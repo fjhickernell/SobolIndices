@@ -1,0 +1,64 @@
+\documentclass[]{amsart}
+
+\usepackage{array,colortbl}
+\usepackage{amsmath,amsfonts,amssymb,bm,listings} % no amsthm, Springer defines Theorem, Lemma, etc themselves
+\usepackage{xspace}
+\usepackage[autolinebreaks]{mcode}
+\input FJHDef
+\newcommand{\oerr}{e}
+
+\begin{document}
+\title{Adaptive Computation of Sobol' Indices}
+\maketitle
+
+\noindent To:  Cl\'ementine Prieur (U. Josef Fourier), Llu\'is Antoni Jim\'enez Rugama (IIT)
+
+\bigskip
+
+Today Cl\'ementine discussed the possibility of using \texttt{cubSobol\_g} to calculate Sobol sensitivity indices for functions $f : [0,1]^d \to \reals$.  Here is some sample code where we showed proof of concept.
+
+\lstinputlisting{ProgramsImages/SobolIndexExample.m}
+
+There are a few next steps: 
+
+\begin{enumerate}
+\item Sobol' indices can be written in terms of $2d-1$-dimensional integrals.   Cl\'ementine will work out what those integrals are.
+
+\item The problem that we want to solve is to find $s_1, \ldots, s_p$ such that 
+\[
+\max_{j=1, \ldots, p} \abs{S_j(I_1(f), \ldots, I_q(f)) - s_j} \le \varepsilon,
+\]
+ where the $I_\ell$ are integrals of $f$ or maybe powers of $f$ or something that Cl\'ementine will work out.  Tony and I need to think about how to modify \texttt{cubSobol\_g}.
+ 
+My suggestion is that for each $m = m_{\min}, m_{\min}+1, \ldots$ we compute our data-based error bounds for the Sobol' cubatures $\hI_{\ell,m}(f)$ using $n=2^m$ points, i.e., 
+\[
+\abs{I_\ell(f) - \hI_{\ell,m}(f)} \le \oerr_{\ell,m}(f).
+\]
+We also identify $\hS$ such that 
+\[
+\hS_j(b_1, \ldots, b_q, c_1, \ldots, c_q) \le S(a_1, \ldots, a_q) \le \hS_j(c_1, \ldots, c_q, b_1, \ldots, b_q) 
+\]
+for all $b_\ell \le a_\ell \le c_\ell$.  When we get 
+\begin{multline*}
+\hS_j(\hI_{1,m}(f) + \oerr_{1,m}(f), \ldots,\hI_{q,m}(f) + \oerr_{q,m}(f), \ldots \\
+\hI_{1,m}(f) - \oerr_{1,m}(f), \ldots,\hI_{q,m}(f) - \oerr_{q,m}(f)) \\
+ - \hS_j(\hI_{1,m}(f) - \oerr_{1,m}(f), \ldots,\hI_{q,m}(f) - \oerr_{q,m}(f), \ldots \\
+ \hI_{1,m}(f) + \oerr_{1,m}(f), \ldots,\hI_{q,m}(f) + \oerr_{q,m}(f))   \le 2\varepsilon, \quad j = 1, \ldots, p
+\end{multline*}
+we may stop and choose 
+\begin{multline*}
+s_j = \frac{1}{2}\Bigl[\hS_j(\hI_{1,m}(f) + \oerr_{1,m}(f), \ldots,\hI_{q,m}(f) + \oerr_{q,m}(f), \ldots \\
+\hI_{1,m}(f) - \oerr_{1,m}(f), \ldots,\hI_{q,m}(f) - \oerr_{q,m}(f)) \\
++ \hS_j(\hI_{1,m}(f) - \oerr_{1,m}(f), \ldots,\hI_{q,m}(f) - \oerr_{q,m}(f), \ldots \\
+ \hI_{1,m}(f) + \oerr_{1,m}(f), \ldots,\hI_{q,m}(f) + \oerr_{q,m}(f)) \Bigr]
+ \end{multline*}
+ 
+\item Cl\'ementine will talk to her student to involve him in this project.
+
+\end{enumerate}
+
+\bigskip
+
+Any questions, clarifications, or comments?
+
+\end{document}
