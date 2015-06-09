@@ -57,6 +57,40 @@ s_j = \frac{1}{2}\Bigl[\hS_j(\hI_{1,m}(f) + \oerr_{1,m}(f), \ldots,\hI_{q,m}(f) 
 
 \end{enumerate}
 
+$$\mu=\mathbb{E}\left[f(\underline{X})\right]=\int_{[0,1]^d} f(\underline{x}) d \underline{x} \, .$$
+$$\Var \left(f(\underline{X})\right)=\int_{[0,1]^d}\left(f(\underline{x})-\mu\right)^2d \underline{x} =\int_{[0,1]^d}\left(f(\underline{x})\right)^2d \underline{x} - \mu^2 \, .$$
+$$\mu_j(x)=\mathbb{E}\left[f(\underline{X})|X_j=x\right]=\int_{[0,1]^{d-1}} f(\underline{t}_{-j},x)d\underline{t}_{-j} \, .$$
+$$\begin{array}{rcl}
+\mathbb{E}\left\{ \Var \left(f(\underline{X})|X_j\right)\right\} & = &\int_{0,1]^d}\left[f(\underline{x}\right]^2 d \underline{x} - \int_0^1 \mu_j^2(x) dx  \\
+&=& \int_{[0,1]^d}\left[f(\underline{x}\right]^2 d \underline{x} - \int_{[0,1]^{2d-1}}f(\underline{x})f(\underline{x}'_{-j},x_j)d \underline{x} d \underline{x}'_{-j} \, . 
+\end{array}$$
+
+$$\mu_{-j}(\underline{x}_{-j})=\mathbb{E}\left[f(\underline{X})|X_{-j}=\underline{x}_{-j}\right]=\int_0^1 f({t}_{j},\underline{x}_{-j})d {t}_{j} \, .$$
+$$\begin{array}{rcl}
+\mathbb{E}\left\{ \Var \left(f(\underline{X})|\underline{X}_{-j}\right)\right\} & = &\int_{[0,1]^d}\left[f(\underline{x}\right]^2 d \underline{x} - \int_{[0,1]^{d-1}} \mu_{-j}^2(\underline{x}_{-j}) d \underline{x}_{-j}  \\
+&=& \int_{[0,1]^d}\left[f(\underline{x}\right]^2 d \underline{x} - \int_{[0,1]^{d+1}}f(\underline{x})f(x'_{j},\underline{x}_{-j})d \underline{x} d {x}'_{j} \, . 
+\end{array}$$
+
+
+\bigskip
+
+$$S_{j}=1-\frac{\mathbb{E}\left\{ \Var \left(f(\underline{X})|X_j\right)\right\}}{\Var\left(f(\underline{X})\right)}= \frac{N_j}{D}\, .$$
+$$S_{j}^{\textup{tot}}=\frac{\mathbb{E}\left\{ \Var \left(f(\underline{X})|\underline{X}_{-j}\right)\right\} }{\Var\left(f(\underline{X})\right)}=\frac{N_j^{\textup{tot}}}{D}\, .$$
+
+
+As $N_j$, $N_j^{\textup{tot}}$ and $D$ can be written as sums of integrals,
+one can guarantee with the existing code the existence of error terms $\tilde{\oerr}_{j,m}(f)$, $\tilde{\oerr}_{j,m}^{\textup{tot}}(f)$ and $\tilde{\oerr}_m(f)$ such that
+
+$$\hat{N}_{j,m}-\tilde{\oerr}_{j,m}(f) \leq N_j \leq \hat{N}_{j,m}+\tilde{\oerr}_{j,m}(f)  \, ,$$
+$$\hat{N}_{j,m}^{\textup{tot}}-\tilde{\oerr}_{j,m}^{\textup{tot}}(f) \leq N_j^{\textup{tot}} \leq \hat{N}_{j,m}^{\textup{tot}}+\tilde{\oerr}_{j,m}^{\textup{tot}}(f) \, ,$$
+$$\hat{D}_{m}-\tilde{\oerr}_{m}(f) \leq D \leq \hat{D}_{m}+\tilde{\oerr}_{m}(f)  \, .$$
+
+
+Thus
+
+$$\frac{\hat{N}_{j,m}-\tilde{\oerr}_{j,m}(f)}{\hat{D}_{m}+\tilde{\oerr}_{m}(f) } \leq \frac{N_j}{D} \leq \frac{\hat{N}_{j,m}+\tilde{\oerr}_{j,m}(f)}{\hat{D}_{m}-\tilde{\oerr}_{m}(f) }\, ,$$
+$$ \frac{\hat{N}_{j,m}^{\textup{tot}}-\tilde{\oerr}_{j,m}^{\textup{tot}}(f) }{\hat{D}_{m}+\tilde{\oerr}_{m}(f)} \leq \frac{N_{j}^{\textup{tot}}}{D} \leq \frac{ \hat{N}_{j,m}^{\textup{tot}}+\tilde{\oerr}_{j,m}^{\textup{tot}}(f)}{\hat{D}_{m}-\tilde{\oerr}_{m}(f)} \, .$$
+
 \bigskip
 
 Any questions, clarifications, or comments?
