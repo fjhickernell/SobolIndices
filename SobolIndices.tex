@@ -102,12 +102,12 @@ Any questions, clarifications, or comments?
 Domains for integrals $N_j$ and $N_j^{\textup{tot}}$ can be rearranged to consider them as a single integral:
 \begin{align*}
 \mathbb{E}\left[ \Var \left(f(\underline{X})|X_j\right)\right] & = \int_{[0,1)^d}f(\underline{x})^2 d \underline{x} - \int_{[0,1)^{2d-1}}f(\underline{x})f(\underline{x}'_{-j},x_j)d \underline{x} d \underline{x}'_{-j} \\
-& = \int_{[0,1)^{2d-1}}\left(f(\underline{x})^2-f(\underline{x})\right)f(\underline{x}'_{-j},x_j)d \underline{x} d \underline{x}'_{-j} \, . 
+& = \int_{[0,1)^{2d-1}}\left[f(\underline{x})^2-f(\underline{x})f(\underline{x}'_{-j},x_j)\right] d \underline{x} d \underline{x}'_{-j} \, . 
 \end{align*}
 
 \begin{align*}
 \mathbb{E}\left[ \Var \left(f(\underline{X})|\underline{X}_{-j}\right)\right] & = \int_{[0,1)^d}f(\underline{x})^2 d \underline{x} - \int_{[0,1)^{d+1}}f(\underline{x})f(x'_{j},\underline{x}_{-j})d \underline{x} d {x}'_{j} \\
-& = \int_{[0,1)^{d+1}}\left(f(\underline{x})^2-f(\underline{x})\right)f(x'_{j},\underline{x}_{-j})d \underline{x} d {x}'_{j} \, . 
+& = \int_{[0,1)^{d+1}}\left[f(\underline{x})^2-f(\underline{x})f(x'_{j},\underline{x}_{-j})\right] d \underline{x} d {x}'_{j} \, . 
 \end{align*}
 
 However, because $D$ is a nonlinear combination of integrals over different domains, it needs to be split into 2 parts:
