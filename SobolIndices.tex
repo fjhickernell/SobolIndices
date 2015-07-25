@@ -40,12 +40,12 @@ We also identify $\hS$ such that
 \hS_j(b_1, \ldots, b_q, c_1, \ldots, c_q) \le S(a_1, \ldots, a_q) \le \hS_j(c_1, \ldots, c_q, b_1, \ldots, b_q) 
 \]
 for all $b_\ell \le a_\ell \le c_\ell$.  When we get 
-\begin{multline*}
+\begin{multline}\label{stopping_crit}
 \hS_j(\hI_{1,m}(f) + \oerr_{1,m}(f), \ldots,\hI_{q,m}(f) + \oerr_{q,m}(f), \ldots \\
 \hI_{1,m}(f) - \oerr_{1,m}(f), \ldots,\hI_{q,m}(f) - \oerr_{q,m}(f)) \\
  - \hS_j(\hI_{1,m}(f) - \oerr_{1,m}(f), \ldots,\hI_{q,m}(f) - \oerr_{q,m}(f), \ldots \\
  \hI_{1,m}(f) + \oerr_{1,m}(f), \ldots,\hI_{q,m}(f) + \oerr_{q,m}(f))   \le 2\varepsilon, \quad j = 1, \ldots, p
-\end{multline*}
+\end{multline}
 we may stop and choose 
 \begin{multline*}
 s_j = \frac{1}{2}\Bigl[\hS_j(\hI_{1,m}(f) + \oerr_{1,m}(f), \ldots,\hI_{q,m}(f) + \oerr_{q,m}(f), \ldots \\
@@ -89,11 +89,53 @@ $$\hat{D}_{m}-\tilde{\oerr}_{m}(f) \leq D \leq \hat{D}_{m}+\tilde{\oerr}_{m}(f) 
 
 Thus
 
-$$\frac{\hat{N}_{j,m}-\tilde{\oerr}_{j,m}(f)}{\hat{D}_{m}+\tilde{\oerr}_{m}(f) } \leq \frac{N_j}{D} \leq \frac{\hat{N}_{j,m}+\tilde{\oerr}_{j,m}(f)}{\hat{D}_{m}-\tilde{\oerr}_{m}(f) }\, ,$$
-$$ \frac{\hat{N}_{j,m}^{\textup{tot}}-\tilde{\oerr}_{j,m}^{\textup{tot}}(f) }{\hat{D}_{m}+\tilde{\oerr}_{m}(f)} \leq \frac{N_{j}^{\textup{tot}}}{D} \leq \frac{ \hat{N}_{j,m}^{\textup{tot}}+\tilde{\oerr}_{j,m}^{\textup{tot}}(f)}{\hat{D}_{m}-\tilde{\oerr}_{m}(f)} \, .$$
+\begin{equation}\label{err_bound_j}
+\frac{\hat{N}_{j,m}-\tilde{\oerr}_{j,m}(f)}{\hat{D}_{m}+\tilde{\oerr}_{m}(f) } \leq \frac{N_j}{D} \leq \frac{\hat{N}_{j,m}+\tilde{\oerr}_{j,m}(f)}{\hat{D}_{m}-\tilde{\oerr}_{m}(f) }\, ,
+\end{equation}
+\begin{equation}\label{err_bound_jtot}
+\frac{\hat{N}_{j,m}^{\textup{tot}}-\tilde{\oerr}_{j,m}^{\textup{tot}}(f) }{\hat{D}_{m}+\tilde{\oerr}_{m}(f)} \leq \frac{N_{j}^{\textup{tot}}}{D} \leq \frac{ \hat{N}_{j,m}^{\textup{tot}}+\tilde{\oerr}_{j,m}^{\textup{tot}}(f)}{\hat{D}_{m}-\tilde{\oerr}_{m}(f)} \, .
+\end{equation}
 
 \bigskip
 
 Any questions, clarifications, or comments?
+
+Domains for integrals $N_j$ and $N_j^{\textup{tot}}$ can be rearranged to consider them as a single integral:
+\begin{align*}
+\mathbb{E}\left[ \Var \left(f(\underline{X})|X_j\right)\right] & = \int_{[0,1)^d}f(\underline{x})^2 d \underline{x} - \int_{[0,1)^{2d-1}}f(\underline{x})f(\underline{x}'_{-j},x_j)d \underline{x} d \underline{x}'_{-j} \\
+& = \int_{[0,1)^{2d-1}}\left[f(\underline{x})^2-f(\underline{x})f(\underline{x}'_{-j},x_j)\right] d \underline{x} d \underline{x}'_{-j} \, . 
+\end{align*}
+
+\begin{align*}
+\mathbb{E}\left[ \Var \left(f(\underline{X})|\underline{X}_{-j}\right)\right] & = \int_{[0,1)^d}f(\underline{x})^2 d \underline{x} - \int_{[0,1)^{d+1}}f(\underline{x})f(x'_{j},\underline{x}_{-j})d \underline{x} d {x}'_{j} \\
+& = \int_{[0,1)^{d+1}}\left[f(\underline{x})^2-f(\underline{x})f(x'_{j},\underline{x}_{-j})\right] d \underline{x} d {x}'_{j} \, . 
+\end{align*}
+
+However, because $D$ is a nonlinear combination of integrals over different domains, it needs to be split into 2 parts:
+
+\begin{align*}
+\Var \left(f(\underline{X})\right) & = \int_{[0,1)^d}f(\underline{x})^2 d \underline{x} - \left(\int_{[0,1)^d}f(\underline{x}) d \underline{x}\right)^2 \\
+& = D_1 - D_2^2 \, .
+\end{align*}
+
+Namely $a_1^{(j)} :=\mathbb{E}\left[ \Var \left(f(\underline{X})|X_j\right)\right]$, $a_2^{(j)} := \mathbb{E}\left[ \Var \left(f(\underline{X})|\underline{X}_{-j}\right)\right]$, $a_3^{(j)} := D_1$ and $a_4^{(j)} := D_2$ (we will spare the ${(j)}$ notation for simplicity), we have:
+
+\begin{equation}
+S(a_1,\dots,a_4)=1-\frac{a_1}{a_3-a_4^2} \; , \qquad S^\textup{tot}(a_1,\dots,a_4)=\frac{a_2}{a_3-a_4^2} \, .
+\end{equation}
+that directly leads to,
+\begin{equation}\label{functionals_stop_criteria}
+\hS(b_1,\dots,b_4,c_1,\dots,c_4)=1-\frac{c_1}{b_3-c_4^2} \; , \qquad \hS^\textup{tot}(b_1,\dots,b_4,c_1,\dots,c_4)=\frac{b_2}{c_3-b_4^2} \, .
+\end{equation}
+Remark that if we have some a priori knowledge of $a_4$, $c_4^2$ can be replaced by $c_4$ and $b_4^2$ by $b_4$ depending on whether $a_4 \leq 1$ or $a_4 \geq 1$ respectively. This would provide tighter bounds.
+
+According to \eqref{functionals_stop_criteria},
+\begin{equation}
+\hS^\textup{tot}(b_1,b_2,b_3,b_4,c_1,c_2,c_3,c_4) = 1 - \hS(b_1,c_1,c_3,c_4,b_2,c_2,b_3,b_4) \, .
+\end{equation}
+Hence, we do not really need a second estimator $\hS^\textup{tot}$. For further clarity, we can also set to $0$ the variables not affecting our estimators, $\hS(b_1,0,b_3,b_4,c_1,0,c_3,c_4)$ and $1-\hS(0,0,c_3,c_4,b_2,c_2,b_3,b_4)$.
+
+From here, we can use the stopping criteria proposed in \eqref{stopping_crit}.
+
 
 \end{document}
