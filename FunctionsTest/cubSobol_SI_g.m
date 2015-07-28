@@ -1,4 +1,4 @@
-function [q,out_param] = cubSobol_SI_g(varargin)
+function [q,int,out_param] = cubSobol_SI_g(varargin)
 %cubSobol_SI_g Quasi-Monte Carlo method using Sobol' cubature over the
 %d-dimensional region to compute the Sobol Index within a specified generalized error
 %tolerance with guarantees under Walsh-Fourier coefficients cone decay
@@ -310,6 +310,7 @@ end
 q = 1/2*(S(est_int_k+err_bound_k , est_int_k-err_bound_k) + S(est_int_k-err_bound_k , est_int_k+err_bound_k));
 out_param.bound_err = 1/2*(S(est_int_k+err_bound_k , est_int_k-err_bound_k) - S(est_int_k-err_bound_k , est_int_k+err_bound_k));
 errest(1) = out_param.bound_err;
+int = est_int_k(1,3);
 
 % Necessary conditions for all three integrals
 for k = 1:size(y,2)
@@ -412,6 +413,7 @@ for m=out_param.mmin+1:out_param.mmax
    q = 1/2*(S(est_int_k(meff,:)+err_bound_k(meff,:) , est_int_k(meff,:)-err_bound_k(meff,:)) + S(est_int_k(meff,:)-err_bound_k(meff,:) , est_int_k(meff,:)+err_bound_k(meff,:)));
    out_param.bound_err = 1/2*(S(est_int_k(meff,:)+err_bound_k(meff,:) , est_int_k(meff,:)-err_bound_k(meff,:)) - S(est_int_k(meff,:)-err_bound_k(meff,:) , est_int_k(meff,:)+err_bound_k(meff,:)));
    errest(meff) = out_param.bound_err;
+   int = est_int_k(meff,3);
 
    % Necessary conditions
    for k = 1:size(y,2)
