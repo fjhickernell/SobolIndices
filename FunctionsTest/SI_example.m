@@ -1,8 +1,8 @@
 clearvars
 
-abstol = 1e-4;
+abstol = 1e-3;
 reltol = 0; % Pure absolute tolerance
-mmax = 20; % I adjust that not to run out of memory. It can go up to 54. Type help cubSobol_SI_g for more information.
+mmax = 22; % I adjust that not to run out of memory. It can go up to 54. Type help cubSobol_SI_g for more information.
 
 %% Ishigami
 disp('Running Ishigami example ...')

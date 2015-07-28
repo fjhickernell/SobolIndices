@@ -347,7 +347,7 @@ end
 
 
 %% Loop over m
-for m=out_param.mmin+1:out_param.mmax
+for m = out_param.mmin+1:out_param.mmax
     if is_done,
        break;
     end
@@ -407,7 +407,7 @@ for m=out_param.mmin+1:out_param.mmax
 
        %% Compute Stilde
        Stilde(meff,k)=sum(abs(y(kappanumap(nllstart+1:2*nllstart,k),k)));
-       err_bound_k(meff,k) = out_param.fudge(out_param.mmin)*Stilde(meff,k);
+       err_bound_k(meff,k) = out_param.fudge(m)*Stilde(meff,k);
        est_int_k(meff,k) = mean(yval(:,k));
    end
    q = 1/2*(S(est_int_k(meff,:)+err_bound_k(meff,:) , est_int_k(meff,:)-err_bound_k(meff,:)) + S(est_int_k(meff,:)-err_bound_k(meff,:) , est_int_k(meff,:)+err_bound_k(meff,:)));
