@@ -11,11 +11,12 @@ S0 = 100; K = 100; sgma = 0.05; r = sgma^2/2; T = 1; price = normcdf((log(S0/K)+
 d = 8;
 time_disc = linspace(T/d,T,d);
 Sigma=bsxfun(@min,time_disc',time_disc);  % Sigma(i,j) = min(time_disc(i),time_disc(j))
-[Evec,Eval]=eig(Sigma); % Jordan decomposition of Sigma
-[~,order] = sort(diag(Sigma),1,'descend');
-A = Evec*Eval.^(1/2); % A*A' = Sigma. PCA substitution
+[Evec,Eval]=eig(Sigma,'vector'); % Jordan decomposition of Sigma
+[~,order] = sort(Eval,'descend');
+A = Evec(:,order)*diag(Eval(order).^(1/2)); % A*A' = Sigma. PCA substitution
 
-f = @(x) max(0,(S0*exp((r-sgma^2/2)*bsxfun(@plus,time_disc,zeros(size(x,1),1))+sgma*norminv(x(:,order))*A'))*[zeros(d-1,1);1]-K);
+
+f = @(x) max(0,(S0*exp((r-sgma^2/2)*bsxfun(@plus,time_disc,zeros(size(x,1),1))+sgma*norminv(x)*A'))*[zeros(d-1,1);1]-K);
 hyperbox = [zeros(1,d) ; ones(1,d)];
 
 j = 1;
@@ -29,11 +30,11 @@ approx_price
 % d = 8;
 % time_disc = linspace(T/d,T,d);
 % Sigma=bsxfun(@min,time_disc',time_disc);  % Sigma(i,j) = min(time_disc(i),time_disc(j))
-% [Evec,Eval]=eig(Sigma); % Jordan decomposition of Sigma
-% [~,order] = sort(diag(Sigma),1,'descend');
-% A = Evec*Eval.^(1/2); % A*A' = Sigma. PCA substitution
+% [Evec,Eval]=eig(Sigma,'vector'); % Jordan decomposition of Sigma
+% [~,order] = sort(Eval,'descend');
+% A = Evec(:,order)*diag(Eval(order).^(1/2)); % A*A' = Sigma. PCA substitution
 % 
-% f = @(x) max(0,S0*prod(exp((r-sgma^2/2)*bsxfun(@plus,time_disc,zeros(size(x,1),1))+sgma*norminv(x(:,order))*A'),2).^(1/d)-K);
+% f = @(x) max(0,S0*prod(exp((r-sgma^2/2)*bsxfun(@plus,time_disc,zeros(size(x,1),1))+sgma*norminv(x)*A'),2).^(1/d)-K);
 % hyperbox = [zeros(1,d) ; ones(1,d)];
 % 
 % j = 1;
