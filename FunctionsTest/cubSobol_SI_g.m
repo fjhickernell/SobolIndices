@@ -228,12 +228,15 @@ function [q,int,out_param] = cubSobol_SI_g(varargin)
 %   above papers, software, and materials.
 %
 
-tic
+t_start = tic;
 %% Initial important cone factors and Check-initialize parameters
 r_lag = 4; %distance between coefficients summed and those computed
 [f,hyperbox,out_param] = cubSobol_SI_g_param(r_lag,varargin{:});
 u = out_param.u;
 l_star = out_param.mmin - r_lag; % Minimum gathering of points for the sums of DFWT
+omg_circ = @(m) 2.^(-m);
+omg_hat = @(m) out_param.fudge(m)/((1+out_param.fudge(r_lag))*omg_circ(r_lag));
+
 if u > 0
     S = @(b,c) 1 - c(:,1)./(b(:,2)-c(:,3).^2);
 else
@@ -315,14 +318,16 @@ int = est_int_k(1,3);
 % Necessary conditions for all three integrals
 for k = 1:size(y,2)
     for l = l_star:out_param.mmin % Storing the information for the necessary conditions
-        C_low = (1+out_param.fudge(out_param.mmin-l))/(1+2*out_param.fudge(out_param.mmin-l));
-        C_up = (1+out_param.fudge(out_param.mmin-l));
-        CStilde_low(l-l_star+1,k) = C_low*sum(abs(y(kappanumap(2^(l-1)+1:2^l,k),k)));
-        CStilde_up(l-l_star+1,k) = C_up*sum(abs(y(kappanumap(2^(l-1)+1:2^l,k),k)));
-    end
-    if any(CStilde_low(:,k) > CStilde_up(:,k))
-       out_param.exit(2) = true;
-    end
+        C_low = 1/(1+omg_hat(out_param.mmin-l)*omg_circ(out_param.mmin-l));
+    	C_up = 1/(1-omg_hat(out_param.mmin-l)*omg_circ(out_param.mmin-l));
+	CStilde_low(l-l_star+1,k) = max(CStilde_low(l-l_star+1,k),C_low*sum(abs(y(kappanumap(2^(l-1)+1:2^l)))));
+	if (omg_hat(out_param.mmin-l)*omg_circ(out_param.mmin-l) < 1)
+		CStilde_up(l-l_star+1,k) = min(CStilde_up(l-l_star+1,k),C_up*sum(abs(y(kappanumap(2^(l-1)+1:2^l)))));
+	end
+     end
+     if any(CStilde_low(:,k) > CStilde_up(:,k))
+   	out_param.exit(2) = true;
+     end
 end
 
 % Check the end of the algorithm
@@ -338,7 +343,7 @@ deltaminus = 0.5*(gail.tolfun(out_param.abstol,...
 is_done = false;
 q=q+deltaminus;
 appxinteg(1) = q;
-out_param.time=toc;
+out_param.time=toc(t_start);
 if out_param.bound_err <= deltaplus
    is_done = true;
 elseif out_param.mmin == out_param.mmax % We are on our max budget and did not meet the error condition => overbudget
@@ -418,14 +423,16 @@ for m = out_param.mmin+1:out_param.mmax
    % Necessary conditions
    for k = 1:size(y,2)
        for l = l_star:m % Storing the information for the necessary conditions
-            C_low = (1+out_param.fudge(m-l))/(1+2*out_param.fudge(m-l));
-            C_up = (1+out_param.fudge(m-l));
-            CStilde_low(l-l_star+1,k) = max(CStilde_low(l-l_star+1,k),C_low*sum(abs(y(kappanumap(2^(l-1)+1:2^l,k),k))));
-            CStilde_up(l-l_star+1,k) = min(CStilde_up(l-l_star+1,k),C_up*sum(abs(y(kappanumap(2^(l-1)+1:2^l,k),k))));
-       end
-       if any(CStilde_low(:,k) > CStilde_up(:,k))
-           out_param.exit(2) = true;
-       end
+            C_low = 1/(1+omg_hat(out_param.mmin-l)*omg_circ(out_param.mmin-l));
+    	    C_up = 1/(1-omg_hat(out_param.mmin-l)*omg_circ(out_param.mmin-l));
+	    CStilde_low(l-l_star+1,k) = max(CStilde_low(l-l_star+1,k),C_low*sum(abs(y(kappanumap(2^(l-1)+1:2^l)))));
+	    if (omg_hat(out_param.mmin-l)*omg_circ(out_param.mmin-l) < 1)
+		CStilde_up(l-l_star+1,k) = min(CStilde_up(l-l_star+1,k),C_up*sum(abs(y(kappanumap(2^(l-1)+1:2^l)))));
+	    end
+        end
+        if any(CStilde_low(:,k) > CStilde_up(:,k))
+   	    out_param.exit(2) = true;
+        end
    end
    
    % Check the end of the algorithm
@@ -440,7 +447,7 @@ for m = out_param.mmin+1:out_param.mmax
    
    q=q+deltaminus;
    appxinteg(meff)=q;
-   out_param.time=toc;
+   out_param.time=toc(t_start);
    if out_param.bound_err <= deltaplus
       is_done = true;
    elseif m == out_param.mmax % We are on our max budget and did not meet the error condition => overbudget
@@ -458,7 +465,7 @@ else
 end
 out_param = rmfield(out_param,'exit');
 
-out_param.time=toc;
+out_param.time=toc(t_start);
 end
 
 
