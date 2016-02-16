@@ -1,6 +1,6 @@
 clearvars
 
-abstol = 1e-3;
+abstol = 1e-4;
 reltol = 0; % Pure absolute tolerance
 mmax = 22; % I adjust that not to run out of memory. It can go up to 54. Type help cubSobol_SI_g for more information.
 
@@ -36,6 +36,7 @@ hyperbox = [zeros(1,d) ; ones(1,d)];
 
 exitflag = [];
 exitflagt = [];
+tic
 for j = 1:d
     [q,app_int,out_param] = cubSobol_SI_g(f,hyperbox,j,'abstol',abstol,'reltol',reltol,'mmax',mmax);
     exitflag = [exitflag out_param.exitflag];
@@ -44,6 +45,7 @@ for j = 1:d
     exitflagt = [exitflagt out_param.exitflag];
     SI(2,j) = q;
 end
+toc
 disp(SI)
 if any(exitflag > 0) || any(exitflagt > 0)
     warning('Results cannot be guaranteed due to reaching maximum budget or failing necessary conditions.')

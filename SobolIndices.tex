@@ -6,6 +6,11 @@
 \usepackage[autolinebreaks]{mcode}
 \input FJHDef
 \newcommand{\oerr}{e}
+\newcommand{\verr}{\boldsymbol{\varepsilon}}
+\newcommand{\tverr}{\tilde{\boldsymbol{\varepsilon}}}
+\newcommand{\terr}{\tilde{\varepsilon}}
+\newcommand{\vI}{\bvec{I}}
+\newcommand{\tx}{\tilde{x}}
 
 
 \begin{document}
@@ -136,6 +141,38 @@ According to \eqref{functionals_stop_criteria},
 Hence, we do not really need a second estimator $\hS^\textup{tot}$. For further clarity, we can also set to $0$ the variables not affecting our estimators, $\hS(b_1,0,b_3,b_4,c_1,0,c_3,c_4)$ and $1-\hS(0,0,c_3,c_4,b_2,c_2,b_3,b_4)$.
 
 From here, we can use the stopping criteria proposed in \eqref{stopping_crit}.
+
+\section{Improving Error Bounds for Stopping Criteria}
+Consider the previous function ($\vx:=\vI$)
+\[
+f(\vx)=1-\frac{x_1}{x_2-x_3^2},\quad \vx\in[\tvx-\tverr,\tvx+\tverr].
+\]
+If our estimator is 
+\[
+\tf(\tvx)=\frac{1}{2}\left(f(\tx_1+\terr_1,\tx_2-\terr_2,\tx_3+\terr_3)+f(\tx_1-\terr_1,\tx_2+\terr_2,\tx_3-\terr_3)\right),
+\]
+we know that the error bound is clearly
+\begin{align*}
+\abs{f(\vx)-\tf(\tvx)}\leq\frac{1}{2} \abs{\frac{\tx_1+\terr_1}{\tx_2-\terr_2-\left(\tx_3+\terr_3\right)^2}-\frac{\tx_1-\terr_1}{\tx_2+\terr_2-\left(\tx_3-\terr_3\right)^2} }.
+\end{align*}
+If $\varepsilon_2=\varepsilon_3=0$, this error bound would directly be linear on $\varepsilon_1$. However, the difference in the denominators makes this error bound not clearly linearly convergent.
+
+If we consider the Taylor expansion of our function with $\vx-\tvx=\verr$ (the difference is the real error $\verr\in[-\tverr,\tverr]$):
+\begin{equation}
+f(\vx)=f(\tvx)+\nabla f(\tvx)^t\verr+\frac{1}{2}\verr^t Hf(\tvx) \verr + \mathcal{O}(\norm{\verr}^3),
+\end{equation}
+we can take the following estimator,
+\begin{align*}
+\tf(\tvx)&=\frac{1}{2}\left(f(\tvx)+\nabla f(\tvx)^t\tverr+\frac{1}{2}\tverr^t Hf(\tvx) \tverr + f(\tvx)+\nabla f(\tvx)^t(-\tverr)+\frac{1}{2}(-\tverr)^t Hf(\tvx) (-\tverr) \right)\\
+&=f(\tvx)+\frac{1}{2}\tverr^t Hf(\tvx) \tverr
+\end{align*}
+Thus, given that $Hf$ is symmetric, differentiable in the region of interest (denominator always positive), the error will be bounded by
+\begin{align*}
+\abs{f(\vx)-\tf(\tvx)}&=\abs{\nabla f(\tvx)^t\verr+\frac{1}{2}\left(\verr+\tverr\right)^t Hf(\tvx) \left(\verr-\tverr\right) + \mathcal{O}(\norm{\verr}^3)} \\
+&\leq \max_{\vy\in[\tvx-\tverr,\tvx+\tverr], \vz\in[-\tverr,\tverr]}\abs{\nabla f(\tvx)^t\vz+\frac{1}{2}(\vz+\tverr)^t Hf(\vy)(\vz-\tverr)}
+\end{align*}
+
+Clearly, because of signs the maximum $\vz$ is for $\vz=\{-\tilde{\varepsilon_1},\tilde{\varepsilon_2},-\tilde{\varepsilon_3}\}$.
 
 
 \end{document}
