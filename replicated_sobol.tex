@@ -115,6 +115,13 @@ Our objective is to combine the use of Sobol' sequences with the replication met
 
 
 \section{Sobol' sequence background}
+
+We are interested in digital nets which are constructed as point sets in $\cube$.
+
+For $d\geq 1$, $b\geq 2$, and $0\geq t\geq m$, the set of points $\mathcal{P}\in\cube$, with $|\mathcal{P}|=b^m$, is a $(t,m,d)-net$ in base $b$ if for every $A\in\mathcal{A}$ with volume $b^{t-m}$, $|A\cap\mathcal{P}|=b^t$ ($A$ contains exactly $b^t$ points of $\mathcal{P}$).
+
+A Sobol' sequence in dimension $d$ is a $(t,d)-sequence$ in base 2.
+
 Obviously, we do not need to evaluate $f(\vx)$ $d$ times. But we can do event better than that, and evaluate $f(\vx_u:{\vx'}_{-u})$ only one time. This is the replication method....
 
 $X$,$X'$ are two sequences such that,
