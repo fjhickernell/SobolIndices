@@ -148,11 +148,16 @@ Digital nets are usually computed with the generating matrices $C_1,\dots,C_s$ i
 \end{equation}
 where $x_{i,j} = \sum_{k \geq 1}x_{i,j,k}b^{-k}$ and $i = \sum_{k=0}^{m-1}i_kb^{k}$.
 
-Our goal is to generate two sequences $\{\vx_i\}_{i\in\mathbb{N}_0}$ and $\{{\vx'}_i\}_{i\in\mathbb{N}_0}$ such that for all $m\geq 0$, $\{{\vx'}_i\}_{i=0}^{b^m-1}$ is a replicated design of $\{{\vx}_i\}_{i=0}^{b^m-1}$. For that purpose, $C_j'$ depend on the choice of $C_j$.
+\subsection{Replicated Digital Sequences}
+Here recall the link with the replicated method....
+\begin{defin}
+A digital sequence $\{{\vx'}_i\}_{i\in\mathbb{N}_0}$ is the replicated digital sequence of $\{\vx_i\}_{i\in\mathbb{N}_0}$ if for all $m\geq 0$, $\{{\vx'}_i\}_{i=0}^{b^m-1}$ is a replicated design of $\{{\vx}_i\}_{i=0}^{b^m-1}$.
+\end{defin}
+In this case, $C_j'$ will depend on the choice of $C_j$.
 
-Although the choices of $C_j$ and $C_j'$ are many, there is a special case interesting for its construction simplicity, and with a wide range of possible $C_j'$ choices given $C_j$.
+Although the choices of $C_j$ and $C_j'$ are many, there is a special case interesting for its construction simplicity, and wide range of $C_j'$ choices.
 
-Considering the generating matrices to be upper triangular full rank (no zeros on the diagonal), one ensures that $x_{i,j,k}=0$, for $k>m$ and $b^m-1\geq i \geq 0$. Since the block $C_j^{m\times m}$ is full rank, each $x_{i,j}\neq x_{r,j}$ when $i\neq j$. Therefore, excluding the case ${\vx}_i={\vx'}_i$ for all $i\in\mathbb{N}_0$, it is enough to choose $C_j\neq C_j'$ for at least one dimension $j$. When $b=2$, this is the case of Sobol' sequences and one could simply consider $C_{j+d},\dots,C_{2d}$ to generate the replicated sequence.
+Considering the generating matrices to be upper triangular and without zeros on the diagonal, one ensures that $x_{i,j,k}=0$, for $m<k$ and $0 \leq i \leq b^m-1$. Since the block $C_j^{m\times m}$ is full rank, each $x_{i,j}\neq x_{r,j}$ when $i\neq j$. Therefore, excluding the case ${\vx}_i={\vx'}_i$ for all $i\in\mathbb{N}_0$, it is enough to choose $C_j\neq C_j'$ for at least $d-1$ dimension. When $b=2$, this is the case of Sobol' sequences and one could simply consider $C_{j+d},\dots,C_{2d}$ to generate the replicated sequence.
 
 Because we are estimating the integral \eqref{first_order_indice}, we want to minimize the t-value of the following $d$ sequences at the same time............
 
@@ -189,7 +194,7 @@ Indeed, we inherit all the group properties from the Permuatations group... beca
 
 Not all choices are possible, for instance order 2 and higher Sobol' indices.
 
-\subsection{Owen Scrambling To The New Sequence}
+\subsection{Owen Scrambling To Replicated Digital Sequences}
 
 
 \section{Additive Approach}
