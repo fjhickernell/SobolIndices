@@ -3,6 +3,7 @@
 \documentclass[]{elsarticle}
 \setlength{\marginparwidth}{0.5in}
 \usepackage{amsmath,amssymb,amsthm,natbib,mathtools,bbm,extraipa,mathabx,graphicx}
+\usepackage[ruled,vlined]{algorithm2e}
 %accents,
 
 \newtheorem{lem}{Lemma}
@@ -23,6 +24,8 @@
 \newcommand{\e}{\text{e}}
 \newcommand{\bvec}[1]{\boldsymbol{#1}}
 \newcommand{\vx}{\bvec{x}}
+\newcommand{\vi}{\bvec{i}}
+\newcommand{\ve}{\bvec{e}}
 \newcommand{\vk}{\bvec{k}}
 \newcommand{\vz}{\bvec{z}}
 \newcommand{\dif}{\mathsf{d}}
@@ -151,7 +154,44 @@ Indeed, we inherit all the group properties from the Permuatations group... beca
 Not all choices are possible, for instance order 2 and higher Sobol' indices.
 
 
-\section{There Is The Addition Method I Do Not Know}
+\section{Additive Approach}
+Notations:
+\begin{itemize}
+\item[.] $m$ denote the number of digits
+\item[.] $C_{m,1},\dots,C_{m,d}$: $d$ generator matrices of size $m \times m$ over the finite field $\mathcal{Z}_2$
+\item[.] $\vi$: base-$2$ representation of the integer $i$: $\vi=(i_1,\dots,i_m)^T$
+\item[.] $L_{m,l}$: nonsingular $m \times m$ lower triangular matrix over the finite field $\mathcal{Z}_2$
+\item[.] $\ve_{m,l}$: $m \times 1$ vector with elements from $\mathcal{Z}_2$
+\end{itemize}
+
+Denote by $X$ and $X'$ the two replicated designs of order $1$.
+A row of $X$ or $X'$ is a point in $[0,1]^d$. The symbol $x_i^j$ (resp. ${x'}_i^j$) corresponds to  the element of row $i$ and column $j$ of $X$ (resp. $X'$). The additive approach is described by Algorithm \ref{additive}. All operations are carried on the finite field $\mathcal{Z}_2$.
+\begin{algorithm}[!ht]
+
+\begin{center}
+\begin{minipage}{10cm}
+\begin{enumerate}
+\item[Step 1.] Instantiation: $X \leftarrow \emptyset$, $X' \leftarrow \emptyset$, $l \leftarrow 1$, $\widehat{\underline{\tau}_u^2}^{(0)} \leftarrow 0$.
+\item[Step 4.] $while$ ($!$ stopping criterion):
+\begin{enumerate}
+\item[4.1] Construct $L_{m,l}$ and $\ve_{m,l}$.
+\item[4.2] Augment both $X$ and $X'$:\\
+for $j=1,\dots,d$:\\
+for $i=1+2^{m+l-1},\dots,2^{m+l}$:
+\begin{flalign*}
+x_i^j & = C_{m,j} . \vi + \ve_{m,l} && \\
+{x'}_i^j & = L_{m,l} . (C_{m,j} . \vi +  \ve_{m,l})&&
+\end{flalign*}
+\item[4.3] For $u=1,\dots,d$: evaluate $\widehat{\underline{\tau}_u^2}^{(l)}.$ 
+\item[4.4.]  $l \leftarrow l+1.$
+\end{enumerate}
+\item[Step 5.] Return: $\widehat{\underline{\tau}_u^2}, \ u \in \{1,\dots,d\}.$ 
+\end{enumerate}
+\end{minipage}
+\end{center}
+\label{additive}
+\caption{Additive approach}
+\end{algorithm}
 
 
 
