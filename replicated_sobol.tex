@@ -99,7 +99,7 @@ x_{n,1} & ... & x_{n,j} & ... & x_{n,d} \\
 {x'}_{i,1} & ... & {x'}_{i,j} & ... & {x'}_{i,d} \\
 \vdots &  & \vdots & & \vdots \\
 {x'}_{n,1} & ... & {x'}_{n,j} & ... & {x'}_{n,d} \\
-\end{array} \right) 
+\end{array} \right).
 \]
 Let the symbol $X_u$ (resp. $X'_u$), $u \subsetneq \{1,\dots,d-1\}$, denotes a subset of $u$ columns of $X$ (resp. $X'$). We say that $X$ and $X'$ are two replicated designs of order $r \in \{1,\dots,d-1\}$ if:
 
@@ -110,7 +110,8 @@ The replication procedure introduced in \cite{} allows to estimate all first-ord
 where $\pi_1,\dots,\pi_d$ are $d$ permutations on $\{1,\dots,n\}$.
 \bigskip
 
-Our objective is to combine the use of Sobol' sequence with the replication method to estimate all quantities $\underline{\tau}_u^2, u \in \{1,\dots,d\}$ with only $2n$ evaluations of $f$. This translates to construct two Sobol' sequence that identify as two replicated designs of order $1$. 
+Our objective is to combine the use of Sobol' sequences with the replication method to iteratively estimate all quantities $\underline{\tau}_u^2, u \in \{1,\dots,d\}$. This would reduce the method to constructing two replicated designs of order $1$ that are iteratively augmented with new point sets. Two approaches are considered: one multiplicative and one additive. The first one uses the innate nested structure of a Sobol' sequence. The size of each replicated design is doubled at each step. The additive approach consists first of constructing a Sobol' sequence then shifting and scrambling it to form the new point sets. These new point sets are then added to the initial Sobol' sequence to form the two replicated designs. In this case, the size of each replicated design at step $k$ is $ k \times 2^m$ where $2^m$ is the size of the initial Sobol' sequence.
+
 
 
 \section{Sobol' sequence background}
@@ -132,6 +133,8 @@ X' = \begin{pmatrix}
 
 These sequences can be generated indeed with Owen scramblings, or which is equivalent, matrix generators $C_i$
 
+\section{Matrix generators group $U_m$}
+
 Be $U_m(\mathbb{F}_b)$ the multiplicative group of all invertible triangular matrices of size $m\times m$ over $\mathbb{F}_b$ ($GF(b)$). We have that $\abs{U_m(\mathbb{F}_b)}=(b-1)^m b^{(m-1)m/2}$.
 
 We consider the (infinite) set all possible generating matrices $C_1,C_2,\dots$. We also define the class 
@@ -142,6 +145,8 @@ Not all choices are possible, for instance order 2 and higher Sobol' indices.
 
 
 \section{There Is The Addition Method I Do Not Know}
+
+
 
 \section{L Matrices Fred Method Too Restrictive}
 
