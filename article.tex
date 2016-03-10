@@ -56,14 +56,24 @@
 
 \section{Introduction}
 
+\section{Estimators---> Correlation 2 Oracle 2}
+\subsection{Choice and parameters (threshold small)}
+\subsection{Cost discussion ---> Consider or not total order}
+Cost small:\[n(d+1)+d_sn+n\]
+Cost pas small:\[\alpha n d_s +n+(d-d_s)n\]
+Cost small - cost pas small: \[n\sum_{i=1}^{s}(2-\alpha_i+1)\] $s$ number of small indices, $alhpa_i$ proportion of how many more points if not pas small
+
 \section{Sensibility Analysis}
 \subsection{Background}
 \subsection{Replication Method}
 \subsection{Sobol' Indices}
 
 \section{Reliable Error Estimation for Cubatures}
+\subsection{Definition of $\widehat{S}$ (fix it with max and min)}
 
 \section{Sobol' Sequences and Permuted Points}
-
+7 digits $L$ bi/tri diagonal but $L'$ identity up 7 digits.
+Fix $L_j$ for each dimension differently?
+If we fix the initial number of digits to 7, we have $7!$ different permutations of the points or Owen scramblings which means that if we take $d$ such that $2d>7!$, some dimensions will share the same points. Therefore, we need to scramble each dimension differently ($L'$).
 
 \end{document}

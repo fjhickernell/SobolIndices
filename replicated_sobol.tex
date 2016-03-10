@@ -1,0 +1,149 @@
+% !TEX TS-program = PDFLatexBibtex
+%&LaTeX
+\documentclass[]{elsarticle}
+\setlength{\marginparwidth}{0.5in}
+\usepackage{amsmath,amssymb,amsthm,natbib,mathtools,bbm,extraipa,mathabx,graphicx}
+%accents,
+
+\newtheorem{lem}{Lemma}
+\newtheorem{remark}{Remark}
+\theoremstyle{definition}
+\newtheorem{defin}{Definition}
+\newtheorem{algo}{Algorithm}
+
+\newcommand{\fudge}{\fC}
+\newcommand{\dtf}{\textit{\doubletilde{f}}}
+\newcommand{\cube}{[0,1)^d}
+%\renewcommand{\bbK}{\natzero^d}
+\newcommand{\rf}{\mathring{f}}
+\newcommand{\rnu}{\mathring{\nu}}
+\newcommand{\natm}{\naturals_{0,m}}
+\newcommand{\wcS}{\widecheck{S}}
+\newcommand{\tol}{\text{tol}}
+\newcommand{\e}{\text{e}}
+\newcommand{\bvec}[1]{\boldsymbol{#1}}
+\newcommand{\vx}{\bvec{x}}
+\newcommand{\vk}{\bvec{k}}
+\newcommand{\vz}{\bvec{z}}
+\newcommand{\dif}{\mathsf{d}}
+\newcommand{\hf}{\hat{f}}
+\newcommand{\hS}{\widehat{S}}
+\newcommand{\tS}{\widetilde{S}}
+\newcommand{\tf}{\tilde{f}}
+\newcommand{\fC}{\mathfrak{C}}
+\newcommand{\homega}{\widehat{\omega}}
+\newcommand{\wcomega}{\mathring{\omega}}
+\newcommand{\vzero}{\bvec{0}}
+\newcommand{\integers}{\mathbb{Z}}
+\newcommand{\naturals}{\mathbb{N}}
+\newcommand{\ip}[3][{}]{\ensuremath{\left \langle #2, #3 \right \rangle_{#1}}}
+
+\def\abs#1{\ensuremath{\left \lvert #1 \right \rvert}}
+
+
+\begin{document}
+
+\begin{frontmatter}
+
+\title{}
+
+\author{Cl\'ementine Prieur, Elise Arnaud, Herv\'{e} Monod, Laurent Gilquin, Fred J. Hickernell, Llu\'{i}s Antoni Jim\'{e}nez Rugama}
+\address{U. Josef Fourier, Illinois Institute of Technology}
+\begin{abstract}
+\end{abstract}
+
+\end{frontmatter}
+
+\section{Problem Statement}
+Denote by $\vx \in [0,1)^d$ a point with components $x_1,\dots,x_d$. Let $u$ be a subset of $\{1,\dots,d\}$, $-u$ its complement and $|u|$ its cardinality. $\vx_u$ represents a point in $[0,1)^u$ with components $x_j, j \in u$. Given two points $\vx$ and $\vx'$, we define the following hybrid point: 
+\[(\vx_u:{\vx'}_{-u}) := ({x'}_1,\dots,{x'}_{u-1},x_u,{x'}_{u+1},\dots,{x'}_d).\]
+Let $f$ be the symbol representing the numerical model considered. We assume $f \in \mathcal{L}^2[0,1]^d$. Denote by $\mu$ and $\sigma^2$ the mean and variance of $f$.
+%These two quantities can be expressed as the following integrals:
+%\[\mu= \frac{1}{2} \int_{[0,1)^{2d-1}}f(\vx)+f(\vx_u:{\vx'}_{-u}) d\vx d{\vx'}_{-u}, \]
+%\[\sigma^2= \int_{[0,1)^{d}}f(\vx)^2 d\vx - \Big{(}\int_{[0,1)^{d}}f(\vx) d\vx\Big{)}^2 .\]
+The uncertainty on $\vx$ is modeled by random variables such that $\vx \sim \mathcal{U}[0,1]^d$. Recall the Hoeffding decomposition of $f$:
+\begin{equation}
+f(\vx)=\mu+\sum \limits_{u \subseteq \{1,\dots,d\}} f_u(\vx),
+\label{anova}
+\end{equation}
+where:
+\[f_u(\vx)= \int_{[0,1)^{|u|}} f(\vx) d{\vx}_{-u} - \sum \limits_{v \subset u} f_v(\vx).\]
+Due to orthogonality, by taking the variance of each side in Equation \ref{anova} we obtain the following decomposition of the variance:
+\[ \sigma^2 = \sum \limits_{u \subseteq \{1,\dots,d\}} \sigma_v^2.\]
+The problem of interest is the estimation of the quantities:
+\[\underline{\tau}_u^2 = \sum \limits_{v \subseteq u} \sigma_v^2, \qquad \text{ for } u = 1,\dots,d.\]
+These quantities correspond to the partial sensitivity Sobol' indices often found written in the literature in their normalized form: $\underline{\tau}_u^2/\sigma^2$. When, $|u|=1$, $\underline{\tau}_u^2$ corresponds to the first-order Sobol' index that evaluate the main effect of the variable $\vx_u$. In \cite{}, Owen proposed to use the following expression for $\underline{\tau}_u^2$:
+\[\underline{\tau}_u^2  =\int_{[0,1)^{2d-1}}(f(\vx) - \mu) (f(\vx_u:{\vx'}_{-u})-\mu) d\vx d{\vx'}_{-u},\]
+taking $\mu$ as introduced in Janon \textit{et al.}:
+\[\mu= \frac{1}{2} \int_{[0,1)^{2d-1}}f(\vx)+f(\vx_u:{\vx'}_{-u}) d\vx d{\vx'}_{-u}. \]
+The natural way to estimate these two quantities is for $(\vx_i,\vx'_i) \stackrel{iid}{\sim} [0,1)^{2d}$ via:
+\begin{align*}
+\widehat{\underline{\tau}_u^2} & = \frac{1}{n} \sum \limits_{i=1}^n (f(\vx_i) - \mu) (f(\vx_{i,u}:{\vx'}_{i,-u})-\mu),\\
+\widehat{\mu} & = \frac{1}{2n} \sum \limits_{i=1}^n f(\vx_i) +f(\vx_{i,u}:{\vx'}_{i,-u}).
+\end{align*}
+\bigskip
+
+We consider here a quasi-Monte Carlo sampling strategy to evaluate these two estimators. We focus on the estimation of all first-order Sobol' indices. The classical estimation procedure introduced by Sobol' requires to evaluate the quantity $f(\vx_u:{\vx'}_{-u})$ $n$ times for each $u \in \{1,\dots,d\}$ while the quantity $f(\vx)$ is only evaluated $n$ times once for all $u$. The total cost sums up to $n(d+1)$ evaluations of $f$. This cost can rapidly becomes prohibitive for expansive models involving an important number of parameters. An improvement to reduces this cost lies in the use of replicated designs. The notion of replicated designs was first introduced by McKay. It is defined as follows:
+\begin{defin}[Replicated designs]
+Let $X$ and $X'$ be two designs defined as follow:
+\[\arraycolsep=1.3pt
+X=\left(\begin{array}{ccccc}
+x_{1,1} & ... & x_{1,j} & ... & x_{1,d} \\
+\vdots &  & \vdots & & \vdots \\
+x_{i,1} & ... & x_{i,j} & ... & x_{i,d} \\
+\vdots &  & \vdots & & \vdots \\
+x_{n,1} & ... & x_{n,j} & ... & x_{n,d} \\
+\end{array} \right), \ X'=\left(\begin{array}{ccccc}
+{x'}_{1,1} & ... & {x'}_{1,j} & ... & {x'}_{1,d} \\
+\vdots &  & \vdots & & \vdots \\
+{x'}_{i,1} & ... & {x'}_{i,j} & ... & {x'}_{i,d} \\
+\vdots &  & \vdots & & \vdots \\
+{x'}_{n,1} & ... & {x'}_{n,j} & ... & {x'}_{n,d} \\
+\end{array} \right) 
+\]
+Let the symbol $X_u$ (resp. $X'_u$), $u \subsetneq \{1,\dots,d-1\}$, denotes a subset of $u$ columns of $X$ (resp. $X'$). We say that $X$ and $X'$ are two replicated designs of order $r \in \{1,\dots,d-1\}$ if:
+
+$\forall \ u \subsetneq \{1,\dots,d\}$ such that $|u|=r$, $X_u$ and $X'_u$ represent the same point sets.
+\end{defin}
+The replication procedure introduced in \cite{} allows to estimate all first-order Sobol' indices with two replicated designs of order $1$. In this procedure, the quantity $f(\vx_u:{\vx'}_{-u})$ is only evaluated $n$ times once for all $u$ resulting in a total of $2n$ evaluations of $f$. Denote by $X$,$X'$ the two replicated designs of order $1$ required by the replication procedure, $X'$ is constructed from $X$ as follows:
+\[{x'}_{i,j}=x_{\pi_j(i),j}, \qquad \forall \ (i,j) \in \{1,\dots,n\} \times \{1,\dots,d\},\]
+where $\pi_1,\dots,\pi_d$ are $d$ permutations on $\{1,\dots,n\}$.
+\bigskip
+
+Our objective is to combine the use of Sobol' sequence with the replication method to estimate all quantities $\underline{\tau}_u^2, u \in \{1,\dots,d\}$ with only $2n$ evaluations of $f$. This translates to construct two Sobol' sequence that identify as two replicated designs of order $1$. 
+
+
+\section{Sobol' sequence background}
+Obviously, we do not need to evaluate $f(\vx)$ $d$ times. But we can do event better than that, and evaluate $f(\vx_u:{\vx'}_{-u})$ only one time. This is the replication method....
+
+$X$,$X'$ are two sequences such that,
+\[
+X = \begin{pmatrix}
+x_1^1,\dots,x_1^d \\
+x_2^1,\dots,x_2^d \\
+x_3^1,\dots,x_3^d \\
+\end{pmatrix} \\
+X' = \begin{pmatrix}
+\pi_1(x_1^1),\dots,\pi_d(x_1^d) \\
+\pi_1(x_2^1),\dots,\pi_d(x_2^d) \\
+\pi_1(x_3^1),\dots,\pi_d(x_3^d) \\
+\end{pmatrix}
+\]
+
+These sequences can be generated indeed with Owen scramblings, or which is equivalent, matrix generators $C_i$
+
+Be $U_m(\mathbb{F}_b)$ the multiplicative group of all invertible triangular matrices of size $m\times m$ over $\mathbb{F}_b$ ($GF(b)$). We have that $\abs{U_m(\mathbb{F}_b)}=(b-1)^m b^{(m-1)m/2}$.
+
+We consider the (infinite) set all possible generating matrices $C_1,C_2,\dots$. We also define the class 
+
+Indeed, we inherit all the group properties from the Permuatations group... because it is equivalent....
+
+Not all choices are possible, for instance order 2 and higher Sobol' indices.
+
+
+\section{There Is The Addition Method I Do Not Know}
+
+\section{L Matrices Fred Method Too Restrictive}
+
+
+\end{document}
