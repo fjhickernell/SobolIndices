@@ -1,4 +1,11 @@
-m = 6;
+clearvars
+m = 7;
+% m:2   max group order:2   group size:2       2^1
+% m:3   max group order:4   group size:8       2^3
+% m:4   max group order:4   group size:64      2^6
+% m:5   max group order:8   group size:1024    2^10
+% m:6   max group order:8   group size:32768   2^15
+% m:7   max group order:8   group size:2097152 2^21
 
 aux = eye(m);
 for i = 0:2^(m*(m-1)/2)-1
@@ -24,8 +31,9 @@ for i = 0:2^(m*(m-1)/2)-1
             GROUP.element(i+1).matrix = A;
         end
     end
+    disp(['Done: ' num2str(i/(2^(m*(m-1)/2)-1))])
 end
 
-disp(max(GROUP.order))
+disp(['m:' num2str(m) '   max group order:' num2str(max(GROUP.order)) '   group size:' num2str(2^(m*(m-1)/2))])
     
     
