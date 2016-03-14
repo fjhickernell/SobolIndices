@@ -1,6 +1,6 @@
 %% Construction of C generating matrices
-s = 28; % Number of matrices for which we generate the Sobol' seq generator
-m = 12; % Number of digits used to generate the seq up to 2^m points
+s = 10; % Number of matrices for which we generate the Sobol' seq generator
+m = 7; % Number of digits used to generate the seq up to 2^m points
 entry_file = 'new-joe-kuo-6.21201'; % joe-kuo-old.1111 new-joe-kuo-6.21201
 A = txt2mat(entry_file);
 
@@ -72,7 +72,7 @@ t_table(1).t = [];
 for dim = 2:s
     t_table(dim).t = [];
     for j = 1:dim - 1
-        t_table(dim).t = [t_table(dim).t, t_value(j,C(j).C,dim,C(dim).C,m)];
+        t_table(dim).t = [t_table(dim).t, t_value(C(j).C,C(dim).C,m)];
     end
     disp(t_table(dim).t)
 end
