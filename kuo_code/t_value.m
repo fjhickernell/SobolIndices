@@ -10,7 +10,6 @@ y = -1;
             r_d = m - t - r_j;
             M = [C_j(1:r_j,1:m); C_d(1:r_d,1:m)];
             M = mod(rref_toni(M),2);
-            disp(M)
             if ~any(M(end,:)) % Matrix M is not full rank (echelon matrix last row is 0)
                 break
             elseif r_j == m - t
