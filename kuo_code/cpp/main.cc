@@ -20,7 +20,7 @@ int main(){
   std::clock_t timer; // initializing a clock type
   timer = std::clock(); // starting time of clock
 
-  unsigned D = 200U; // Number of dimensions to work with
+  unsigned D = 15U; // Number of dimensions to work with
   unsigned digits = 24U; // Number of digits and 2^digits points
   std::vector<generator> geners(D);
 
@@ -70,11 +70,13 @@ int main(){
     }
   }
    infile.close();
-   int a;
+
+   // Computing t_values table
 	for (unsigned dim = 1U; dim<D; dim++){
-//		for (unsigned j = 0U; j<dim; j++) std::cout << t_value(geners[j].C,geners[dim].C,digits) << " ";
-for (unsigned j = 0U; j<dim; j++) a = t_value(geners[j].C,geners[dim].C,digits);
-//	std::cout << std::endl;
+		for (unsigned j = 0U; j<dim; j++) std::cout << t_value(geners[j].C,geners[dim].C,digits) << " ";
+	std::cout << std::endl;
 	}
+
+   // Final total elapsed time
   std::cout << (std::clock() - timer)/((double)CLOCKS_PER_SEC) << " seconds." << std::endl;
 }
