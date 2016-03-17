@@ -5,6 +5,7 @@
 #include <iomanip>
 #include "BooleanMatrix.hh"
 #include "tools.hh"
+#include <ctime>
 
 
 struct generator{
@@ -16,8 +17,11 @@ struct generator{
 };
 
 int main(){
-  unsigned D = 28U; // Number of dimensions to work with
-  unsigned digits = 12U; // Number of digits and 2^digits points
+  std::clock_t timer; // initializing a clock type
+  timer = std::clock(); // starting time of clock
+
+  unsigned D = 200U; // Number of dimensions to work with
+  unsigned digits = 24U; // Number of digits and 2^digits points
   std::vector<generator> geners(D);
 
   // Setting dimension 1 which is defined independently
@@ -66,8 +70,11 @@ int main(){
     }
   }
    infile.close();
+   int a;
 	for (unsigned dim = 1U; dim<D; dim++){
-		for (unsigned j = 0U; j<dim; j++) std::cout << t_value(geners[j].C,geners[dim].C,digits) << " ";
-	std::cout << std::endl;
+//		for (unsigned j = 0U; j<dim; j++) std::cout << t_value(geners[j].C,geners[dim].C,digits) << " ";
+for (unsigned j = 0U; j<dim; j++) a = t_value(geners[j].C,geners[dim].C,digits);
+//	std::cout << std::endl;
 	}
+  std::cout << (std::clock() - timer)/((double)CLOCKS_PER_SEC) << " seconds." << std::endl;
 }
