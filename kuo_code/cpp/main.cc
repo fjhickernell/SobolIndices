@@ -16,8 +16,8 @@ struct generator{
 };
 
 int main(){
-  unsigned D = 10U; // Number of dimensions to work with
-  unsigned digits = 7U; // Number of digits and 2^digits points
+  unsigned D = 28U; // Number of dimensions to work with
+  unsigned digits = 12U; // Number of digits and 2^digits points
   std::vector<generator> geners(D);
 
   // Setting dimension 1 which is defined independently
@@ -29,7 +29,7 @@ int main(){
   }
   geners[0].d = 1U; geners[0].s = 0U;
   
-  // Reading Kuo and Joe data file
+  // Reading Kuo and Joe data file joe-kuo-old.1111 new-joe-kuo-6.21201
   std::ifstream infile("../new-joe-kuo-6.21201",std::ios::in);
   if (!infile) {
     std::cout << "Input file containing direction numbers cannot be found!\n";
@@ -66,9 +66,8 @@ int main(){
     }
   }
    infile.close();
-//	for (unsigned dim = 1U; dim<D; dim++){
-//		for (unsigned j = 0U; j<dim; j++) std::cout << t_value(geners[j].C,geners[dim].C,digits) << " ";
-//	std::cout << std::endl;
-//	}
-std::cout << t_value(geners[1].C,geners[7].C,digits) << std::endl;
+	for (unsigned dim = 1U; dim<D; dim++){
+		for (unsigned j = 0U; j<dim; j++) std::cout << t_value(geners[j].C,geners[dim].C,digits) << " ";
+	std::cout << std::endl;
+	}
 }

@@ -25,25 +25,27 @@ BooleanMatrix M;
 int rd;
     for (int t = 0U; t<m; t++){
         if (t == m - 1U) return t;
-        for (int rj = 1U; rj<m - t; ++rj){
+        for (int rj = 1U; rj <= m - t; ++rj){
             rd = m - t - rj;
 	    aux.clear();
 	    for (unsigned k = 0U; k<rj+rd; k++){
 		if (k<rj) aux.push_back(Cj[k]);
 		else aux.push_back(Cd[k-rj]);
 	    }
-		for (unsigned pp = 0U; pp<rj+rd; pp++){
-			for (unsigned pp2 = 0U; pp2<m; pp2++){
-				std::cout << aux[pp][pp2] << " ";
-			}
-			std::cout << std::endl;
-		}
-	    std::cout << std::endl;
-	    M.set(aux,rj+rd,m); M.print();
-	    std::cout << "-----------------------" << std::endl;
+//		for (unsigned pp = 0U; pp<rj+rd; pp++){
+//			for (unsigned pp2 = 0U; pp2<m; pp2++){
+//				std::cout << aux[pp][pp2] << " ";
+//			}
+//			std::cout << std::endl;
+//		}
+//	    std::cout << std::endl;
+	    M.set(aux,rj+rd,m);
+//	    M.print();
+//	    std::cout << M.getRank() << std::endl;
+//	    std::cout << "-----------------------" << std::endl;
 	    aux.clear();
-            if (M.getRank() < rj+rd) break; // M is not full rank
-            else if (rj == m - t - 1U) return t;
+            if (M.getRank() < rj+rd) break; // M is not full rank, we increase t
+            else if (rj == m - t) return t;
         }
     }
 };

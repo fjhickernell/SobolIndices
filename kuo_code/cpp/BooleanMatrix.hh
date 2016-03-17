@@ -5,7 +5,7 @@
 
 class BooleanMatrix{
     /*This class contains a method gaussElimination()
-     *that computes the rank of the matrix in Z2
+     *that diagonalizes mat and returns the rank in Z2
      */
 
     std::vector< std::vector<bool> > mat; //boolean matrix
@@ -44,6 +44,8 @@ class BooleanMatrix{
         gaussElimination();
     }
 */
+
+   /* Resets any BooleanMatrix to new values */	   
     void set(std::vector< std::vector<bool> > M, int n, int m){
         this -> n = n;
         this -> m = m;
@@ -52,33 +54,57 @@ class BooleanMatrix{
     }
 
     /* Does Gauss Elimination with partial pivoting on the matrix */
-     void gaussElimination(){
-        rank = n;
-        for (int i = 0; i < n; i++){ //std::cout << i << std::endl;
-            if (!mat[i][i]){
-		int j, p;
-                for (j = i+1; j < n && !mat[j][i]; j++);
-		for (p = i+1; p < m && !mat[i][p]; p++);
-                if (j == n && p == m){
-                       rank--;
-                       continue;
-                }
-                else if (j < n){
-                    for (int k = i; k < m; k++){
-                        bool t = mat[i][k];
-                        mat[i][k] = mat[j][k];
-                        mat[j][k] = t;
+    /* It diagonalizes matrix mat and computes the rank */
+    /* We work on n>=m. Otherwise, we work with the transpose */
+     bool gaussElimination(){
+	if (n >= m){
+		rank = m;
+	        for (int i = 0; i < n; i++){
+        	    if (!mat[i][i]){
+                	int j;
+                	for (j = i+1; j < n && !mat[j][i]; j++);
+                	if (j < n){
+                    		for (int k = i; k < m; k++){
+                       			bool t = mat[i][k];
+                        		mat[i][k] = mat[j][k];
+                        		mat[j][k] = t;
+                   	 	}
+            		}
+		    }
+            	    for (int j = i+1; j < n; j++){
+                	if (mat[j][i]){
+                    	for (int k = i; k < m; k++)
+                        	mat[j][k] = mat[j][k] - mat[i][k];
+                	}
+            	    }
+        	}
+		for (int j = 0; j < m; j++){if (!mat[j][j]) rank--;};
+    	}
+	else{
+                rank = n;
+                for (int i = 0; i < m; i++){
+                    if (!mat[i][i]){
+                        int j;
+                        for (j = i+1; j < m && !mat[i][j]; j++);
+                        if (j < m){
+                                for (int k = i; k < n; k++){
+                                        bool t = mat[k][i];
+                                        mat[k][i] = mat[k][j];
+                                        mat[k][j] = t;
+                                }
+                        }
                     }
-		}
-            }
-            for (int j = i+1; j < n; j++){
-                if (mat[j][i]){
-                    for (int k = i; k < m; k++)
-                        mat[j][k] = mat[j][k] - mat[i][k];
+                    for (int j = i+1; j < m; j++){
+                        if (mat[i][j]){
+                        for (int k = i; k < n; k++)
+                                mat[k][j] = mat[k][j] - mat[k][i];
+                        }
+                    }
                 }
-            }
-        }
-    }
+                for (int j = 0; j < n; j++){if (!mat[j][j]) rank--;};
+	}
+   }
+
 
     void print(){
             for (unsigned pp = 0U; pp < n; pp++){
@@ -90,7 +116,7 @@ class BooleanMatrix{
     }
 
     /* Get the row rank of the boolean matrix
-     * If you require the rank of the matrix, make sure that n > m.
+     * If you require the rank of the matrix, make sure that n >= m.
      * i.e. if n < m, call the constructor over the transpose.
      */
     int getRank(){
