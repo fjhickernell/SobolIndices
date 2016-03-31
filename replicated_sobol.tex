@@ -10,6 +10,7 @@
 \newtheorem{remark}{Remark}
 \theoremstyle{definition}
 \newtheorem{defin}{Definition}
+\newtheorem{prop}{Proposition}
 \newtheorem{algo}{Algorithm}
 
 \newcommand{\fudge}{\fC}
@@ -44,7 +45,6 @@
 
 \def\abs#1{\ensuremath{\left \lvert #1 \right \rvert}}
 
-
 \begin{document}
 
 \begin{frontmatter}
@@ -59,107 +59,136 @@
 \end{frontmatter}
 
 \section{Problem Statement}
-Denote by $\vx \in [0,1)^d$ a point with components $x_1,\dots,x_d$. Let $u$ be a subset of $\{1,\dots,d\}$, $-u$ its complement and $|u|$ its cardinality. $\vx_u$ represents a point in $[0,1)^u$ with components $x_j, j \in u$. Given two points $\vx$ and $\vx'$, we define the following hybrid point: 
-\[(\vx_u:{\vx'}_{-u}) := ({x'}_1,\dots,{x'}_{u-1},x_u,{x'}_{u+1},\dots,{x'}_d).\]
-Let $f$ be the symbol representing the numerical model considered. We assume $f \in \mathcal{L}^2[0,1]^d$. Denote by $\mu$ and $\sigma^2$ the mean and variance of $f$.
+Denote by $\vx \in [0,1)^s$ a point with components $x_1,\dots,x_s$. We set $\mathcal{D}=\{1,\dots,s\}$. Let $u$ be a subset of $\mathcal{D}$, $-u$ its complement and $|u|$ its cardinality. $\vx_u$ represents a point in $[0,1)^u$ with components $x_j, j \in u$. Given two points $\vx$ and $\vx'$, we define the following hybrid point: 
+\[\vz_u=(\vx_u:{\vx'}_{-u}), \text{ where: } \left\{
+      \begin{aligned}
+        z_j &= x_j, & \text{ if } j \in u\\
+        z_j &= {x'}_j, & \text{ if } j \in -u\\
+      \end{aligned}
+    \right.  \]
+Let $f$ be the symbol representing the numerical model considered. We assume $f \in \mathcal{L}^2[0,1]^s$. Denote by $\mu$ and $\sigma^2$ the mean and variance of $f$.
 %These two quantities can be expressed as the following integrals:
 %\[\mu= \frac{1}{2} \int_{[0,1)^{2d-1}}f(\vx)+f(\vx_u:{\vx'}_{-u}) d\vx d{\vx'}_{-u}, \]
 %\[\sigma^2= \int_{[0,1)^{d}}f(\vx)^2 d\vx - \Big{(}\int_{[0,1)^{d}}f(\vx) d\vx\Big{)}^2 .\]
-The uncertainty on $\vx$ is modeled by random variables such that $\vx \sim \mathcal{U}[0,1]^d$. Recall the Hoeffding decomposition of $f$:
+The uncertainty on $\vx$ is modeled by random variables such that $\vx \stackrel{iid}{\sim} \mathcal{U}[0,1)^s$. Recall the Hoeffding decomposition of $f$:
 \begin{equation}
-f(\vx)=\mu+\sum \limits_{u \subseteq \{1,\dots,d\}} f_u(\vx),
+f(\vx)=\mu+\sum_{\substack{u \subseteq \{1,\dots,s\} \\ u \neq \emptyset}} f_u(\vx_u),
 \label{anova}
 \end{equation}
-where:
-\[f_u(\vx)= \int_{[0,1)^{d-|u|}} f(\vx) d{\vx}_{-u} - \sum \limits_{v \subset u} f_v(\vx).\]
+where: $\mu$ is a constant and $\forall \ u \subseteq \mathcal{D}, \ u \neq \emptyset, \ \forall \ j \in u: \int_{[0,1]} f_u(\vx_u) d{x_j}=0$.
+
 Due to orthogonality, by taking the variance of each side in Equation \ref{anova} we obtain the following decomposition of the variance:
-\[ \sigma^2 = \sum \limits_{u \subseteq \{1,\dots,d\}} \sigma_v^2.\]
+\[ \sigma^2 = \sum_{\substack{u \subseteq \{1,\dots,s\} \\ u \neq \emptyset}} \sigma_v^2.\]
 The problem of interest is the estimation of the quantities:
-\[\underline{\tau}_u^2 = \sum \limits_{v \subseteq u} \sigma_v^2, \qquad \text{ for } u = 1,\dots,d.\]
-These quantities correspond to the partial sensitivity Sobol' indices often found written in the literature in their normalized form: $\underline{\tau}_u^2/\sigma^2$. When, $|u|=1$, $\underline{\tau}_u^2$ corresponds to the first-order Sobol' index that evaluate the main effect of the variable $\vx_u$. In \cite{}, Owen proposed to use the following expression for $\underline{\tau}_u^2$:
+\[\underline{\tau}_u^2 = \sum \limits_{v \subseteq u} \sigma_v^2, \qquad u \in \mathcal{D}.\]
+These quantities correspond to the partial sensitivity Sobol' indices often found written in the literature in their normalized form: $\underline{\tau}_u^2/\sigma^2$. When, $|u|=1$, $\underline{\tau}_u^2$ corresponds to the first-order Sobol' index that evaluate the main effect of the variable $\vx_u$. Higher order indices evaluate higher order interactions between variables. In \cite{}, Owen proposed to use the following expression for $\underline{\tau}_u^2$:
 \begin{equation}\label{first_order_indice}
-\underline{\tau}_u^2  =\int_{[0,1)^{2d-1}}(f(\vx) - \mu) (f(\vx_u:{\vx'}_{-u})-\mu) d\vx d{\vx'}_{-u},
+\underline{\tau}_u^2  =\int_{[0,1)^{2s-1}}(f(\vx) - \mu) (f(\vx_u:{\vx'}_{-u})-\mu) d\vx d{\vx'}_{-u},
 \end{equation}
 taking $\mu$ as introduced in Janon \textit{et al.}:
-\[\mu= \frac{1}{2} \int_{[0,1)^{2d-1}}f(\vx)+f(\vx_u:{\vx'}_{-u}) d\vx d{\vx'}_{-u}. \]
-The natural way to estimate these two quantities is for $(\vx_i,\vx'_i) \stackrel{iid}{\sim} [0,1)^{2d}$ via:
+\[\mu= \frac{1}{2} \int_{[0,1)^{2s-1}}f(\vx)+f(\vx_u:{\vx'}_{-u}) d\vx d{\vx'}_{-u}. \]
+The natural way to estimate these two quantities is for $(\vx_i,\vx'_i) \stackrel{iid}{\sim} [0,1)^{2s}$ via:
 \begin{align}
 \widehat{\underline{\tau}_u^2} & = \frac{1}{n} \sum \limits_{i=1}^n (f(\vx_i) - \widehat{\mu}) (f(\vx_{i,u}:{\vx'}_{i,-u})-\widehat{\mu}),\label{first_order_indice_estimator}\\
 \nonumber
 \widehat{\mu} & = \frac{1}{2n} \sum \limits_{i=1}^n f(\vx_i) +f(\vx_{i,u}:{\vx'}_{i,-u}).
 \end{align}
-\bigskip
 
-We consider here a quasi-Monte Carlo sampling strategy to evaluate these two estimators. We focus on the estimation of all first-order Sobol' indices. The classical estimation procedure introduced by Sobol' requires to evaluate the quantity $f(\vx_u:{\vx'}_{-u})$ $n$ times for each $u \in \{1,\dots,d\}$ while the quantity $f(\vx)$ is only evaluated $n$ times once for all $u$. The total cost sums up to $n(d+1)$ evaluations of $f$. This cost can rapidly becomes prohibitive for expansive models involving an important number of parameters. An improvement to reduces this cost lies in the use of replicated designs. The notion of replicated designs was first introduced by McKay. It is defined as follows:
+We consider here a quasi-Monte Carlo sampling strategy to evaluate these two estimators. We focus on the estimation of all first-order Sobol' indices, $u \in \mathcal{D}$. The classical estimation procedure introduced by Sobol' requires to evaluate the quantity $f(\vx_u:{\vx'}_{-u})$ $n$ times for each $u$ while the quantity $f(\vx)$ is only evaluated $n$ times once for all $u$. The total cost sums up to $n(d+1)$ evaluations of $f$. This cost can rapidly becomes prohibitive for expansive models involving an important number of parameters. 
+
+An improvement to reduces this cost lies in the use of replicated designs. The notion of replicated designs was first introduced by McKay through the introduction of replicated Latin Hypercubes samples. Here, we define replicated designs in a wider framework:
 \begin{defin}[Replicated designs]
-Let $X$ and $X'$ be two designs defined as follow:
-\[\arraycolsep=1.3pt
-X=\left(\begin{array}{ccccc}
-x_{1,1} & ... & x_{1,j} & ... & x_{1,d} \\
-\vdots &  & \vdots & & \vdots \\
-x_{i,1} & ... & x_{i,j} & ... & x_{i,d} \\
-\vdots &  & \vdots & & \vdots \\
-x_{n,1} & ... & x_{n,j} & ... & x_{n,d} \\
-\end{array} \right), \ X'=\left(\begin{array}{ccccc}
-{x'}_{1,1} & ... & {x'}_{1,j} & ... & {x'}_{1,d} \\
-\vdots &  & \vdots & & \vdots \\
-{x'}_{i,1} & ... & {x'}_{i,j} & ... & {x'}_{i,d} \\
-\vdots &  & \vdots & & \vdots \\
-{x'}_{n,1} & ... & {x'}_{n,j} & ... & {x'}_{n,d} \\
-\end{array} \right).
-\]
-Let the symbol $X_u$ (resp. $X'_u$), $u \subsetneq \{1,\dots,d-1\}$, denotes a subset of $u$ columns of $X$ (resp. $X'$). We say that $X$ and $X'$ are two replicated designs of order $r \in \{1,\dots,d-1\}$ if:
-
-$\forall \ u \subsetneq \{1,\dots,d\}$ such that $|u|=r$, $X_u$ and $X'_u$ represent the same point sets.
+Let $\mathcal{P}$ and $\mathcal{P}'$ be two points sets defined as follow:
+%\[\arraycolsep=1.3pt
+%D=\left(\begin{array}{ccccc}
+%x_{1,1} & ... & x_{1,j} & ... & x_{1,s} \\
+%\vdots &  & \vdots & & \vdots \\
+%x_{i,1} & ... & x_{i,j} & ... & x_{i,s} \\
+%\vdots &  & \vdots & & \vdots \\
+%x_{n,1} & ... & x_{n,j} & ... & x_{n,s} \\
+%\end{array} \right), \ D'=\left(\begin{array}{ccccc}
+%{x'}_{1,1} & ... & {x'}_{1,j} & ... & {x'}_{1,s} \\
+%\vdots &  & \vdots & & \vdots \\
+%{x'}_{i,1} & ... & {x'}_{i,j} & ... & {x'}_{i,s} \\
+%\vdots &  & \vdots & & \vdots \\
+%{x'}_{n,1} & ... & {x'}_{n,j} & ... & {x'}_{n,s} \\
+%\end{array} \right).
+%\]
+$\mathcal{P}=\{\vx_i\}_{i=0}^{n-1}$, $\mathcal{P}'=\{{\vx'}_i\}_{i=0}^{n-1}$, $(\vx_i,\vx'_i) \stackrel{iid}{\sim} [0,1)^{2s}$. Let $\mathcal{P}^u=\{\vx_{i,u}\}_{i=0}^{n-1}$ (resp. $\mathcal{P}'^u$), $u \subsetneq \mathcal{D}$, denote the subset of columns of $\mathcal{P}$ (resp. $\mathcal{P}'$) indexed by $u$. We say that $\mathcal{P}$ and $\mathcal{P}'$ are two replicated designs of order $r$ if:\\
+$\forall \ u \subsetneq \mathcal{D}$ such that $|u|=r$, $\mathcal{P}^u$ and $\mathcal{P}'^u$ represent the same points set in $[0,1)^r$.
 \end{defin}
-The replication procedure introduced in \cite{•} allows to estimate all first-order Sobol' indices with two replicated designs of order $1$. In this procedure, the quantity $f(\vx_u:{\vx'}_{-u})$ is only evaluated $n$ times once for all $u$ resulting in a total of $2n$ evaluations of $f$. Denote by $X$,$X'$ the two replicated designs of order $1$ required by the replication procedure, $X'$ is constructed from $X$ as follows:
-\[{x'}_{i,j}=x_{\pi_j(i),j}, \qquad \forall \ (i,j) \in \{1,\dots,n\} \times \{1,\dots,d\},\]
-where $\pi_1,\dots,\pi_d$ are $d$ permutations on $\{1,\dots,n\}$.
-\bigskip
+The replication procedure introduced in \cite{•} allows to estimate all first-order Sobol' indices with two replicated designs of order $1$. In this procedure, the quantity $f(\vx_u:{\vx'}_{-u})$ is only evaluated $n$ times once for all $u$, resulting in a total of $2n$ evaluations of $f$. %Denote by $D$,$D'$ the two replicated designs of order $1$ required by the replication procedure, $D'$ is constructed from $D$ as follows:
+%\[{x'}_{i,j}=x_{\pi_j(i),j}, \qquad \forall \ (i,j) \in \{1,\dots,n\} \times \{1,\dots,d\},\]
+%where $\pi_1,\dots,\pi_d$ are $d$ permutations on $\{1,\dots,n\}$ selected randomly and independently.
 
-Our objective is to combine the use of Sobol' sequences with the replication method to iteratively estimate all quantities $\underline{\tau}_u^2, u \in \{1,\dots,d\}$. This would reduce the method to constructing two replicated designs of order $1$ that are iteratively augmented with new point sets. Two approaches are considered: one multiplicative and one additive. The first one uses the innate nested structure of a Sobol' sequence. The size of each replicated design is doubled at each step. The additive approach consists first of constructing a Sobol' sequence then shifting and scrambling it to form the new point sets. These new point sets are then added to the initial Sobol' sequence to form the two replicated designs. In this case, the size of each replicated design at step $k$ is $ k \times 2^m$ where $2^m$ is the size of the initial Sobol' sequence.
-
-
+Our objective here is to combine the use of Sobol' sequences with the replication method to iteratively estimate all quantities $\underline{\tau}_u^2, u \in \mathcal{D}$. This approach reduces to construct two replicated Sobol' sequences iteratively refined with new point sets. In this fashion, two approaches are considered: one multiplicative and one additive. In the next section, we provide some background on digital nets and sequences. The two approaches are detailed in Section \ref{sobol.seq.cons}.
 
 \section{Digital Nets Background}
 
-In this section we introduce a particular type of quasi-Monte Carlo points to estimate $\eqref{first_order_indice}$, which will allow us to evaluate the integrand at points $\{\left(\vx_i,{\vx'}_{i,-u}\right)\}_{i=0}^{b^m}$ only one time to estimate all $d$ indices.
+In this section we introduce a particular type of quasi-Monte Carlo points called digital nets to estimate the quantities $\eqref{first_order_indice}$. 
+%, which will allow us to evaluate the integrand at points $\{\left(\vx_i,{\vx'}_{i,-u}\right)\}_{i=0}^{b^m}$ only one time to estimate all $d$ indices.
+ The concept of $(t,m,s)$-net and $(t,s)$-sequence was first introduced and studied by Niederreiter in \cite{•}. $(t,m,s)$-nets are digital nets in $\cubes$ whose quality is measured by the parameter $t$ called $t$-value. %Because this parameter is the criterion we use to construct our new sequences, we provide the key definitions below.
+ $(t,m,s)$-net and and $(t,s)$-sequence are strongly linked to the concept of star discrepancy \cite{.} and defined as follows:
+\begin{defin}[$(t,m,s)-net$]
+Let $\mathcal{A}$ be the set of all elementary intervals $A\in\cubes$ where $A=\prod_{i=1}^s [\alpha_jb^{-\gamma_j},(\alpha_j+1)b^{-\gamma_j})$, with integers $0\leq\gamma_j$ and $0\leq\alpha_j<b^{\gamma_j}$ for all $j=1,\dots,s$. For integers $s\geq 1$, $b\geq 2$, and $m\geq t\geq 0$, the points set $\mathcal{P}=\{\vx_i\}_{i=0}^{b^m-1}$, $\vx_i\in\cubes$, with $|\mathcal{P}|=b^m$, is a $(t,m,s)-net$ in base $b$ if:
 
-The concept of $(t,m,s)$-net and $(t,s)$-sequence was first introduced and studied by Niederreiter in \cite{•}. These are points sets in $\cubes$ whose quality is measured by the parameter $t$. Because this parameter is the criterion we use to construct our new sequences, we provide the key definitions below.
-
-Let $\mathcal{A}$ be the set of all $A\in\cubes$ such that $A:=\prod_{i=1}^s [\alpha_jb^{-\gamma_j},(\alpha_j+1)b^{-\gamma_j})$, with integers $0\leq\gamma_j$ and $0\leq\alpha_j<b^{\gamma_j}$ for all $j=1,\dots,s$. 
-
-\begin{defin}
-For integers $s\geq 1$, $b\geq 2$, and $m\geq t\geq 0$, the set of points $\mathcal{P}\in\cubes$, with $|\mathcal{P}|=b^m$, is a $(t,m,d)-net$ in base $b$ if for every $A\in\mathcal{A}$ with volume $b^{t-m}$, $|A\cap\mathcal{P}|=b^t$ ($A$ contains exactly $b^t$ points of $\mathcal{P}$).
+for every $A\in\mathcal{A}$ with volume $b^{t-m}$, $|A\cap\mathcal{P}|=b^t$ ($A$ contains exactly $b^t$ points of $\mathcal{P}$).
 \end{defin}
-
-In other words, any box of ... contains a proport
-....
-This definition is linked to the star discrepancy...
-The smaller the t value, the better.
-
-\begin{defin}
-For integers $s\geq 1$, $b\geq 2$, and $t\geq 0$, the sequence $\{\vx_i\}_{\mathbb{N}_0}$ is a $(t,s)$-sequence in base $b$, if every set $\mathcal{P}_{l,m}:=\{\vx_i\}_{i=lb^m}^{(l+1)b^m-1}$ with $l\geq 0$ and $m\geq t$, $\mathcal{P}_{l,m}$ is a $(t,m,s)$-net in base $b$.
+%In other words, any box of ... contains a proport
+%....
+%This definition is linked to the star discrepancy...
+%The smaller the t value, the better.
+\begin{defin}[$(t,s)$-sequence]
+For integers $s\geq 1$, $b\geq 2$, and $t\geq 0$, the sequence $\{\vx_i\}_{i=1}^{\infty}$ is a $(t,s)$-sequence in base $b$, if every set $\mathcal{P}_{l,m}=\{\vx_i\}_{i=lb^m}^{(l+1)b^m-1}$ with $l\geq 0$ and $m\geq t$, $\mathcal{P}_{l,m}$ is a $(t,m,s)$-net in base $b$.
 \end{defin}
+In other words, the points set $\mathcal{P}$ is a $(t,m,s)$-net if its points are apportioned equally on all elementary intervals $A\in\mathcal{A}$. The smaller the $t$-value, the better the scattering of $\mathcal{P}$ in $\cubes$.
+\bigskip
 
-Digital nets are usually computed with the generating matrices $C_1,\dots,C_s$ in $\mathbb{F}_b$, whose size $\infty\times\infty$. However, to construct the first $b^m$ points, one only needs the knowledge of $C_1^{\infty\times m},\dots,C_s^{\infty\times m}$. For each $i=0,\dots,b^m-1$, the points $\vx_i = (x_{i,j},\dots,x_{i,s})^\intercal$ of the sequence can be constructed as follows:
+Digital nets are usually computed with square matrices $C_1^{\infty},\dots,C_s^{\infty}$ in $\mathbb{F}_b$ of size $\infty\times\infty$ often referred in the literature as generating matrices. However, to construct the first $b^m$ points, one only needs the knowledge of $C_1^m,\dots,C_s^m$. For each $i=0,\dots,b^m-1$, the points $\vx_i = (x_{i,1},\dots,x_{i,s})^\intercal$ of the sequence can be constructed as follows:
 \begin{equation}
-(x_{i,j,1},x_{i,j,2},\dots)^\intercal = C_j^{\infty\times m}(i_{0},\dots,i_{m-1})^\intercal,\qquad j= 1,\dots,s\, ,
+\label{dig.net.eq.}
+(x_{i,j,1},x_{i,j,2},\dots)^\intercal = C_j^m (i_{0},\dots,i_{m-1})^\intercal,\qquad j= 1,\dots,s\, ,
 \end{equation}
-where $x_{i,j} = \sum_{k \geq 1}x_{i,j,k}b^{-k}$ and $i = \sum_{k=0}^{m-1}i_kb^{k}$.
+where $x_{i,j} = \sum_{k \geq 1}x_{i,j,k}b^{-k}$ is the radical inverse $b$-ary decomposition of point $x_{i,j}$ and $i = \sum_{k=0}^{m-1}i_kb^{k}$ is the $b$-ary decomposition of $i$. For $m' < m$ the matrices $C_j^{m'}$ are embedded in the upper left corners of matrices $C_j^{m}$. Thus, the digital nets possess an innate nested structure resulting from this embedding. That is $\mathcal{P}_{m'} \subset \mathcal{P}_m \subset \dots \subset \mathcal{P}_{\infty}$. 
 
-\subsection{Replicated Digital Sequences}
-Here recall the link with the replicated method....
+Sobol' sequences are digital nets defined in base $b=2$. They are attractive due to their efficient implementation through the use of Gray code. In our scope, their attractiveness comes from their low growing rate (factor $2$). 
+\bigskip
+
+In the next section, we present two approaches to construct two replicated Sobol' sequences iteratively refined with new points sets. The multiplicative approach uses the innate nested structure of a Sobol' sequence. The size of each replicated Sobol' sequence is doubled at each step. The additive approach combines digital shifting and scrambling operations to form the new points set. In this case, at step $k$ the size of each replicated Sobol' sequence is $ k \times 2^m$ where $2^m$ is the size of the initial Sobol' sequence. 
+
+\section{Iterative constructions of replicated Sobol' sequence}
+\label{sobol.seq.cons}
+
+\subsection{Replicated Sobol' sequences}
+
+
+We start by introducing some useful definitions for the rest of the paper. We note by $\vi=(i_{0},\dots,i_{m-1})^T$ the vector resulting from the binary decomposition $\eqref{dig.net.eq.}$ of integer $i$. We also note by $U_m(\mathbb{F}_2)$ the multiplicative group of all invertible triangular matrices of size $m\times m$ over the Galois field $\mathbb{F}_2$. Consider the following application:
+\begin{equation*}
+ \Diamond \colon \left\lbrace \begin{array}{ccccc} (\mathbb{F}_2)^m \times U_m(\mathbb{F}_2) & \to & (\mathbb{F}_2)^m \\
+  (\vi,C) & \mapsto &  C . \vi \\
+\end{array} \right.
+\label{model}
+\end{equation*}
+The application $\Diamond$ consists in the operation carried on in Equation $\eqref{dig.net.eq.}$. It is easy to see that for $C \in U_m(\mathbb{F}_2)$ fixed, $\Diamond$ is a bijection of $(\mathbb{F}_2)^m$. As a results, applying $\Diamond$ for all $\vi \in (\mathbb{F}_2)^m$ with any generating matrix $C_j^m$ give the same points set. This leads to the following definition of replicated Sobol' sequences:
 \begin{defin}
-A digital sequence $\{{\vx'}_i\}_{i\in\mathbb{N}_0}$ is the \emph{replicated digital} sequence of $\{\vx_i\}_{i\in\mathbb{N}_0}$ if for all $m\geq 0$, $\{{\vx'}_i\}_{i=0}^{b^m-1}$ is a replicated design of $\{{\vx}_i\}_{i=0}^{b^m-1}$.
+Let $C_j^m$, $C_{j'}^m$ be two generating matrices. The corresponding Sobol' sequences $\{\vx_i\}_{i=0}^{b^m-1}$ and $\{\vx'_i\}_{i=0}^{b^m-1}$ are two replicated designs of order $1$. Furthermore, the digital sequences $\{{\vx}_i\}_{i=0}^{\infty}$ and $\{{\vx'}_i\}_{i=0}^{\infty}$ are two replicated Sobol' sequence, that is for all $m \geq 0$, $\{{\vx}_i\}_{i=b^{m-1}}^{b^m-1}$ and $\{{\vx'}_i\}_{i=b^{m-1}}^{b^m-1}$ are two replicated designs of order $1$.
 \end{defin}
-In this case, $C_j'$ will depend on the choice of $C_j$.
+In other worlds, Sobol' sequences are innate replicated designs of order $1$ possessing a nested structure.
 
-If we do higher order Sobol' indices, we can easily show that $C'_{i}=AC_{i}$ for $i = 1,\dots,d$, and this does not work because this means having the same function values for each $u$, with a unique ordering given by $A$.
+
+\subsection{Multiplicative approach}
+%
+%\begin{defin}
+%A digital sequence $\{{\vx'}_i\}_{i\in\mathbb{N}_0}$ is the \emph{replicated digital} sequence of $\{\vx_i\}_{i\in\mathbb{N}_0}$ if for all $m\geq 0$, $\{{\vx'}_i\}_{i=0}^{b^m-1}$ is a replicated design of $\{{\vx}_i\}_{i=0}^{b^m-1}$.
+%\end{defin}
+%In this case, $C_j'$ will depend on the choice of $C_j$.
+
+%If we do higher order Sobol' indices, we can easily show that $C'_{i}=AC_{i}$ for $i = 1,\dots,d$, and this does not work because this means having the same function values for each $u$, with a unique ordering given by $A$.
  
 Although the choices of $C_j$ and $C_j'$ are many, there is a special case interesting for its construction simplicity, and wide range of $C_j'$ choices.
 
-For this special case, we consider the generating matrices to be upper triangular. This ensures that $x_{i,j,k}=0$, for $m<k$ and $0 \leq i \leq b^m-1$. If we also assume that there are no zeros on the diagonal, the block $C_j^{m\times m}$ is full rank and each $x_{i,j}\neq x_{r,j}$ when $i\neq r$. Therefore, excluding the trivial case, it is enough to choose $C_j\neq C_j'$ for at least $d-1$ dimensions to obtain a \emph{replicated digital sequence}. When $b=2$, these are Sobol' sequences.
+For this special case, we consider the generating matrices to be upper triangular. This ensures that $x_{i,j,k}=0$, for $m<k$ and $0 \leq i \leq b^m-1$. If we also assume that there are no zeros on the diagonal, the block $C_j^{m\times m}$ is full rank and each $x_{i,j}\neq x_{r,j}$ when $i\neq r$. Therefore, excluding the trivial case, it is enough to choose $C_j\neq C_j'$ for at least $d-1$ dimensions to obtain a \emph{replicated digital sequence}. 
+%When $b=2$, these are Sobol' sequences.
 
 For quasi-Monte Carlo integration purposes, given $\{{\vx}_i\}_{i\in\mathbb{N}_0}$ generated by $C_{1},\dots,C_{d}$, and $\{{\vx'}_i\}_{i\in\mathbb{N}_0}$ generated by $C'_{1},\dots,C'_{d}$, the $d$ sequences in dimension $2d-1$ used to estimate all $\underline{\tau}_u^2$ are generated by
 \begin{equation}\label{ordered_sequence}
@@ -171,61 +200,56 @@ The best choice of primitive polynomials and directional numbers to generate goo
 
 Pairwise projections are already well optimized (see\cite[Table 2.1]{•}). Thus, our starting point will be using the $C_1,\dots,C_d$ found in \cite{•} to generate the sequence $\{{\vx}_i\}_{i\in\mathbb{N}_0}$. Hence, we will focus on finding the optimal $C'_{1},\dots,C'_{d}$ such that we minimize a $t$-value criteria (to specify, perhaps the max of all) over all $d$ sequences described in \eqref{ordered_sequence}.
 
-\subsection{Matrix generators group $U_m$}
+%\subsection{Matrix generators group $U_m$}
+%
+%Be $U_m(\mathbb{F}_b)$ the multiplicative group of all invertible triangular matrices of size $m\times m$ over $\mathbb{F}_b$ ($GF(b)$). We have that $\abs{U_m(\mathbb{F}_b)}=(b-1)^m b^{(m-1)m/2}$.
+%
+%We consider the (infinite) set all possible generating matrices $C_1,C_2,\dots$. We also define the class 
+%
+%Indeed, we inherit all the group properties from the Permuatations group... because it is equivalent....
 
-Be $U_m(\mathbb{F}_b)$ the multiplicative group of all invertible triangular matrices of size $m\times m$ over $\mathbb{F}_b$ ($GF(b)$). We have that $\abs{U_m(\mathbb{F}_b)}=(b-1)^m b^{(m-1)m/2}$.
-
-We consider the (infinite) set all possible generating matrices $C_1,C_2,\dots$. We also define the class 
-
-Indeed, we inherit all the group properties from the Permuatations group... because it is equivalent....
-
-\subsection{Owen Scrambling To Replicated Digital Sequences}
-
-It will be easy to write that we can apply an Owen scrambling to each dimension separately, and we only need to keep the same scrambling for $C_j$ and $C'_j$.
-
-
-\section{Additive Approach}
-Notations:
-\begin{itemize}
-\item[.] $m$ denote the number of digits
-\item[.] $C_{m,1},\dots,C_{m,d}$: $d$ generator matrices of size $m \times m$ over the finite field $\mathcal{Z}_2$
-\item[.] $\vi$: base-$2$ representation of the integer $i$: $\vi=(i_1,\dots,i_m)^T$
-\item[.] $L_{m,l}$: nonsingular $m \times m$ lower triangular matrix over the finite field $\mathcal{Z}_2$
-\item[.] $\ve_{m,l}$: $m \times 1$ vector with elements from $\mathcal{Z}_2$
-\end{itemize}
-
-Denote by $X$ and $X'$ the two replicated designs of order $1$.
-A row of $X$ or $X'$ is a point in $[0,1]^d$. The symbol $x_i^j$ (resp. ${x'}_i^j$) corresponds to  the element of row $i$ and column $j$ of $X$ (resp. $X'$). The additive approach is described by Algorithm \ref{additive}. All operations are carried on the finite field $\mathcal{Z}_2$.
-\begin{algorithm}[!ht]
-
-\begin{center}
-\begin{minipage}{10cm}
-\begin{enumerate}
-\item[Step 1.] Instantiation: $X \leftarrow \emptyset$, $X' \leftarrow \emptyset$, $l \leftarrow 1$, $\widehat{\underline{\tau}_u^2}^{(0)} \leftarrow 0$.
-\item[Step 4.] $while$ ($!$ stopping criterion):
-\begin{enumerate}
-\item[4.1] Construct $L_{m,l}$ and $\ve_{m,l}$.
-\item[4.2] Augment both $X$ and $X'$:\\
-for $j=1,\dots,d$:\\
-for $i=1+2^{m+l-1},\dots,2^{m+l}$:
-\begin{flalign*}
-x_i^j & = C_{m,j} . \vi + \ve_{m,l} && \\
-{x'}_i^j & = L_{m,l} . (C_{m,j} . \vi +  \ve_{m,l})&&
-\end{flalign*}
-\item[4.3] For $u=1,\dots,d$: evaluate $\widehat{\underline{\tau}_u^2}^{(l)}.$ 
-\item[4.4.]  $l \leftarrow l+1.$
-\end{enumerate}
-\item[Step 5.] Return: $\widehat{\underline{\tau}_u^2}, \ u \in \{1,\dots,d\}.$ 
-\end{enumerate}
-\end{minipage}
-\end{center}
-\label{additive}
-\caption{Additive approach}
-\end{algorithm}
+%\subsection{Owen Scrambling To Replicated Digital Sequences}
+%
+%It will be easy to write that we can apply an Owen scrambling to each dimension separately, and we only need to keep the same scrambling for $C_j$ and $C'_j$.
 
 
-
-\section{L Matrices Fred Method Too Restrictive}
-
+\subsection{Additive Approach}
+%Notations:
+%\begin{itemize}
+%\item[.] $m$ denote the number of digits
+%\item[.] $C_{m,1},\dots,C_{m,d}$: $d$ generator matrices of size $m \times m$ over the finite field $\mathcal{Z}_2$
+%\item[.] $\vi$: base-$2$ representation of the integer $i$: $\vi=(i_1,\dots,i_m)^T$
+%\item[.] $L_{m,l}$: nonsingular $m \times m$ lower triangular matrix over the finite field $\mathcal{Z}_2$
+%\item[.] $\ve_{m,l}$: $m \times 1$ vector with elements from $\mathcal{Z}_2$
+%\end{itemize}
+%
+%Denote by $X$ and $X'$ the two replicated designs of order $1$.
+%A row of $X$ or $X'$ is a point in $[0,1]^d$. The symbol $x_i^j$ (resp. ${x'}_i^j$) corresponds to  the element of row $i$ and column $j$ of $X$ (resp. $X'$). The additive approach is described by Algorithm \ref{additive}. All operations are carried on the finite field $\mathcal{Z}_2$.
+%\begin{algorithm}[!ht]
+%
+%\begin{center}
+%\begin{minipage}{10cm}
+%\begin{enumerate}
+%\item[Step 1.] Instantiation: $X \leftarrow \emptyset$, $X' \leftarrow \emptyset$, $l \leftarrow 1$, $\widehat{\underline{\tau}_u^2}^{(0)} \leftarrow 0$.
+%\item[Step 4.] $while$ ($!$ stopping criterion):
+%\begin{enumerate}
+%\item[4.1] Construct $L_{m,l}$ and $\ve_{m,l}$.
+%\item[4.2] Augment both $X$ and $X'$:\\
+%for $j=1,\dots,d$:\\
+%for $i=1+2^{m+l-1},\dots,2^{m+l}$:
+%\begin{flalign*}
+%x_i^j & = C_{m,j} . \vi + \ve_{m,l} && \\
+%{x'}_i^j & = L_{m,l} . (C_{m,j} . \vi +  \ve_{m,l})&&
+%\end{flalign*}
+%\item[4.3] For $u=1,\dots,d$: evaluate $\widehat{\underline{\tau}_u^2}^{(l)}.$ 
+%\item[4.4.]  $l \leftarrow l+1.$
+%\end{enumerate}
+%\item[Step 5.] Return: $\widehat{\underline{\tau}_u^2}, \ u \in \{1,\dots,d\}.$ 
+%\end{enumerate}
+%\end{minipage}
+%\end{center}
+%\label{additive}
+%\caption{Additive approach}
+%\end{algorithm}
 
 \end{document}
