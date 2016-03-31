@@ -71,7 +71,7 @@ f(\vx)=\mu+\sum \limits_{u \subseteq \{1,\dots,d\}} f_u(\vx),
 \label{anova}
 \end{equation}
 where:
-\[f_u(\vx)= \int_{[0,1)^{|u|}} f(\vx) d{\vx}_{-u} - \sum \limits_{v \subset u} f_v(\vx).\]
+\[f_u(\vx)= \int_{[0,1)^{d-|u|}} f(\vx) d{\vx}_{-u} - \sum \limits_{v \subset u} f_v(\vx).\]
 Due to orthogonality, by taking the variance of each side in Equation \ref{anova} we obtain the following decomposition of the variance:
 \[ \sigma^2 = \sum \limits_{u \subseteq \{1,\dots,d\}} \sigma_v^2.\]
 The problem of interest is the estimation of the quantities:
