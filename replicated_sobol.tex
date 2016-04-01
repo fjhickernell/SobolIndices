@@ -15,8 +15,7 @@
 
 \newcommand{\fudge}{\fC}
 \newcommand{\dtf}{\textit{\doubletilde{f}}}
-\newcommand{\cube}{[0,1)^d}
-\newcommand{\cubes}{[0,1)^s}
+\newcommand{\cube}{[0,1)^s}
 %\renewcommand{\bbK}{\natzero^d}
 \newcommand{\rf}{\mathring{f}}
 \newcommand{\rnu}{\mathring{\nu}}
@@ -94,11 +93,11 @@ The natural way to estimate these two quantities is for $(\vx_i,\vx'_i) \stackre
 \widehat{\mu} & = \frac{1}{2n} \sum \limits_{i=1}^n f(\vx_i) +f(\vx_{i,u}:{\vx'}_{i,-u}).
 \end{align}
 
-We consider here a quasi-Monte Carlo sampling strategy to evaluate these two estimators. We focus on the estimation of all first-order Sobol' indices, $u \in \mathcal{D}$. The classical estimation procedure introduced by Sobol' requires to evaluate the quantity $f(\vx_u:{\vx'}_{-u})$ $n$ times for each $u$ while the quantity $f(\vx)$ is only evaluated $n$ times once for all $u$. The total cost sums up to $n(d+1)$ evaluations of $f$. This cost can rapidly becomes prohibitive for expansive models involving an important number of parameters. 
+We consider here a quasi-Monte Carlo sampling strategy to evaluate these two estimators. We focus on the estimation of all first-order Sobol' indices, $u \in \mathcal{D}$. The classical estimation procedure introduced by Sobol' requires to evaluate the quantity $f(\vx_u:{\vx'}_{-u})$ $n$ times for each $u$ while the quantity $f(\vx)$ is only evaluated $n$ times once for all $u$. The total cost sums up to $n(d+1)$ evaluations of $f$. This cost can rapidly become prohibitive for models whose evaluation is time consuming, as such involve an important number of parameters. 
 
-An improvement to reduces this cost lies in the use of replicated designs. The notion of replicated designs was first introduced by McKay through the introduction of replicated Latin Hypercubes samples. Here, we define replicated designs in a wider framework:
+An improvement to reduce this cost lies in the use of replicated designs. The notion of replicated designs was first introduced by McKay through the introduction of replicated Latin Hypercubes samples. Here, we define replicated designs in a wider framework:
 \begin{defin}[Replicated designs]
-Let $\mathcal{P}$ and $\mathcal{P}'$ be two points sets defined as follow:
+Let $\mathcal{P}=\{\vx_i\}_{i=0}^{n-1}$ and $\mathcal{P}'=\{{\vx'}_i\}_{i=0}^{n-1}$ be two point sets,
 %\[\arraycolsep=1.3pt
 %D=\left(\begin{array}{ccccc}
 %x_{1,1} & ... & x_{1,j} & ... & x_{1,s} \\
@@ -114,42 +113,37 @@ Let $\mathcal{P}$ and $\mathcal{P}'$ be two points sets defined as follow:
 %{x'}_{n,1} & ... & {x'}_{n,j} & ... & {x'}_{n,s} \\
 %\end{array} \right).
 %\]
-$\mathcal{P}=\{\vx_i\}_{i=0}^{n-1}$, $\mathcal{P}'=\{{\vx'}_i\}_{i=0}^{n-1}$, $(\vx_i,\vx'_i) \stackrel{iid}{\sim} [0,1)^{2s}$. Let $\mathcal{P}^u=\{\vx_{i,u}\}_{i=0}^{n-1}$ (resp. $\mathcal{P}'^u$), $u \subsetneq \mathcal{D}$, denote the subset of columns of $\mathcal{P}$ (resp. $\mathcal{P}'$) indexed by $u$. We say that $\mathcal{P}$ and $\mathcal{P}'$ are two replicated designs of order $r$ if:\\
-$\forall \ u \subsetneq \mathcal{D}$ such that $|u|=r$, $\mathcal{P}^u$ and $\mathcal{P}'^u$ represent the same points set in $[0,1)^r$.
+$\vx_i,\vx'_i\in[0,1)^{s}$. Let $\mathcal{P}^u=\{\vx_{i,u}\}_{i=0}^{n-1}$ (resp. $\mathcal{P}'^u$), $u \subsetneq \mathcal{D}$, denote the subset of dimensions of $\mathcal{P}$ (resp. $\mathcal{P}'$) indexed by $u$. We say that $\mathcal{P}$ and $\mathcal{P}'$ are two replicated designs of order $r$ if:\\
+$\forall \ u \subsetneq \mathcal{D}$ such that $|u|=r$, $\mathcal{P}^u$ and $\mathcal{P}'^u$ are the same point set in $[0,1)^r$.
 \end{defin}
 The replication procedure introduced in \cite{•} allows to estimate all first-order Sobol' indices with two replicated designs of order $1$. In this procedure, the quantity $f(\vx_u:{\vx'}_{-u})$ is only evaluated $n$ times once for all $u$, resulting in a total of $2n$ evaluations of $f$. %Denote by $D$,$D'$ the two replicated designs of order $1$ required by the replication procedure, $D'$ is constructed from $D$ as follows:
 %\[{x'}_{i,j}=x_{\pi_j(i),j}, \qquad \forall \ (i,j) \in \{1,\dots,n\} \times \{1,\dots,d\},\]
 %where $\pi_1,\dots,\pi_d$ are $d$ permutations on $\{1,\dots,n\}$ selected randomly and independently.
 
-Our objective here is to combine the use of Sobol' sequences with the replication method to iteratively estimate all quantities $\underline{\tau}_u^2, u \in \mathcal{D}$. This approach reduces to construct two replicated Sobol' sequences iteratively refined with new point sets. In this fashion, two approaches are considered: one multiplicative and one additive. In the next section, we provide some background on digital nets and sequences. The two approaches are detailed in Section \ref{sobol.seq.cons}.
+Our objective here is to combine the use of Sobol' sequences with the replication method to iteratively estimate all quantities $\underline{\tau}_u^2, u \in \mathcal{D}$, $\abs{u}=1$. This approach reduces to construct two replicated Sobol' sequences iteratively refined with new point sets. In this fashion, two approaches are considered: one multiplicative and one additive. In the next section, we provide some background on digital nets and sequences. The two approaches are detailed in Section \ref{sobol.seq.cons}.
 
 \section{Digital Nets Background}
 
-In this section we introduce a particular type of quasi-Monte Carlo points called digital nets to estimate the quantities $\eqref{first_order_indice}$. 
+In this section we introduce a particular type of quasi-Monte Carlo points to estimate the quantities in $\eqref{first_order_indice}$ for $\abs{u}=1$, according to the replication method. 
 %, which will allow us to evaluate the integrand at points $\{\left(\vx_i,{\vx'}_{i,-u}\right)\}_{i=0}^{b^m}$ only one time to estimate all $d$ indices.
- The concept of $(t,m,s)$-net and $(t,s)$-sequence was first introduced and studied by Niederreiter in \cite{•}. $(t,m,s)$-nets are digital nets in $\cubes$ whose quality is measured by the parameter $t$ called $t$-value. %Because this parameter is the criterion we use to construct our new sequences, we provide the key definitions below.
- $(t,m,s)$-net and and $(t,s)$-sequence are strongly linked to the concept of star discrepancy \cite{.} and defined as follows:
+The concepts of $(t,m,s)$-net and $(t,s)$-sequence were first introduced by Niederreiter in \cite{•}. Digital nets are accurately defined as $(t,m,s)$-nets in $\cube$ whose quality is measured by the parameter $t$, called $t$-value. %Because this parameter is the criterion we use to construct our new sequences, we provide the key definitions below.
+%$(t,m,s)$-net and and $(t,s)$-sequence are strongly linked to the concept of star discrepancy \cite{.} and defined as follows:
 \begin{defin}[$(t,m,s)-net$]
-Let $\mathcal{A}$ be the set of all elementary intervals $A\in\cubes$ where $A=\prod_{i=1}^s [\alpha_jb^{-\gamma_j},(\alpha_j+1)b^{-\gamma_j})$, with integers $0\leq\gamma_j$ and $0\leq\alpha_j<b^{\gamma_j}$ for all $j=1,\dots,s$. For integers $s\geq 1$, $b\geq 2$, and $m\geq t\geq 0$, the points set $\mathcal{P}=\{\vx_i\}_{i=0}^{b^m-1}$, $\vx_i\in\cubes$, with $|\mathcal{P}|=b^m$, is a $(t,m,s)-net$ in base $b$ if:
-
-for every $A\in\mathcal{A}$ with volume $b^{t-m}$, $|A\cap\mathcal{P}|=b^t$ ($A$ contains exactly $b^t$ points of $\mathcal{P}$).
+Let $\mathcal{A}$ be the set of all elementary intervals $A\in\cube$ where $A=\prod_{j=1}^s [\alpha_jb^{-\gamma_j},(\alpha_j+1)b^{-\gamma_j})$, with integers $s\geq 1$, $b\geq 2$, $\gamma_j\geq 0$, and $b^{\gamma_j}>\alpha_j\geq 0$. For $m\geq t\geq 0$, the point set $\mathcal{P}\in\cube$ with $b^m$ points is a $(t,m,s)-net$ in base $b$ if every $A$ with volume $b^{t-m}$ contains $b^t$ points of $\mathcal{P}$.
 \end{defin}
-%In other words, any box of ... contains a proport
-%....
-%This definition is linked to the star discrepancy...
-%The smaller the t value, the better.
+
+A $(t,m,s)$-net is defined such that all elementary intervals of volume at least $b^{t-m}$ will enclose a proportional number of points. The most evenly spread nets are $(0,m,s)$-nets, since each elementary interval of the smallest size possible, $b^{-m}$, contains exactly one point. Note that if $t'>t$, $(t,m,s)$-nets are always $(t',m,s)$-nets.
+
 \begin{defin}[$(t,s)$-sequence]
-For integers $s\geq 1$, $b\geq 2$, and $t\geq 0$, the sequence $\{\vx_i\}_{i=1}^{\infty}$ is a $(t,s)$-sequence in base $b$, if every set $\mathcal{P}_{l,m}=\{\vx_i\}_{i=lb^m}^{(l+1)b^m-1}$ with $l\geq 0$ and $m\geq t$, $\mathcal{P}_{l,m}$ is a $(t,m,s)$-net in base $b$.
+For integers $s\geq 1$, $b\geq 2$, and $t\geq 0$, the sequence $\{\vx_i\}_{i\in\mathbb{N}_0}$ is a $(t,s)$-sequence in base $b$, if every set $\mathcal{P}_{\ell,m}=\{\vx_i\}_{i=\ell b^m}^{(\ell+1)b^m-1}$ with $\ell\geq 0$ and $m\geq t$, $\mathcal{P}_{\ell,m}$ is a $(t,m,s)$-net in base $b$.
 \end{defin}
-In other words, the points set $\mathcal{P}$ is a $(t,m,s)$-net if its points are apportioned equally on all elementary intervals $A\in\mathcal{A}$. The smaller the $t$-value, the better the scattering of $\mathcal{P}$ in $\cubes$.
-\bigskip
 
-Digital nets are usually computed with square matrices $C_1^{\infty},\dots,C_s^{\infty}$ in $\mathbb{F}_b$ of size $\infty\times\infty$ often referred in the literature as generating matrices. However, to construct the first $b^m$ points, one only needs the knowledge of $C_1^m,\dots,C_s^m$. For each $i=0,\dots,b^m-1$, the points $\vx_i = (x_{i,1},\dots,x_{i,s})^\intercal$ of the sequence can be constructed as follows:
+Digital sequences are usually computed with $\infty\times\infty$-matrices $C_1,\dots,C_s$ over $\mathbb{F}_b$, often referred in the literature as generating matrices. However, to construct the first $b^m$ points, one only needs the knowledge of the blocks $C_1^{\infty\times m},\dots,C_s^{\infty\times m}$. This is due to its construction, described as follows. For each $i=0,\dots,b^m-1$, the point $\vx_i = (x_{i,1},\dots,x_{i,s})^\intercal$ of the sequence is obtained dimension per dimension:
 \begin{equation}
 \label{dig.net.eq.}
-(x_{i,j,1},x_{i,j,2},\dots)^\intercal = C_j^m (i_{0},\dots,i_{m-1})^\intercal,\qquad j= 1,\dots,s\, ,
+(x_{i,j,1},x_{i,j,2},\dots)^\intercal = C_j^{\infty\times m} (i_{0},\dots,i_{m-1})^\intercal,\qquad j= 1,\dots,s\, ,
 \end{equation}
-where $x_{i,j} = \sum_{k \geq 1}x_{i,j,k}b^{-k}$ is the radical inverse $b$-ary decomposition of point $x_{i,j}$ and $i = \sum_{k=0}^{m-1}i_kb^{k}$ is the $b$-ary decomposition of $i$. For $m' < m$ the matrices $C_j^{m'}$ are embedded in the upper left corners of matrices $C_j^{m}$. Thus, the digital nets possess an innate nested structure resulting from this embedding. That is $\mathcal{P}_{m'} \subset \mathcal{P}_m \subset \dots \subset \mathcal{P}_{\infty}$. 
+where $x_{i,j} = \sum_{k \geq 1}x_{i,j,k}b^{-k}$ and $i = \sum_{k=0}^{m-1}i_kb^{k}$. For $m' < m$ the matrices $C_j^{m'}$ are embedded in the upper left corners of matrices $C_j^{m}$. Thus, the digital nets possess an innate nested structure resulting from this embedding. That is $\mathcal{P}_{m'} \subset \mathcal{P}_m \subset \dots \subset \mathcal{P}_{\infty}$. 
 
 Sobol' sequences are digital nets defined in base $b=2$. They are attractive due to their efficient implementation through the use of Gray code. In our scope, their attractiveness comes from their low growing rate (factor $2$). 
 \bigskip
