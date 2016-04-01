@@ -48,12 +48,12 @@
 
 \begin{frontmatter}
 
-\title{}
+\title{On the replication of Sobol' sequences to estimate main effects of model inputs}
 
 \author{Cl\'ementine Prieur, Elise Arnaud, Herv\'{e} Monod, Laurent Gilquin, Fred J. Hickernell, Llu\'{i}s Antoni Jim\'{e}nez Rugama}
-\address{U. Josef Fourier, Illinois Institute of Technology}
-\begin{abstract}
-\end{abstract}
+\address{University Grenoble Alpes, Illinois Institute of Technology, INRA Jouy-en-Josas}
+%\begin{abstract}
+%\end{abstract}
 
 \end{frontmatter}
 
@@ -69,22 +69,21 @@ Let $f$ be the symbol representing the numerical model considered. We assume $f 
 %These two quantities can be expressed as the following integrals:
 %\[\mu= \frac{1}{2} \int_{[0,1)^{2d-1}}f(\vx)+f(\vx_u:{\vx'}_{-u}) d\vx d{\vx'}_{-u}, \]
 %\[\sigma^2= \int_{[0,1)^{d}}f(\vx)^2 d\vx - \Big{(}\int_{[0,1)^{d}}f(\vx) d\vx\Big{)}^2 .\]
-The uncertainty on $\vx$ is modeled by random variables such that $\vx \stackrel{iid}{\sim} \mathcal{U}[0,1)^s$. Recall the Hoeffding decomposition of $f$:
+The uncertainty on $\vx$ is modeled by random variables such that $\vx \stackrel{iid}{\sim} \mathcal{U}[0,1)^s$. Recall the Hoeffding cite{hoeffding} decomposition of $f$:
 \begin{equation}
 f(\vx)=\mu+\sum_{\substack{u \subseteq \{1,\dots,s\} \\ u \neq \emptyset}} f_u(\vx_u),
 \label{anova}
 \end{equation}
 where: $\mu$ is a constant and $\forall \ u \subseteq \mathcal{D}, \ u \neq \emptyset, \ \forall \ j \in u: \int_{[0,1]} f_u(\vx_u) d{x_j}=0$.
-
 Due to orthogonality, by taking the variance of each side in Equation \ref{anova} we obtain the following decomposition of the variance:
 \[ \sigma^2 = \sum_{\substack{u \subseteq \{1,\dots,s\} \\ u \neq \emptyset}} \sigma_v^2.\]
 The problem of interest is the estimation of the quantities:
 \[\underline{\tau}_u^2 = \sum \limits_{v \subseteq u} \sigma_v^2, \qquad u \in \mathcal{D}.\]
-These quantities correspond to the partial sensitivity Sobol' indices often found written in the literature in their normalized form: $\underline{\tau}_u^2/\sigma^2$. When, $|u|=1$, $\underline{\tau}_u^2$ corresponds to the first-order Sobol' index that evaluate the main effect of the variable $\vx_u$. Higher order indices evaluate higher order interactions between variables. In \cite{}, Owen proposed to use the following expression for $\underline{\tau}_u^2$:
+These quantities correspond to the partial sensitivity Sobol' indices \cite{sobol} often found written in the literature in their normalized form: $\underline{\tau}_u^2/\sigma^2$. When, $|u|=1$, $\underline{\tau}_u^2$ corresponds to the first-order Sobol' index that evaluate the main effect of the variable $\vx_u$. Higher order indices evaluate higher order interactions between variables. In \cite{owen}, Owen proposed to use the following expression for $\underline{\tau}_u^2$:
 \begin{equation}\label{first_order_indice}
 \underline{\tau}_u^2  =\int_{[0,1)^{2s-1}}(f(\vx) - \mu) (f(\vx_u:{\vx'}_{-u})-\mu) d\vx d{\vx'}_{-u},
 \end{equation}
-taking $\mu$ as introduced in Janon \textit{et al.}:
+taking $\mu$ as introduced in \cite{monod,janon}:
 \[\mu= \frac{1}{2} \int_{[0,1)^{2s-1}}f(\vx)+f(\vx_u:{\vx'}_{-u}) d\vx d{\vx'}_{-u}. \]
 The natural way to estimate these two quantities is for $(\vx_i,\vx'_i) \stackrel{iid}{\sim} [0,1)^{2s}$ via:
 \begin{align}
@@ -95,7 +94,7 @@ The natural way to estimate these two quantities is for $(\vx_i,\vx'_i) \stackre
 
 We consider here a quasi-Monte Carlo sampling strategy to evaluate these two estimators. We focus on the estimation of all first-order Sobol' indices, $u \in \mathcal{D}$. The classical estimation procedure introduced by Sobol' requires to evaluate the quantity $f(\vx_u:{\vx'}_{-u})$ $n$ times for each $u$ while the quantity $f(\vx)$ is only evaluated $n$ times once for all $u$. The total cost sums up to $n(d+1)$ evaluations of $f$. This cost can rapidly become prohibitive for models whose evaluation is time consuming, as such involve an important number of parameters. 
 
-An improvement to reduce this cost lies in the use of replicated designs. The notion of replicated designs was first introduced by McKay through the introduction of replicated Latin Hypercubes samples. Here, we define replicated designs in a wider framework:
+An improvement to reduce this cost lies in the use of replicated designs. The notion of replicated designs was first introduced by McKay \cite{mckay} through the introduction of replicated Latin Hypercubes samples. Here, we define replicated designs in a wider framework:
 \begin{defin}[Replicated designs]
 Let $\mathcal{P}=\{\vx_i\}_{i=0}^{n-1}$ and $\mathcal{P}'=\{{\vx'}_i\}_{i=0}^{n-1}$ be two point sets,
 %\[\arraycolsep=1.3pt
@@ -116,17 +115,18 @@ Let $\mathcal{P}=\{\vx_i\}_{i=0}^{n-1}$ and $\mathcal{P}'=\{{\vx'}_i\}_{i=0}^{n-
 $\vx_i,\vx'_i\in[0,1)^{s}$. Let $\mathcal{P}^u=\{\vx_{i,u}\}_{i=0}^{n-1}$ (resp. $\mathcal{P}'^u$), $u \subsetneq \mathcal{D}$, denote the subset of dimensions of $\mathcal{P}$ (resp. $\mathcal{P}'$) indexed by $u$. We say that $\mathcal{P}$ and $\mathcal{P}'$ are two replicated designs of order $r$ if:\\
 $\forall \ u \subsetneq \mathcal{D}$ such that $|u|=r$, $\mathcal{P}^u$ and $\mathcal{P}'^u$ are the same point set in $[0,1)^r$.
 \end{defin}
-The replication procedure introduced in \cite{•} allows to estimate all first-order Sobol' indices with two replicated designs of order $1$. In this procedure, the quantity $f(\vx_u:{\vx'}_{-u})$ is only evaluated $n$ times once for all $u$, resulting in a total of $2n$ evaluations of $f$. %Denote by $D$,$D'$ the two replicated designs of order $1$ required by the replication procedure, $D'$ is constructed from $D$ as follows:
+The replication procedure introduced and studied in \cite{mara,tissot} allows to estimate all first-order Sobol' indices with two replicated designs of order $1$. In this procedure, the quantity $f(\vx_u:{\vx'}_{-u})$ is only evaluated $n$ times once for all $u$, resulting in a total of $2n$ evaluations of $f$. %Denote by $D$,$D'$ the two replicated designs of order $1$ required by the replication procedure, $D'$ is constructed from $D$ as follows:
 %\[{x'}_{i,j}=x_{\pi_j(i),j}, \qquad \forall \ (i,j) \in \{1,\dots,n\} \times \{1,\dots,d\},\]
 %where $\pi_1,\dots,\pi_d$ are $d$ permutations on $\{1,\dots,n\}$ selected randomly and independently.
 
-Our objective here is to combine the use of Sobol' sequences with the replication method to iteratively estimate all quantities $\underline{\tau}_u^2, u \in \mathcal{D}$, $\abs{u}=1$. This approach reduces to construct two replicated Sobol' sequences iteratively refined with new point sets. In this fashion, two approaches are considered: one multiplicative and one additive. In the next section, we provide some background on digital nets and sequences. The two approaches are detailed in Section \ref{sobol.seq.cons}.
+Our objective here is to combine the use of Sobol' sequences \cite{sobolseq} with the replication method to iteratively estimate all quantities $\underline{\tau}_u^2, u \in \mathcal{D}$, $\abs{u}=1$. This approach reduces to construct two replicated Sobol' sequences iteratively refined with new point sets. In this fashion, two approaches are considered: one multiplicative and one additive. In the next section, we provide some background on digital nets and sequences. The two approaches are detailed in Section \ref{sobol.seq.cons}.
 
 \section{Digital Nets Background}
 
 In this section we introduce a particular type of quasi-Monte Carlo points to estimate the quantities in $\eqref{first_order_indice}$ for $\abs{u}=1$, according to the replication method. 
 %, which will allow us to evaluate the integrand at points $\{\left(\vx_i,{\vx'}_{i,-u}\right)\}_{i=0}^{b^m}$ only one time to estimate all $d$ indices.
-The concepts of $(t,m,s)$-net and $(t,s)$-sequence were first introduced by Niederreiter in \cite{•}. Digital nets are accurately defined as $(t,m,s)$-nets in $\cube$ whose quality is measured by the parameter $t$, called $t$-value. %Because this parameter is the criterion we use to construct our new sequences, we provide the key definitions below.
+
+The concepts of $(t,m,s)$-net and $(t,s)$-sequence were first introduced by Niederreiter in \cite{niederreiter}. Digital nets are accurately defined as $(t,m,s)$-nets in $\cube$ whose quality is measured by the parameter $t$, called $t$-value. %Because this parameter is the criterion we use to construct our new sequences, we provide the key definitions below.
 %$(t,m,s)$-net and and $(t,s)$-sequence are strongly linked to the concept of star discrepancy \cite{.} and defined as follows:
 \begin{defin}[$(t,m,s)-net$]
 Let $\mathcal{A}$ be the set of all elementary intervals $A\in\cube$ where $A=\prod_{j=1}^s [\alpha_jb^{-\gamma_j},(\alpha_j+1)b^{-\gamma_j})$, with integers $s\geq 1$, $b\geq 2$, $\gamma_j\geq 0$, and $b^{\gamma_j}>\alpha_j\geq 0$. For $m\geq t\geq 0$, the point set $\mathcal{P}\in\cube$ with $b^m$ points is a $(t,m,s)-net$ in base $b$ if every $A$ with volume $b^{t-m}$ contains $b^t$ points of $\mathcal{P}$.
@@ -143,7 +143,7 @@ Digital sequences are usually computed with $\infty\times\infty$-matrices $C_1,\
 \label{dig.net.eq.}
 (x_{i,j,1},x_{i,j,2},\dots)^\intercal = C_j^{\infty\times m} (i_{0},\dots,i_{m-1})^\intercal,\qquad j= 1,\dots,s\, ,
 \end{equation}
-where $x_{i,j} = \sum_{k \geq 1}x_{i,j,k}b^{-k}$ and $i = \sum_{k=0}^{m-1}i_kb^{k}$. For $m' < m$ the matrices $C_j^{m'}$ are embedded in the upper left corners of matrices $C_j^{m}$. Thus, the digital nets possess an innate nested structure resulting from this embedding. That is $\mathcal{P}_{m'} \subset \mathcal{P}_m \subset \dots \subset \mathcal{P}_{\infty}$. 
+where $x_{i,j} = \sum_{k \geq 1}x_{i,j,k}b^{-k}$ and $i = \sum_{k=0}^{m-1}i_kb^{k}$. For $m' < m$ the matrices $C_j^{m'}$ are embedded in the upper left corners of matrices $C_j^{m}$. Thus, the digital nets possess an innate nested structure resulting from this embedding. %That is $\mathcal{P}_{m'} \subset \mathcal{P}_m \subset \dots \subset \mathcal{P}_{\infty}$. 
 
 Sobol' sequences are digital nets defined in base $b=2$. They are attractive due to their efficient implementation through the use of Gray code. In our scope, their attractiveness comes from their low growing rate (factor $2$). 
 \bigskip
@@ -156,16 +156,15 @@ In the next section, we present two approaches to construct two replicated Sobol
 \subsection{Replicated Sobol' sequences}
 
 
-We start by introducing some useful definitions for the rest of the paper. We note by $\vi=(i_{0},\dots,i_{m-1})^T$ the vector resulting from the binary decomposition $\eqref{dig.net.eq.}$ of integer $i$. We also note by $U_m(\mathbb{F}_2)$ the multiplicative group of all invertible triangular matrices of size $m\times m$ over the Galois field $\mathbb{F}_2$. Consider the following application:
+We start by introducing some useful definitions for the rest of the paper. We note by $\vi=(i_{0},\dots,i_{m-1})^\intercal$ the vector resulting from the binary decomposition $\eqref{dig.net.eq.}$ of integer $i$. We note by $\mathbb{N}_0$ the integer space. We also note by $U_m(\mathbb{F}_2)$ the multiplicative group of all invertible upper triangular matrices of size $m\times m$ over the Galois field $\mathbb{F}_2$. Consider the following application:
 \begin{equation*}
  \Diamond \colon \left\lbrace \begin{array}{ccccc} (\mathbb{F}_2)^m \times U_m(\mathbb{F}_2) & \to & (\mathbb{F}_2)^m \\
   (\vi,C) & \mapsto &  C . \vi \\
 \end{array} \right.
-\label{model}
 \end{equation*}
 The application $\Diamond$ consists in the operation carried on in Equation $\eqref{dig.net.eq.}$. It is easy to see that for $C \in U_m(\mathbb{F}_2)$ fixed, $\Diamond$ is a bijection of $(\mathbb{F}_2)^m$. As a results, applying $\Diamond$ for all $\vi \in (\mathbb{F}_2)^m$ with any generating matrix $C_j^m$ give the same points set. This leads to the following definition of replicated Sobol' sequences:
 \begin{defin}
-Let $C_j^m$, $C_{j'}^m$ be two generating matrices. The corresponding Sobol' sequences $\{\vx_i\}_{i=0}^{b^m-1}$ and $\{\vx'_i\}_{i=0}^{b^m-1}$ are two replicated designs of order $1$. Furthermore, the digital sequences $\{{\vx}_i\}_{i=0}^{\infty}$ and $\{{\vx'}_i\}_{i=0}^{\infty}$ are two replicated Sobol' sequence, that is for all $m \geq 0$, $\{{\vx}_i\}_{i=b^{m-1}}^{b^m-1}$ and $\{{\vx'}_i\}_{i=b^{m-1}}^{b^m-1}$ are two replicated designs of order $1$.
+Let $C_j^m$, $C_{j'}^m$ be two generating matrices. The corresponding Sobol' sequences $\{\vx_i\}_{i=0}^{b^m-1}$ and $\{\vx'_i\}_{i=0}^{b^m-1}$ are two replicated designs of order $1$. Furthermore, the digital sequences $\{{\vx}_i\}_{i\in\mathbb{N}_0}$ and $\{{\vx'}_i\}_{i\in\mathbb{N}_0}$ are two replicated Sobol' sequence, that is for all $m \geq 0$, $\{{\vx}_i\}_{i=b^{m-1}}^{b^m-1}$ and $\{{\vx'}_i\}_{i=b^{m-1}}^{b^m-1}$ are two replicated designs of order $1$.
 \end{defin}
 In other worlds, Sobol' sequences are innate replicated designs of order $1$ possessing a nested structure.
 
@@ -190,9 +189,9 @@ For quasi-Monte Carlo integration purposes, given $\{{\vx}_i\}_{i\in\mathbb{N}_0
 \end{equation}
 where $C_{\alpha(u,i)}:=C_u(C'_{u})^{-1}C'_{i}$. Note that for $i=u$, one has $C_{\alpha(u,u)}=C_u$. This is in fact forcing $C_u = C'_{u}$, as desired to apply the replicated method. Therefore, our goal is to find a good choice of $C_{1},\dots,C_{d},C'_{1},\dots,C'_{d}$ such that for all $u=1,\dots,d$, the sequence used to estimate $\underline{\tau}_u^2$ has a low $t$-value.
 
-The best choice of primitive polynomials and directional numbers to generate good quality Sobol' sequences is deeply discussed in \cite{•}. We are going to take Kuo and Joe results to find  good \emph{replicated Sobol'} sequences.
+The best choice of primitive polynomials and directional numbers to generate good quality Sobol' sequences is deeply discussed in \cite{kuo}. We are going to take Kuo and Joe results to find  good \emph{replicated Sobol'} sequences.
 
-Pairwise projections are already well optimized (see\cite[Table 2.1]{•}). Thus, our starting point will be using the $C_1,\dots,C_d$ found in \cite{•} to generate the sequence $\{{\vx}_i\}_{i\in\mathbb{N}_0}$. Hence, we will focus on finding the optimal $C'_{1},\dots,C'_{d}$ such that we minimize a $t$-value criteria (to specify, perhaps the max of all) over all $d$ sequences described in \eqref{ordered_sequence}.
+Pairwise projections are already well optimized (see\cite[Table 2.1]{kuo2}). Thus, our starting point will be using the $C_1,\dots,C_d$ found in \cite{kuo2} to generate the sequence $\{{\vx}_i\}_{i\in\mathbb{N}_0}$. Hence, we will focus on finding the optimal $C'_{1},\dots,C'_{d}$ such that we minimize a $t$-value criteria (to specify, perhaps the max of all) over all $d$ sequences described in \eqref{ordered_sequence}.
 
 %\subsection{Matrix generators group $U_m$}
 %
@@ -208,6 +207,43 @@ Pairwise projections are already well optimized (see\cite[Table 2.1]{•}). Thus
 
 
 \subsection{Additive Approach}
+
+Denote by $\mathcal{P}$ and $\mathcal{P}'$ the two replicated designs iteratively refined with new points sets using the additive approach. These two designs possess a block structure:
+$$\mathcal{P}= B_0 \cup B_1 \cup B_2 \dots $$
+$$\mathcal{P}'= {B'}_0 \cup {B'}_1 \cup {B'}_2 \dots $$
+We detail below the steps of the construction of these two designs.
+\begin{enumerate}
+\item[Step 1.] We start by fixing $m$ and choosing a set $C_1^{m},\dots,C_s^{m}$ of generating matrices to construct an initial Sobol' sequence $\{\vx_i\}_{i=0}^{2^m-1}$ of $2^m$ points. \\
+
+\item[Step 2.] At step $l$ of the recursive estimation, $l \geq 0$, a new points set $B_l=\{\vx_i^{(l)}\}_{i=0}^{2^m-1}$ of $2^m$ points is added to $\mathcal{P}$. $B_l$ is obtained by applying a digital shift to the initial Sobol' sequence. The digital shift operation is applied as follows:
+
+for each $i=0,\dots,2^m-1$, the points $\vx_i^{(l)} = (x_{i,1}^{(l)},\dots,x_{i,s}^{(l)})^\intercal$ is obtained by:
+\begin{equation}
+\label{dig.shift}
+(x_{i,j,1}^{(l)},\dots,x_{i,j,m}^{(l)})^\intercal = C_j^m \vi^\intercal+\ve_j,\qquad j= 1,\dots,s\, ,
+\end{equation}
+where $ x_{i,j}^{(l)}=\sum_{k = 1}^mx_{i,j,k}^{(l)}2^{-k}$ and $\ve_j=(e_{j,{0}},\dots,e_{j,{m-1}})^\intercal \in (\mathbb{F}_2)^m$.\\
+
+\item[Step 3.] Then, the points set ${B'}_l=\{{\vx'}_i^{(l)}\}_{i=0}^{2^m-1}$ is obtained from $B_l$ by applying Tezuka's i-binomial scrambling \cite{tezuka}. This operation consists in the following: 
+
+for each $i=0,\dots,2^m-1$, the points ${\vx'}_i^{(l)} = ({x'}_{i,1}^{(l)},\dots,{x'}_{i,s}^{(l)})^\intercal$ is obtained by:
+\begin{equation}
+\label{ibinom.scrambling}
+({x'}_{i,j,1}^{(l)},\dots,{x'}_{i,j,m}^{(l)})^\intercal = L_j^m (x_{i,j,1}^{(l)},\dots,x_{i,j,m}^{(l)})^\intercal,
+\end{equation}
+where $ {x'}_{i,j}^{(l)}=\sum_{k = 1}^m{x'}_{i,j,k}^{(l)}2^{-k}$ and $L_j^m$ is an invertible lower triangular matrix of size $m \times m$ over the Galois field $\mathbb{F}_2$.\\
+
+\item[Step 4.] The two blocks $B_l$ and ${B'}_l$ are then both randomised using a same Owen's scrambling \cite{owen.scrambl}
+
+\item[Step 5.] $B_l$ and ${B'}_l$ are used to estimate all first-order indices $\underline{\tau}_u^2, u \in \mathcal{D}$.
+\end{enumerate}
+Steps $2$ to $5$ are iterated until a stopping criterion is reached. There is a finite choice for the vector $\ve_j$ and matrix $L_j^m$ respectively constructed in Steps $2$ and $3$. Once $m$ is fixed, one can build up to $2^m$ different $\ve_j$ and $2^{m(m-1)/2}$ different $L_j^m$. The choice of $m$ must take into account these limitations.
+
+ At each step $l$, $B_l$ and ${B'}_l$ are two replicated designs of order $1$ thus enabling the estimation of all first-order indices. Denote by $K$ the step at which the recursive estimation stopped. The total cost of the additive approach to estimate all first-order indices equals $2 \times K \times 2^m$. 
+ 
+The additive approach is attractive due to the slow growing size of the two replicated designs $\mathcal{P}$ and $\mathcal{P}'$. At the opposite of the multiplicative approach, the main drawback is that $\mathcal{P}$ and $\mathcal{P}'$ does not possess the structure of a Sobol' sequence but each block $B_l$ (resp. $B'_l$) composing them does.
+
+
 %Notations:
 %\begin{itemize}
 %\item[.] $m$ denote the number of digits
@@ -245,5 +281,8 @@ Pairwise projections are already well optimized (see\cite[Table 2.1]{•}). Thus
 %\label{additive}
 %\caption{Additive approach}
 %\end{algorithm}
+\section*{References}
+\bibliographystyle{elsarticle-num-names} 
+\bibliography{bib}
 
 \end{document}
