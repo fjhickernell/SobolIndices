@@ -26,6 +26,7 @@
 \newcommand{\bvec}[1]{\boldsymbol{#1}}
 \newcommand{\vx}{\bvec{x}}
 \newcommand{\vi}{\bvec{i}}
+\newcommand{\vj}{\bvec{j}}
 \newcommand{\ve}{\bvec{e}}
 \newcommand{\vk}{\bvec{k}}
 \newcommand{\vz}{\bvec{z}}
@@ -132,66 +133,78 @@ The concepts of $(t,m,s)$-net and $(t,s)$-sequence were first introduced by Nied
 Let $\mathcal{A}$ be the set of all elementary intervals $A\in\cube$ where $A=\prod_{j=1}^s [\alpha_jb^{-\gamma_j},(\alpha_j+1)b^{-\gamma_j})$, with integers $s\geq 1$, $b\geq 2$, $\gamma_j\geq 0$, and $b^{\gamma_j}>\alpha_j\geq 0$. For $m\geq t\geq 0$, the point set $\mathcal{P}\in\cube$ with $b^m$ points is a $(t,m,s)-net$ in base $b$ if every $A$ with volume $b^{t-m}$ contains $b^t$ points of $\mathcal{P}$.
 \end{defin}
 
-A $(t,m,s)$-net is defined such that all elementary intervals of volume at least $b^{t-m}$ will enclose a proportional number of points. The most evenly spread nets are $(0,m,s)$-nets, since each elementary interval of the smallest size possible, $b^{-m}$, contains exactly one point. Note that if $t'>t$, $(t,m,s)$-nets are always $(t',m,s)$-nets.
+A $(t,m,s)$-net is defined such that all elementary intervals of volume at least $b^{t-m}$ will enclose a proportional number of points. The most evenly spread nets are $(0,m,s)$-nets, since each elementary interval of the smallest volume possible, $b^{-m}$, contains exactly one point. Note that if $t'>t$, $(t,m,s)$-nets are always $(t',m,s)$-nets.
 
 \begin{defin}[$(t,s)$-sequence]
-For integers $s\geq 1$, $b\geq 2$, and $t\geq 0$, the sequence $\{\vx_i\}_{i\in\mathbb{N}_0}$ is a $(t,s)$-sequence in base $b$, if every set $\mathcal{P}_{\ell,m}=\{\vx_i\}_{i=\ell b^m}^{(\ell+1)b^m-1}$ with $\ell\geq 0$ and $m\geq t$, $\mathcal{P}_{\ell,m}$ is a $(t,m,s)$-net in base $b$.
+For integers $s\geq 1$, $b\geq 2$, and $t\geq 0$, the sequence $\{\vx_i\}_{i\in\mathbb{N}_0}$ is a $(t,s)$-sequence in base $b$, if for every set $\mathcal{P}_{\ell,m}=\{\vx_i\}_{i=\ell b^m}^{(\ell+1)b^m-1}$ with $\ell\geq 0$ and $m\geq t$, $\mathcal{P}_{\ell,m}$ is a $(t,m,s)$-net in base $b$.
 \end{defin}
 
-Digital sequences are usually computed with $\infty\times\infty$-matrices $C_1,\dots,C_s$ over $\mathbb{F}_b$, often referred in the literature as generating matrices. However, to construct the first $b^m$ points, one only needs the knowledge of the blocks $C_1^{\infty\times m},\dots,C_s^{\infty\times m}$. This is due to its construction, described as follows. For each $i=0,\dots,b^m-1$, the point $\vx_i = (x_{i,1},\dots,x_{i,s})^\intercal$ of the sequence is obtained dimension per dimension:
+Digital sequences are usually computed with $\infty\times\infty$-matrices $C_1,\dots,C_s$ over $\mathbb{F}_b$, often referred in the literature as generating matrices. However, to construct the first $b^m$ points, one only needs the knowledge of the blocks $C_1^{\infty\times m},\dots,C_s^{\infty\times m}$. This is due to its construction, described as follows. For each $i=0,\dots,b^m-1$, the point $\vx_i = (x_{i,1},\dots,x_{i,s})^\intercal$ of the sequence is obtained dimension-wise:
 \begin{equation}
 \label{dig.net.eq.}
-(x_{i,j,1},x_{i,j,2},\dots)^\intercal = C_j^{\infty\times m} (i_{0},\dots,i_{m-1})^\intercal,\qquad j= 1,\dots,s\, ,
+(x_{i,j,1},x_{i,j,2},\dots)^\intercal = C_j^{\infty\times m} \vi,\qquad j= 1,\dots,s\, ,
 \end{equation}
-where $x_{i,j} = \sum_{k \geq 1}x_{i,j,k}b^{-k}$ and $i = \sum_{k=0}^{m-1}i_kb^{k}$. For $m' < m$ the matrices $C_j^{m'}$ are embedded in the upper left corners of matrices $C_j^{m}$. Thus, the digital nets possess an innate nested structure resulting from this embedding. %That is $\mathcal{P}_{m'} \subset \mathcal{P}_m \subset \dots \subset \mathcal{P}_{\infty}$. 
+where $x_{i,j} = \sum_{k \geq 1}x_{i,j,k}b^{-k}$ and $\vi = (i_{0},\dots,i_{m-1})^\intercal$ is the b-ary decomposition of $i$.
+%For $m' < m$ the matrices $C_j^{m'}$ are embedded in the upper left corners of matrices $C_j^{m}$. Thus, the digital nets possess an innate nested structure resulting from this embedding. That is $\mathcal{P}_{m'} \subset \mathcal{P}_m \subset \dots \subset \mathcal{P}_{\infty}$. 
 
-Sobol' sequences are digital nets defined in base $b=2$. They are attractive due to their efficient implementation through the use of Gray code. In our scope, their attractiveness comes from their low growing rate (factor $2$). 
+In order to relate digital nets and sequences to the definition of replicated design, we introduce the following concept.
+\begin{defin}
+Two digital sequences $\{\vx_i\}_{i\in\mathbb{N}_0}$ and $\{{\vx'}_i\}_{i\in\mathbb{N}_0}$ are \emph{digitally replicated} of order $r$ if for all $m\geq 0$, $\{{\vx}_i\}_{i=0}^{b^m-1}$ and $\{{\vx'}_i\}_{i=0}^{b^m-1}$ are two replicated designs of order $r$.
+\end{defin}
+ 
 \bigskip
 
-In the next section, we present two approaches to construct two replicated Sobol' sequences iteratively refined with new points sets. The multiplicative approach uses the innate nested structure of a Sobol' sequence. The size of each replicated Sobol' sequence is doubled at each step. The additive approach combines digital shifting and scrambling operations to form the new points set. In this case, at step $k$ the size of each replicated Sobol' sequence is $ k \times 2^m$ where $2^m$ is the size of the initial Sobol' sequence. 
+Sobol' sequences are digital sequences attractive for their easy implementation and optimized properties \cite{kuo2}. % In our scope, their attractiveness comes from their low growing rate (factor $2$).
+In section \ref{sobol.seq.cons}, we present two approaches to construct replicated point sets based on Sobol' sequences. The multiplicative approach uses two Sobol' sequences that are replicated by construction, while the additive approach takes an initial number of points of two Sobol' sequences and applies digital shifts and scramblings to extend the point set. In this case, at step $k$ the size of each replicated Sobol' sequence is $ k \times 2^m$ where $2^m$ is the size of the initial Sobol' sequence. 
 
-\section{Iterative constructions of replicated Sobol' sequence}
+\section{Iterative constructions of replicated point sets}
 \label{sobol.seq.cons}
 
-\subsection{Replicated Sobol' sequences}
+Sobol' sequences are particularly interesting for having unitriangular generating matrices over $\mathbb{F}_2$. This property leads to the result below,
 
+\begin{lem}\label{Sobol_replicated}
+All Sobol' sequences are digitally replicated of order 1.
+\end{lem}
+\begin{proof}
+Consider any two s-dimensional Sobol' sequences generated by $C_1,\dots,C_s$ and $C'_1,\dots,C'_s$. Since these matrices are upper triangular, to compute the first $2^m$ points one only needs the knowledge of the $m\times m$ blocks. Because any two matrices $C^{m\times m}_j$ and $C'^{\,m\times m}_j$ are square and full rank, the products $C^{m\times m}_j\vi$ and $C'^{\,m\times m}_j\vi$ are one-to one and onto, for all $i=0,\dots,2^m-1$. Therefore, they generate the same point sets.
+\end{proof}
 
-We start by introducing some useful definitions for the rest of the paper. We note by $\vi=(i_{0},\dots,i_{m-1})^\intercal$ the vector resulting from the binary decomposition $\eqref{dig.net.eq.}$ of integer $i$. We note by $\mathbb{N}_0$ the integer space. We also note by $U_m(\mathbb{F}_2)$ the multiplicative group of all invertible upper triangular matrices of size $m\times m$ over the Galois field $\mathbb{F}_2$. Consider the following application:
-\begin{equation*}
- \Diamond \colon \left\lbrace \begin{array}{ccccc} (\mathbb{F}_2)^m \times U_m(\mathbb{F}_2) & \to & (\mathbb{F}_2)^m \\
-  (\vi,C) & \mapsto &  C . \vi \\
-\end{array} \right.
-\end{equation*}
-The application $\Diamond$ consists in the operation carried on in Equation $\eqref{dig.net.eq.}$. It is easy to see that for $C \in U_m(\mathbb{F}_2)$ fixed, $\Diamond$ is a bijection of $(\mathbb{F}_2)^m$. As a results, applying $\Diamond$ for all $\vi \in (\mathbb{F}_2)^m$ with any generating matrix $C_j^m$ give the same points set. This leads to the following definition of replicated Sobol' sequences:
-\begin{defin}
-Let $C_j^m$, $C_{j'}^m$ be two generating matrices. The corresponding Sobol' sequences $\{\vx_i\}_{i=0}^{b^m-1}$ and $\{\vx'_i\}_{i=0}^{b^m-1}$ are two replicated designs of order $1$. Furthermore, the digital sequences $\{{\vx}_i\}_{i\in\mathbb{N}_0}$ and $\{{\vx'}_i\}_{i\in\mathbb{N}_0}$ are two replicated Sobol' sequence, that is for all $m \geq 0$, $\{{\vx}_i\}_{i=b^{m-1}}^{b^m-1}$ and $\{{\vx'}_i\}_{i=b^{m-1}}^{b^m-1}$ are two replicated designs of order $1$.
-\end{defin}
-In other worlds, Sobol' sequences are innate replicated designs of order $1$ possessing a nested structure.
+%We start by introducing some useful definitions for the rest of the paper. We note by $\vi=(i_{0},\dots,i_{m-1})^\intercal$ the vector resulting from the binary decomposition $\eqref{dig.net.eq.}$ of integer $i$. We note by $\mathbb{N}_0$ the integer space. We also note by $U_m(\mathbb{F}_2)$ the multiplicative group of all invertible upper triangular matrices of size $m\times m$ over the Galois field $\mathbb{F}_2$. Consider the following application:
+%\begin{equation*}
+% \Diamond \colon \left\lbrace \begin{array}{ccccc} (\mathbb{F}_2)^m \times U_m(\mathbb{F}_2) & \to & (\mathbb{F}_2)^m \\
+%  (\vi,C) & \mapsto &  C . \vi \\
+%\end{array} \right.
+%\end{equation*}
+%The application $\Diamond$ consists in the operation carried on in Equation $\eqref{dig.net.eq.}$. It is easy to see that for $C \in U_m(\mathbb{F}_2)$ fixed, $\Diamond$ is a bijection of $(\mathbb{F}_2)^m$. As a results, applying $\Diamond$ for all $\vi \in (\mathbb{F}_2)^m$ with any generating matrix $C_j^m$ give the same points set. This leads to the following definition of replicated Sobol' sequences:
+%\begin{defin}
+%Let $C_j^m$, $C_{j'}^m$ be two generating matrices. The corresponding Sobol' sequences $\{\vx_i\}_{i=0}^{b^m-1}$ and $\{\vx'_i\}_{i=0}^{b^m-1}$ are two replicated designs of order $1$. Furthermore, the digital sequences $\{{\vx}_i\}_{i\in\mathbb{N}_0}$ and $\{{\vx'}_i\}_{i\in\mathbb{N}_0}$ are two replicated Sobol' sequence, that is for all $m \geq 0$, $\{{\vx}_i\}_{i=b^{m-1}}^{b^m-1}$ and $\{{\vx'}_i\}_{i=b^{m-1}}^{b^m-1}$ are two replicated designs of order $1$.
+%\end{defin}
+%In other worlds, Sobol' sequences are innate replicated designs of order $1$ possessing a nested structure.
 
+Two different matrices $C^{m\times m}$ and $C'^{\,m\times m}$ produce the same set of $2^m$ values. However, they will appear in different order. It is possible to generate them in the same order using the corresponding upper triangular matrix $U^{m\times m}$, such that $C^{m\times m}=C'^{\,m\times m}U^{m\times m}$. This matrix can be thought as permutation of the input binary vectors $\vi$.
 
 \subsection{Multiplicative approach}
-%
-%\begin{defin}
-%A digital sequence $\{{\vx'}_i\}_{i\in\mathbb{N}_0}$ is the \emph{replicated digital} sequence of $\{\vx_i\}_{i\in\mathbb{N}_0}$ if for all $m\geq 0$, $\{{\vx'}_i\}_{i=0}^{b^m-1}$ is a replicated design of $\{{\vx}_i\}_{i=0}^{b^m-1}$.
-%\end{defin}
-%In this case, $C_j'$ will depend on the choice of $C_j$.
 
-%If we do higher order Sobol' indices, we can easily show that $C'_{i}=AC_{i}$ for $i = 1,\dots,d$, and this does not work because this means having the same function values for each $u$, with a unique ordering given by $A$.
- 
-Although the choices of $C_j$ and $C_j'$ are many, there is a special case interesting for its construction simplicity, and wide range of $C_j'$ choices.
+The goal of this method is to generate a $2s$-dimensional Sobol' sequence with good properties to estimate all first order Sobol' indices. As shown in Lemma \ref{Sobol_replicated}, for any $m\geq 0$ and $2^m$ points, each dimension of the sequence will have exactly the same values, although probably with different order.
 
-For this special case, we consider the generating matrices to be upper triangular. This ensures that $x_{i,j,k}=0$, for $m<k$ and $0 \leq i \leq b^m-1$. If we also assume that there are no zeros on the diagonal, the block $C_j^{m\times m}$ is full rank and each $x_{i,j}\neq x_{r,j}$ when $i\neq r$. Therefore, excluding the trivial case, it is enough to choose $C_j\neq C_j'$ for at least $d-1$ dimensions to obtain a \emph{replicated digital sequence}. 
-%When $b=2$, these are Sobol' sequences.
+The only constraint we have is that for each $u=1,\dots,s$, the $2s$-dimensional Sobol' sequence must ensure that $x_{i,u}=x_{i,u}$ for $i\in\mathbb{N}_0$. Therefore, we will need $s$ different $2s$-dimensional sequences. These sequences can be constructed using a single $2s$-dimensional sequence and considering the corresponding upper triangular matrices $U_u$.
 
-For quasi-Monte Carlo integration purposes, given $\{{\vx}_i\}_{i\in\mathbb{N}_0}$ generated by $C_{1},\dots,C_{d}$, and $\{{\vx'}_i\}_{i\in\mathbb{N}_0}$ generated by $C'_{1},\dots,C'_{d}$, the $d$ sequences in dimension $2d-1$ used to estimate all $\underline{\tau}_u^2$ are generated by
-\begin{equation}\label{ordered_sequence}
-\underbrace{C_{1},\dots,C_{d}}_{\text{First }d\text{ dimensions}},\underbrace{C_{\alpha(u,1)},\dots,C_{\alpha(u,u-1)},C_{\alpha(u,u+1)},\dots,C_{\alpha(u,d)}}_{\text{Next }d-1\text{ dimensions}},\quad 1\leq u \leq d\, ,
-\end{equation}
-where $C_{\alpha(u,i)}:=C_u(C'_{u})^{-1}C'_{i}$. Note that for $i=u$, one has $C_{\alpha(u,u)}=C_u$. This is in fact forcing $C_u = C'_{u}$, as desired to apply the replicated method. Therefore, our goal is to find a good choice of $C_{1},\dots,C_{d},C'_{1},\dots,C'_{d}$ such that for all $u=1,\dots,d$, the sequence used to estimate $\underline{\tau}_u^2$ has a low $t$-value.
+Given the generators $C_1,\dots,C_s,C'_1,\dots,C'_s$, we  define the $U_u$ matrices such that $C_u=C'_uU_u$. Then, each sequence generated by $C_1,\dots,C_s,C'_1U_u,\dots,C'_sU_u$ will satisfy $x_{i,u}=x_{i,u}$, for all $i\in\mathbb{N}_0$.
 
-The best choice of primitive polynomials and directional numbers to generate good quality Sobol' sequences is deeply discussed in \cite{kuo}. We are going to take Kuo and Joe results to find  good \emph{replicated Sobol'} sequences.
+\begin{prop}
+For any $m\geq 0$, and $t_m$ depending on $m$, if the Sobol' $(t_m,m,s)$-nets are generated by $C_1,\dots,C_s$, then $C_1U,\dots,C_sU$, where $U$ is an upper triangular matrix, generate exactly the same $(t_m,m,s)$-nets.
+\end{prop}
+\begin{proof}
+For any $m$ and $2^{m-1}\leq i < 2^m$, the image by $U$, $\vj=U\vi$, will also satisfy $2^{m-1}\leq j < 2^m$. The reason is because $U$ is upper triangular, therefore $j_{m-1}=i_{m-1}$. Thus, by induction on $m$, the $(t_m,m,s)$-nets generated after applying the permutation $U$ contain exactly the same points.
+\end{proof}
 
-Pairwise projections are already well optimized (see\cite[Table 2.1]{kuo2}). Thus, our starting point will be using the $C_1,\dots,C_d$ found in \cite{kuo2} to generate the sequence $\{{\vx}_i\}_{i\in\mathbb{N}_0}$. Hence, we will focus on finding the optimal $C'_{1},\dots,C'_{d}$ such that we minimize a $t$-value criteria (to specify, perhaps the max of all) over all $d$ sequences described in \eqref{ordered_sequence}.
+This means that the use of these matrices $U_u$ do not affect the quality of our initial sequence.
+
+Sobol' generating matrices $C$ are constructed through primitive polynomials and initial directional numbers. How to choose them is deeply discussed in \cite{kuo}. The $t$-values of pairwise projections are already optimized in \cite{kuo2}. Thus, we will consider the $2s$-dimensional Sobol' sequence described by them to construct the other $s$ $2s$-dimensional sequences.
+
+We still can optimize the quality of the $s$ sequences together by taking a different order of the generating matrices of the initial sequence. Given the generators $C_1,\dots,C_{2s}$, for all $s$ reordered sequences, the projections $C_i-C_j$ appear $s$ times when $0<i<j\leq s$, $s-1$ times when $0<i\leq s<j\leq 2s$, and $s-2$ times if $s<i<j\leq 2s$. Hence, we can sort the matrices such that sets of bad $C_{\pi(i)}-C_{\pi(j)}$ projections are mostly for $s<{\pi(i)}<{\pi(j)}\leq 2s$.
+
+In addition to it, one can still randomize the initial Sobol' sequence using Owen's scrambling \cite{owen.scrambl}. The only requirement to keep the replication property is to apply the same scrambling to dimensions that differ by $s$ positions, i.e., same scrambling to $C_j$ and $C_{j+s}$ for all $j=1,\dots,s$.
 
 %\subsection{Matrix generators group $U_m$}
 %
@@ -220,7 +233,7 @@ We detail below the steps of the construction of these two designs.
 for each $i=0,\dots,2^m-1$, the points $\vx_i^{(l)} = (x_{i,1}^{(l)},\dots,x_{i,s}^{(l)})^\intercal$ is obtained by:
 \begin{equation}
 \label{dig.shift}
-(x_{i,j,1}^{(l)},\dots,x_{i,j,m}^{(l)})^\intercal = C_j^m \vi^\intercal+\ve_j,\qquad j= 1,\dots,s\, ,
+(x_{i,j,1}^{(l)},\dots,x_{i,j,m}^{(l)})^\intercal = C_j^m \vi+\ve_j,\qquad j= 1,\dots,s\, ,
 \end{equation}
 where $ x_{i,j}^{(l)}=\sum_{k = 1}^mx_{i,j,k}^{(l)}2^{-k}$ and $\ve_j=(e_{j,{0}},\dots,e_{j,{m-1}})^\intercal \in (\mathbb{F}_2)^m$.\\
 
