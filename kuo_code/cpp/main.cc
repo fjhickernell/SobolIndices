@@ -20,7 +20,7 @@ int main(){
   std::clock_t timer; // initializing a clock type
   timer = std::clock(); // starting time of clock
 
-  unsigned D = 15U; // Number of dimensions to work with
+  unsigned D = 19U; // Number of dimensions to work with
   unsigned digits = 24U; // Number of digits and 2^digits points
   std::vector<generator> geners(D);
 
