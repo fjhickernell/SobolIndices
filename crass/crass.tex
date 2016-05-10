@@ -199,7 +199,7 @@ For integers $s\geq 1$, $b\geq 2$, and $t\geq 0$, the sequence $\{\vx_i\}_{i\in\
 All $(t,m,s)$-nets and $(t,s)$-sequences relevant for applications are based on a digital construction scheme over a finite field $\mathbb{F}_b$ with $b$ a prime power number. Digital nets and sequences referred to these structures. 
 \bigskip
 
-The construction scheme of a $s$-dimensional digital sequence requires the knowledge of the base $b$ and a set of $s$ full rank upper triangular matrices of infinite size called generating matrices. These generating matrices are recursively constructed through primitive polynomials and initial directional numbers (see \cite{niederreiter} for further details). Denote by $C_1,\dots,C_s$ $s$ generating matrices over $\mathbb{F}_b$. For $m>0$ and $j \in \{1,\dots,s\}$, we note $C_j^{m}$ the $m \times m$ upper left block of $C_j$. The first $b^m$ points $\{\vx_0,\dots,\vx_{b^m-1}\}$ of the digital sequence are constructed as follows:\\
+The construction scheme of a $s$-dimensional digital sequence requires the knowledge of the base $b$ and a set of $s$ full rank upper triangular matrices of infinite size called generating matrices. These generating matrices are recursively constructed through primitive polynomials and initial directional numbers (see \cite{niederreiter} for further details). Denote by $C_1,\dots,C_s$ $s$ generating matrices over $\mathbb{F}_b:=\{0,\dots,b-1\}$. For $m>0$ and $j \in \{1,\dots,s\}$, we note $C_j^{m}$ the $m \times m$ upper left block of $C_j$. The first $b^m$ points $\{\vx_0,\dots,\vx_{b^m-1}\}$ of the digital sequence are constructed as follows:\\
 
 For each $i=0,\dots,b^m-1$, the point $\vx_i = (x_{i,1},\dots,x_{i,s})^\intercal$ of the sequence is obtained dimension-wise by:
 \begin{equation}

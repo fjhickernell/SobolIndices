@@ -61,7 +61,7 @@
 \subsection{Cost discussion ---> Consider or not total order}
 Cost small:\[n(d+1)+d_sn+n\]
 Cost pas small:\[\alpha n d_s +n+(d-d_s)n\]
-Cost small - cost pas small: \[n\sum_{i=1}^{s}(2-\alpha_i+1)\] $s$ number of small indices, $alhpa_i$ proportion of how many more points if not pas small
+Cost small - cost pas small: \[n\sum_{i=1}^{s}(2-\alpha_i+1)\] $s$ number of small indices, $\alhpa_i$ proportion of how many more points if not pas small
 
 \section{Sensibility Analysis}
 \subsection{Background}
@@ -69,6 +69,19 @@ Cost small - cost pas small: \[n\sum_{i=1}^{s}(2-\alpha_i+1)\] $s$ number of sma
 \subsection{Sobol' Indices}
 
 \section{Reliable Error Estimation for Cubatures}
+
+We assume that we have an algorithm $\widehat{I}(f;\varepsilon)$ such that $\abs{I(f)-\widehat{I}(f;\varepsilon)}\leq \varepsilon$. For instance, the guaranteed quasi-Monte Carlo cubatures described in \cite{-} and \cite{-}. Therefore, we will always assume that the true integral $I(f)$ lies in $[\widehat{I}(f;\varepsilon)-\varepsilon,\widehat{I}(f;\varepsilon)+\varepsilon]$.
+
+Sobol' indices can be seen as operators over functions that can be simplified as functions whose entries are integrals.
+
+The case of $correlation 2$
+Je viens de comprendre, prendre S(LB,UB) comme le minimum (LowerBound, UpperBound) et S(UB,LB) comme le maximum est trop simple. Il faut construire le S_max et S_min en fonction du cas.
+Pour nous, a - b*c + c^2 est un paraboloïde hyperbolique. La droite avec plus de décroissement est 0+lambda(2,1) [prends la dérivée par rapport à c et l'on a c=b/2] et la perpendiculaire, celle de plus accroissement (symmetrie). Sur notre région carré, le point de max valeur de S sera le point le plus eloignée de la droite 0+lambda(2,1), et le minimum, sera sur cette droite le plus eloignée de b = 0 (si l'on substitue c=b/2, on obtient que restreint à cette droite, la fonction est a-b^2/4).
+
+- Max at = hat{a} + e_a  ,  hat{b} - sign(hat{c}-hat{b}/2) e_b  ,  hat{c} + sign(hat{c}-hat{b}/2) e_c
+- Min at = hat{a} - e_a  ,  hat{b} + sign(hat{b}) e_b  ,  (hat{b} + sign(hat{b}) e_b)/2
+
+
 \subsection{Definition of $\widehat{S}$ (fix it with max and min)}
 
 \section{Sobol' Sequences and Permuted Points}
