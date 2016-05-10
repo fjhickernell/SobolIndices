@@ -102,7 +102,8 @@
 % \address{Address\thanksref{label3}}
 % \thanks[label3]{}
 \selectlanguage{english}
-\title{On the replication of Sobol' sequences to estimate main effects of model inputs}
+\title{Replicated designs based on Sobol' sequences to estimate main effects of model inputs}
+%\title{On the replication of Sobol' sequences to estimate main effects of model inputs}
 
 
 % use optional labels to link authors explicitly to addresses:
@@ -163,7 +164,7 @@ Mathematical models used in various fields often involve a substantial number of
 
 The procedure proposed by Sobol' to estimate first-order Sobol' indices and its improvements (see Saltelli \cite{Saltelli} for an exhaustive survey) all suffer from a prohibitive cost of model evaluations that grows with respect to the input space dimension. %An elegant solution to reduce this cost relies on the construction of replicated designs introduced by McKay \cite{mckay}.  
  An elegant solution to reduce this cost relies on the construction of particular designs of experiments called replicated designs. The notion of replicated designs was first introduced by McKay through its introduction of replicated Latin Hypercubes \cite{mckay}. 
-Here, replicated designs are defined in a wider framework:
+Here, we define replicated designs in a wider framework:
 
 \begin{definition}%[Replicated designs]
 \label{rep.designs}
@@ -172,16 +173,18 @@ $\vx_i,\vx'_i\in[0,1)^{s}$. Let $\mathcal{P}^u=\{\vx_{i,u}\}_{i=0}^{n-1}$ (resp.
 $\forall \ u \subsetneq \mathcal{D}$ such that $|u|=r$, $\mathcal{P}^u$ and $\mathcal{P}'^u$ are the same point set in $[0,1)^r$.
 \end{definition}
 
-With the construction of only two replicated designs of order $1$, the replication procedure introduced and studied in \cite{mara,tissot} allows to estimate all first-order Sobol' indices. This procedure has the major advantage of reducing drastically the estimation cost as the number of runs (one design $\mathcal{P}$ of size $n$  and its replication $\mathcal{P}'$) becomes independent of the input space dimension. However, if the input space is not properly explored the Sobol' indices estimates may still not be accurate enough. 
+With the construction of only two replicated designs of order $1$, the replication procedure introduced and studied in \cite{mara,tissot} allows to estimate all first-order Sobol' indices. 
+
+This procedure has the major advantage of reducing drastically the estimation cost as the number of runs (one design $\mathcal{P}$ of size $n$  and its replication $\mathcal{P}'$) becomes independent of the input space dimension. However, Sobol' indices estimates may still not be accurate enough if the input space is not properly explored.
 \bigskip
 
-In this note, we propose to construct replicated point sets based on Sobol' sequences to generate two space-filling replicated designs of order $1$. These two designs insure that the input space is properly explored and can then be used within the replication procedure to estimate all main-effects of a numerical model. We first provide backgrounds on digital sequences, then we present two iterative approaches to construct replicated point sets based on Sobol' sequences. 
+In this note, we propose to construct two replicated point sets based on Sobol' sequences that identify as two space-filling replicated designs of order $1$. These two designs insure that the input space is properly explored and can then be used within the replication procedure to estimate all main-effects of a numerical model. We first provide backgrounds on digital sequences, then we present two iterative approaches to construct the two replicated point sets. 
 
 \section{Digital sequences background}
 
 \subsection{Preliminaries}
 
-The introduction of digital nets and sequences has its origin in numerical integration and uniform distribution. Explicit constructions of digital sequences have been developed notably by Sobol' and Niederreiter \cite{niderreiter} into the overarching notion of $(t,m,s)$-nets and $(t,s)$-sequences. A comprehensive theory of $(t,m,s)$-net and $(t,s)$-sequences was first formulate by Niederreiter. 
+The introduction of digital nets and sequences has its origin in numerical integration and uniform distribution. Explicit constructions of digital nets and sequences have been developed notably by Sobol' and Niederreiter \cite{niderreiter} into the overarching notion of $(t,m,s)$-nets and $(t,s)$-sequences. A comprehensive theory of $(t,m,s)$-net and $(t,s)$-sequences was first formulate by Niederreiter. 
 
 $(t,m,s)$-nets are defined as point sets in $\cube$ whose quality is measured by the parameter $t$, called $t$-value. They are defined as follows:
 \begin{definition}%[$(t,m,s)-net$]
@@ -199,7 +202,7 @@ For integers $s\geq 1$, $b\geq 2$, and $t\geq 0$, the sequence $\{\vx_i\}_{i\in\
 All $(t,m,s)$-nets and $(t,s)$-sequences relevant for applications are based on a digital construction scheme over a finite field $\mathbb{F}_b$ with $b$ a prime power number. Digital nets and sequences referred to these structures. 
 \bigskip
 
-The construction scheme of a $s$-dimensional digital sequence requires the knowledge of the base $b$ and a set of $s$ full rank upper triangular matrices of infinite size called generating matrices. These generating matrices are recursively constructed through primitive polynomials and initial directional numbers (see \cite{niederreiter} for further details). Denote by $C_1,\dots,C_s$ $s$ generating matrices over $\mathbb{F}_b$. For $m>0$ and $j \in \{1,\dots,s\}$, we note $C_j^{m}$ the $m \times m$ upper left block of $C_j$. The first $b^m$ points $\{\vx_0,\dots,\vx_{b^m-1}\}$ of the digital sequence are constructed as follows:\\
+The construction scheme of a $s$-dimensional digital sequence requires the knowledge of the base $b$ and a set of $s$ full rank upper triangular matrices of infinite size called generating matrices. These generating matrices are recursively constructed through primitive polynomials and initial directional numbers (see \cite{niederreiter} for further details). We denote by $C_1,\dots,C_s$ the $s$ generating matrices over $\mathbb{F}_b$ of the $s$-dimensional digital sequence. For $m>0$ and $j \in \{1,\dots,s\}$, we note $C_j^{m}$ the $m \times m$ upper left block of $C_j$. The first $b^m$ points $\{\vx_0,\dots,\vx_{b^m-1}\}$ of the digital sequence are constructed as follows:\\
 
 For each $i=0,\dots,b^m-1$, the point $\vx_i = (x_{i,1},\dots,x_{i,s})^\intercal$ of the sequence is obtained dimension-wise by:
 \begin{equation}
@@ -209,7 +212,9 @@ For each $i=0,\dots,b^m-1$, the point $\vx_i = (x_{i,1},\dots,x_{i,s})^\intercal
 where $x_{i,j} = \sum_{k \geq 1}x_{i,j,k}b^{-k}$ and $\vi = (i_{0},\dots,i_{m-1})^\intercal$ is the b-ary decomposition of $i$.
 \bigskip
 
-For $m' > m$ the matrix $C_j^m$ is embedded in the upper left of matrices $C_j^{m'}$. Resulting from this embedding, the construction of a digital sequence can be performed iteratively. To link digital sequences to the definition of replicated designs, we introduce the following concept:
+Remark that for any $m' > m$, the matrix $C_j^m$ is embedded in the upper left of matrices $C_j^{m'}$. Resulting from this embedding, the construction of a digital sequence can be performed iteratively.
+
+The concept of digital sequences can be linked to the definition of replicated designs. To do so, we introduce the following notion:
 \begin{definition}
 Two digital sequences $\{\vx_i\}_{i\in\mathbb{N}_0}$ and $\{{\vx'}_i\}_{i\in\mathbb{N}_0}$ are said \emph{digitally replicated} of order $r$ if for all $m\geq 0$, $\{{\vx}_i\}_{i=0}^{b^m-1}$ and $\{{\vx'}_i\}_{i=0}^{b^m-1}$ are two replicated designs of order $r$.
 \end{definition}
@@ -223,74 +228,93 @@ All Sobol' sequences are digitally replicated of order 1.
 \begin{pf*}{\textit{Proof}.}
 Consider any two s-dimensional Sobol' sequences generated respectively by the matrices $C_1,\dots,C_s$ and $C'_1,\dots,C'_s$. Since these matrices are upper triangular, to compute the first $2^m$ points one only needs the knowledge of the $m\times m$ upper left blocks $C_j^m$ and ${C'}_j^m$, $j \in \{1,\dots,s\}$. Because any two matrices $C^{m}_j$ and ${C'}^{m}_j$ are square and full rank, the products $C^{m}_j\vi$ and ${C'}^{m}_j\vi$ are one-to one and onto, for all $i=0,\dots,2^m-1$. Therefore, they generate the same point sets.
 \end{pf*} 
-For $j \in \{1,\dots,s\}$, using two different generating matrices $C^{m}_j$ and $C'^{m}_j$ in equation (\ref{dig.net.eq.}) produce the same set of $2^m$ values $\{x_{0,j},\dots,x_{2^m-1,j}\}$ but ordered differently. It is possible to go from an order to the other by using the corresponding full rank upper triangular matrix $U^{m}_j$, such that $C^{m}_j=C'^{m}U^{m}_j$. This matrix can be thought as a permutation of the input binary vectors $\vi$.
 
+%\begin{remark}
+%For any $j \in \{1,\dots,s\}$, using two different generating matrices $C^{m}_j$ and $C'^{m}_j$ in equation (\ref{dig.net.eq.}) produce the same set of $2^m$ values $\{x_{0,j},\dots,x_{2^m-1,j}\}$ but ordered differently. It is possible to go from an order to the other by using the corresponding full rank upper triangular matrix $U^{m}_j$, such that $C^{m}_j=C'^{m}U^{m}_j$. This matrix can be thought as a permutation of the input binary vectors $\vi$.
+%\end{remark}
 
 \section{Iterative construction of replicated point sets}
 
-%In section \ref{sobol.seq.cons}, we present two approaches to construct replicated point sets based on Sobol' sequences. The multiplicative approach uses two Sobol' sequences that are replicated by construction, while the additive approach takes an initial number of points of two Sobol' sequences and applies digital shifts and scramblings to extend the point set. In this case, at step $k$ the size of each replicated Sobol' sequence is $ k \times 2^m$ where $2^m$ is the size of the initial Sobol' sequence. 
+We propose here two approaches to construct two replicated point sets $\mathcal{P}$ and $\mathcal{P}'$ based on Sobol' sequences. These two constructions are iterative that is the two points sets constructed possess the following structure:
+$$\mathcal{P}= B_1 \cup B_2 \cup B_3 \dots $$
+$$\mathcal{P}'= {B'}_1 \cup {B'}_2 \cup {B'}_3 \dots $$
+where each $B_l$ (resp. $B'_l$), $l\geq1$, is a new set of points added at step $l$ to refine $\mathcal{P}$ (resp. $\mathcal{P}'$). At each step $l$ and for each approach, $\mathcal{P}$ and $\mathcal{P'}$ are two replicated designs of order $1$.
+
+The first approach is called multiplicative approach and simply consists in generating two different Sobol' sequences. This approach exploits the result of Lemma \ref{Sobol_replicated}. The second approach is called additive approach. It takes an initial number of points of a Sobol' sequence and applies to it digital shift and scrambling operations to generate the two replicated points sets.
+
 
 \subsection{Multiplicative approach}
-Denote by $\mathcal{P}$ and $\mathcal{P}'$ the two designs iteratively refined with new points sets using the multiplicative approach. %Based on Lemma \ref{Sobol_replicated}, by taking $\mathcal{P}$ and $\mathcal{P}'$ to be two $s$-dimensional Sobol' sequences we obtain two replicated designs or order $1$ with an innate nested structure.
-The goal of this approach is to generate a $2s$-dimensional Sobol' sequence with good properties to estimate all first order Sobol' indices. Design $\mathcal{P}$ is formed with the first $s$ dimensions of the sequence and design $\mathcal{P}'$ with the $s$ remaining ones. As shown in Lemma \ref{Sobol_replicated}, for any $m\geq 0$ and $2^m$ points, each dimension of the sequence will have exactly the same values, although probably with different order. Thus, designs $\mathcal{P}$ and $\mathcal{P}'$ are nested replicated designs of order $1$ and both are $s$-dimensional Sobol' sequences.
 
-The only constraint we have is that for each $u=1,\dots,s$, to estimate the quantity $\underline{\tau}_u^2$ the $2s$-dimensional Sobol' sequence must ensure that $x_{i,u}=x_{i,u+s}$ for $i\in\mathbb{N}_0$. Therefore, we will need $s$ different $2s$-dimensional sequences. These sequences can be constructed using a single $2s$-dimensional sequence and considering the corresponding upper triangular matrices $U_u$.
+The two replicated points sets $\mathcal{P}$ and $\mathcal{P}'$ constructed with the multiplicative approach are two $s$-dimensional Sobol' sequences constructed with different sets of generating matrices. We note $C_1,\dots,C_s$ the generating matrices used to generate design $\mathcal{P}$ and ${C'}_1,\dots,{C'}_s$ those used to generate design $\mathcal{P}'$. Our choice of the $2s$ generating matrices $C_1,\dots,C_S,{C'}_1,\dots,{C'}_s$ follows the results obtained by Joe and Kuo in \cite{kuo2}. These two authors proposed a set of generating matrices optimized based on the $t$-value of pairwise projections. We select $2s$ generating matrices of this set to generate our two designs $\mathcal{P}$ and $\mathcal{P}'$.
+\bigskip
 
-Given the generators $C_1,\dots,C_s,C'_1,\dots,C'_s$, we define the $U_u$ matrices such that $C_u=C'_uU_u$. Then, each sequence generated by $C_1,\dots,C_s,C'_1U_u,\dots,C'_sU_u$ will satisfy $x_{i,u}=x_{i,u+s}$, for all $i\in\mathbb{N}_0$.
+The iterative construction of designs $\mathcal{P}$ and $\mathcal{P}'$ proceed as follows:
 
-\begin{proposition}
-For any $m\geq 0$, and $t_m$ depending on $m$, if the Sobol' $(t_m,m,s)$-nets are generated by $C_1,\dots,C_s$, then $C_1U,\dots,C_sU$, where $U$ is an upper triangular matrix, generate exactly the same $(t_m,m,s)$-nets.
-\end{proposition}
-\begin{pf*}{Proof.}
-For any $m$ and $2^{m-1}\leq i < 2^m$, the image by $U$, $\vj=U\vi$, will also satisfy $2^{m-1}\leq j < 2^m$. The reason is because $U$ is upper triangular, therefore $j_{m-1}=i_{m-1}$. Thus, by induction on $m$, the $(t_m,m,s)$-nets generated after applying the permutation $U$ contain exactly the same points.
-\end{pf*}
+at step $l$, $l \geq 1$, design $\mathcal{P}$ is refined with a set of $2^l$ points $B_l=\{\vx_{2^{l-1}},\dots,\vx_{2^l-1}\}$ obtained through equation (\ref{dig.net.eq.}) with $C_1^l,\dots,C_s^l$. Likewise, design $\mathcal{P}'$ is refined with ${B'}_l=\{\vx'_{2^{l-1}},\dots,\vx'_{2^l-1}\}$ obtained through equation (\ref{dig.net.eq.}) with ${C'}_1^l,\dots,{C'}_s^l$.
+ 
+As a direct consequence of Lemma \ref{Sobol_replicated}, at each step $l$ the designs $\mathcal{P}$ and $\mathcal{P}'$ are two replicated designs of order $1$. Furthermore, they both inherit the space-filling properties of $(t,l,s)$-nets.
 
-This means that the use of these matrices $U_u$ do not affect the quality of our initial sequence.
 
-Sobol' generating matrices $C$ are constructed through primitive polynomials and initial directional numbers. How to choose them is deeply discussed in \cite{kuo}. The $t$-values of pairwise projections are already optimized in \cite{kuo2}. Thus, we will consider the $2s$-dimensional Sobol' sequence described by them to construct the other $s$ $2s$-dimensional sequences.
+%The only constraint we have is that for each $u=1,\dots,s$, to estimate the quantity $\underline{\tau}_u^2$ the $2s$-dimensional Sobol' sequence must ensure that $x_{i,u}=x_{i,u+s}$ for $i\in\mathbb{N}_0$. Therefore, we will need $s$ different $2s$-dimensional sequences. These sequences can be constructed using a single $2s$-dimensional sequence and considering the corresponding upper triangular matrices $U_u$.
 
-We still can optimize the quality of the $s$ sequences together by taking a different order of the generating matrices of the initial sequence. Given the generators $C_1,\dots,C_{2s}$, for all $s$ reordered sequences, the projections $C_i-C_j$ appear $s$ times when $0<i<j\leq s$, $s-1$ times when $0<i\leq s<j\leq 2s$, and $s-2$ times if $s<i<j\leq 2s$. Hence, we can sort the matrices such that sets of bad $C_{\pi(i)}-C_{\pi(j)}$ projections are mostly for $s<{\pi(i)}<{\pi(j)}\leq 2s$.
+%Given the generators $C_1,\dots,C_s,C'_1,\dots,C'_s$, we define the $U_u$ matrices such that $C_u=C'_uU_u$. Then, each sequence generated by $C_1,\dots,C_s,C'_1U_u,\dots,C'_sU_u$ will satisfy $x_{i,u}=x_{i,u+s}$, for all $i\in\mathbb{N}_0$.
 
-In addition to it, one can still randomize the initial Sobol' sequence using Owen's scrambling \cite{owen.scrambl}. The only requirement to keep the replication property is to apply the same scrambling to dimensions that differ by $s$ positions, i.e., same scrambling to $C_j$ and $C_{j+s}$ for all $j=1,\dots,s$.
+%\begin{proposition}
+%For any $m\geq 0$, and $t_m$ depending on $m$, if the Sobol' $(t_m,m,s)$-nets are generated by $C_1,\dots,C_s$, then $C_1U,\dots,C_sU$, where $U$ is an upper triangular matrix, generate exactly the same $(t_m,m,s)$-nets.
+%\end{proposition}
+%\begin{pf*}{Proof.}
+%For any $m$ and $2^{m-1}\leq i < 2^m$, the image by $U$, $\vj=U\vi$, will also satisfy $2^{m-1}\leq j < 2^m$. The reason is because $U$ is upper triangular, therefore $j_{m-1}=i_{m-1}$. Thus, by induction on $m$, the $(t_m,m,s)$-nets generated after applying the permutation $U$ contain exactly the same points.
+%\end{pf*}
+
+%This means that the use of these matrices $U_u$ do not affect the quality of our initial sequence.
+
+%We still can optimize the quality of the $s$ sequences together by taking a different order of the generating matrices of the initial sequence. Given the generators $C_1,\dots,C_{2s}$, for all $s$ reordered sequences, the projections $C_i-C_j$ appear $s$ times when $0<i<j\leq s$, $s-1$ times when $0<i\leq s<j\leq 2s$, and $s-2$ times if $s<i<j\leq 2s$. Hence, we can sort the matrices such that sets of bad $C_{\pi(i)}-C_{\pi(j)}$ projections are mostly for $s<{\pi(i)}<{\pi(j)}\leq 2s$.
 
 \subsection{Additive Approach}
 
-Denote by $\mathcal{P}$ and $\mathcal{P}'$ the two replicated designs iteratively refined with new points sets using the additive approach. These two designs possess a block structure:
-$$\mathcal{P}= B_0 \cup B_1 \cup B_2 \dots $$
-$$\mathcal{P}'= {B'}_0 \cup {B'}_1 \cup {B'}_2 \dots $$
-We detail below the steps of the construction of these two designs.
-\begin{enumerate}
-\item[Step 1.] We start by fixing $m$ and choosing a set $C_1^{m},\dots,C_s^{m}$ of generating matrices to construct an initial Sobol' sequence $\{\vx_i\}_{i=0}^{2^m-1}$ of $2^m$ points. \\
+The two replicated points sets $\mathcal{P}$ and $\mathcal{P}'$ constructed with the additive approach are iteratively refined with points sets $B_l$ and ${B'}_l$ that each possesses the structure of a $(t,m,s)$-net.
 
-\item[Step 2.] At step $l$ of the recursive estimation, $l \geq 0$, a new points set $B_l=\{\vx_i^{(l)}\}_{i=0}^{2^m-1}$ of $2^m$ points is added to $\mathcal{P}$. $B_l$ is obtained by applying a digital shift to the initial Sobol' sequence. The digital shift operation is applied as follows:
+First, an initial set of $2^m$ points $B_0=\{\vx_i^{(0)}\}_{i=0}^{2^m-1}$ of a $s$-dimensional Sobol' sequence is generated by fixing $m >0$ and selecting $s$ generating matrices $C_1,\dots,C_s$ from the set obtained in \cite{kuo2}. Then, $B_l$ and ${B'}_l$ are obtained from $B_0$ by carrying out digital shift and scrambling operations. These operations guarantee that both $B_l$ and ${B'}_l$ inherit the $(t,m,s)$-net structure of the starting set $B_0$.
+\bigskip
+
+We detail below the construction of $B_l$ and ${B'}_l$:
+
+At step $l$, $l \geq 1$, design $\mathcal{P}$ is refined with a set of $2^m$ points $B_l=\{\vx_i^{(l)}\}_{i=0}^{2^m-1}$. $B_l$ is a digitally shifted version of $B_0$:
 
 for each $i=0,\dots,2^m-1$, the points $\vx_i^{(l)} = (x_{i,1}^{(l)},\dots,x_{i,s}^{(l)})^\intercal$ is obtained by:
 \begin{equation}
 \label{dig.shift}
-(x_{i,j,1}^{(l)},\dots,x_{i,j,m}^{(l)})^\intercal = C_j^m \vi+\ve_j,\qquad j= 1,\dots,s\, ,
+(x_{i,j,1}^{(l)},\dots,x_{i,j,m}^{(l)})^\intercal = (x_{i,j,1}^{(0)},\dots,x_{i,j,m}^{(0)})^\intercal+\ve_j,\qquad j= 1,\dots,s\, ,
 \end{equation}
-where $ x_{i,j}^{(l)}=\sum_{k = 1}^mx_{i,j,k}^{(l)}2^{-k}$ and $\ve_j=(e_{j,{0}},\dots,e_{j,{m-1}})^\intercal \in ker(C_j^m)$ the kernel of $C_j^m$.\\
+where $ x_{i,j}^{(l)}=\sum_{k = 1}^mx_{i,j,k}^{(l)}2^{-k}$ and $\ve_j=(e_{j,{0}},\dots,e_{j,{m-1}})^\intercal \in ker(C_j^m)$ the kernel of $C_j^m$.
+\bigskip
 
-\item[Step 3.] Then, the points set ${B'}_l=\{{\vx'}_i^{(l)}\}_{i=0}^{2^m-1}$ is obtained from $B_l$ by applying Tezuka's i-binomial scrambling \cite{tezuka}. This operation consists in the following: 
+Then, design $\mathcal{P}'$ is refined with a set of $2^m$ points ${B'}_l=\{{\vx'}_i^{(l)}\}_{i=0}^{2^m-1}$. ${B'}_l$ is obtained from $B_l$ by applying Tezuka's i-binomial scrambling \cite{tezuka}. This scrambling operation writes as follows: 
 
 for each $i=0,\dots,2^m-1$, the points ${\vx'}_i^{(l)} = ({x'}_{i,1}^{(l)},\dots,{x'}_{i,s}^{(l)})^\intercal$ is obtained by:
 \begin{equation}
 \label{ibinom.scrambling}
 ({x'}_{i,j,1}^{(l)},\dots,{x'}_{i,j,m}^{(l)})^\intercal = L_j^m (x_{i,j,1}^{(l)},\dots,x_{i,j,m}^{(l)})^\intercal,
 \end{equation}
-where $ {x'}_{i,j}^{(l)}=\sum_{k = 1}^m{x'}_{i,j,k}^{(l)}2^{-k}$ and $L_j^m$ is an invertible lower triangular matrix of size $m \times m$ over the Galois field $\mathbb{F}_2$.\\
+where $ {x'}_{i,j}^{(l)}=\sum_{k = 1}^m{x'}_{i,j,k}^{(l)}2^{-k}$ and $L_j^m$ is a full rank lower triangular matrix of size $m \times m$ over the Galois field $\mathbb{F}_2$.
+\bigskip
 
-\item[Step 4.] The two blocks $B_l$ and ${B'}_l$ are then both randomized using the same Owen's scrambling column-wise.
+%\item[Step 4.] The two blocks $B_l$ and ${B'}_l$ are then both randomized using the same Owen's scrambling column-wise.
 
-\item[Step 5.] $B_l$ and ${B'}_l$ are used to estimate all first-order indices $\underline{\tau}_u^2, u \in \mathcal{D}$.
-\end{enumerate}
-Steps $2$ to $5$ are iterated until a stopping criterion is reached. There is a finite choice for the vector $\ve_j$ and matrix $L_j^m$ respectively constructed in Steps $2$ and $3$. %Once $m$ is fixed, one can build up to $2^m$ different $\ve_j$ and $2^{m(m-1)/2}$ different $L_j^m$. 
-The choice of $m$ must take into account this limitation.
+%\item[Step 5.] $B_l$ and ${B'}_l$ are used to estimate all first-order indices $\underline{\tau}_u^2, u \in \mathcal{D}$.
+%There is a finite choice for the vector $\ve_j$ and matrix $L_j^m$ respectively constructed in Steps $2$ and $3$. The choice of $m$ must take into account this limitation.
 
- At each step $l$, $B_l$ and ${B'}_l$ are two replicated designs of order $1$ thus enabling the estimation of all first-order indices. Denote by $K$ the step at which the recursive estimation stopped. The total cost of the additive approach to estimate all first-order indices equals $2 \times K \times 2^m$. 
- 
-The additive approach is attractive due to the slow growing size of the two replicated designs $\mathcal{P}$ and $\mathcal{P}'$. At the opposite of the multiplicative approach, the main drawback is that $\mathcal{P}$ and $\mathcal{P}'$ does not possess the structure of a Sobol' sequence but each block $B_l$ (resp. $B'_l$) composing them does.
+\begin{lemma}
+At each step $l$, $l\geq1$, the digital shift and scrambling operations carried out in equations (\ref{dig.shift}) and (\ref{ibinom.scrambling}) ensure that $\mathcal{P}$ and $\mathcal{P}'$ are two replicated designs of order $1$. 
+\end{lemma}
 
+\begin{pf*}{Proof.}
+This is a direct consequence of the following result: at each step $l$, $B_l$ and ${B'}_l$ are two replicated designs of order $1$. Indeed, since digital shift and i-binomial scrambling operations are bijections from $\mathbb{F}_2^m$ to $\mathbb{F}_2^m$, each dimension of $B_l$ and ${B'}_l$ contains the same set of $2^m$ values.
+\end{pf*}
+
+In the multiplicative approach, at each step $l$, $l \geq 1$ the sizes of designs $\mathcal{P}$ and $\mathcal{P}'$ are multiplied by $2$. This relatively fast growing size may be inadequate for some applications. The additive approach presented here is attractive due to the slow growing size of the two replicated designs $\mathcal{P}$ and $\mathcal{P}'$. At each step $l$, only $2^m$ points are added to both designs. However, the main drawback is that $\mathcal{P}$ and $\mathcal{P}'$ each as a whole does not possess the structure of a Sobol' sequence anymore. 
+
+%In addition to it, one can still randomize the initial Sobol' sequence using Owen's scrambling \cite{owen.scrambl}. The only requirement to keep the replication property is to apply the same scrambling to dimensions that differ by $s$ positions, i.e., same scrambling to $C_j$ and $C_{j+s}$ for all $j=1,\dots,s$.
 
 %\label{}
 % etc, etc
