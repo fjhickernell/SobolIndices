@@ -184,27 +184,25 @@ In this note, we propose to construct two replicated point sets based on Sobol' 
 
 \subsection{Preliminaries}
 
-The introduction of digital nets and sequences has its origin in numerical integration and uniform distribution. Explicit constructions of digital nets and sequences have been developed notably by Sobol' and Niederreiter \cite{niderreiter} into the overarching notion of $(t,m,s)$-nets and $(t,s)$-sequences. A comprehensive theory of $(t,m,s)$-net and $(t,s)$-sequences was first formulate by Niederreiter. 
+Digital nets and sequences were first introduced by Niederreiter \cite{SIAM92book} in the numerical integration framework to define good uniformly distributed points in $\cube$. They can also appear in the literature as digital $(t,m,s)$-nets and digital $(t,s)$-sequences, or simply $(t,m,s)$-nets and $(t,s)$-sequences. Sobol' \cite{Sobol} and Niederreiter-Xing sequences are two examples whose explicit constructions are detailed in \cite{Niederreiter, Sobol, DickPhilischammer,DickKritzer,KuoJoe}.
 
-$(t,m,s)$-nets are defined as point sets in $\cube$ whose quality is measured by the parameter $t$, called $t$-value. They are defined as follows:
+The quality of any $(t,m,s)$-net or $(t,s)$-sequence is measured by $t$, called the $t$-value. The $t$-value is introduced in the $(t,m,s)$-net definition as follows:
+
 \begin{definition}%[$(t,m,s)-net$]
 Let $\mathcal{A}$ be the set of all elementary intervals $A\in\cube$ where $A=\prod_{j=1}^s [\alpha_jb^{-\gamma_j},(\alpha_j+1)b^{-\gamma_j})$, with integers $s\geq 1$, $b\geq 2$, $\gamma_j\geq 0$, and $b^{\gamma_j}>\alpha_j\geq 0$. For $m\geq t\geq 0$, the point set $\mathcal{P}\in\cube$ with $b^m$ points is a $(t,m,s)-net$ in base $b$ if every $A$ with volume $b^{t-m}$ contains $b^t$ points of $\mathcal{P}$.
 \end{definition}
 
-A $(t,m,s)$-net is defined such that all elementary intervals of volume at least $b^{t-m}$ will enclose a proportional number of points. The most evenly spread nets are $(0,m,s)$-nets, since each elementary interval of the smallest volume possible, $b^{-m}$, contains exactly one point. %Note that if $t'>t$, $(t,m,s)$-nets are always $(t',m,s)$-nets.
+Thus, a $(t,m,s)$-net is defined such that all elementary intervals of volume at least $b^{t-m}$ will enclose a proportional number of points of $\mathcal{P}$, namely $b^{t-m}|\mathcal{P}|$ points. The most evenly spread nets are $(0,m,s)$-nets, since each elementary interval of the smallest volume possible, $b^{-m}$, contains exactly one point.
 
-$(t,s)$-sequences are the infinite analogues of $(t,m,s)$-nets. They are defined as follows:
+By increasing $m$, we increase the number of points of the $(t,m,s)$-net. If one considers the limit for $m\rightarrow\infty$, $(t,s)$-sequences are defined as:
 \begin{definition}%[$(t,s)$-sequence]
 For integers $s\geq 1$, $b\geq 2$, and $t\geq 0$, the sequence $\{\vx_i\}_{i\in\mathbb{N}_0}$ is a $(t,s)$-sequence in base $b$, if for every set $\mathcal{P}_{\ell,m}=\{\vx_i\}_{i=\ell b^m}^{(\ell+1)b^m-1}$ with $\ell\geq 0$ and $m\geq t$, $\mathcal{P}_{\ell,m}$ is a $(t,m,s)$-net in base $b$.
 \end{definition}
 \bigskip
 
-All $(t,m,s)$-nets and $(t,s)$-sequences relevant for applications are based on a digital construction scheme over a finite field $\mathbb{F}_b$ with $b$ a prime power number. Digital nets and sequences referred to these structures. 
+All $(t,m,s)$-nets and $(t,s)$-sequences relevant for applications are based on a digital construction scheme over a finite field $\mathbb{F}_b:=\{0,\dots,b-1\}$ with $b$ a prime power number. Digital nets and sequences referred to these structures. 
 \bigskip
 
-<<<<<<< HEAD
-The construction scheme of a $s$-dimensional digital sequence requires the knowledge of the base $b$ and a set of $s$ full rank upper triangular matrices of infinite size called generating matrices. These generating matrices are recursively constructed through primitive polynomials and initial directional numbers (see \cite{niederreiter} for further details). Denote by $C_1,\dots,C_s$ $s$ generating matrices over $\mathbb{F}_b:=\{0,\dots,b-1\}$. For $m>0$ and $j \in \{1,\dots,s\}$, we note $C_j^{m}$ the $m \times m$ upper left block of $C_j$. The first $b^m$ points $\{\vx_0,\dots,\vx_{b^m-1}\}$ of the digital sequence are constructed as follows:\\
-=======
 The construction scheme of a $s$-dimensional digital sequence requires the knowledge of the base $b$ and a set of $s$ full rank upper triangular matrices of infinite size called generating matrices. These generating matrices are recursively constructed through primitive polynomials and initial directional numbers (see \cite{niederreiter} for further details). We denote by $C_1,\dots,C_s$ the $s$ generating matrices over $\mathbb{F}_b$ of the $s$-dimensional digital sequence. For $m>0$ and $j \in \{1,\dots,s\}$, we note $C_j^{m}$ the $m \times m$ upper left block of $C_j$. The first $b^m$ points $\{\vx_0,\dots,\vx_{b^m-1}\}$ of the digital sequence are constructed as follows:\\
 
 For each $i=0,\dots,b^m-1$, the point $\vx_i = (x_{i,1},\dots,x_{i,s})^\intercal$ of the sequence is obtained dimension-wise by:
