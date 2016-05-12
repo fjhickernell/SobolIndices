@@ -143,7 +143,7 @@ Presented by £££££}
 % Text of abstract in English
 In the perspective of estimating main effects of model inputs, two approaches are studied to construct replicated designs based on Sobol' sequences.
 {\it To cite this article: L.
-Gilquin, L. A. J. Rugama, E. Arnaud, F. J. Hickernell, H. Monod, C. Prieur, C. R. Acad. Sci. Paris, Ser. I 340 (2005).}
+Gilquin, Ll. A. Jim\'enez Rugama, E. Arnaud, F. J. Hickernell, H. Monod, C. Prieur, C. R. Acad. Sci. Paris, Ser. I 340 (2005).}
 
 \vskip 0.5\baselineskip
 
@@ -184,7 +184,7 @@ In this note, we propose to construct two replicated points sets based on Sobol'
 
 \subsection{Preliminaries}
 
-Digital nets and sequences were first introduced by Niederreiter \cite{Niederreiter} in the numerical integration framework to define good uniformly distributed points in $\cube$. They can also appear in the literature as digital $(t,m,s)$-nets and digital $(t,s)$-sequences, or simply $(t,m,s)$-nets and $(t,s)$-sequences. Sobol' and Niederreiter-Xing sequences are two examples whose explicit constructions are detailed in \cite{Niederreiter} and \cite{Sobol1}. %\cite{Niederreiter, Sobol, DickPhilischammer,DickKritzer,KuoJoe}.
+Digital nets and sequences were first introduced by Niederreiter \cite{Niederreiter} in the numerical integration framework to define good uniformly distributed points in $\cube$. They can also appear in the literature as digital $(t,m,s)$-nets and digital $(t,s)$-sequences, or simply $(t,m,s)$-nets and $(t,s)$-sequences. Sobol' and Niederreiter-Xing sequences are two examples of digital sequences detailed in \cite{Sobol1} and \cite{NiederreiterXing}.
 
 The quality of any $(t,m,s)$-net or $(t,s)$-sequence is measured by $t$, called the $t$-value. The $t$-value is introduced in the $(t,m,s)$-net definition as follows:
 
@@ -194,41 +194,90 @@ Let $\mathcal{A}$ be the set of all elementary intervals $A\in\cube$ where $A=\p
 
 Thus, a $(t,m,s)$-net is defined such that all elementary intervals of volume at least $b^{t-m}$ will enclose a proportional number of points of $\mathcal{P}$, namely $b^{t-m}|\mathcal{P}|$ points. The most evenly spread nets are $(0,m,s)$-nets, since each elementary interval of the smallest volume possible, $b^{-m}$, contains exactly one point.
 
-By increasing $m$, we increase the number of points of the $(t,m,s)$-net. If one considers the limit for $m\rightarrow\infty$, $(t,s)$-sequences are defined as:
+By increasing $m$, we increase the number of points of the $(t,m,s)$-net. In the limit case where $m\rightarrow\infty$, we can define $(t,s)$-sequences as:
 \begin{definition}%[$(t,s)$-sequence]
 For integers $s\geq 1$, $b\geq 2$, and $t\geq 0$, the sequence $\{\vx_i\}_{i\in\mathbb{N}_0}$ is a $(t,s)$-sequence in base $b$, if for every set $\mathcal{P}_{\ell,m}=\{\vx_i\}_{i=\ell b^m}^{(\ell+1)b^m-1}$ with $\ell\geq 0$ and $m\geq t$, $\mathcal{P}_{\ell,m}$ is a $(t,m,s)$-net in base $b$.
 \end{definition}
-\bigskip
 
-All $(t,m,s)$-nets and $(t,s)$-sequences relevant for applications are based on a digital construction scheme over a finite field $\mathbb{F}_b:=\{0,\dots,b-1\}$ with $b$ a prime power number. Digital nets and sequences referred to these structures. 
+Replicated design properties can apply to digital sequences. Therefore, we introduce the definition,
+\begin{definition}
+Two digital sequences $\{\vx_i\}_{i\in\mathbb{N}_0}$ and $\{{\vx'}_i\}_{i\in\mathbb{N}_0}$ are said \emph{digitally replicated} of order $r$ if for all $m\geq 0$, $\{{\vx}_i\}_{i=0}^{b^m-1}$ and $\{{\vx'}_i\}_{i=0}^{b^m-1}$ are two replicated designs of order $r$.
+\end{definition}
 
-The construction scheme of a $s$-dimensional digital sequence requires the knowledge of the base $b$ and a set of $s$ full rank upper triangular matrices of infinite size called generating matrices. These generating matrices are recursively constructed through primitive polynomials and initial directional numbers (see \cite{Niederreiter} for further details). We detail below the construction scheme. 
+\subsection{Sobol' sequences}
 
-Denote by $C_1,\dots,C_s$ the $s$ generating matrices over $\mathbb{F}_b$ of a $s$-dimensional digital sequence. For $m>0$ and $j \in \{1,\dots,s\}$, we note $C_j^{m}$ the $m \times m$ upper left block of $C_j$. The first $b^m$ points $\{\vx_0,\dots,\vx_{b^m-1}\}$ of the digital sequence are constructed as follows:
+$s$-dimensional Sobol' sequences are designed in base $b=2$ and can be computed using the \emph{generating matrices}, a set of $s$ full rank infinite dimensional upper triangular matrices defined over $\mathbb{F}_2:=\{0,1\}$. In \cite{Kuo}, Kuo and Joe suggest a particular choice for these matrices that optimize the 2 dimensional projection $t$-values.
 
-For each $i=0,\dots,b^m-1$, the point $\vx_i = (x_{i,1},\dots,x_{i,s})^\intercal$ of the sequence is obtained dimension-wise by:
+We denote these matrices by $C_1,\dots,C_s$, and $C_1^m,\dots,C_s^m$ their upper left corner blocks of size $m\times m$. Although $C_1,\dots,C_s$ have infinite size, one only requires the knowledge of $C_1^m,\dots,C_s^m$ to construct the first $2^m$ points.
+
+For each $i=0,\dots,2^m-1$, the point $\vx_i = (x_{i,1},\dots,x_{i,s})^\intercal$ of the sequence is obtained dimension-wise by:
 \begin{equation}
 \label{dig.net.eq.}
 (x_{i,j,1},x_{i,j,2},\dots)^\intercal = C_j^{m} \vi,\qquad j= 1,\dots,s\, ,
 \end{equation}
-where $x_{i,j} = \sum_{k \geq 1}x_{i,j,k}b^{-k}$ and $\vi = (i_{0},\dots,i_{m-1})^\intercal$ is the b-ary decomposition of $i$.
+where $x_{i,j} = \sum_{k \geq 1}x_{i,j,k}2^{-k}$ and $\vi = (i_{0},\dots,i_{m-1})^\intercal$ the binary decomposition of $i$. Below we show how to compute $x_{11,1}=0.8125$ and $x_{9,2}=0.4375$
+
+\begin{equation*}
+\begin{pmatrix}
+x_{11,1,1} \\
+x_{11,1,2} \\
+x_{11,1,3} \\
+x_{11,1,4}
+\end{pmatrix} =
+\begin{pmatrix}
+1 \\
+1 \\
+0 \\
+1
+\end{pmatrix} = 
+\overbrace{
+\begin{pmatrix}
+1 & 0 & 0 & 0 \\
+0 & 1 & 0 & 0 \\
+0 & 0 & 1 & 0 \\
+0 & 0 & 0 & 1
+\end{pmatrix}}^{C_1^4}
+\overbrace{
+\begin{pmatrix}
+1 \\
+1 \\
+0 \\
+1
+\end{pmatrix}}^{\bvec{11}},\qquad
+\begin{pmatrix}
+x_{9,2,1} \\
+x_{9,2,2} \\
+x_{9,2,3} \\
+x_{9,2,4}
+\end{pmatrix} =
+\begin{pmatrix}
+0 \\
+1 \\
+1 \\
+1
+\end{pmatrix} = 
+\overbrace{\begin{pmatrix}
+1 & 1 & 1 & 1 \\
+0 & 1 & 0 & 1 \\
+0 & 0 & 1 & 1 \\
+0 & 0 & 0 & 1
+\end{pmatrix}}^{C_2^4}
+\overbrace{\begin{pmatrix}
+1 \\
+0 \\
+0 \\
+1
+\end{pmatrix}}^{\bvec{9}}
+\end{equation*}
 \bigskip
 
 Remark that for any $m' > m$, the matrix $C_j^m$ is embedded in the upper left of matrix $C_j^{m'}$. Resulting from this embedding, the next $2^m$ points of the digital sequence are constructed by increasing $m$ by one in equation (\ref{dig.net.eq.}). The process is iterated as many times as needed.
 
-The concept of digital sequences can be linked to the definition of replicated designs. To do so, we introduce the following notion:
-\begin{definition}
-Two digital sequences $\{\vx_i\}_{i\in\mathbb{N}_0}$ and $\{{\vx'}_i\}_{i\in\mathbb{N}_0}$ are said \emph{digitally replicated} of order $r$ if for all $m\geq 0$, $\{{\vx}_i\}_{i=0}^{b^m-1}$ and $\{{\vx'}_i\}_{i=0}^{b^m-1}$ are two replicated designs of order $r$.
-\end{definition}
- 
-\subsection{Sobol' sequences}
-
-Sobol' sequences are digital sequences constructed in base $2$. These sequences are attractive for their easy implementation and optimized properties \cite{Kuo}. Sobol' sequences are particularly interesting for having full rank upper triangular generating matrices over $\mathbb{F}_2$. This property leads to the following lemma:
 \begin{lemma}\label{Sobol_replicated}
 All Sobol' sequences are digitally replicated of order 1.
 \end{lemma}
 \begin{pf*}{Proof.}
-Consider any two s-dimensional Sobol' sequences generated respectively by the generating matrices $C_1,\dots,C_s$ and $C'_1,\dots,C'_s$. Since these matrices are upper triangular, to compute the first $2^m$ points one only needs the knowledge of the $m\times m$ upper left blocks $C_j^m$ and ${C'}_j^m$, $j \in \{1,\dots,s\}$. Because any two matrices $C^{m}_j$ and ${C'}^{m}_j$ are square and full rank, the products $C^{m}_j\vi$ and ${C'}^{m}_j\vi$ are one-to one and onto, for all $i=0,\dots,2^m-1$. Therefore, they generate the same point sets.
+Consider any two $s$-dimensional Sobol' sequences generated by the generating matrices $C_1,\dots,C_s$ and $C'_1,\dots,C'_s$ respectively. Since these matrices are upper triangular, to compute the first $2^m$ points one only needs the knowledge of the $m\times m$ upper left blocks $C_j^m$ and ${C'}_j^m$, $j \in \{1,\dots,s\}$. Because any two matrices $C^{m}_j$ and ${C'}^{m}_j$ are square and full rank, the operations $C^{m}_j\vi$ and ${C'}^{m}_j\vi$ are one-to one and onto, for all $i=0,\dots,2^m-1$. Therefore, they generate the same point sets.
 \end{pf*} 
 
 %\begin{remark}
@@ -236,7 +285,7 @@ Consider any two s-dimensional Sobol' sequences generated respectively by the ge
 %\end{remark}
 
 \section{Iterative construction of replicated point sets}
-
+SCRAMBLING
 We propose here two approaches to construct two replicated point sets $\mathcal{P}$ and $\mathcal{P}'$ based on Sobol' sequences. These two constructions are iterative that is the two points sets constructed possess the following structure:
 $$\mathcal{P}= B_1 \cup B_2 \cup B_3 \dots $$
 $$\mathcal{P}'= {B'}_1 \cup {B'}_2 \cup {B'}_3 \dots $$
@@ -360,8 +409,7 @@ This is a direct consequence of the following result: at each step $l$, $B_l$ an
 
 \bibitem{Tissot} J. Y. Tissot, C. Prieur, A randomized orthogonal array-based procedure for the estimation of first- and second-order Sobol' indices, \emph{J. Statist. Comput. Simulation} 85, 2014, pp. 1358--1381.
 
-
-
+\bibitem{NiederreiterXing} H. Niederreiter, C. Xing, Low-Discrepancy Sequences and Global Function Fields with Many Rational Places, \emph{Finite Fields and Their Applications} 2(3), 1996, pp. 241--273.
 
 \end{thebibliography}
 
