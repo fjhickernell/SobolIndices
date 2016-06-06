@@ -7,6 +7,7 @@
 
 \newtheorem{lem}{Lemma}
 \newtheorem{remark}{Remark}
+\newtheorem{theorem}{Theorem}
 \theoremstyle{definition}
 \newtheorem{defin}{Definition}
 \newtheorem{algo}{Algorithm}
@@ -37,8 +38,17 @@
 \newcommand{\integers}{\mathbb{Z}}
 \newcommand{\naturals}{\mathbb{N}}
 \newcommand{\ip}[3][{}]{\ensuremath{\left \langle #2, #3 \right \rangle_{#1}}}
+\newcommand\iid{\stackrel{iid}{\sim}}
+
+\makeatletter
+\newcommand*{\ov}[1]{
+  \m@th\overline{\mbox{#1}\raisebox{2mm}{}}
+}
 
 \def\abs#1{\ensuremath{\left \lvert #1 \right \rvert}}
+
+\let\oldemptyset\emptyset
+\let\emptyset\varnothing
 
 
 \begin{document}
@@ -56,37 +66,116 @@
 
 \section{Introduction}
 
-\section{Estimators---> Correlation 2 Oracle 2}
-\subsection{Choice and parameters (threshold small)}
-\subsection{Cost discussion ---> Consider or not total order}
+\begin{itemize}
+\item[$\bullet$] introduction sensitivity analysis + estimation methods
+\item[$\bullet$] importance of sampling $\rightarrow$ sobol' sequences
+\item[$\bullet$] problem: when to stop? $\rightarrow$ reliable error estimation 
+\end{itemize}
+
+\section{Estimation of Sobol' indices}
+\subsection{Definition of Sobol' indices}
+We follow the same notations introduced by Owen in \cite{Owen}.
+Denote by $\vx \in [0,1)^d$ a point with components $x_1,\dots,x_d$ and $\mathcal{D}=\{1,\dots,d\}$. Let $u$ be a subset of $\mathcal{D}$, $-u$ its complement and $|u|$ its cardinality. $\vx_u$ represents a point in $[0,1)^u$ with components $x_j, j \in u$. Given two points $\vx$ and $\vx'$, the hybrid point $\vz=(\vx_u:{\vx'}_{-u})$ is defined as $z_j=x_j$ if $j \in u$ and $z_j={x'}_j$ if $j \notin u$.
+
+Let $f$ be the symbol representing the numerical model considered. We assume $f \in \mathcal{L}^2[0,1]^d$. Denote by $\mu$ and $\sigma^2$ the mean and variance of $f$.
+The uncertainty on $\vx$ is modeled by random variables such that $\vx \iid \mathcal{U}[0,1)^d$. Recall the Hoeffding decomposition \cite{Hoeffding} of $f$:
+\begin{equation}
+f(\vx)=\mu+\sum \limits_{u \subseteq \mathcal{D}} f_u(\vx),
+\label{anova}
+\end{equation}
+where:
+\[f_u(\vx)= \int_{[0,1)^{|u|}} f(\vx) d{\vx}_{-u} - \sum \limits_{v \subset u} f_v(\vx).\]
+Due to orthogonality, taking the variance of each side in equation (\ref{anova}) leads to the variance decomposition of $f$:
+\[ \sigma^2 = \sum \limits_{u \subseteq \{1,\dots,d\}} \sigma_v^2, \ \text{ with } \ \sigma_v^2=\int_{[0,1)^{|v|}} f_v(\vx)^2 d{\vx}.\]
+The problem of interest is the estimation of the quantities:
+\begin{align*}
+\underline{\tau}_u^2 &= \sum \limits_{v \subseteq u} \sigma_v^2, \\
+\ov{$\tau$}_u^2 &= \sum \limits_{v \cap u \neq \varnothing} \sigma_v^2.
+\end{align*}
+
+For $u \subsetneq \mathcal{D}$, the two quantities $\underline{\tau}_u^2$ and $\ov{$\tau$}_u^2$ both measure the importance of the variables in $\vx_u$. $\underline{\tau}_u^2$ quantifies the main effect of $\vx_u$ that corresponds to the effect of all interactions between variables in $\vx_u$. $\ov{$\tau$}_u^2$ quantifies the main effect of $\vx_u$ plus all interactions between variables in $\vx_u$ and variables in $\vx_{-u}$.
+
+These two measure satisfy the following relations: $ 0 \leq  \underline{\tau}_u^2 \leq \ov{$\tau$}_u^2$ and $\underline{\tau}_u^2 = \sigma^2 - \ov{$\tau$}_{-u}^2$. These two measure are commonly found in the litterature in their normalized form: $\underline{S}_u = \underline{\tau}_u^2 / \sigma^2$ is the closed $|u|$-order Sobol' index for the set $u$, while $\ov{$S$}_u = \ov{$\tau$}_u^2 / \sigma^2$ is the total effect Sobol' index for the set $u$.
+\bigskip
+
+We focus here on the evaluation of first-order and total effect Sobol' indices. The computation of these indices is performed based on the following identities:
+\begin{align}
+\label{first.order}
+\underline{\tau}_u^2  &= \int_{[0,1)^{2d-1}} f(\vx) f(\vx_u:{\vx'}_{-u})d\vx d{\vx'}-\mu^2 , \\
+\label{total.effect}
+\ov{$\tau$}_u^2 &= \int_{[0,1)^{d+1}}f(\vx)^2-f(\vx)f({\vx'}_u:\vx_{-u})d\vx d{\vx'},
+\end{align}
+where mean and variance of $f$ respectively writes as:
+\[ \mu = \int_{[0,1)^{2d}} f(\vx) d{\vx}, \ \qquad
+\sigma^2 = \int_{[0,1)^{2d}} f(\vx)^2d{\vx} - \mu^2 .\]
+Most of the time, the complexity of $f$ causes the computation of $\mu$, $\sigma^2$ and integrals (\ref{first.order}) and (\ref{total.effect}) to be intractable. In such case, one needs to rely on an estimation of these quantities.
+
+We define by design a point set $\mathcal{P}=\{\vx_i\}_{i=0}^{n-1}$ obtained by sampling each variable $x_j$ $n$ times. Each row of the design is a point $\vx_i$ in $[0,1)^d$. Each column of the design refers to a variable $x_j$. The strategy proposed by Sobol' to estimate the two quantities (\ref{first.order}) and (\ref{total.effect}) is via:
+\begin{align}
+\widehat{\underline{\tau}_u^2} & = \frac{1}{n} \sum \limits_{i=0}^{n-1} f(\vx_i)f(\vx_{i,u}:{\vx'}_{i,-u})-\hat{\mu}^2,\\
+\widehat{\ov{$\tau$}_u^2} & = \frac{1}{n} \sum \limits_{i=0}^{n-1} f(\vx_i)^2 - f(\vx_i)f({\vx'}_{i,u}:\vx_{i,-u}),
+\end{align}
+where $\mathcal{P}=\{\vx_i\}_{i=0}^{n-1}$ and $\mathcal{P'}=\{{\vx'}_i\}_{i=0}^{n-1}$ are two designs and $(\vx_i,{\vx'}_i) \iid [0,1)^{2d}$. The estimation of a single pair ($\underline{\tau}_u^2$, $\ov{$\tau$}_u^2$) requires $3n$ evaluations of the model $f$. Using a combinatorial formalism, Saltelli \cite{Saltelli} proposed the following strategy to reduce the estimation cost:
+\begin{theorem}
+\label{saltelli.theorem}
+The $d+2$ designs $\{\vx_{i,u},{\vx'}_{i,-u}\}_{i=0}^{n-1}$ constructed for $u \in \{\varnothing,\{1\},\dots,$ $\{d\},\mathcal{D}\}$ allows to estimate all first-order and all total effect Sobol' indices at a cost of $n(d+2)$ evaluations of the model.
+\end{theorem}
+The $d+2$ designs of Theorem \ref{saltelli.theorem} are obtained by substituting columns of $\mathcal{P'}$ in $\mathcal{P}$. While elegant, this approach still requires a number of model evaluations that grows linearly with respect to the input space dimension.
+
+An efficient alternative was proposed by Mara \textit{et al.} \cite{Mara} to evaluate all first-order indices with only $2n$ model evaluations. This alternative has been further deeply studied and generalized in Tissot
+et al. \cite{Mara} to the estimation of closed second-order indices. The estimation procedure introduced in \cite{Mara} relies on the construction of two replicated designs.
+
+\subsection{Two iterative estimation procedures}
+
+In this section we propose two iterative estimation procedures to evaluate first-order and total-effect Sobol' indices. The first procedure combine the strategy proposed by Saltelli with quasi-Monte Carlo sampling. The second is the procedure proposed by Mara 
+
+The first approach is called multiplicative because $|P_\ell|=2^\ell$ while the second one with $|P_\ell|=\ell|B_0|$ is called additive. In the multiplicative case, we will directly use $2$ $s$-dimensional sequences as a result from Lemma \ref{Sobol_replicated}. However, for the additive case, we will consider an initial set of Sobol' points and apply different scramblings and digital shifts to extend the point sets. Additionally, in both cases one can randomize the points with Owen's scrambling \cite{OwenScrambling} as long as same coordinates of $\mathcal{P}_\ell$ and $\mathcal{P}'_\ell$ share the same scrambling. 
+
+$\mathcal{P}_\ell$ and $\mathcal{P}'_\ell$, based on Sobol' sequences. These two constructions are carried out according to the following recursive scheme :
+$$\left\lbrace \begin{array}{l}
+\mathcal{P}_0= B_0 \\
+\mathcal{P}_\ell= \mathcal{P}_{\ell-1} \cup B_\ell \end{array}\right. \,
+\hspace*{0.5cm}
+\left\lbrace \begin{array}{l}
+\mathcal{P}'_0= {B'}_0 \\
+\mathcal{P}'_\ell= \mathcal{P}'_{\ell-1} \cup {B'}_\ell \end{array}\right. 
+$$
+
+
+%where expressions for $\mu$ and $\sigma^2$ are taken as introduced in Janon \textit{et al.} \cite{Janon}:
+%\begin{align*}
+%\mu &= \frac{1}{2} \int_{[0,1)^{2d-1}}f(\vx)+f(\vx_u:{\vx'}_{-u}) d\vx d{\vx'}, \\
+%\sigma^2 &= \frac{1}{2} \int_{[0,1)^{2d-1}}(f(\vx)+f(\vx_u:{\vx'}_{-u}))^2 d\vx d{\vx'} - \mu^2.
+%\end{align*}
+
+\subsection{Improvements}
 Cost small:\[n(d+1)+d_sn+n\]
 Cost pas small:\[\alpha n d_s +n+(d-d_s)n\]
-Cost small - cost pas small: \[n\sum_{i=1}^{s}(2-\alpha_i+1)\] $s$ number of small indices, $\alhpa_i$ proportion of how many more points if not pas small
+Cost small - cost pas small: \[n\sum_{i=1}^{s}(2-\alpha_i+1)\] $s$ number of small indices, $\alpha_i$ proportion of how many more points if not pas small
 
-\section{Sensibility Analysis}
-\subsection{Background}
-\subsection{Replication Method}
-\subsection{Sobol' Indices}
+%\section{Estimators: Correlation 2 Oracle 2}
+%\subsection{Choice and parameters (threshold small?)}
+%\subsection{Cost discussion: for first-order Consider or not total order}
 
 \section{Reliable Error Estimation for Cubatures}
-
 We assume that we have an algorithm $\widehat{I}(f;\varepsilon)$ such that $\abs{I(f)-\widehat{I}(f;\varepsilon)}\leq \varepsilon$. For instance, the guaranteed quasi-Monte Carlo cubatures described in \cite{-} and \cite{-}. Therefore, we will always assume that the true integral $I(f)$ lies in $[\widehat{I}(f;\varepsilon)-\varepsilon,\widehat{I}(f;\varepsilon)+\varepsilon]$.
 
 Sobol' indices can be seen as operators over functions that can be simplified as functions whose entries are integrals.
 
 The case of $correlation 2$
-Je viens de comprendre, prendre S(LB,UB) comme le minimum (LowerBound, UpperBound) et S(UB,LB) comme le maximum est trop simple. Il faut construire le S_max et S_min en fonction du cas.
-Pour nous, a - b*c + c^2 est un paraboloïde hyperbolique. La droite avec plus de décroissement est 0+lambda(2,1) [prends la dérivée par rapport à c et l'on a c=b/2] et la perpendiculaire, celle de plus accroissement (symmetrie). Sur notre région carré, le point de max valeur de S sera le point le plus eloignée de la droite 0+lambda(2,1), et le minimum, sera sur cette droite le plus eloignée de b = 0 (si l'on substitue c=b/2, on obtient que restreint à cette droite, la fonction est a-b^2/4).
+Je viens de comprendre, prendre S(LB,UB) comme le minimum (LowerBound, UpperBound) et S(UB,LB) comme le maximum est trop simple. Il faut construire le $S_{max}$ et $S_{min}$ en fonction du cas.
+Pour nous, $a - b*c + c^2$ est un paraboloïde hyperbolique. La droite avec plus de décroissement est $0+\lambda(2,1)$ [prends la dérivée par rapport à $c$ et l'on a $c=b/2$] et la perpendiculaire, celle de plus accroissement (symmetrie). Sur notre région carré, le point de max valeur de $S$ sera le point le plus eloignée de la droite $0+\lambda(2,1)$, et le minimum, sera sur cette droite le plus eloignée de $b = 0$ (si l'on substitue $c=b/2$, on obtient que restreint à cette droite, la fonction est $a-b^2/4$).
 
-- Max at = hat{a} + e_a  ,  hat{b} - sign(hat{c}-hat{b}/2) e_b  ,  hat{c} + sign(hat{c}-hat{b}/2) e_c
-- Min at = hat{a} - e_a  ,  hat{b} + sign(hat{b}) e_b  ,  (hat{b} + sign(hat{b}) e_b)/2
+$\bullet$ Max at $= \hat{a} + e_a$  ,  $\hat{b} - sign(\hat{c}-\hat{b}/2) e_b$,  $\hat{c} + sign(\hat{c}-\hat{b}/2) e_c$
 
-
+$\bullet$ Min at $= \hat{a} - e_a$  ,  $\hat{b} + sign(\hat{b}) e_b$  ,  $(\hat{b} + sign(\hat{b}) e_b)/2$
 \subsection{Definition of $\widehat{S}$ (fix it with max and min)}
 
-\section{Sobol' Sequences and Permuted Points}
-7 digits $L$ bi/tri diagonal but $L'$ identity up 7 digits.
-Fix $L_j$ for each dimension differently?
-If we fix the initial number of digits to 7, we have $7!$ different permutations of the points or Owen scramblings which means that if we take $d$ such that $2d>7!$, some dimensions will share the same points. Therefore, we need to scramble each dimension differently ($L'$).
+
+\section{Applications}
+\subsection{Classical test functions}
+\subsection{Real case model}
+
+
 
 \end{document}
