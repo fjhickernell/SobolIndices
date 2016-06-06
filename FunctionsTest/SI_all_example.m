@@ -23,8 +23,8 @@ SI_n = out_param.n;
 SI_t = out_param.time;
 SI_s = out_param.small;
 disp(SI)
-disp(out_param.bound_err)
-% disp(SI_n)
+% disp(out_param.bound_err)
+disp(SI_n)
 % disp(SI_s)
 % disp(abs(R-SI) > max(abstol,R*reltol))
 % disp(out_param.exitflag)
@@ -72,8 +72,8 @@ SI_n = out_param.n;
 SI_t = out_param.time;
 SI_s = out_param.small;
 disp(SI)
-disp(out_param.bound_err)
-% disp(SI_n)
+% disp(out_param.bound_err)
+disp(SI_n)
 % disp(SI_s)
 % disp(abs(R-SI) > max(abstol,R*reltol))
 % wronga = wronga + sum(sum(abs(R-SI) > max(abstol,R*reltol)));
@@ -122,8 +122,8 @@ SI_n = out_param.n;
 SI_t = out_param.time;
 SI_s = out_param.small;
 disp(SI)
-disp(out_param.bound_err)
-% disp(SI_n)
+% disp(out_param.bound_err)
+disp(SI_n)
 % disp(SI_s)
 % disp(abs(R-SI) > max(abstol,R*reltol))
 % wronga = wronga + sum(sum(abs(R-SI) > max(abstol,R*reltol)));
@@ -171,8 +171,8 @@ SI_n = out_param.n;
 SI_t = out_param.time;
 SI_s = out_param.small;
 disp(SI)
-disp(out_param.bound_err)
-% disp(SI_n)
+% disp(out_param.bound_err)
+disp(SI_n)
 % disp(SI_s)
 % disp(abs(R-SI) > max(abstol,R*reltol))
 % wronga = wronga + sum(sum(abs(R-SI) > max(abstol,R*reltol)));

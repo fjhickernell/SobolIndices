@@ -244,7 +244,8 @@ end
 
 % First and total order indices estimators and function evaluations
 Sfo  = @(b,c) min(max(max(b(:,1),0)./max((c(:,2)-b(:,3).^2),0),0),1); % S function for first order
-ffo = @(xpts,u,fx,fy,fxy) (fx - 1/2*mean(fx + fxy)).*(fxy - 1/2*mean(fx + fxy));
+% ffo = @(xpts,u,fx,fy,fxy) (fx - 1/2*mean(fx + fxy)).*(fxy - 1/2*mean(fx + fxy));
+ffo = @(xpts,u,fx,fy,fxy) fx.*(fxy - fy);
 Sfo_s = Sfo; % S function for first order small
 ffo_s = @(xpts,u,fx,fy,fxy) (fx - f([xpts(:,1:u-1) xpts(:,2*out_param.d + u) xpts(:,u+1:out_param.d)])).*(fxy - fy); % We redefine the non normalized estimator
 Stot = Sfo; % S function for total effect
@@ -253,7 +254,7 @@ ftot = @(xpts,u,fx,fy,fxy) 1/2*(fy - fxy).^2;
 
 %% Main algorithm (we added 2xd dimensions for each index and and additional 2 for mean of f and f^2)
 sobstr = sobolset(3*out_param.d); %generate a Sobol' sequence 3*d to consider the changing to the estimator for some smaller size indices
-sobstr = scramble(sobstr,'MatousekAffineOwen'); %scramble it
+% sobstr = scramble(sobstr,'MatousekAffineOwen'); %scramble it
 kappanumap_fx2_fx = bsxfun(@times,(1:2^out_param.mmin)', [1 1]); %initialize map
 Stilde_fx2_fx = zeros(out_param.mmax-out_param.mmin+1, 2); %initialize sum of DFWT terms for fx2 and fx
 CStilde_low_fx2_fx = -inf(out_param.mmax-l_star+1, 2); %initialize various sums of DFWT terms for necessary conditions for fx2 and fx
@@ -886,5 +887,11 @@ if (strcmp(out_param.measure,'normal')) && (any(hyperbox(1,:)==hyperbox(2,:)) ||
     disp([-inf*ones(1,out_param.d);inf*ones(1,out_param.d)])
     hyperbox = [-inf*ones(1,out_param.d);inf*ones(1,out_param.d)];
 end
+
+end
+
+function y = phyp_minmax(b,c)
+
+
 
 end
