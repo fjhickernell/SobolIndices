@@ -2,14 +2,16 @@
 %&LaTeX
 \documentclass[]{elsarticle}
 \setlength{\marginparwidth}{0.5in}
-\usepackage{amsmath,amssymb,amsthm,natbib,mathtools,bbm,extraipa,mathabx,graphicx}
+\usepackage{amsmath,amssymb,amsthm,natbib,
+mathtools,bbm,extraipa,mathabx,graphicx,algorithm}
+\usepackage{algpseudocode}
 %accents,
 
 \newtheorem{lem}{Lemma}
 \newtheorem{remark}{Remark}
 \newtheorem{theorem}{Theorem}
+\newtheorem{definition}{Definition}
 \theoremstyle{definition}
-\newtheorem{defin}{Definition}
 \newtheorem{algo}{Algorithm}
 
 \newcommand{\fudge}{\fC}
@@ -74,10 +76,9 @@
 
 \section{Estimation of Sobol' indices}
 \subsection{Definition of Sobol' indices}
-We follow the same notations introduced by Owen in \cite{Owen}.
-Denote by $\vx \in [0,1)^d$ a point with components $x_1,\dots,x_d$ and $\mathcal{D}=\{1,\dots,d\}$. Let $u$ be a subset of $\mathcal{D}$, $-u$ its complement and $|u|$ its cardinality. $\vx_u$ represents a point in $[0,1)^u$ with components $x_j, j \in u$. Given two points $\vx$ and $\vx'$, the hybrid point $\vz=(\vx_u:{\vx'}_{-u})$ is defined as $z_j=x_j$ if $j \in u$ and $z_j={x'}_j$ if $j \notin u$.
+We adopt the same notations introduced by Owen in \cite{Owen}. Denote by $\vx \in [0,1)^d$ a point with components $x_1,\dots,x_d$ and set $\mathcal{D}=\{1,\dots,d\}$. Let $u$ be a subset of $\mathcal{D}$, $-u$ its complement and $|u|$ its cardinality. $\vx_u$ represents a point in $[0,1)^u$ with components $x_j, j \in u$. Given two points $\vx$ and $\vx'$, the hybrid point $\vz=(\vx_u:{\vx'}_{-u})$ is defined as $z_j=x_j$ if $j \in u$ and $z_j={x'}_j$ if $j \notin u$.
 
-Let $f$ be the symbol representing the numerical model considered. We assume $f \in \mathcal{L}^2[0,1]^d$. Denote by $\mu$ and $\sigma^2$ the mean and variance of $f$.
+Let $f$ be the symbol representing the numerical model studied. We assume $f \in \mathcal{L}^2[0,1)^d$. Denote by $\mu$ and $\sigma^2$ the mean and variance of $f$.
 The uncertainty on $\vx$ is modeled by random variables such that $\vx \iid \mathcal{U}[0,1)^d$. Recall the Hoeffding decomposition \cite{Hoeffding} of $f$:
 \begin{equation}
 f(\vx)=\mu+\sum \limits_{u \subseteq \mathcal{D}} f_u(\vx),
@@ -87,77 +88,145 @@ where:
 \[f_u(\vx)= \int_{[0,1)^{|u|}} f(\vx) d{\vx}_{-u} - \sum \limits_{v \subset u} f_v(\vx).\]
 Due to orthogonality, taking the variance of each side in equation (\ref{anova}) leads to the variance decomposition of $f$:
 \[ \sigma^2 = \sum \limits_{u \subseteq \{1,\dots,d\}} \sigma_v^2, \ \text{ with } \ \sigma_v^2=\int_{[0,1)^{|v|}} f_v(\vx)^2 d{\vx}.\]
-The problem of interest is the estimation of the quantities:
-\begin{align*}
-\underline{\tau}_u^2 &= \sum \limits_{v \subseteq u} \sigma_v^2, \\
-\ov{$\tau$}_u^2 &= \sum \limits_{v \cap u \neq \varnothing} \sigma_v^2.
-\end{align*}
+From the variance decomposition of $f$, on can express the following two quantities:
+\[\underline{\tau}_u^2 = \sum \limits_{v \subseteq u} \sigma_v^2, \qquad
+\ov{$\tau$}_u^2 = \sum \limits_{v \cap u \neq \varnothing} \sigma_v^2, \qquad u \subsetneq \mathcal{D}.\]
 
-For $u \subsetneq \mathcal{D}$, the two quantities $\underline{\tau}_u^2$ and $\ov{$\tau$}_u^2$ both measure the importance of the variables in $\vx_u$. $\underline{\tau}_u^2$ quantifies the main effect of $\vx_u$ that corresponds to the effect of all interactions between variables in $\vx_u$. $\ov{$\tau$}_u^2$ quantifies the main effect of $\vx_u$ plus all interactions between variables in $\vx_u$ and variables in $\vx_{-u}$.
+For $u \subsetneq \mathcal{D}$, the two quantities $\underline{\tau}_u^2$ and $\ov{$\tau$}_u^2$ both measure the importance of the variables in $\vx_u$. $\underline{\tau}_u^2$ quantifies the main effect of $\vx_u$ that is the effect of all interactions between variables in $\vx_u$. $\ov{$\tau$}_u^2$ quantifies the main effect of $\vx_u$ plus all interactions between variables in $\vx_u$ and variables in $\vx_{-u}$.
 
-These two measure satisfy the following relations: $ 0 \leq  \underline{\tau}_u^2 \leq \ov{$\tau$}_u^2$ and $\underline{\tau}_u^2 = \sigma^2 - \ov{$\tau$}_{-u}^2$. These two measure are commonly found in the litterature in their normalized form: $\underline{S}_u = \underline{\tau}_u^2 / \sigma^2$ is the closed $|u|$-order Sobol' index for the set $u$, while $\ov{$S$}_u = \ov{$\tau$}_u^2 / \sigma^2$ is the total effect Sobol' index for the set $u$.
+$\underline{\tau}_u^2$ and $\ov{$\tau$}_u^2$ satisfy the following relations: $ 0 \leq  \underline{\tau}_u^2 \leq \ov{$\tau$}_u^2$ and $\underline{\tau}_u^2 = \sigma^2 - \ov{$\tau$}_{-u}^2$. These two measure are commonly found in the litterature in their normalized form: $\underline{S}_u = \underline{\tau}_u^2 / \sigma^2$ is the closed $|u|$-order Sobol' index for the set $u$, while $\ov{$S$}_u = \ov{$\tau$}_u^2 / \sigma^2$ is the total effect Sobol' index for the set $u$.
 \bigskip
 
-We focus here on the evaluation of first-order and total effect Sobol' indices. The computation of these indices is performed based on the following identities:
+The problem of interest here is the evaluation of first-order and total effect Sobol' indices. The computation of these indices is performed based on the following integral formula:
 \begin{align}
 \label{first.order}
 \underline{\tau}_u^2  &= \int_{[0,1)^{2d-1}} f(\vx) f(\vx_u:{\vx'}_{-u})d\vx d{\vx'}-\mu^2 , \\
 \label{total.effect}
-\ov{$\tau$}_u^2 &= \int_{[0,1)^{d+1}}f(\vx)^2-f(\vx)f({\vx'}_u:\vx_{-u})d\vx d{\vx'},
+\ov{$\tau$}_u^2 &= \int_{[0,1)^{d+1}}(f(\vx)-f({\vx'}_u:\vx_{-u}))^2d\vx d{\vx'},
 \end{align}
 where mean and variance of $f$ respectively writes as:
 \[ \mu = \int_{[0,1)^{2d}} f(\vx) d{\vx}, \ \qquad
 \sigma^2 = \int_{[0,1)^{2d}} f(\vx)^2d{\vx} - \mu^2 .\]
-Most of the time, the complexity of $f$ causes the computation of $\mu$, $\sigma^2$ and integrals (\ref{first.order}) and (\ref{total.effect}) to be intractable. In such case, one needs to rely on an estimation of these quantities.
+Most of the time, the complexity of $f$ causes the computation of $\mu$, $\sigma^2$ and integrals (\ref{first.order}) and (\ref{total.effect}) to be intractable. In such case, one needs to rely on an estimation of these quantities. In the following, we propose two iterative estimation procedures to evaluate first-order and total-effect Sobol' indices.
 
-We define by design a point set $\mathcal{P}=\{\vx_i\}_{i=0}^{n-1}$ obtained by sampling each variable $x_j$ $n$ times. Each row of the design is a point $\vx_i$ in $[0,1)^d$. Each column of the design refers to a variable $x_j$. The strategy proposed by Sobol' to estimate the two quantities (\ref{first.order}) and (\ref{total.effect}) is via:
+\subsection{Estimation of Sobol' indices}
+
+We define by design a point set $\mathcal{P}=\{\vx_i\}_{i=0}^{n-1}$ obtained by sampling each variable $x_j$ $n$ times. Each row of the design is a point $\vx_i$ in $[0,1)^d$. Each column of the design refers to a variable $x_j$. Consider $\mathcal{P}=\{\vx_i\}_{i=0}^{n-1}$ and $\mathcal{P'}=\{{\vx'}_i\}_{i=0}^{n-1}$ two designs where $(\vx_i,{\vx'}_i) \iid [0,1)^{2d}$. One way to estimate the two quantities (\ref{first.order}) and (\ref{total.effect}) is via:
 \begin{align}
-\widehat{\underline{\tau}_u^2} & = \frac{1}{n} \sum \limits_{i=0}^{n-1} f(\vx_i)f(\vx_{i,u}:{\vx'}_{i,-u})-\hat{\mu}^2,\\
-\widehat{\ov{$\tau$}_u^2} & = \frac{1}{n} \sum \limits_{i=0}^{n-1} f(\vx_i)^2 - f(\vx_i)f({\vx'}_{i,u}:\vx_{i,-u}),
+\label{first.order.est}
+\widehat{\underline{\tau}_u^2} & = \frac{1}{n} \sum \limits_{i=0}^{n-1} (f(\vx_i)-\hat{\mu})(f(\vx_{i,u}:{\vx'}_{i,-u})-\hat{\mu}),\\
+\label{total.effect.est}
+\widehat{\ov{$\tau$}_u^2} & = \frac{1}{2n} \sum \limits_{i=0}^{n-1} (f(\vx_i) - f({\vx'}_{i,u}:\vx_{i,-u}))^2,
 \end{align}
-where $\mathcal{P}=\{\vx_i\}_{i=0}^{n-1}$ and $\mathcal{P'}=\{{\vx'}_i\}_{i=0}^{n-1}$ are two designs and $(\vx_i,{\vx'}_i) \iid [0,1)^{2d}$. The estimation of a single pair ($\underline{\tau}_u^2$, $\ov{$\tau$}_u^2$) requires $3n$ evaluations of the model $f$. Using a combinatorial formalism, Saltelli \cite{Saltelli} proposed the following strategy to reduce the estimation cost:
+using for $\mu$ the efficient estimator introduced in \cite{Monod, Janon}:
+\[ \hat{\mu} = \frac{1}{2n} \sum \limits_{i=0}^{n-1} f(\vx_i) + f({\vx'}_{i,u}:\vx_{i,-u}). \]
+The estimation of a single pair ($\underline{\tau}_u^2$, $\ov{$\tau$}_u^2$) requires $3n$ evaluations of the model $f$. Using a combinatorial formalism, Saltelli \cite[Theorem 1]{Saltelli} proposed the following strategy to reduce the estimation cost:
 \begin{theorem}
 \label{saltelli.theorem}
 The $d+2$ designs $\{\vx_{i,u},{\vx'}_{i,-u}\}_{i=0}^{n-1}$ constructed for $u \in \{\varnothing,\{1\},\dots,$ $\{d\},\mathcal{D}\}$ allows to estimate all first-order and all total effect Sobol' indices at a cost of $n(d+2)$ evaluations of the model.
 \end{theorem}
-The $d+2$ designs of Theorem \ref{saltelli.theorem} are obtained by substituting columns of $\mathcal{P'}$ in $\mathcal{P}$. While elegant, this approach still requires a number of model evaluations that grows linearly with respect to the input space dimension.
+The $d+2$ designs of Theorem \ref{saltelli.theorem} are obtained by substituting columns of $\mathcal{P}$ for columns of $\mathcal{P}'$ accordingly to subset $u$. While elegant, this approach still requires a number of model evaluations that grows linearly with respect to the input space dimension.
 
-An efficient alternative was proposed by Mara \textit{et al.} \cite{Mara} to evaluate all first-order indices with only $2n$ model evaluations. This alternative has been further deeply studied and generalized in Tissot
-et al. \cite{Mara} to the estimation of closed second-order indices. The estimation procedure introduced in \cite{Mara} relies on the construction of two replicated designs.
+An efficient alternative to evaluate all first-order indices was proposed by Mara \textit{et al.} \cite{Mara}  requiring only $2n$ model evaluations. This alternative relies on the construction of two replicated designs. The notion of replicated designs was first introduced by McKay through its introduction of replicated Latin Hypercubes in \cite{Mckay}. The definition we give here introduce the structure in a wider context:
+\begin{definition}
+\label{rep.designs}
+Let $\mathcal{P}=\{\vx_i\}_{i=0}^{n-1}$ and $\mathcal{P}'=\{{\vx'}_i\}_{i=0}^{n-1}$ be two point sets in
+$[0,1)^{d}$. Let $\mathcal{P}^u=\{\vx_{i,u}\}_{i=0}^{n-1}$ (resp. ${\mathcal{P}'}^u$), $u \subsetneq \mathcal{D}$, denote the subset of dimensions of $\mathcal{P}$ (resp. $\mathcal{P}'$) indexed by $u$. We say that $\mathcal{P}$ and $\mathcal{P}'$ are two replicated designs of order $a$ if $\forall \ u \subsetneq \mathcal{D}$ of cardinality $|u|=a$, $\mathcal{P}^u$ and ${\mathcal{P}'}^u$ are the same point set in $[0,1)^a$. We note $\pi_u$ the permutation reordering the rows of ${\mathcal{P}'}^u$ into $\mathcal{P}^u$.
+\end{definition}
+The method introduced in \cite{Mara} allows to estimate all first-order Sobol' indices with only two replicated designs of order $1$. The key point of this method is to use the permutations resulting from the structure of the two replicated designs to mimic the hybrid points in formula (\ref{first.order.est}). 
 
-\subsection{Two iterative estimation procedures}
+Let $\mathcal{P}=\{\vx_i\}_{i=0}^{n-1}$ and $\mathcal{P}'=\{{\vx'}_i\}_{i=0}^{n-1}$ be two replicated designs of order $1$. Denote by $\{f(\vx_i)\}_{i=0}^{n-1}$ and $\{f({\vx'}_i)\}_{i=0}^{n-1}$ the two sets of model evaluations obtained with $\mathcal{P}$ and $\mathcal{P}'$. Consider $u \subsetneq \mathcal{D}$, from Definition \ref{rep.designs} there exists a permutation $\pi_u$ such that ${\vx'}_{\pi_u(i),u}={\vx}_{i,u}$. Then, remark that $\forall i \in \{0,\dots,n-1\}$:
+\[\pi_u(f({\vx'}_i))=f(\vx'_{\pi_u(i),u}:{\vx'}_{\pi_u(i),-u})=f(\vx_{i,u}:{\vx'}_{\pi_u(i),-u})\]
+%\pi_u(f({\vx'}_{i,u}:{\vx'}_{i,-u}))
+Hence, $\underline{\tau}^2_u$ can be estimated via formula (\ref{first.order.est}) with $\{f(\vx_i)\}_{i=0}^{n-1}$ and $\{\pi_u(f({\vx'}_i))\}_{i=0}^{n-1}$. This estimation method has been further studied and generalized in Tissot et al. \cite{Mara} to the case of closed second-order indices.
+\bigskip
 
-In this section we propose two iterative estimation procedures to evaluate first-order and total-effect Sobol' indices. The first procedure combine the strategy proposed by Saltelli with quasi-Monte Carlo sampling. The second is the procedure proposed by Mara 
+\subsection{Iterative estimation procedures}
+We propose here two iterative procedures two estimate first-order and total effect Sobol' indices. Each procedure combines quasi-Monte Carlo sampling with respectively the estimation strategy proposed by Saltelli (Theorem \ref{saltelli.theorem}) and the estimation strategy based on replicated designs. In the following, we refer to these two iterative procedures as procedure $A$ and $B$.
+\bigskip
 
-The first approach is called multiplicative because $|P_\ell|=2^\ell$ while the second one with $|P_\ell|=\ell|B_0|$ is called additive. In the multiplicative case, we will directly use $2$ $s$-dimensional sequences as a result from Lemma \ref{Sobol_replicated}. However, for the additive case, we will consider an initial set of Sobol' points and apply different scramblings and digital shifts to extend the point sets. Additionally, in both cases one can randomize the points with Owen's scrambling \cite{OwenScrambling} as long as same coordinates of $\mathcal{P}_\ell$ and $\mathcal{P}'_\ell$ share the same scrambling. 
-
-$\mathcal{P}_\ell$ and $\mathcal{P}'_\ell$, based on Sobol' sequences. These two constructions are carried out according to the following recursive scheme :
+Both procedures require to iteratively construct two points sets $\mathcal{P}_\ell=\{\vx_i\}_{i=0}^{2^\ell-1}$ and $\mathcal{P}'_\ell=\{{\vx'}_i\}_{i=0}^{2^\ell-1}$ that identify as two Sobol' sequences. Background on Sobol' sequences are provided in \cite{crass}. The construction of these two points sets is carried out according to the following recursive scheme :
 $$\left\lbrace \begin{array}{l}
 \mathcal{P}_0= B_0 \\
-\mathcal{P}_\ell= \mathcal{P}_{\ell-1} \cup B_\ell \end{array}\right. \,
+\mathcal{P}_\ell= \mathcal{P}_{\ell-1} \cup B_\ell \end{array}\right. ,\qquad
 \hspace*{0.5cm}
 \left\lbrace \begin{array}{l}
 \mathcal{P}'_0= {B'}_0 \\
-\mathcal{P}'_\ell= \mathcal{P}'_{\ell-1} \cup {B'}_\ell \end{array}\right. 
+\mathcal{P}'_\ell= \mathcal{P}'_{\ell-1} \cup {B'}_\ell \end{array}\right.,
 $$
+where at step $\ell\geq0$, $B_\ell$ and $B'_\ell$ are new sets of $2^{\ell-1}$ points added to refine $\mathcal{P}_{\ell-1}$ and $\mathcal{P}'_{\ell-1}$. In the following, $\mathcal{P}_\ell$ and $\mathcal{P}'_\ell$ refer to the two Sobol' sequences constructed following the multiplicative approach presented in \cite{crass}. This approach guarantee that at each step $\ell\geq0$, $\mathcal{P}_{\ell}$ and $\mathcal{P}'_{\ell}$ are two replicated designs of order $1$.
 
+$\mathcal{P}_{\ell}$ and $\mathcal{P}'_{\ell}$ can either be used with procedure $A$ to estimate all first-order and all total effect Sobol' indices or with procedure $B$ to estimate all first-order Sobol' indices. Algorithms \ref{procedureA} and \ref{procedureB} summarize the main steps of each iterative estimation procedure.
+\begin{algorithm}[!ht]
+\caption{Iterative estimation: procedure $A$}
+\begin{algorithmic}[1]
+\vspace*{0.2cm}
+\State Set: $\ell \leftarrow 1$, $\mathcal{P}_{0} \leftarrow B_0$, ${\mathcal{P}'}_{0} \leftarrow {B'}_0$
+\While {stopping criterion}
+\State $\mathcal{P}_\ell \leftarrow \mathcal{P}_{\ell-1} \cup B_\ell$
 
-%where expressions for $\mu$ and $\sigma^2$ are taken as introduced in Janon \textit{et al.} \cite{Janon}:
-%\begin{align*}
-%\mu &= \frac{1}{2} \int_{[0,1)^{2d-1}}f(\vx)+f(\vx_u:{\vx'}_{-u}) d\vx d{\vx'}, \\
-%\sigma^2 &= \frac{1}{2} \int_{[0,1)^{2d-1}}(f(\vx)+f(\vx_u:{\vx'}_{-u}))^2 d\vx d{\vx'} - \mu^2.
-%\end{align*}
+\hspace*{-0.3cm} $\mathcal{P}'_\ell \leftarrow \mathcal{P}'_{\ell-1} \cup {B'}_\ell$
+\For {$u \in \{\varnothing,\{1\},\dots,$ $\{d\},\mathcal{D}\}$}
+\State Construct design $\{\vx_{i,u},{\vx'}_{i,-u}\}_{i=0}^{2^{\ell}-1}$
+\State Compute $\{f(\vx_i)\}_{i=0}^{2^\ell-1}$ and $\{f(\vx_{i,u},{\vx'}_{i,-u})\}_{i=0}^{2^\ell-1}$
+\State Estimate $\widehat{\underline{\tau}_u^2}$ and $\widehat{\ov{$\tau$}_u^2}$ with formula (\ref{first.order.est}) and (\ref{total.effect.est})
+\EndFor
+\State $\ell \leftarrow \ell + 1$
+\EndWhile
+\State Return $\widehat{\underline{\tau}_u^2}$ and $\widehat{\ov{$\tau$}_u^2}$ for all $u \in \mathcal{D}$.
+\end{algorithmic}
+\label{procedureA}
+\end{algorithm}
+\begin{algorithm}[!ht]
+\caption{Iterative estimation: procedure $B$}
+\begin{algorithmic}[1]
+\vspace*{0.2cm}
+\State Set: $\ell \leftarrow 1$, $\mathcal{P}_{0} \leftarrow B_0$, ${\mathcal{P}'}_{0} \leftarrow {B'}_0$
+\While {stopping criterion}
+\State $\mathcal{P}_\ell \leftarrow \mathcal{P}_{\ell-1} \cup B_\ell$
+
+\hspace*{-0.3cm} $\mathcal{P}'_\ell \leftarrow \mathcal{P}'_{\ell-1} \cup {B'}_\ell$
+\State Compute $\{f(\vx_i)\}_{i=0}^{2^\ell-1}$ and $\{f({\vx'}_i)\}_{i=0}^{2^\ell-1}$
+\For {$u \in \mathcal{D}$}
+\State  $\{f({\vx'}_i)\}_{i=0}^{2^\ell-1}$ into $\{\pi_u(f({\vx'}_i))\}_{i=0}^{2^\ell-1}$
+\State Estimate $\widehat{\underline{\tau}_u^2}$ with formula (\ref{first.order.est})
+\EndFor
+\State $\ell \leftarrow \ell + 1$
+\EndWhile
+\State Return $\widehat{\underline{\tau}_u^2}$ for all $u \in \mathcal{D}$.
+\end{algorithmic}
+\label{procedureB}
+\end{algorithm}
+
+The choice of the stopping criterion is the key point of this paper. In most iterative approaches that estimate Sobol' indices, the stopping criterion is a quantity of interest build directly from the estimates. For example, an absolute difference between estimates obtained on consecutive steps. Such stopping criteria are often hard to tweak but above all fail to guarantee any error bounds on the Sobol' indices. Our stopping criterion is presented and discussed in Section \ref{section.error}. The criterion is an error bound based on the discrete Walsh decomposition of the integral formula of the first-order and total effect Sobol' index. The formulation of this error bound makes use of the closed set property of Sobol' sequences.
+
 
 \subsection{Improvements}
-Cost small:\[n(d+1)+d_sn+n\]
-Cost pas small:\[\alpha n d_s +n+(d-d_s)n\]
-Cost small - cost pas small: \[n\sum_{i=1}^{s}(2-\alpha_i+1)\] $s$ number of small indices, $\alpha_i$ proportion of how many more points if not pas small
+This section provide two improvements to ease the estimation of Sobol' indices with procedures $A$ and $B$. The first improvement focus on the use of a better estimator to evaluate small first-order Sobol' indices with procedure $A$. The second improvement focus on the choice of the $2d$ generating matrices that generate the two Sobol' sequences $\mathcal{P}_\ell$  and ${\mathcal{P}'}_\ell$ in procedure $B$.
+
+\bigskip
+
+
+This estimator called ``Correlation 2" was introduced by Owen in \cite{Owen}. Owen discussed and highlighted the efficiency of ``Correlation 2" when estimating small closed Sobol' indices. Our aim is to show that using ``Correlation 2" to estimate small first-order Sobol' indices in procedure $A$  reduces the total number of model evaluations required while reaching the same accuracy on the estimates.
+
+
+Cost small: $n(d+1)+d_sn+n$
+
+Cost pas small: $\alpha n d_s +n+(d-d_s)n$
+
+Cost small - cost pas small: $n\sum_{i=1}^{s}(2-\alpha_i+1)$ $s$ number of small indices, $\alpha_i$ proportion of how many more points if not pas small
+\bigskip
+
+The choice of the $2d$ generating matrices that generate the two Sobol' sequences $\mathcal{P}_\ell$ and ${\mathcal{P}'}_\ell$ in the multiplicative approach \cite{crass}. These generating matrices are selected from the set found by Kuo and Joe in \cite{Kuo}. This set is composed of generating matrices that optimize the $2$-dimensional projection $t$-values. Elements of the set are ordered based on the best optimized $t$-values. 
+
+
 
 %\section{Estimators: Correlation 2 Oracle 2}
 %\subsection{Choice and parameters (threshold small?)}
 %\subsection{Cost discussion: for first-order Consider or not total order}
 
 \section{Reliable Error Estimation for Cubatures}
+\label{section.error} 
 We assume that we have an algorithm $\widehat{I}(f;\varepsilon)$ such that $\abs{I(f)-\widehat{I}(f;\varepsilon)}\leq \varepsilon$. For instance, the guaranteed quasi-Monte Carlo cubatures described in \cite{-} and \cite{-}. Therefore, we will always assume that the true integral $I(f)$ lies in $[\widehat{I}(f;\varepsilon)-\varepsilon,\widehat{I}(f;\varepsilon)+\varepsilon]$.
 
 Sobol' indices can be seen as operators over functions that can be simplified as functions whose entries are integrals.
