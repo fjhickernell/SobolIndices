@@ -175,7 +175,7 @@ The replication procedure described in \cite{Mara,Tissot} allows the estimation 
 
 \bigskip
 
-In this note, we propose two different constructions of replicated designs of order $1$ based on Sobol' sequences. These two constructions ensure that the input space is properly explored and can be used within the replication procedure to estimate all first order Sobol' indices. The definition of these constructions is recursive, therefore one can iteratively refine the replicated designs by adding the corresponding new set of points.
+In this note, we propose two different constructions of replicated designs of order $1$ based on Sobol' sequences. These two constructions ensure that the input space is properly explored and can be used within the replication procedure to estimate all first-order Sobol' indices. The definition of these constructions is recursive, therefore one can iteratively refine each replicated design by adding the corresponding new set of points.
 
 We first provide a brief introduction on digital sequences and then present two iterative approaches to construct the two replicated point sets. We end this note by analyzing the space-filling properties of the two designs constructed.
 
@@ -355,12 +355,12 @@ where $ {x'}_{i,j}^{(\ell)}=\sum_{k = 1}^r {x'}_{i,j,k}^{(\ell)}2^{-k}$, ${\ve'}
 \bigskip
 
 
-Left multiplications by matrices $L$ and $L'$ in \eqref{dig.shift} and \eqref{ibinom.scrambling}  are called linear scramblings \cite{Matousek} while additions by vectors $\ve_j$ and ${\ve'}_j$ are referred as digital shifts. There are exactly $2^r$ different choices of $\ve_j$ and ${\ve'}_j$ and $2^{r(r-1)/2}$ choices of $L$ and $L'$ {\color{blue} although ....... Because......., (I think it would be good to give the reason why a particular choice of $\ve_j$ needs to be made. Then, how)} vectors $\ve_j$ (resp. ${\ve}'_j$) are selected as follows:
+Left multiplications by matrices $L$ and $L'$ in \eqref{dig.shift} and \eqref{ibinom.scrambling}  are called linear scramblings \cite{Matousek} while additions by vectors $\ve_j$ and ${\ve'}_j$ are referred as digital shifts. There are exactly $2^r$ different choices of $\ve_j$ and ${\ve'}_j$ and $2^{r(r-1)/2}$ choices of $L$ and $L'$. To guarantee that new points added will fill unexplored regions of the input space, the vectors $\ve_j$ (resp. ${\ve}'_j$) are selected as follows:
 \begin{itemize}
 \item[i)] for the first dimension, the same vector $\ve_1$ (resp. ${\ve}'_1$) is selected at each iteration $\ell$,
-\item[ii)] for the other dimensions, vectors $\ve_2,\dots,\ve_s$ (resp. ${\ve}'_2,\dots,{\ve}'_s$) are selected to guarantee that the set $\{\ve_2,\dots,\ve_s\}$ is different at each step $\ell$. There exists exactly $2^{r (s-1)}$ combinations of this set which leaves us with a large panel of choice.
+\item[ii)] for the other dimensions, vectors $\ve_2,\dots,\ve_s$ (resp. ${\ve}'_2,\dots,{\ve}'_s$) are selected to guarantee that the set $\{\ve_2,\dots,\ve_s\}$ is different at each step $\ell$. There exists exactly $2^{r (s-1)}$ combinations of this set. At each step $\ell$, one combination is sampled without replacement. 
 \end{itemize}
-
+The maximum number of iterations $\ell$ that can be performed equals the number of combinations of the set $\{\ve_2,\dots,\ve_s\}$. If this maximum is reached, designs $\mathcal{P}_\ell$ and $\mathcal{P}'_\ell$ both correspond to a full grid design of $2^{rs}$ points.
 %We have the following result:
 %\item[Step 4.] The two blocks $B_l$ and ${B'}_l$ are then both randomized using the same Owen's scrambling column-wise.
 
@@ -376,16 +376,16 @@ Under the additive construction $\mathcal{P}_\ell$ and $\mathcal{P}'_\ell$ are t
 
 %In the previous section we showed how two replicated designs constructed with the additive approach are not $(t,m,s)$-nets after refinement. Nonetheless, they still retain space-filling properties that combined with the low iterative growth make their use appealing.
 
-To analyze the space-filling properties of both approaches we will use two criteria. The first one is the $L_2$ star discrepancy that measures the uniformity of a point set. This criterion can be easily computed through an analytical expression provided by \cite{Morokoff}. The lower the criterion, the more uniform the point set is. Sobol' sequences were originally constructed to be low discrepancy sequences and therefore, behave well under this criterion. The second criterion is called maximin distance and measures the regularity of a point set. It returns the minimum of all {\color{blue} euclidean?} distances between pairs of points in the set. The higher the criterion, the more spread the point set is.
+To analyze the space-filling properties of both approaches we will use two criteria. The first one is the $L_2$ star discrepancy that measures the uniformity of a point set. This criterion can be easily computed through an analytical expression provided by \cite{Morokoff}. The lower the criterion, the more uniform the point set is. Sobol' sequences were originally constructed to be low discrepancy sequences and therefore, behave well under this criterion. The second criterion is called maximin distance and measures the regularity of a point set. It returns the minimum of all euclidean distances between pairs of points in the set. The higher the criterion, the more spread the point set is.
 
 \bigskip
 
-We name by $A$ (resp. $B$) one of the two replicated designs constructed with the multiplicative (resp. additive) approach {\color{blue} In which dimension?}. We also sampled {\color{blue} how? randomly? IID? the Sobol' seq is fixed, did you sample it?} $100$ designs of $A$ and $B$ whose average criteria are presented in Figure \ref{results.crit} below. Design $A$ is refined until $\ell=12$, and design $B$ is constructed with an initial value $r=8$ and refined 15 times {\color{blue} for each $B$, how are $L$ and $\ve_j$ chosen?}. The x-axis corresponds to the number of points of the design.
+We name by $A$ (resp. $B$) one of the two replicated designs constructed with the multiplicative (resp. additive) approach. We set the input space dimension $s$ equals to $6$. We also sampled $100$ designs of $A$ and $B$ whose average criteria are presented in Figure \ref{results.crit}. Each of the $100$ designs $A$ is independently randomized by applying Owen's scrambling. Each of the $100$ designs $B$ is sampled by randomly selecting the matrix $L$ among the $2^{r(r-1)/2}$ choices and by selecting the vectors $\ve_j$ following steps i) and ii). Design $A$ is refined until $\ell=12$, and design $B$ is constructed with an initial value $r=8$ and refined 15 times. The x-axis corresponds to the number of points $N$ of the design. THe y-axis corresponds to the value of the criterion. Logarithmic scale is used for both axis.
 
-As expected, design $A$ performs the best. However, we observe that design $B$ outperforms a classic Latin Hypercube design for both criteria while allowing $15$ refinement steps from $2^8$ to $2^{12}$ points, instead of only $4$ steps for design $A$.
+As expected, design $A$ performs the best and the estimated slope of the discrepancy curve ($-0.67$) falls within the expected range for Sobol' sequences \cite{Morokoff}. However, we observe that design $B$ outperforms a classic Latin Hypercube design for both criteria while allowing $15$ refinement steps from $2^8$ to $2^{12}$ points, instead of only $4$ steps for design $A$.
 
 \begin{figure}
-\caption{Averaged $L_2$ star discrepancy (left) and maximin (right) for designs $A$ and $B$ over $100$ repetitions.}
+\caption{Log-log graph of averaged $L_2$ star discrepancy (left) and maximin (right) for designs $A$ and $B$ over $100$ repetitions.}
 \label{results.crit}
 \centering
 \includegraphics[scale=0.4]{discrep.pdf}
