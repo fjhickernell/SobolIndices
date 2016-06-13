@@ -356,14 +356,16 @@ where $ {x'}_{i,j}^{(\ell)}=\sum_{k = 1}^r {x'}_{i,j,k}^{(\ell)}2^{-k}$, ${\ve'}
 
 Left multiplications by matrices $L$ and $L'$ in \eqref{dig.shift} and \eqref{ibinom.scrambling}  are called linear scramblings \cite{Matousek} while additions by vectors $\ve_j$ and ${\ve'}_j$ are referred as digital shifts. There are exactly $2^r$ different choices of $\ve_j$ and ${\ve'}_j$ and $2^{r(r-1)/2}$ choices of $L$ and $L'$. To guarantee that new points added will fill unexplored regions of the input space, the vectors $\ve_j$ are selected as follows:
 \begin{itemize}
-\item[i)] at iteration $\ell=0$, the vectors $\ve_j$ are all equal to the zero of $\mathbb{F}_2^r$,
+\item[i)] at iteration $\ell=0$, vectors $\ve_j$ are all equal to the zero of $\mathbb{F}_2^r$,
 \item[ii)] for $\ell \geq1$, we use the following result:
-$(B_0,\oplus)$ is a subgroup in $\mathbb{F}_2^{rs}$. From Lagrange's Theorem, the left cosets $\ve \oplus B_0$, $\ve \in \mathbb{F}_2^{rs}$, form a partition of $\mathbb{F}_2^{rs}$. At iteration $\ell \geq1$, we select $\ve \in \mathbb{F}_2^{rs}$ such that $\ve \oplus B_0$ is a left coset different from $\{B_0,\dots,B_{\ell-1}\}$. Then, the vectors $\ve_j$ are extracted from $\ve=(\ve_1,\dots,\ve_s)$. By identification we have $B_{\ell}=\ve \oplus B_0$ ensuring that the new points added are all different.
+$(B_0,\oplus)$ is a subgroup of $\left(\mathbb{F}_2^{r}\right)^{s}$. From Lagrange's Theorem, we can construct cosets $B_\ell$ as $B_0 \oplus \ve$, $\ve=(\ve_1,\dots,\ve_s) \in \left(\mathbb{F}_2^{r}\right)^{s}$
+%, which form a partition of $\left(\mathbb{F}_2^{r}\right)^{s}$
+. At iteration $\ell \geq1$, we select $\ve$ such that $B_0 \oplus \ve$ is a new coset different from $\{B_0,\dots,B_{\ell-1}\}$, and it will be enough to choose $\ve\notin\mathcal{P}_{\ell-1}$. By identification we have $B_{\ell}=B_0 \oplus \ve$ ensuring that the new points added are all different.
 
 %\item[i)] for the first dimension, the same vector $\ve_1=(0,\dots,0)$ (resp. ${\ve}'_1=(0,\dots,0)$) is selected at each iteration $\ell$,
 %\item[ii)] for the other dimensions, vectors $\ve_2,\dots,\ve_s$ (resp. ${\ve}'_2,\dots,{\ve}'_s$) are selected to guarantee that the set $\{\ve_2,\dots,\ve_s\}$ is different at each step $\ell$ and different from $\{\ve_1,\dots,\ve_1\}$. There exists exactly $2^{r (s-1)}$ combinations of this set. At each step $\ell$, one combination is sampled without replacement. 
 \end{itemize}
-The same reasoning is made with $({B'}_0,\oplus)$ to select the vectors $\ve'_j$. The maximum number of iterations $\ell$ that can be performed equals the number of unique left cosets that is $2^{s}$. If this maximum is reached, designs $\mathcal{P}_\ell$ and $\mathcal{P}'_\ell$ both correspond to a full grid design of $2^{rs}$ points.
+The same reasoning to select vectors $\ve'_j$ is made for $({B'}_0,\oplus)$. The maximum number of iterations $\ell$ that can be performed equals the number of cosets, $2^{s}$. If this maximum is reached, designs $\mathcal{P}_\ell$ and $\mathcal{P}'_\ell$ both correspond to a full grid design of $2^{rs}$ points.
 %We have the following result:
 %\item[Step 4.] The two blocks $B_l$ and ${B'}_l$ are then both randomized using the same Owen's scrambling column-wise.
 
