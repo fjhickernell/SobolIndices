@@ -333,34 +333,37 @@ With the multiplicative approach, the size of designs $\mathcal{P}_\ell$ and $\m
 
 \bigskip 
 
-Analogously to the multiplicative case, the two replicated point sets $\mathcal{P}_\ell$ and $\mathcal{P}'_\ell$ constructed with the additive approach are iteratively refined with $B_\ell$ and ${B'}_\ell$. First, $B_0=\{\vx_i^{(0)}\}_{i=0}^{2^r-1}$ and ${B'}_0=\{{\vx'}_i^{(0)}\}_{i=0}^{2^r-1}$ are set to be the first $2^r$ points of two $s$-dimensional Sobol' sequences. The generating matrices of these two sequences are selected as in the multiplicative approach. Then, $B_\ell$ (resp. ${B'}_\ell$), for $\ell \geq 1$, is obtained from $B_0$ (resp. ${B'}_0$) by carrying out digital shifts and scrambling operations. Therefore, both $B_\ell$ and ${B'}_\ell$ inherit the $(t,r,s)$-net structure of the initial sets $B_0$ and ${B'}_0$. %We detail below the construction of $B_\ell$ and ${B'}_\ell$.
+Analogously to the multiplicative case, the two replicated point sets $\mathcal{P}_\ell$ and $\mathcal{P}'_\ell$ constructed with the additive approach are iteratively refined with $B_\ell$ and ${B'}_\ell$. %First, $B_0=\{\vx_i^{(0)}\}_{i=0}^{2^r-1}$ and ${B'}_0=\{{\vx'}_i^{(0)}\}_{i=0}^{2^r-1}$ are set to be the first $2^r$ points of two $s$-dimensional Sobol' sequences.
+First $\{\vx_i\}_{i=0}^{2^r-1}$ and $\{{\vx'}_i\}_{i=0}^{2^r-1}$ are set to be the first $2^r$ points of two $s$-dimensional Sobol' sequences. The generating matrices of these two sequences are selected as in the multiplicative approach. Then, $B_\ell$ (resp. ${B'}_\ell$), for $\ell \geq 0$, is obtained from $\{\vx_i\}_{i=0}^{2^r-1}$ (resp. $\{{\vx'}_i\}_{i=0}^{2^r-1}$) by carrying out digital shifts and scrambling operations. Therefore, both $B_\ell$ and ${B'}_\ell$ inherit the $(t,r,s)$-net structure of these initial sets. %We detail below the construction of $B_\ell$ and ${B'}_\ell$.
 \bigskip
 
-At step $\ell$, $\ell \geq 1$, $B_\ell=\{\vx_i^{(\ell)}\}_{i=0}^{2^r-1}$ is generated as follows: for each $i=0,\dots,2^r-1$, point $\vx_i^{(\ell)} = (x_{i,1}^{(\ell)},\dots,x_{i,s}^{(\ell)})^\intercal$ is obtained by linearly transforming $\vx_i^{(0)}$,
+At step $\ell$, $\ell \geq 0$, $B_\ell=\{\vx_i^{(\ell)}\}_{i=0}^{2^r-1}$ is generated as follows: for each $i=0,\dots,2^r-1$, point $\vx_i^{(\ell)} = (x_{i,1}^{(\ell)},\dots,x_{i,s}^{(\ell)})^\intercal$ is obtained by linearly transforming $\vx_i$,
 \begin{equation}
 \label{dig.shift}
-(x_{i,j,1}^{(\ell)},\dots,x_{i,j,r}^{(\ell)})^\intercal = L (x_{i,j,1}^{(0)},\dots,x_{i,j,r}^{(0)})^\intercal\oplus \ve_j,\qquad j= 1,\dots,s\, ,
+(x_{i,j,1}^{(\ell)},\dots,x_{i,j,r}^{(\ell)})^\intercal = L (x_{i,j,1},\dots,x_{i,j,r})^\intercal\oplus \ve_j,\qquad j= 1,\dots,s\, ,
 \end{equation}
 where $ x_{i,j}^{(\ell)}=\sum_{k = 1}^r x_{i,j,k}^{(\ell)}2^{-k}$, $\ve_j=(e_{j,{0}},\dots,e_{j,{r-1}})^\intercal\in\mathbb{F}_2^r$ and $L$ is a full rank lower triangular matrix of size $r \times r$ over $\mathbb{F}_2$.
 \bigskip
 
 Likewise, ${B'}_\ell=\{{\vx'}_i^{(\ell)}\}_{i=0}^{2^r-1}$ is obtained as follows: for each $i=0,\dots,2^r-1$, point ${\vx'}_i^{(\ell)} = ({x'}_{i,1}^{(\ell)},\dots,{x'}_{i,s}^{(\ell)})^\intercal$ is obtained by linearly transforming ${\vx'}_i^{(0)}$,
-%from $B_\ell$ by applying Tezuka's i-binomial scrambling \cite{Tezuka}. This scrambling operation writes as follows
-
 \begin{equation}
 \label{ibinom.scrambling}
-({x'}_{i,j,1}^{(\ell)},\dots,{x'}_{i,j,r}^{(\ell)})^\intercal = {L'} ({x'}_{i,j,1}^{(0)},\dots,{x'}_{i,j,r}^{(0)})^\intercal\oplus {\ve'}_j,\qquad j= 1,\dots,s\, ,
+({x'}_{i,j,1}^{(\ell)},\dots,{x'}_{i,j,r}^{(\ell)})^\intercal = {L'} ({x'}_{i,j,1},\dots,{x'}_{i,j,r})^\intercal\oplus {\ve'}_j,\qquad j= 1,\dots,s\, ,
 \end{equation}
 where $ {x'}_{i,j}^{(\ell)}=\sum_{k = 1}^r {x'}_{i,j,k}^{(\ell)}2^{-k}$, ${\ve'}_j=(e_{j,{0}},\dots,e_{j,{r-1}})^\intercal\in\mathbb{F}_2^r$ and ${L'}$ is a full rank lower triangular matrix of size $r \times r$ over $\mathbb{F}_2$.
 \bigskip
 
 
-Left multiplications by matrices $L$ and $L'$ in \eqref{dig.shift} and \eqref{ibinom.scrambling}  are called linear scramblings \cite{Matousek} while additions by vectors $\ve_j$ and ${\ve'}_j$ are referred as digital shifts. There are exactly $2^r$ different choices of $\ve_j$ and ${\ve'}_j$ and $2^{r(r-1)/2}$ choices of $L$ and $L'$. To guarantee that new points added will fill unexplored regions of the input space, vectors $\ve_j$ (resp. ${\ve}'_j$) are selected as follows:
+Left multiplications by matrices $L$ and $L'$ in \eqref{dig.shift} and \eqref{ibinom.scrambling}  are called linear scramblings \cite{Matousek} while additions by vectors $\ve_j$ and ${\ve'}_j$ are referred as digital shifts. There are exactly $2^r$ different choices of $\ve_j$ and ${\ve'}_j$ and $2^{r(r-1)/2}$ choices of $L$ and $L'$. To guarantee that new points added will fill unexplored regions of the input space, the vectors $\ve_j$ are selected as follows:
 \begin{itemize}
-\item[i)] for the first dimension, the same vector $\ve_1=(0,\dots,0)$ (resp. ${\ve}'_1=(0,\dots,0)$) is selected at each iteration $\ell$,
-\item[ii)] for the other dimensions, vectors $\ve_2,\dots,\ve_s$ (resp. ${\ve}'_2,\dots,{\ve}'_s$) are selected to guarantee that the set $\{\ve_2,\dots,\ve_s\}$ is different at each step $\ell$ and different from $\{\ve_1,\dots,\ve_1\}$. There exists exactly $2^{r (s-1)}$ combinations of this set. At each step $\ell$, one combination is sampled without replacement. 
+\item[i)] at iteration $\ell=0$, the vectors $\ve_j$ are all equal to the zero of $\mathbb{F}_2^r$,
+\item[ii)] for $\ell \geq1$, we use the following result:
+$(B_0,\oplus)$ is a subgroup in $\mathbb{F}_2^{rs}$. From Lagrange's Theorem, the left cosets $\ve \oplus B_0$, $\ve \in \mathbb{F}_2^{rs}$, form a partition of $\mathbb{F}_2^{rs}$. At iteration $\ell \geq1$, we select $\ve \in \mathbb{F}_2^{rs}$ such that $\ve \oplus B_0$ is a left coset different from $\{B_0,\dots,B_{\ell-1}\}$. Then, the vectors $\ve_j$ are extracted from $\ve=(\ve_1,\dots,\ve_s)$. By identification we have $B_{\ell}=\ve \oplus B_0$ ensuring that the new points added are all different.
+
+%\item[i)] for the first dimension, the same vector $\ve_1=(0,\dots,0)$ (resp. ${\ve}'_1=(0,\dots,0)$) is selected at each iteration $\ell$,
+%\item[ii)] for the other dimensions, vectors $\ve_2,\dots,\ve_s$ (resp. ${\ve}'_2,\dots,{\ve}'_s$) are selected to guarantee that the set $\{\ve_2,\dots,\ve_s\}$ is different at each step $\ell$ and different from $\{\ve_1,\dots,\ve_1\}$. There exists exactly $2^{r (s-1)}$ combinations of this set. At each step $\ell$, one combination is sampled without replacement. 
 \end{itemize}
-The maximum number of iterations $\ell$ that can be performed equals the number of combinations of the set $\{\ve_2,\dots,\ve_s\}$. If this maximum is reached, designs $\mathcal{P}_\ell$ and $\mathcal{P}'_\ell$ both correspond to a full grid design of $2^{rs}$ points.
+The same reasoning is made with $({B'}_0,\oplus)$ to select the vectors $\ve'_j$. The maximum number of iterations $\ell$ that can be performed equals the number of unique left cosets that is $2^{s}$. If this maximum is reached, designs $\mathcal{P}_\ell$ and $\mathcal{P}'_\ell$ both correspond to a full grid design of $2^{rs}$ points.
 %We have the following result:
 %\item[Step 4.] The two blocks $B_l$ and ${B'}_l$ are then both randomized using the same Owen's scrambling column-wise.
 
