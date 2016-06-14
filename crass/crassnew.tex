@@ -276,13 +276,17 @@ To compute the next $2^m$ points of the sequence, one can infer from \eqref{dig.
 \begin{equation}\label{Sobol_iter_constr}
 (x_{i+2^m,j,1},\dots,x_{i+2^m,j,m+1})^\intercal=(x_{i,j,1},\dots,x_{i,j,m},0)^\intercal\oplus {(c_j^{m+1})}^\intercal,\quad i=0,\dots,2^m-1,
 \end{equation}
-where $c_j^{m+1}$ is the last column of $C_j^{m+1}$.
+where $c_j^{m+1}$ is the last column of $C_j^{m+1}$ and $\oplus$ is the addition in $\mathbb{F}_2$.
 
-Sobol' sequences also have good group structure properties. For any $m\geq 1$, the first $2^m$ points of the sequence form an Abelian group under the following operation $\oplus$,
-\begin{gather*}
+Sobol' sequences also have good group structure properties. For any $m\geq 1$, the first $2^m$ points of the sequence form an Abelian group under $\oplus$:
+\begin{equation}
+\begin{gathered}
 \vx = \left(\sum_{k=1}^m x_{1,k}2^{-k},\dots,\sum_{k=1}^m x_{s,k}2^{-k}\right)^\intercal\; , \qquad \vz = \left(\sum_{k=1}^m z_{1,k}2^{-k},\dots,\sum_{k=1}^m z_{s,k}2^{-k}\right)^\intercal, \\
 \vx\oplus\vz := \left(\sum_{k=1}^m (x_{1,k}+z_{1,k}\mod 2)2^{-k},\dots,\sum_{k=1}^m (x_{s,k}+z_{s,k}\mod 2)2^{-k}\right)^\intercal.
-\end{gather*}
+\end{gathered}
+\label{group.operation}
+\end{equation}
+
 
 
 
@@ -365,8 +369,28 @@ First $\{\vx_i\}_{i=0}^{2^r-1}$ and $\{{\vx'}_i\}_{i=0}^{2^r-1}$ are set to be t
 %where $ {x'}_{i,j}^{(\ell)}=\sum_{k = 1}^r {x'}_{i,j,k}^{(\ell)}2^{-k}$, ${\ve'}_j=(e_{j,{0}},\dots,e_{j,{r-1}})^\intercal\in\mathbb{F}_2^r$ and ${L'}$ is a full rank lower triangular matrix of size $r \times r$ over $\mathbb{F}_2$.
 %\bigskip
 
-Initial sets are $B_0=\{\vx_i\}_{i=0}^{2^r-1}$ and ${B'}_0=\{{\vx'}_i\}_{i=0}^{2^r-1}$. Then, one may take $B_\ell=\{\vx_i\oplus\ve_\ell\}_{i=0}^{2^r-1}$ and ${B'}_\ell=\{{\vx'}_i\oplus{\ve'}_\ell\}_{i=0}^{2^r-1}$ such that $\ve_\ell\notin\mathcal{P}_{\ell-1}$ and ${\ve'}_\ell\notin\mathcal{P'}_{\ell-1}$.  Indeed, $B_0$ is a subgroup of $\left(\mathbb{F}_2^{r}\right)^{s}$. Therefore, we can construct cosets $B_\ell$ as $B_0 \oplus \ve$, under the right $\ve \in \left(\mathbb{F}_2^{r}\right)^{s}$. After that, we may also apply linear scramblings \cite{Matousek} using lower triangular matrices $L$ and $L'$ ...... There are exactly $2^{rs}$ different choices of $\ve$ and ${\ve'}$, and $2^{r(r-1)/2}$ choices of $L$ and $L'$. The maximum number of iterations $\ell$ that can be performed equals the number of cosets, $2^{s}$. If this maximum is reached, designs $\mathcal{P}_\ell$ and $\mathcal{P}'_\ell$ both correspond to a full grid design of $2^{rs}$ points.
+At step $\ell=0$, $B_0=\{\vx_i^{(0)}\}_{i=0}^{2^r-1}$ and ${B'}_0=\{{\vx'}_i^{(0)}\}_{i=0}^{2^r-1}$ are generated as follows: 
 
+for each $i=0,\dots,2^r-1$, point $\vx_i^{(0)} = (x_{i,1}^{(0)},\dots,x_{i,s}^{(0)})^\intercal$ and ${\vx'}_i^{(0)} = ({x'}_{i,1}^{(0)},\dots,{x'}_{i,s}^{(0)})^\intercal$ are obtained by linearly transforming $\vx_i$,
+\begin{equation}
+\label{linear.scrambl}
+\begin{aligned}
+(x_{i,j,1}^{(0)},\dots,x_{i,j,r}^{(0)})^\intercal &= L (x_{i,j,1},\dots,x_{i,j,r})^\intercal,\\
+({x'}_{i,j,1}^{(0)},\dots,{x'}_{i,j,r}^{(0)})^\intercal &= L' (x_{i,j,1},\dots,x_{i,j,r})^\intercal,\qquad j= 1,\dots,s\,
+\end{aligned}
+\end{equation}
+where $ x_{i,j}^{(0)}=\sum_{k = 1}^r x_{i,j,k}^{(0)}2^{-k}$, $ {x'}_{i,j}^{(0)}=\sum_{k = 1}^r {x'}_{i,j,k}^{(0)}2^{-k}$ and $L$, $L'$ are two full rank lower triangular matrices of size $r \times r$ over $\mathbb{F}_2$. Left multiplications by matrices $L$ and $L'$ in \eqref{linear.scrambl} are called linear scramblings \cite{Matousek}.
+
+At step $\ell \geq 1$, using formula (\ref{group.operation}) we construct:
+\begin{equation}
+B_\ell=\{\vx_i^{(0)}\oplus\ve_\ell\}_{i=0}^{2^r-1}, \qquad {B'}_\ell=\{{\vx'}_i^{(0)}\oplus{\ve'}_\ell\}_{i=0}^{2^r-1}
+\label{dig.shift}
+\end{equation}
+where $\ve_\ell \in \left(\mathbb{F}_2^{r}\right)^{s} \setminus \mathcal{P}_{\ell-1}$ and ${\ve'}_\ell \in \left(\mathbb{F}_2^{r}\right)^{s} \setminus \mathcal{P'}_{\ell-1}$. Indeed, $B_0$ is a subgroup of $\left(\mathbb{F}_2^{r}\right)^{s}$. Therefore, we construct $B_\ell=B_0 \oplus \ve_\ell$ as a coset of $B_0$ under the right $\ve_\ell$. The same reasoning applies to ${B'}_0$.  Additions by vectors $\ve_j$ and ${\ve'}_j$ in (\ref{dig.shift}) are referred as digital shifts.
+
+There are exactly $2^{rs}$ different choices of $\ve_\ell$ and ${\ve'}_\ell$, and $2^{r(r-1)/2}$ choices of $L$ and $L'$. The maximum number of iterations $\ell$ that can be performed equals the number of cosets, $2^{r(s-1)}$. If this maximum is reached, designs $\mathcal{P}_\ell$ and $\mathcal{P}'_\ell$ both correspond to a full grid design of $2^{rs}$ points.
+
+\bigskip
 %Left multiplications by matrices $L$ and $L'$ in \eqref{dig.shift} and \eqref{ibinom.scrambling}  are called linear scramblings \cite{Matousek} while additions by vectors $\ve_j$ and ${\ve'}_j$ are referred as digital shifts. There are exactly $2^r$ different choices of $\ve_j$ and ${\ve'}_j$ and $2^{r(r-1)/2}$ choices of $L$ and $L'$. To guarantee that new points added will fill unexplored regions of the input space, the vectors $\ve_j$ are selected as follows:
 %\begin{itemize}
 %\item[i)] at iteration $\ell=0$, vectors $\ve_j$ are all equal to the zero of $\mathbb{F}_2^r$,
@@ -388,7 +412,7 @@ Initial sets are $B_0=\{\vx_i\}_{i=0}^{2^r-1}$ and ${B'}_0=\{{\vx'}_i\}_{i=0}^{2
 \begin{lemma}
 Under the additive construction $\mathcal{P}_\ell$ and $\mathcal{P}'_\ell$ are two replicated designs of order $1$, $\ell \geq 0$.
 \end{lemma}
-\textit{Proof}:For each $\ell\geq 1$, digital shift and scrambling operations carried out in equations (\ref{dig.shift}) and (\ref{ibinom.scrambling}) are bijections from $\mathbb{F}^r_2$ to $\mathbb{F}^r_2$. Hence, same coordinates of $B_\ell$ and ${B'}_\ell$ will contain the same set of $2^r$ values.
+\textit{Proof}:For each $\ell\geq 1$, digital shift and scrambling operations carried out in equations (\ref{linear.scrambl}) and (\ref{dig.shift}) are bijections. Hence, same coordinates of $B_\ell$ and ${B'}_\ell$ will contain the same set of $2^r$ values.
 
 \section{Space-filling properties}
 
