@@ -382,12 +382,12 @@ for each $i=0,\dots,2^r-1$, point $\vx_i^{(0)} = (x_{i,1}^{(0)},\dots,x_{i,s}^{(
 \end{equation}
 where $ x_{i,j}^{(0)}=\sum_{k = 1}^r x_{i,j,k}^{(0)}2^{-k}$, $ {x'}_{i,j}^{(0)}=\sum_{k = 1}^r {x'}_{i,j,k}^{(0)}2^{-k}$ and $L$, $L'$ are two full rank lower triangular matrices of size $r \times r$ over $\mathbb{F}_2$. Left multiplications by matrices $L$ and $L'$ in \eqref{linear.scrambl} are called linear scramblings \cite{Matousek}.
 
-At step $\ell \geq 1$, using formula (\ref{group.operation}) we construct:
+At step $\ell \geq 1$, using definition \eqref{group.operation} we construct:
 \begin{equation}
 B_\ell=\{\vx_i^{(0)}\oplus\ve_\ell\}_{i=0}^{2^r-1}, \qquad {B'}_\ell=\{{\vx'}_i^{(0)}\oplus{\ve'}_\ell\}_{i=0}^{2^r-1}.
 \label{dig.shift}
 \end{equation}
-where $\ve_\ell \in \left(\mathbb{F}_2^{r}\right)^{s} \setminus \mathcal{P}_{\ell-1}$ and ${\ve'}_\ell \in \left(\mathbb{F}_2^{r}\right)^{s} \setminus \mathcal{P'}_{\ell-1}$. Indeed, $B_0$ is a subgroup of $\left(\mathbb{F}_2^{r}\right)^{s}$. Therefore, we construct $B_\ell=B_0 \oplus \ve_\ell$ as a coset of $B_0$ under the right choice of $\ve_\ell$. The same reasoning applies to ${B'}_0$.  Additions by vectors $\ve_j$ and ${\ve'}_j$ in (\ref{dig.shift}) are referred as digital shifts.
+where $\ve_\ell \in \left(\mathbb{F}_2^{r}\right)^{s} \setminus \mathcal{P}_{\ell-1}$ and ${\ve'}_\ell \in \left(\mathbb{F}_2^{r}\right)^{s} \setminus \mathcal{P'}_{\ell-1}$. Indeed, $B_0$ is a subgroup of $\left(\mathbb{F}_2^{r}\right)^{s}$. Therefore, we construct $B_\ell=B_0 \oplus \ve_\ell$ as a coset of $B_0$ under the right choice of $\ve_\ell$. The same reasoning applies to ${B'}_0$.  Additions by vectors $\ve_j$ and ${\ve'}_j$ in \eqref{dig.shift} are referred as digital shifts.
 
 There are exactly $2^{rs}$ different choices of $\ve_\ell$ and ${\ve'}_\ell$, and $2^{r(r-1)/2}$ choices of $L$ and $L'$. The maximum number of iterations $\ell$ that can be performed equals the number of cosets, $2^s$. If this maximum is reached, designs $\mathcal{P}_\ell$ and $\mathcal{P}'_\ell$ both correspond to a full grid design of $2^{rs}$ points.
 
