@@ -206,7 +206,7 @@ Each
 
 \subsection{Sobol' sequences}
 
-Sobol' sequences in dimension $s$ are digital sequences in base $b=2$ that can be computed using the \emph{generating matrices}, a set of $s$ full rank infinite dimensional upper triangular matrices over the Galois field $\mathbb{F}_2:=\{0,1\}$.
+Sobol' sequences in dimension $s$ are digital sequences in base $b=2$ that can be computed using the \emph{generating matrices}, a set of $s$ full rank infinite dimensional upper triangular matrices over $\mathbb{F}_2$.
 %We will denote by $\oplus$ the addition in $\mathbb{F}_2$.
 These generating matrices are recursively constructed given some primitive polynomials and initial directional numbers. In \cite{Kuo}, Kuo and Joe detail this construction and also suggest a particular choice for these matrices that optimize the 2 dimensional projection $t$-values.
 
@@ -278,7 +278,7 @@ To compute the next $2^m$ points of the sequence, one can infer from \eqref{dig.
 \end{equation}
 where $c_j^{m+1}$ is the last column of $C_j^{m+1}$ and $\oplus$ is the addition in $\mathbb{F}_2$.
 
-Sobol' sequences also have good group structure properties. For any $m\geq 1$, the first $2^m$ points of the sequence form an Abelian group under $\oplus$:
+In addition, Sobol' sequences have good group structure properties. For any $m\geq 1$, the first $2^m$ points of the sequence form an Abelian group under $\oplus$:
 \begin{equation}
 \begin{gathered}
 \vx = \left(\sum_{k=1}^m x_{1,k}2^{-k},\dots,\sum_{k=1}^m x_{s,k}2^{-k}\right)^\intercal\; , \qquad \vz = \left(\sum_{k=1}^m z_{1,k}2^{-k},\dots,\sum_{k=1}^m z_{s,k}2^{-k}\right)^\intercal, \\
@@ -286,6 +286,7 @@ Sobol' sequences also have good group structure properties. For any $m\geq 1$, t
 \end{gathered}
 \label{group.operation}
 \end{equation}
+From definition \eqref{group.operation} above, one may see that the first $2^m$ points of the sequence are elements of $\left(\mathbb{F}_2^m\right)^s$, with $\mathbb{F}_2:=\{0,1\}$ the Galois field.
 
 
 
@@ -375,20 +376,20 @@ for each $i=0,\dots,2^r-1$, point $\vx_i^{(0)} = (x_{i,1}^{(0)},\dots,x_{i,s}^{(
 \begin{equation}
 \label{linear.scrambl}
 \begin{aligned}
-(x_{i,j,1}^{(0)},\dots,x_{i,j,r}^{(0)})^\intercal &= L (x_{i,j,1},\dots,x_{i,j,r})^\intercal,\\
-({x'}_{i,j,1}^{(0)},\dots,{x'}_{i,j,r}^{(0)})^\intercal &= L' (x_{i,j,1},\dots,x_{i,j,r})^\intercal,\qquad j= 1,\dots,s\,
+(x_{i,j,1}^{(0)},\dots,x_{i,j,r}^{(0)})^\intercal &= L (x_{i,j,1},\dots,x_{i,j,r})^\intercal,\qquad j= 1,\dots,s\, , \\
+({x'}_{i,j,1}^{(0)},\dots,{x'}_{i,j,r}^{(0)})^\intercal &= L' (x_{i,j,1},\dots,x_{i,j,r})^\intercal,\qquad j= 1,\dots,s\, , 
 \end{aligned}
 \end{equation}
 where $ x_{i,j}^{(0)}=\sum_{k = 1}^r x_{i,j,k}^{(0)}2^{-k}$, $ {x'}_{i,j}^{(0)}=\sum_{k = 1}^r {x'}_{i,j,k}^{(0)}2^{-k}$ and $L$, $L'$ are two full rank lower triangular matrices of size $r \times r$ over $\mathbb{F}_2$. Left multiplications by matrices $L$ and $L'$ in \eqref{linear.scrambl} are called linear scramblings \cite{Matousek}.
 
 At step $\ell \geq 1$, using formula (\ref{group.operation}) we construct:
 \begin{equation}
-B_\ell=\{\vx_i^{(0)}\oplus\ve_\ell\}_{i=0}^{2^r-1}, \qquad {B'}_\ell=\{{\vx'}_i^{(0)}\oplus{\ve'}_\ell\}_{i=0}^{2^r-1}
+B_\ell=\{\vx_i^{(0)}\oplus\ve_\ell\}_{i=0}^{2^r-1}, \qquad {B'}_\ell=\{{\vx'}_i^{(0)}\oplus{\ve'}_\ell\}_{i=0}^{2^r-1}.
 \label{dig.shift}
 \end{equation}
-where $\ve_\ell \in \left(\mathbb{F}_2^{r}\right)^{s} \setminus \mathcal{P}_{\ell-1}$ and ${\ve'}_\ell \in \left(\mathbb{F}_2^{r}\right)^{s} \setminus \mathcal{P'}_{\ell-1}$. Indeed, $B_0$ is a subgroup of $\left(\mathbb{F}_2^{r}\right)^{s}$. Therefore, we construct $B_\ell=B_0 \oplus \ve_\ell$ as a coset of $B_0$ under the right $\ve_\ell$. The same reasoning applies to ${B'}_0$.  Additions by vectors $\ve_j$ and ${\ve'}_j$ in (\ref{dig.shift}) are referred as digital shifts.
+where $\ve_\ell \in \left(\mathbb{F}_2^{r}\right)^{s} \setminus \mathcal{P}_{\ell-1}$ and ${\ve'}_\ell \in \left(\mathbb{F}_2^{r}\right)^{s} \setminus \mathcal{P'}_{\ell-1}$. Indeed, $B_0$ is a subgroup of $\left(\mathbb{F}_2^{r}\right)^{s}$. Therefore, we construct $B_\ell=B_0 \oplus \ve_\ell$ as a coset of $B_0$ under the right choice of $\ve_\ell$. The same reasoning applies to ${B'}_0$.  Additions by vectors $\ve_j$ and ${\ve'}_j$ in (\ref{dig.shift}) are referred as digital shifts.
 
-There are exactly $2^{rs}$ different choices of $\ve_\ell$ and ${\ve'}_\ell$, and $2^{r(r-1)/2}$ choices of $L$ and $L'$. The maximum number of iterations $\ell$ that can be performed equals the number of cosets, $2^{r(s-1)}$. If this maximum is reached, designs $\mathcal{P}_\ell$ and $\mathcal{P}'_\ell$ both correspond to a full grid design of $2^{rs}$ points.
+There are exactly $2^{rs}$ different choices of $\ve_\ell$ and ${\ve'}_\ell$, and $2^{r(r-1)/2}$ choices of $L$ and $L'$. The maximum number of iterations $\ell$ that can be performed equals the number of cosets, $2^s$. If this maximum is reached, designs $\mathcal{P}_\ell$ and $\mathcal{P}'_\ell$ both correspond to a full grid design of $2^{rs}$ points.
 
 %Left multiplications by matrices $L$ and $L'$ in \eqref{dig.shift} and \eqref{ibinom.scrambling}  are called linear scramblings \cite{Matousek} while additions by vectors $\ve_j$ and ${\ve'}_j$ are referred as digital shifts. There are exactly $2^r$ different choices of $\ve_j$ and ${\ve'}_j$ and $2^{r(r-1)/2}$ choices of $L$ and $L'$. To guarantee that new points added will fill unexplored regions of the input space, the vectors $\ve_j$ are selected as follows:
 %\begin{itemize}
