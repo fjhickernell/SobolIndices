@@ -390,7 +390,6 @@ where $\ve_\ell \in \left(\mathbb{F}_2^{r}\right)^{s} \setminus \mathcal{P}_{\el
 
 There are exactly $2^{rs}$ different choices of $\ve_\ell$ and ${\ve'}_\ell$, and $2^{r(r-1)/2}$ choices of $L$ and $L'$. The maximum number of iterations $\ell$ that can be performed equals the number of cosets, $2^{r(s-1)}$. If this maximum is reached, designs $\mathcal{P}_\ell$ and $\mathcal{P}'_\ell$ both correspond to a full grid design of $2^{rs}$ points.
 
-\bigskip
 %Left multiplications by matrices $L$ and $L'$ in \eqref{dig.shift} and \eqref{ibinom.scrambling}  are called linear scramblings \cite{Matousek} while additions by vectors $\ve_j$ and ${\ve'}_j$ are referred as digital shifts. There are exactly $2^r$ different choices of $\ve_j$ and ${\ve'}_j$ and $2^{r(r-1)/2}$ choices of $L$ and $L'$. To guarantee that new points added will fill unexplored regions of the input space, the vectors $\ve_j$ are selected as follows:
 %\begin{itemize}
 %\item[i)] at iteration $\ell=0$, vectors $\ve_j$ are all equal to the zero of $\mathbb{F}_2^r$,
@@ -412,7 +411,7 @@ There are exactly $2^{rs}$ different choices of $\ve_\ell$ and ${\ve'}_\ell$, an
 \begin{lemma}
 Under the additive construction $\mathcal{P}_\ell$ and $\mathcal{P}'_\ell$ are two replicated designs of order $1$, $\ell \geq 0$.
 \end{lemma}
-\textit{Proof}:For each $\ell\geq 1$, digital shift and scrambling operations carried out in equations (\ref{linear.scrambl}) and (\ref{dig.shift}) are bijections. Hence, same coordinates of $B_\ell$ and ${B'}_\ell$ will contain the same set of $2^r$ values.
+\textit{Proof}:For each $\ell\geq 1$, digital shift and scrambling operations carried out in equations (\ref{linear.scrambl}) and (\ref{dig.shift}) are bijections from $\mathbb{F}_2^r$ and $\left(\mathbb{F}_2^{r}\right)^{s}$. Hence, same coordinates of $B_\ell$ and ${B'}_\ell$ will contain the same set of $2^r$ values.
 
 \section{Space-filling properties}
 
@@ -422,7 +421,7 @@ To analyze the space-filling properties of both approaches we will use two crite
 
 \bigskip
 
-We name by design $A$ (resp. $B$) one of the two replicated designs constructed with the multiplicative (resp. additive) approach. We set the input space dimension $s$ to $6$. Design $A$ is refined until $\ell=12$, and design $B$ is constructed with an initial value $r=8$ and refined 15 times.  We construct $100$ designs $A$ and $B$ whose average criteria are presented in Figure \ref{results.crit}. Each of the $100$ designs $A$ is independently randomized by applying Owen's scrambling. Each of the $100$ designs $B$ is constructed by randomly selecting the matrix $L$ among the $2^{r(r-1)/2}$ choices and by selecting the vectors $\ve_j$ following steps i) and ii). We also represent  in Figure \ref{results.crit} the results obtained with a Latin Hypercube design with an equal number of points of design $B$. The x-axis corresponds to the number of points $N$ of the design. The y-axis corresponds to the value of the criterion. A logarithmic scale is used for both axis.
+We name by design $A$ (resp. $B$) one of the two replicated designs constructed with the multiplicative (resp. additive) approach. We set the input space dimension $s$ to $6$. Design $A$ is refined until $\ell=12$, and design $B$ is constructed with an initial value $r=8$ and refined 15 times.  We construct $100$ designs $A$ and $B$ whose average criteria are presented in Figure \ref{results.crit}. Each of the $100$ designs $A$ is independently randomized by applying Owen's scrambling. Each of the $100$ designs $B$ is constructed by randomly selecting the matrix $L$ among the $2^{r(r-1)/2}$ choices and the vectors $\ve_\ell$ as in equation (\ref{dig.shift}). We also represent in Figure \ref{results.crit} the results obtained with a Latin Hypercube design with an equal number of points of design $B$. The x-axis corresponds to the number of points $N$ of the design. The y-axis corresponds to the value of the criterion. A logarithmic scale is used for both axis.
 
 As expected, design $A$ performs the best and the estimated slope of the discrepancy curve ($-0.67$) falls within the expected range for Sobol' sequences \cite{Morokoff}. Although design $B$ does not perform as well as design $A$, it outperforms a classic Latin Hypercube design for both criteria while allowing $15$ refinement steps from $2^8$ to $2^{12}$ points, instead of only $4$ steps for design $A$.
 \begin{figure}
