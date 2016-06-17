@@ -202,11 +202,9 @@ The replicated design properties can also apply to digital sequences. Hence, we 
 Two digital sequences $\{\vx_i\}_{i\in\mathbb{N}_0}$ and $\{{\vx'}_i\}_{i\in\mathbb{N}_0}$ are \emph{digitally replicated} of order $a$ if for all $m\geq 0$, $\{{\vx}_i\}_{i=0}^{b^m-1}$ and $\{{\vx'}_i\}_{i=0}^{b^m-1}$ are two replicated designs of order $a$.
 \end{definition}
 
-Each 
-
 \subsection{Sobol' sequences}
 
-Sobol' sequences in dimension $s$ are digital sequences in base $b=2$ that can be computed using the \emph{generating matrices}, a set of $s$ full rank infinite dimensional upper triangular matrices over $\mathbb{F}_2$.
+Sobol' sequences in dimension $s$ are digital sequences in base $b=2$ that can be computed using the \emph{generating matrices}, a set of $s$ full rank infinite dimensional upper triangular matrices over the Galois field $\mathbb{F}_2:=\{0,1\}$.
 %We will denote by $\oplus$ the addition in $\mathbb{F}_2$.
 These generating matrices are recursively constructed given some primitive polynomials and initial directional numbers. In \cite{Kuo}, Kuo and Joe detail this construction and also suggest a particular choice for these matrices that optimize the 2 dimensional projection $t$-values.
 
@@ -286,7 +284,7 @@ In addition, Sobol' sequences have good group structure properties. For any $m\g
 \end{gathered}
 \label{group.operation}
 \end{equation}
-From definition \eqref{group.operation} above, one may see that the first $2^m$ points of the sequence are elements of $\left(\mathbb{F}_2^m\right)^s$, with $\mathbb{F}_2:=\{0,1\}$ the Galois field.
+From equation \eqref{dig.net.eq.} above, one may see that the first $2^m$ points of the sequence are elements of $\left(\mathbb{F}_2^m\right)^s$, with $\mathbb{F}_2:=\{0,1\}$ the Galois field.
 
 
 
@@ -317,7 +315,7 @@ $$
 %$$\mathcal{P}'_m= {B'}_0 \cup \dots \cup {B'}_m\, ,$$
 where $B_\ell$ and $B'_\ell$ are new sets of points added at step $\ell$ to refine $\mathcal{P}_{\ell-1}$ and $\mathcal{P}'_{\ell-1}$. For all $\ell\geq 0$, $\mathcal{P}_\ell$ and $\mathcal{P'}_\ell$ are two replicated designs of order $1$.
 
-The first approach is called multiplicative because $|P_\ell|=2^\ell$ while the second one is called additive and $|P_\ell|=\ell|B_0|$. In the multiplicative case, we will directly use $2$ $s$-dimensional sequences as a result from Lemma \ref{Sobol_replicated}. However, for the additive case, we will consider an initial set of Sobol' points and apply different scramblings and digital shifts to extend the point sets. Additionally, in both cases one can randomize the points using Owen's scrambling \cite{OwenScrambling} as long as same coordinates of $\mathcal{P}_\ell$ and $\mathcal{P}'_\ell$ share the same scrambling.
+The first approach is called multiplicative because $|\mathcal{P}_\ell|=2^\ell$ while the second one is called additive and $|\mathcal{P}_\ell|=\ell|B_0|$. In the multiplicative case, we will directly use $2$ $s$-dimensional sequences as a result from Lemma \ref{Sobol_replicated}. However, for the additive case, we will consider an initial set of Sobol' points and apply different scramblings and digital shifts to extend the point sets. Additionally, in both cases one can randomize the points using Owen's scrambling \cite{OwenScrambling} as long as same coordinates of $\mathcal{P}_\ell$ and $\mathcal{P}'_\ell$ share the same scrambling.
 
 \subsection{Multiplicative approach}
 
@@ -380,7 +378,7 @@ for each $i=0,\dots,2^r-1$, point $\vx_i^{(0)} = (x_{i,1}^{(0)},\dots,x_{i,s}^{(
 ({x'}_{i,j,1}^{(0)},\dots,{x'}_{i,j,r}^{(0)})^\intercal &= L' (x_{i,j,1},\dots,x_{i,j,r})^\intercal,\qquad j= 1,\dots,s\, , 
 \end{aligned}
 \end{equation}
-where $ x_{i,j}^{(0)}=\sum_{k = 1}^r x_{i,j,k}^{(0)}2^{-k}$, $ {x'}_{i,j}^{(0)}=\sum_{k = 1}^r {x'}_{i,j,k}^{(0)}2^{-k}$ and $L$, $L'$ are two full rank lower triangular matrices of size $r \times r$ over $\mathbb{F}_2$. Left multiplications by matrices $L$ and $L'$ in \eqref{linear.scrambl} are called linear scramblings \cite{Matousek}.
+where $ x_{i,j}^{(0)}=\sum_{k = 1}^r x_{i,j,k}^{(0)}2^{-k}$, $ {x'}_{i,j}^{(0)}=\sum_{k = 1}^r {x'}_{i,j,k}^{(0)}2^{-k}$ and $L$, $L'$ are two distinct full rank lower triangular matrices of size $r \times r$ over $\mathbb{F}_2$. Left multiplications by matrices $L$ and $L'$ in \eqref{linear.scrambl} are called linear scramblings \cite{Matousek}.
 
 At step $\ell \geq 1$, using definition \eqref{group.operation} we construct:
 \begin{equation}
@@ -389,7 +387,7 @@ B_\ell=\{\vx_i^{(0)}\oplus\ve_\ell\}_{i=0}^{2^r-1}, \qquad {B'}_\ell=\{{\vx'}_i^
 \end{equation}
 where $\ve_\ell \in \left(\mathbb{F}_2^{r}\right)^{s} \setminus \mathcal{P}_{\ell-1}$ and ${\ve'}_\ell \in \left(\mathbb{F}_2^{r}\right)^{s} \setminus \mathcal{P'}_{\ell-1}$. Indeed, $B_0$ is a subgroup of $\left(\mathbb{F}_2^{r}\right)^{s}$. Therefore, we construct $B_\ell=B_0 \oplus \ve_\ell$ as a coset of $B_0$ under the right choice of $\ve_\ell$. The same reasoning applies to ${B'}_0$.  Additions by vectors $\ve_j$ and ${\ve'}_j$ in \eqref{dig.shift} are referred as digital shifts.
 
-There are exactly $2^{rs}$ different choices of $\ve_\ell$ and ${\ve'}_\ell$, and $2^{r(r-1)/2}$ choices of $L$ and $L'$. The maximum number of iterations $\ell$ that can be performed equals the number of cosets, $2^s$. If this maximum is reached, designs $\mathcal{P}_\ell$ and $\mathcal{P}'_\ell$ both correspond to a full grid design of $2^{rs}$ points.
+There are exactly $2^{rs}$ different choices of $\ve_\ell$ and ${\ve'}_\ell$ in $\left(\mathbb{F}_2^{r}\right)^{s}$, and $2^{r(r-1)/2}$ choices of $L$ and $L'$. The maximum number of iterations $\ell$ that can be performed equals the number of cosets, $2^{r(s-1)}$. If this maximum is reached, designs $\mathcal{P}_\ell$ and $\mathcal{P}'_\ell$ both correspond to a full grid design of $2^{rs}$ points.
 
 %Left multiplications by matrices $L$ and $L'$ in \eqref{dig.shift} and \eqref{ibinom.scrambling}  are called linear scramblings \cite{Matousek} while additions by vectors $\ve_j$ and ${\ve'}_j$ are referred as digital shifts. There are exactly $2^r$ different choices of $\ve_j$ and ${\ve'}_j$ and $2^{r(r-1)/2}$ choices of $L$ and $L'$. To guarantee that new points added will fill unexplored regions of the input space, the vectors $\ve_j$ are selected as follows:
 %\begin{itemize}
@@ -422,11 +420,11 @@ To analyze the space-filling properties of both approaches we will use two crite
 
 \bigskip
 
-We name by design $A$ (resp. $B$) one of the two replicated designs constructed with the multiplicative (resp. additive) approach. We set the input space dimension $s$ to $6$. Design $A$ is refined until $\ell=12$, and design $B$ is constructed with an initial value $r=8$ and refined 15 times.  We construct $100$ designs $A$ and $B$ whose average criteria are presented in Figure \ref{results.crit}. Each of the $100$ designs $A$ is independently randomized by applying Owen's scrambling. Each of the $100$ designs $B$ is constructed by randomly selecting the matrix $L$ among the $2^{r(r-1)/2}$ choices and the vectors $\ve_\ell$ as in equation (\ref{dig.shift}). We also represent in Figure \ref{results.crit} the results obtained with a Latin Hypercube design with an equal number of points of design $B$. The x-axis corresponds to the number of points $N$ of the design. The y-axis corresponds to the value of the criterion. A logarithmic scale is used for both axis.
+We name by design $M$ (resp. $A$) one of the two replicated designs constructed with the multiplicative (resp. additive) approach. We set the input space dimension $s$ to $6$. Design $M$ is refined until $\ell=12$, and design $A$ is constructed with an initial value $r=8$ and refined 15 times.  We construct $100$ designs $M$ and $A$ whose average criteria are presented in Figure \ref{results.crit}. Each of the $100$ designs $M$ is independently randomized by applying Owen's scrambling \cite{OwenScrambling}. Each of the $100$ designs $A$ is constructed by randomly selecting the matrix $L$ among the $2^{r(r-1)/2}$ choices and the vectors $\ve_\ell$ as in equation (\ref{dig.shift}). We also represent in Figure \ref{results.crit} the results obtained with a Latin Hypercube design with an equal number of points of design $A$. The x-axis corresponds to the number of points $N$ of the design. The y-axis corresponds to the value of the criterion. A logarithmic scale is used for both axis.
 
-As expected, design $A$ performs the best and the estimated slope of the discrepancy curve ($-0.67$) falls within the expected range for Sobol' sequences \cite{Morokoff}. Although design $B$ does not perform as well as design $A$, it outperforms a classic Latin Hypercube design for both criteria while allowing $15$ refinement steps from $2^8$ to $2^{12}$ points, instead of only $4$ steps for design $A$.
+As expected, design $M$ performs the best and the estimated slope of the discrepancy curve ($-0.67$) falls within the expected range for Sobol' sequences \cite{Morokoff}. Although design $A$ does not perform as well as design $M$, it outperforms a classic Latin Hypercube design for both criteria while allowing $15$ refinement steps from $2^8$ to $2^{12}$ points, instead of only $4$ steps for design $M$.
 \begin{figure}
-\caption{Log-log graph of averaged $L_2$ star discrepancy (left) and maximin (right) for designs $A$ and $B$ over $100$ repetitions.}
+\caption{Log-log graph of averaged $L_2$ star discrepancy (left) and maximin (right) for designs $M$ and $A$ over $100$ repetitions.}
 \label{results.crit}
 \centering
 \includegraphics[scale=0.4]{discrep.pdf}
