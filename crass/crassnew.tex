@@ -145,7 +145,7 @@ Presented by £££££}
 % Text of abstract in English
 In the perspective of estimating main effects of model inputs, two approaches are studied to iteratively construct replicated designs based on Sobol' sequences. Space-filling properties of the resulting designs are studied based on two criteria.
 {\it To cite this article: L.
-Gilquin, Ll. A. Jim\'enez Rugama, E. Arnaud, F. J. Hickernell, H. Monod, C. Prieur, C. R. Acad. Sci. Paris, Ser. I 340 (2005).}
+Gilquin, Ll. A. Jim\'enez Rugama, E. Arnaud, F. J. Hickernell, H. Monod, C. Prieur, C. R. Acad. Sci. Paris, Ser. I 340 (2016).}
 
 \vskip 0.5\baselineskip
 
@@ -156,7 +156,7 @@ Gilquin, Ll. A. Jim\'enez Rugama, E. Arnaud, F. J. Hickernell, H. Monod, C. Prie
 %{\bf Plans r\'epliqu\'es \`a base de s\'equences de Sobol' pour estimer les effets principaux des param\`etres d'un mod\`ele. }
 Dans l'objectif d'estimer les effets principaux des param\`etres d'un mod\`ele, nous proposons d'\'etudier deux approches pour construire it\'erativement des plans r\'epliqu\'es \`a partir de s\'equences de Sobol'. Les propri\'et\'es de remplissement de l'espace des plans construits sont \'etudi\'ees sur la base de deux crit\`eres.
 {\it Pour citer cet article~: L. Gilquin, Ll. A. Jim\'enez Rugama, E. Arnaud, F. J. Hickernell, H. Monod, C. Prieur, C. R. Acad. Sci.
-Paris, Ser. I 340 (2005).}
+Paris, Ser. I 340 (2016).}
 \end{abstract}
 \end{frontmatter}
 \selectlanguage{english}
@@ -166,10 +166,10 @@ Mathematical models often involve a substantial number of poorly known parameter
 The procedure to estimate first-order Sobol' indices proposed by Sobol' and its improvements (see Saltelli \cite{Saltelli} for an exhaustive survey) all suffer from a prohibitive number of model evaluations that grows with respect to the input space dimension. %An elegant solution to reduce this cost relies on the construction of replicated designs introduced by McKay \cite{mckay}.  
  An elegant solution to reduce this number relies on the construction of particular designs of experiments called replicated designs. The notion of replicated designs was first introduced by McKay through its definition of replicated Latin Hypercubes in \cite{Mckay}. Below we provide this definition in a more general framework:
 
-\begin{definition}%[Replicated designs]
+\begin{e-definition}%[Replicated designs]
 \label{rep.designs}
 Consider $\vx \in [0,1)^s$, and $\vx_u \in [0,1)^{s-|u|}$ the subset of elements of $\vx$ given by $u\subsetneq \{1,\dots,s\}$, where $|u|$ is the cardinality of $u$. Let $\mathcal{P}=\{\vx_i\}_{i=0}^{n-1}$ and $\mathcal{P}'=\{{\vx'}_i\}_{i=0}^{n-1}$ be two point sets in $[0,1)^{s}$, and denote by $\mathcal{P}^u=\{\vx_{i,u}\}_{i=0}^{n-1}$ (resp. $\mathcal{P}'^u$) the subset of elements of points in $\mathcal{P}$ (resp. $\mathcal{P}'$) indexed by $u$. We say that $\mathcal{P}$ and $\mathcal{P}'$ are two replicated designs of order $a=1,\dots,s-1$, if for any $u\subsetneq \{1,\dots,s\}$ with $|u|=a$, $\mathcal{P}^u$ and $\mathcal{P}'^u$ are the same point set in $[0,1)^a$.
-\end{definition}
+\end{e-definition}
 
 The replication procedure described in \cite{Mara,Tissot} allows the estimation of all first-order Sobol' indices with only two replicated designs of order $1$. This procedure has the major advantage of reducing the number of model evaluations, evaluating only on designs $\mathcal{P}$ and $\mathcal{P}'$ regardless of the input space dimension. However, Sobol' indices estimates may still not be accurate enough if designs $\mathcal{P}$ and $\mathcal{P}'$ do not explore the input space properly.
 
@@ -186,21 +186,21 @@ Digital nets and sequences were first introduced by Niederreiter \cite{Niederrei
 
 %The quality of any $(t,m,s)$-net or $(t,s)$-sequence is measured by $t$, called the $t$-value. The $t$-value is introduced in the $(t,m,s)$-net definition as follows:
 
-\begin{definition}%[$(t,m,s)-net$]
+\begin{e-definition}%[$(t,m,s)-net$]
 Let $\mathcal{A}$ be the set of all elementary intervals $A\in\cube$ where $A=\prod_{j=1}^s [\alpha_jb^{-\gamma_j},(\alpha_j+1)b^{-\gamma_j})$, with integers $s\geq 1$, $b\geq 2$, $\gamma_j\geq 0$, and $b^{\gamma_j}>\alpha_j\geq 0$. For $m\geq t\geq 0$, the point set $\mathcal{P}\in\cube$ with $b^m$ points is a $(t,m,s)-net$ in base $b$ if every $A$ with volume $b^{t-m}$ contains $b^t$ points of $\mathcal{P}$.
-\end{definition}
+\end{e-definition}
 
 Thus, a $(t,m,s)$-net is defined such that all elementary intervals of volume $b^{t-m}$ will enclose the same proportion of points of $\mathcal{P}$, namely $b^{t-m}|\mathcal{P}|$ points. The most evenly spread nets are $(0,m,s)$-nets, since each elementary interval of the smallest volume possible, $b^{-m}$, contains exactly one point. The quality of any $(t,m,s)$-net is therefore measured by the parameter $t$, called $t$-value.
 
 By increasing $m$, we increase the number of points of the $(t,m,s)$-net. In the limit case where $m\rightarrow\infty$, we can define the $(t,s)$-sequence as:
-\begin{definition}%[$(t,s)$-sequence]
+\begin{e-definition}%[$(t,s)$-sequence]
 For integers $s\geq 1$, $b\geq 2$, and $t\geq 0$, the sequence $\{\vx_i\}_{i\in\mathbb{N}_0}$ is a $(t,s)$-sequence in base $b$, if for every set $\mathcal{P}_{\ell,m}=\{\vx_i\}_{i=\ell b^m}^{(\ell+1)b^m-1}$ with $\ell\geq 0$ and $m\geq t$, $\mathcal{P}_{\ell,m}$ is a $(t,m,s)$-net in base $b$.
-\end{definition}
+\end{e-definition}
 
 The replicated design properties can also apply to digital sequences. Hence, we introduce the following definition,
-\begin{definition}
+\begin{e-definition}
 Two digital sequences $\{\vx_i\}_{i\in\mathbb{N}_0}$ and $\{{\vx'}_i\}_{i\in\mathbb{N}_0}$ are \emph{digitally replicated} of order $a$ if for all $m\geq 0$, $\{{\vx}_i\}_{i=0}^{b^m-1}$ and $\{{\vx'}_i\}_{i=0}^{b^m-1}$ are two replicated designs of order $a$.
-\end{definition}
+\end{e-definition}
 
 \subsection{Sobol' sequences}
 
@@ -417,10 +417,9 @@ Under the additive construction $\mathcal{P}_\ell$ and $\mathcal{P}'_\ell$ are t
 %In the previous section we showed how two replicated designs constructed with the additive approach are not $(t,m,s)$-nets after refinement. Nonetheless, they still retain space-filling properties that combined with the low iterative growth make their use appealing.
 
 To analyze the space-filling properties of both approaches we will use two criteria. The first one is the $L_2$ star discrepancy that measures the uniformity of a point set. This criterion can be easily computed through an analytical expression provided by \cite{Morokoff}. The lower the criterion, the more uniform the point set is. Sobol' sequences were originally constructed to be low discrepancy sequences and therefore, behave well under this criterion. The second criterion is called maximin distance and measures the regularity of a point set. It returns the minimum of all Euclidean distances between pairs of points in the set. The higher the criterion, the more spread the point set is.
-
 \bigskip
 
-We name by design $M$ (resp. $A$) one of the two replicated designs constructed with the multiplicative (resp. additive) approach, and set the input space dimension $s$ to $6$. For design $M$, we study the properties of $\mathcal{P}_8,\dots,\mathcal{P}_{12}$, and for design $A$, we set the initial value to $r=8$ and study the properties of $\mathcal{P}_0,\dots,\mathcal{P}_{15}$. For both $M$ and $A$ we generate $100$ random designs whose average criteria are presented in Figure \ref{results.crit}. While each of the $100$ designs $M$ is independently randomized applying Owen's scrambling \cite{OwenScrambling}, designs $A$ are constructed by randomly selecting matrix $L$ (uniformly among all $2^{r(r-1)/2}$ choices) and vectors $\ve_\ell$ used in equation (\ref{dig.shift}). In addition, we also show in Figure \ref{results.crit} the results obtained with a Latin Hypercube design with an equal number of points as in design $A$. The x-axis corresponds to the number of design points $N$ and the y-axis to the value of the criterion.
+We name by design $M$ (resp. $A$) one of the two replicated designs constructed with the multiplicative (resp. additive) approach, and set the input space dimension $s$ to $6$. For design $M$, we study the properties of $\mathcal{P}_8,\dots,\mathcal{P}_{12}$, and for design $A$, we set the initial value to $r=8$ and study the properties of $\mathcal{P}_0,\dots,\mathcal{P}_{15}$. For both $M$ and $A$ we generate $100$ random designs whose average criteria are presented in Figure \ref{results.crit}. While each of the $100$ designs $M$ is independently randomized applying Owen's scrambling \cite{OwenScrambling}, designs $A$ are constructed by randomly selecting matrix $L$ (uniformly among all $2^{r(r-1)/2}$ choices) and vectors $\ve_\ell$ used in equation (\ref{dig.shift}). In addition, we also show in Figure \ref{results.crit} the results obtained with a Latin Hypercube design (LH design) with an equal number of points as in design $A$. The x-axis corresponds to the number of design points $N$ and the y-axis to the value of the criterion.
 
 As expected, design $M$ performs the best and the estimated slope of the discrepancy curve ($-0.67$) falls within the expected range for Sobol' sequences \cite{Morokoff}. Although design $A$ does not perform as well as design $M$, it outperforms a classic Latin Hypercube design for both criteria while allowing $15$ refinement steps from $2^8$ to $2^{12}$ points, instead of only $4$ steps for design $M$.
 \begin{figure}
