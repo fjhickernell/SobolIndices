@@ -244,12 +244,16 @@ end
 
 % First and total order indices estimators and function evaluations
 Sfo  = @(b,c) min(max(max(b(:,1),0)./max((c(:,2)-b(:,3).^2),0),0),1); % S function for first order
-% ffo = @(xpts,u,fx,fy,fxy) (fx - 1/2*mean(fx + fxy)).*(fxy - 1/2*mean(fx + fxy));
-ffo = @(xpts,u,fx,fy,fxy) fx.*(fxy - fy);
+% ffo = @(xpts,u,fx,fy,fxy,fzx) (fx - 1/2*mean(fx + fxy)).*(fxy - 1/2*mean(fx + fxy));
+ffo = @(xpts,u,fx,fy,fxy,fzx) fx.*(fxy - fy);
 Sfo_s = Sfo; % S function for first order small
-ffo_s = @(xpts,u,fx,fy,fxy) (fx - f([xpts(:,1:u-1) xpts(:,2*out_param.d + u) xpts(:,u+1:out_param.d)])).*(fxy - fy); % We redefine the non normalized estimator
+ffo_s = @(xpts,u,fx,fy,fxy,fzx) (fx - fzx).*(fxy - fy); % We redefine the non normalized estimator
+    % fzx is only used for the small indices. But we needed as input for
+    % all estimators to generalize the algorithm. If we give it as an
+    % input, we can only evaluate it one time and use it to several small
+    % indices.
 Stot = Sfo; % S function for total effect
-ftot = @(xpts,u,fx,fy,fxy) 1/2*(fy - fxy).^2;
+ftot = @(xpts,u,fx,fy,fxy,fzx) 1/2*(fy - fxy).^2;
 
 
 %% Main algorithm (we added 2xd dimensions for each index and and additional 2 for mean of f and f^2)
@@ -265,7 +269,7 @@ exit_len = 2;
 out_param.exit = false(exit_len, 2, out_param.d); %we start the algorithm with all warning flags down
 
 for u = 1:out_param.d
-    for r = 1:2
+    for r = 1:2 % r = 1 for first order, r = 2 for total effect
         INDICES(r,u).kappanumap = kappanumap_fx2_fx(:,1);
         INDICES(r,u).Stilde = zeros(out_param.mmax-out_param.mmin+1,1);
         INDICES(r,u).CStilde_low = CStilde_low_fx2_fx(:,1);
@@ -293,18 +297,22 @@ fx2 = fx.^2; %evaluate integrands y2
 fxval = fx; % We store fx because fx will later contain the fast transform
 fx2val = fx2; % We store fx2 because fx2 will later contain the fast transform
 fy = f(xpts(:,out_param.d+1:2*out_param.d)); % We evaluate the f at the replicated points
+fzx = []; % We set it empty. So if it is empty, we only evaluate it 1 time.
 
 for u = 1:out_param.d
     fxy = f([xpts(:,out_param.d+1:out_param.d+u-1) xpts(:,u) xpts(:,out_param.d+u+1:2*out_param.d)]);
-    INDICES(1,u).y = INDICES(1,u).f(xpts,u,fx,fy,fxy);
+    INDICES(1,u).y = INDICES(1,u).f(xpts,u,fx,fy,fxy,0);
     aux_double = INDICES(1,u).S([mean(INDICES(1,u).y) mean(fx2) mean(fx)],[mean(INDICES(1,u).y) mean(fx2) mean(fx)]);
     if aux_double < threshold_small % If the normalized first order index is small, we change to a better estimator estimator
+        if isempty(fzx)
+            fzx = f([xpts(:,1:u-1) xpts(:,2*out_param.d + u) xpts(:,u+1:out_param.d)]);
+        end
         INDICES(1,u).S = Sfo_s; % We redefine the S function for the small estimator
         INDICES(1,u).f = ffo_s;
-        INDICES(1,u).y = INDICES(1,u).f(xpts,u,fx,fy,fxy); % We reevaluate the points if we change the estimator
+        INDICES(1,u).y = INDICES(1,u).f(xpts,u,fx,fy,fxy,fzx); % We reevaluate the points if we change the estimator
         out_param.small(1,u) = 1;
     end
-    INDICES(2,u).y = INDICES(2,u).f(xpts,u,fx,fy,fxy);
+    INDICES(2,u).y = INDICES(2,u).f(xpts,u,fx,fy,fxy,0);
     INDICES(1,u).est_int(1) = mean(INDICES(1,u).y); % Estimate the integral
     INDICES(2,u).est_int(1) = mean(INDICES(2,u).y); % Estimate the integral
 end
@@ -525,6 +533,7 @@ for m = out_param.mmin+1:out_param.mmax
     err_bound_int_fx2_fx(meff,2) = out_param.fudge(m)*Stilde_fx2_fx(meff,2);
     int = est_int_fx2_fx(meff,2); % Estimate of the expectation of the function
 
+    fzx = [];
     for u = 1:out_param.d
         for r = 1:2
             if ~converged(r,u)
@@ -535,10 +544,14 @@ for m = out_param.mmin+1:out_param.mmax
                 elseif r == 2 & converged(1,u)
                     fxy = f([xnext(:,out_param.d+1:out_param.d+u-1) xnext(:,u) xnext(:,out_param.d+u+1:2*out_param.d)]);
                 end
+                if r == 1 & out_param.small(1,u) == 1 & isempty(fzx)
+                    % We only evaluate fzx if isempty and we found 1 small
+                    fzx = f([xnext(:,1:u-1) xnext(:,2*out_param.d + u) xnext(:,u+1:out_param.d)]);
+                end
                 % Evaluation y only
                 INDICES(r,u).n = 2^m;
                 out_param.n(r,u) = 2^m;
-                ynext = INDICES(r,u).f(xnext,u,fxval(end/2 + 1:end),fy,fxy);
+                ynext = INDICES(r,u).f(xnext,u,fxval(end/2 + 1:end),fy,fxy,fzx);
                 INDICES(r,u).est_int(meff) = 1/2*(INDICES(r,u).est_int(meff-1) + mean(ynext)); % Estimate the integral
 
                %% Compute initial FWT on next points only for y
