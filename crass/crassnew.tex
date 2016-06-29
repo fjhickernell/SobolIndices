@@ -172,10 +172,9 @@ Consider $\vx \in [0,1)^s$, and $\vx_u \in [0,1)^{s-|u|}$ the subset of elements
 \end{e-definition}
 
 The replication procedure described in \cite{Mara,Tissot} allows the estimation of all first-order Sobol' indices with only two replicated designs of order $1$. This procedure has the major advantage of reducing the number of model evaluations, evaluating only on designs $\mathcal{P}$ and $\mathcal{P}'$ regardless of the input space dimension. However, Sobol' indices estimates may still not be accurate enough if designs $\mathcal{P}$ and $\mathcal{P}'$ do not explore the input space properly.
-
 \bigskip
 
-In this note, we propose two different constructions of replicated designs of order $1$ based on Sobol' sequences. These two constructions ensure that the input space is properly explored and can be used within the replication procedure to estimate all first-order Sobol' indices. The definition of these constructions is recursive, therefore one can iteratively refine each replicated design by adding the corresponding new set of points.
+In this note, we propose two different constructions of replicated designs of order $1$ based on Sobol' sequences. Both constructions ensure that the input space is properly explored and can be used within the replication procedure to estimate all first-order Sobol' indices. The definition of these constructions is recursive, therefore one can iteratively refine each replicated design by adding the corresponding new set of points.
 
 We first provide a brief introduction on digital sequences and then present two iterative approaches to construct the two replicated point sets. We end this note by analyzing the space-filling properties of the two designs constructed.
 
@@ -187,7 +186,7 @@ Digital nets and sequences were first introduced by Niederreiter \cite{Niederrei
 %The quality of any $(t,m,s)$-net or $(t,s)$-sequence is measured by $t$, called the $t$-value. The $t$-value is introduced in the $(t,m,s)$-net definition as follows:
 
 \begin{e-definition}%[$(t,m,s)-net$]
-Let $\mathcal{A}$ be the set of all elementary intervals $A\in\cube$ where $A=\prod_{j=1}^s [\alpha_jb^{-\gamma_j},(\alpha_j+1)b^{-\gamma_j})$, with integers $s\geq 1$, $b\geq 2$, $\gamma_j\geq 0$, and $b^{\gamma_j}>\alpha_j\geq 0$. For $m\geq t\geq 0$, the point set $\mathcal{P}\in\cube$ with $b^m$ points is a $(t,m,s)-net$ in base $b$ if every $A$ with volume $b^{t-m}$ contains $b^t$ points of $\mathcal{P}$.
+Let $\mathcal{A}$ be the set of all elementary intervals $A\subset \cube$ where $A=\prod_{j=1}^s [\alpha_jb^{-\gamma_j},(\alpha_j+1)b^{-\gamma_j})$, with integers $s\geq 1$, $b\geq 2$, $\gamma_j\geq 0$, and $b^{\gamma_j}>\alpha_j\geq 0$. For $m\geq t\geq 0$, the point set $\mathcal{P}\in\cube$ with $b^m$ points is a $(t,m,s)-net$ in base $b$ if every $A$ with volume $b^{t-m}$ contains $b^t$ points of $\mathcal{P}$.
 \end{e-definition}
 
 Thus, a $(t,m,s)$-net is defined such that all elementary intervals of volume $b^{t-m}$ will enclose the same proportion of points of $\mathcal{P}$, namely $b^{t-m}|\mathcal{P}|$ points. The most evenly spread nets are $(0,m,s)$-nets, since each elementary interval of the smallest volume possible, $b^{-m}$, contains exactly one point. The quality of any $(t,m,s)$-net is therefore measured by the parameter $t$, called $t$-value.
@@ -319,7 +318,7 @@ The first approach is called multiplicative because $|\mathcal{P}_\ell|=2^\ell$ 
 
 \subsection{Multiplicative approach}
 
-Two replicated point sets of order 1, $\mathcal{P}_\ell$ and $\mathcal{P}'_\ell$, can be constructed using two $s$-dimensional Sobol' sequences. We note $C_1,\dots,C_s$ the generating matrices used to generate $\mathcal{P}_\ell$ and ${C'}_1,\dots,{C'}_s$ those used to generate $\mathcal{P}'_\ell$. To ensure that the $2$-dimensional projections between $\mathcal{P}_\ell$ and $\mathcal{P}'_\ell$ are as uniform as possible, these generating matrices need to be different from each other. Our choice of generating matrices $C_1,\dots,C_s,{C'}_1,\dots,{C'}_s$ is based on the results obtained by Joe and Kuo in \cite{Kuo}.
+Two replicated point sets of order 1, $\mathcal{P}_\ell$ and $\mathcal{P}'_\ell$, can be constructed using two $s$-dimensional Sobol' sequences. We note $C_1,\dots,C_s$ the generating matrices used to generate $\mathcal{P}_\ell$ and ${C'}_1,\dots,{C'}_s$ those used to generate $\mathcal{P}'_\ell$. To ensure that the $2$-dimensional projections between $\mathcal{P}_\ell$ and $\mathcal{P}'_\ell$ are as uniform as possible, these generating matrices need to be different from each other. Our choice of generating matrices $C_1,\dots,C_s,{C'}_1,\dots,{C'}_s$ is based on the results obtained by Joe and Kuo in \cite{Kuo}. 
 \bigskip
 
 In order to iteratively extend designs $\mathcal{P}_\ell$ and $\mathcal{P}'_\ell$, one just needs to compute $B_\ell=\{\vx_{2^{\ell-1}},\dots,\vx_{2^\ell-1}\}$ and ${B'}_\ell=\{\vx'_{2^{\ell-1}},\dots,\vx'_{2^\ell-1}\}$, starting with $B_0=B'_0=\{\bvec{0}\}$, with $\bvec{0}$ the null vector. Each set $B_\ell$ and ${B'}_\ell$ can be constructed using \eqref{Sobol_iter_constr} applied to $\mathcal{P}_{\ell-1}$ and $\mathcal{P}'_{\ell-1}$.
@@ -345,8 +344,7 @@ As a direct consequence of Lemma \ref{Sobol_replicated}, at each step $\ell$ des
 \subsection{Additive Approach}
 
 With the multiplicative approach, the size of designs $\mathcal{P}_\ell$ and $\mathcal{P}'_\ell$ is multiplied by $2$ each time $\ell$ is increased by one. This growth rate may be inadequate for some applications. The additive approach presented in this section is attractive due to a slower size growth. Given an initial choice of $r\geq 1$ that specifies the size of $B_0$ and ${B'}_0$, only $|B_0|=2^r$ points are added to both designs at each step. The main drawback of this approach is that $\mathcal{P}_\ell$ and $\mathcal{P}'_\ell$ do not inherit the structure of a Sobol' sequence when $\ell\geq 1$. Nevertheless, both designs display good space-filling properties as shown in the next section.
-
-\bigskip 
+\bigskip
 
 Analogously to the multiplicative case, the two replicated point sets $\mathcal{P}_\ell$ and $\mathcal{P}'_\ell$ constructed with the additive approach are iteratively refined with $B_\ell$ and ${B'}_\ell$. %First, $B_0=\{\vx_i^{(0)}\}_{i=0}^{2^r-1}$ and ${B'}_0=\{{\vx'}_i^{(0)}\}_{i=0}^{2^r-1}$ are set to be the first $2^r$ points of two $s$-dimensional Sobol' sequences.
 First $\{\vx_i\}_{i=0}^{2^r-1}$ and $\{{\vx'}_i\}_{i=0}^{2^r-1}$ are set to be the first $2^r$ points of two $s$-dimensional Sobol' sequences. The generating matrices of these two sequences are selected as in the multiplicative approach. Then, $B_\ell$ (resp. ${B'}_\ell$), for $\ell \geq 0$, is obtained from $\{\vx_i\}_{i=0}^{2^r-1}$ (resp. $\{{\vx'}_i\}_{i=0}^{2^r-1}$) by carrying out digital shifts and scrambling operations. Therefore, both $B_\ell$ and ${B'}_\ell$ inherit the $(t,r,s)$-net structure of these initial sets. %We detail below the construction of $B_\ell$ and ${B'}_\ell$.
@@ -368,9 +366,7 @@ First $\{\vx_i\}_{i=0}^{2^r-1}$ and $\{{\vx'}_i\}_{i=0}^{2^r-1}$ are set to be t
 %where $ {x'}_{i,j}^{(\ell)}=\sum_{k = 1}^r {x'}_{i,j,k}^{(\ell)}2^{-k}$, ${\ve'}_j=(e_{j,{0}},\dots,e_{j,{r-1}})^\intercal\in\mathbb{F}_2^r$ and ${L'}$ is a full rank lower triangular matrix of size $r \times r$ over $\mathbb{F}_2$.
 %\bigskip
 
-At step $\ell=0$, $B_0=\{\vx_i^{(0)}\}_{i=0}^{2^r-1}$ and ${B'}_0=\{{\vx'}_i^{(0)}\}_{i=0}^{2^r-1}$ are generated as follows: 
-
-for each $i=0,\dots,2^r-1$, point $\vx_i^{(0)} = (x_{i,1}^{(0)},\dots,x_{i,s}^{(0)})^\intercal$ and ${\vx'}_i^{(0)} = ({x'}_{i,1}^{(0)},\dots,{x'}_{i,s}^{(0)})^\intercal$ are obtained by linearly transforming $\vx_i$,
+At step $\ell=0$, $B_0=\{\vx_i^{(0)}\}_{i=0}^{2^r-1}$ and ${B'}_0=\{{\vx'}_i^{(0)}\}_{i=0}^{2^r-1}$ are generated as follows: for each $i=0,\dots,2^r-1$, points $\vx_i^{(0)} = (x_{i,1}^{(0)},\dots,x_{i,s}^{(0)})^\intercal$ and ${\vx'}_i^{(0)} = ({x'}_{i,1}^{(0)},\dots,{x'}_{i,s}^{(0)})^\intercal$ are obtained by linearly transforming $\vx_i$,
 \begin{equation}
 \label{linear.scrambl}
 \begin{aligned}
@@ -378,16 +374,16 @@ for each $i=0,\dots,2^r-1$, point $\vx_i^{(0)} = (x_{i,1}^{(0)},\dots,x_{i,s}^{(
 ({x'}_{i,j,1}^{(0)},\dots,{x'}_{i,j,r}^{(0)})^\intercal &= L' (x_{i,j,1},\dots,x_{i,j,r})^\intercal,\qquad j= 1,\dots,s\, , 
 \end{aligned}
 \end{equation}
-where $ x_{i,j}^{(0)}=\sum_{k = 1}^r x_{i,j,k}^{(0)}2^{-k}$, $ {x'}_{i,j}^{(0)}=\sum_{k = 1}^r {x'}_{i,j,k}^{(0)}2^{-k}$ and $L$, $L'$ are two distinct full rank lower triangular matrices of size $r \times r$ over $\mathbb{F}_2$. Left multiplications by matrices $L$ and $L'$ in \eqref{linear.scrambl} are called linear scramblings \cite{Matousek}.
+where $ x_{i,j}^{(0)}=\sum_{k = 1}^r x_{i,j,k}^{(0)}2^{-k}$, $ {x'}_{i,j}^{(0)}=\sum_{k = 1}^r {x'}_{i,j,k}^{(0)}2^{-k}$ and $L$, $L'$ are two distinct full rank lower triangular matrices of size $r \times r$ over $\mathbb{F}_2$. Left multiplications by $L$ and $L'$ in \eqref{linear.scrambl} are called linear scramblings \cite{Matousek}.
 
-At step $\ell \geq 1$, using definition \eqref{group.operation} we construct:
+At step $\ell \geq 1$, using addition as defined in \eqref{group.operation} we construct:
 \begin{equation}
 B_\ell=\{\vx_i^{(0)}\oplus\ve_\ell\}_{i=0}^{2^r-1}, \qquad {B'}_\ell=\{{\vx'}_i^{(0)}\oplus{\ve'}_\ell\}_{i=0}^{2^r-1}.
 \label{dig.shift}
 \end{equation}
 where $\ve_\ell \in \left(\mathbb{F}_2^{r}\right)^{s} \setminus \mathcal{P}_{\ell-1}$ and ${\ve'}_\ell \in \left(\mathbb{F}_2^{r}\right)^{s} \setminus \mathcal{P'}_{\ell-1}$. Indeed, $B_0$ is a subgroup of $\left(\mathbb{F}_2^{r}\right)^{s}$. Therefore, we construct $B_\ell=B_0 \oplus \ve_\ell$ as a coset of $B_0$ under the right choice of $\ve_\ell$. The same reasoning applies to ${B'}_0$.  Additions by vectors $\ve_j$ and ${\ve'}_j$ in \eqref{dig.shift} are referred as digital shifts.
 
-There are exactly $2^{rs}$ different choices of $\ve_\ell$ and ${\ve'}_\ell$ in $\left(\mathbb{F}_2^{r}\right)^{s}$, and $2^{r(r-1)/2}$ choices of $L$ and $L'$. The maximum number of iterations $\ell$ that can be performed equals the number of cosets, $2^{r(s-1)}$. If this maximum is reached, designs $\mathcal{P}_\ell$ and $\mathcal{P}'_\ell$ both correspond to a full grid design of $2^{rs}$ points.
+There are exactly $2^{rs}$ different choices of $\ve_\ell$ and ${\ve'}_\ell$ in $\left(\mathbb{F}_2^{r}\right)^{s}$, and $2^{r(r-1)/2}$ choices of $L$ and $L'$. The maximum number of iterations $\ell$ that can be performed equals the number of cosets, $2^{r(s-1)}$. If this maximum is reached, designs $\mathcal{P}_\ell$ and $\mathcal{P}'_\ell$ both correspond to a full grid design of $2^{rs}$ points with $2^r$ distinct values per input.
 
 %Left multiplications by matrices $L$ and $L'$ in \eqref{dig.shift} and \eqref{ibinom.scrambling}  are called linear scramblings \cite{Matousek} while additions by vectors $\ve_j$ and ${\ve'}_j$ are referred as digital shifts. There are exactly $2^r$ different choices of $\ve_j$ and ${\ve'}_j$ and $2^{r(r-1)/2}$ choices of $L$ and $L'$. To guarantee that new points added will fill unexplored regions of the input space, the vectors $\ve_j$ are selected as follows:
 %\begin{itemize}
@@ -410,7 +406,7 @@ There are exactly $2^{rs}$ different choices of $\ve_\ell$ and ${\ve'}_\ell$ in 
 \begin{lemma}
 Under the additive construction $\mathcal{P}_\ell$ and $\mathcal{P}'_\ell$ are two replicated designs of order $1$, $\ell \geq 0$.
 \end{lemma}
-\textit{Proof}:For each $\ell\geq 1$, digital shift and scrambling operations carried out in equations (\ref{linear.scrambl}) and (\ref{dig.shift}) are bijections from $\mathbb{F}_2^r$ and $\left(\mathbb{F}_2^{r}\right)^{s}$. Hence, same coordinates of $B_\ell$ and ${B'}_\ell$ will contain the same set of $2^r$ values.
+\textit{Proof}: For each $\ell\geq 1$, digital shift and scrambling operations carried out in equations (\ref{linear.scrambl}) and (\ref{dig.shift}) are bijections from $\mathbb{F}_2^r$ and $\left(\mathbb{F}_2^{r}\right)^{s}$. Hence, the same coordinates of $B_\ell$ and ${B'}_\ell$ will contain the same set of $2^r$ values.
 
 \section{Space-filling properties}
 
@@ -419,16 +415,16 @@ Under the additive construction $\mathcal{P}_\ell$ and $\mathcal{P}'_\ell$ are t
 To analyze the space-filling properties of both approaches we will use two criteria. The first one is the $L_2$ star discrepancy that measures the uniformity of a point set. This criterion can be easily computed through an analytical expression provided by \cite{Morokoff}. The lower the criterion, the more uniform the point set is. Sobol' sequences were originally constructed to be low discrepancy sequences and therefore, behave well under this criterion. The second criterion is called maximin distance and measures the regularity of a point set. It returns the minimum of all Euclidean distances between pairs of points in the set. The higher the criterion, the more spread the point set is.
 \bigskip
 
-We name by design $M$ (resp. $A$) one of the two replicated designs constructed with the multiplicative (resp. additive) approach, and set the input space dimension $s$ to $6$. For design $M$, we study the properties of $\mathcal{P}_8,\dots,\mathcal{P}_{12}$, and for design $A$, we set the initial value to $r=8$ and study the properties of $\mathcal{P}_0,\dots,\mathcal{P}_{15}$. For both $M$ and $A$ we generate $100$ random designs whose average criteria are presented in Figure \ref{results.crit}. While each of the $100$ designs $M$ is independently randomized applying Owen's scrambling \cite{OwenScrambling}, designs $A$ are constructed by randomly selecting matrix $L$ (uniformly among all $2^{r(r-1)/2}$ choices) and vectors $\ve_\ell$ used in equation (\ref{dig.shift}). In addition, we also show in Figure \ref{results.crit} the results obtained with a Latin Hypercube design (LH design) with an equal number of points as in design $A$. The x-axis corresponds to the number of design points $N$ and the y-axis to the value of the criterion.
+We name by design $M$ (resp. $A$) one of the two replicated designs constructed with the multiplicative (resp. additive) approach, and set the input space dimension $s$ to $6$. For design $M$, we study the properties of $\mathcal{P}_8,\dots,\mathcal{P}_{12}$, and for design $A$, we set the initial value to $r=8$ and study the properties of $\mathcal{P}_0,\dots,\mathcal{P}_{15}$. For both $M$ and $A$ we generate $100$ designs whose average criteria are presented in Figure \ref{results.crit}. While each of the $100$ designs $M$ is independently randomized applying Owen's scrambling \cite{OwenScrambling}, designs $A$ are constructed by randomly selecting matrix $L$ (uniformly among all $2^{r(r-1)/2}$ choices) and vectors $\ve_\ell$ used in equation (\ref{dig.shift}). In addition, we also show in Figure \ref{results.crit} the results obtained with a Latin Hypercube design (LH design) with an equal number of points as in design $A$. LH designs are the standard designs used in the replication procedure to estimate first-order indices. The x-axis corresponds to the number of design points $N$ and the y-axis to the value of the criterion.
 
-As expected, design $M$ performs the best and the estimated slope of the discrepancy curve ($-0.72$) falls within the expected range for Sobol' sequences \cite{Morokoff}. Although design $A$ does not perform as well as design $M$, it outperforms a classic Latin Hypercube design for both criteria while allowing $15$ refinement steps from $2^8$ to $2^{12}$ points, instead of only $4$ steps for design $M$.
+As expected, design $M$ performs the best and the estimated slope of the discrepancy curve ($-0.72$) falls within the expected range for Sobol' sequences \cite{Morokoff}. Although design $A$ does not perform as well as design $M$, it outperforms a classic LH design for both criteria while allowing $15$ refinement steps from $2^8$ to $2^{12}$ points, instead of only $4$ steps for design $M$.
 \begin{figure}
 \caption{Log-log graph of averaged $L_2$ star discrepancy (left) and maximin (right) for designs $M$ and $A$ over $100$ repetitions.}
 \label{results.crit}
 \centering
-\includegraphics[scale=0.4]{discrep.pdf}
+\includegraphics[scale=0.38]{discrep.pdf}
 \hspace*{0.1cm}
-\includegraphics[scale=0.4]{mindist.pdf}
+\includegraphics[scale=0.38]{mindist.pdf}
 \end{figure}
 
 
