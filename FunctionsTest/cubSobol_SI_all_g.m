@@ -243,9 +243,9 @@ elseif strcmp(out_param.measure,'uniform')
 end
 
 % First and total order indices estimators and function evaluations
-Sfo  = @(b,c) min(max(max(b(:,1),0)./max((c(:,2)-b(:,3).^2),0),0),1); % S function for first order
-% ffo = @(xpts,u,fx,fy,fxy,fzx) (fx - 1/2*mean(fx + fxy)).*(fxy - 1/2*mean(fx + fxy));
+Sfo  = @(down,up) min(max(max(down(:,1),0)./max((up(:,2)-down(:,3).^2),0),0),1); % S function for first order
 ffo = @(xpts,u,fx,fy,fxy,fzx) fx.*(fxy - fy);
+% ffo = @(xpts,u,fx,fy,fxy,fzx) (fx - 1/2*mean(fx + fxy)).*(fxy - 1/2*mean(fx + fxy));
 Sfo_s = Sfo; % S function for first order small
 ffo_s = @(xpts,u,fx,fy,fxy,fzx) (fx - fzx).*(fxy - fy); % We redefine the non normalized estimator
     % fzx is only used for the small indices. But we needed as input for
@@ -275,10 +275,12 @@ for u = 1:out_param.d
         INDICES(r,u).CStilde_low = CStilde_low_fx2_fx(:,1);
         INDICES(r,u).CStilde_up = CStilde_up_fx2_fx(:,1);
         if r == 1
-            INDICES(r,u).S = Sfo;
+            INDICES(r,u).Smin = @(down,up) Sfo(down,up);
+            INDICES(r,u).Smax = @(down,up) Sfo(up,down);
             INDICES(r,u).f = ffo;
         else
-            INDICES(r,u).S = Stot;
+            INDICES(r,u).Smin = @(down,up) Stot(down,up);
+            INDICES(r,u).Smax = @(down,up) Stot(up,down);
             INDICES(r,u).f = ftot;
         end
         INDICES(r,u).est_int = est_int_fx2_fx(:,1); %initialize mean estimates for each integral in the numerator
@@ -302,7 +304,7 @@ fzx = []; % We set it empty. So if it is empty, we only evaluate it 1 time.
 for u = 1:out_param.d
     fxy = f([xpts(:,out_param.d+1:out_param.d+u-1) xpts(:,u) xpts(:,out_param.d+u+1:2*out_param.d)]);
     INDICES(1,u).y = INDICES(1,u).f(xpts,u,fx,fy,fxy,0);
-    aux_double = INDICES(1,u).S([mean(INDICES(1,u).y) mean(fx2) mean(fx)],[mean(INDICES(1,u).y) mean(fx2) mean(fx)]);
+    aux_double = INDICES(1,u).Smin([mean(INDICES(1,u).y) mean(fx2) mean(fx)],[mean(INDICES(1,u).y) mean(fx2) mean(fx)]);
     if aux_double < threshold_small % If the normalized first order index is small, we change to a better estimator estimator
         if isempty(fzx)
             fzx = f([xpts(:,1:u-1) xpts(:,2*out_param.d + u) xpts(:,u+1:out_param.d)]);
@@ -395,10 +397,10 @@ for u = 1:out_param.d
         INDICES(r,u).Stilde(1) = sum(abs(INDICES(r,u).y(INDICES(r,u).kappanumap(nllstart+1:2*nllstart))));
         INDICES(r,u).err_bound_int(1) = out_param.fudge(out_param.mmin)*INDICES(r,u).Stilde(1);
         
-        b = [INDICES(r,u).est_int(1) - INDICES(r,u).err_bound_int(1), est_int_fx2_fx(1,1) - err_bound_int_fx2_fx(1,1), est_int_fx2_fx(1,2) - err_bound_int_fx2_fx(1,2)];
-        c = [INDICES(r,u).est_int(1) + INDICES(r,u).err_bound_int(1), est_int_fx2_fx(1,1) + err_bound_int_fx2_fx(1,1), est_int_fx2_fx(1,2) + err_bound_int_fx2_fx(1,2)];
-        q(r,u) = 1/2*(min(INDICES(r,u).S(c,b),1) + max(INDICES(r,u).S(b,c),0));
-        out_param.bound_err(r,u) = 1/2*(min(INDICES(r,u).S(c,b),1) - max(INDICES(r,u).S(b,c),0));
+        down = [INDICES(r,u).est_int(1) - INDICES(r,u).err_bound_int(1), est_int_fx2_fx(1,1) - err_bound_int_fx2_fx(1,1), est_int_fx2_fx(1,2) - err_bound_int_fx2_fx(1,2)];
+        up = [INDICES(r,u).est_int(1) + INDICES(r,u).err_bound_int(1), est_int_fx2_fx(1,1) + err_bound_int_fx2_fx(1,1), est_int_fx2_fx(1,2) + err_bound_int_fx2_fx(1,2)];
+        q(r,u) = 1/2*(min(INDICES(r,u).Smax(down,up),1) + max(INDICES(r,u).Smin(down,up),0));
+        out_param.bound_err(r,u) = 1/2*(min(INDICES(r,u).Smax(down,up),1) - max(INDICES(r,u).Smin(down,up),0));
         INDICES(r,u).errest(1) = out_param.bound_err(r,u);
     end
 end
@@ -594,11 +596,11 @@ for m = out_param.mmin+1:out_param.mmax
                 INDICES(r,u).Stilde(meff) = sum(abs(INDICES(r,u).y(INDICES(r,u).kappanumap(nllstart+1:2*nllstart))));
                 INDICES(r,u).err_bound_int(meff) = out_param.fudge(m)*INDICES(r,u).Stilde(meff); % Only error bound for the integral on the numerator
 
-                b = [INDICES(r,u).est_int(meff) - INDICES(r,u).err_bound_int(meff), est_int_fx2_fx(meff,1) - err_bound_int_fx2_fx(meff,1), est_int_fx2_fx(meff,2) - err_bound_int_fx2_fx(meff,2)];
-                c = [INDICES(r,u).est_int(meff) + INDICES(r,u).err_bound_int(meff), est_int_fx2_fx(meff,1) + err_bound_int_fx2_fx(meff,1), est_int_fx2_fx(meff,2) + err_bound_int_fx2_fx(meff,2)];
+                down = [INDICES(r,u).est_int(meff) - INDICES(r,u).err_bound_int(meff), est_int_fx2_fx(meff,1) - err_bound_int_fx2_fx(meff,1), est_int_fx2_fx(meff,2) - err_bound_int_fx2_fx(meff,2)];
+                up = [INDICES(r,u).est_int(meff) + INDICES(r,u).err_bound_int(meff), est_int_fx2_fx(meff,1) + err_bound_int_fx2_fx(meff,1), est_int_fx2_fx(meff,2) + err_bound_int_fx2_fx(meff,2)];
                 
-                q(r,u) = 1/2*(min(INDICES(r,u).S(c,b),1) + max(INDICES(r,u).S(b,c),0));
-                out_param.bound_err(r,u) = 1/2*(min(INDICES(r,u).S(c,b),1) - max(INDICES(r,u).S(b,c),0));
+                q(r,u) = 1/2*(min(INDICES(r,u).Smax(down,up),1) + max(INDICES(r,u).Smin(down,up),0));
+                out_param.bound_err(r,u) = 1/2*(min(INDICES(r,u).Smax(down,up),1) - max(INDICES(r,u).Smin(down,up),0));
                 INDICES(r,u).errest(meff) = out_param.bound_err(r,u);
             end
         end
