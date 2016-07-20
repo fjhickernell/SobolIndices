@@ -274,7 +274,7 @@ ftot = @(xpts,u,fx,fy,fxy,fzx) 1/2*(fy - fxy).^2;
 
 %% Main algorithm (we added 2xd dimensions for each index and and additional 2 for mean of f and f^2)
 sobstr = sobolset(3*out_param.d); %generate a Sobol' sequence 3*d to consider the changing to the estimator for some smaller size indices
-% sobstr = scramble(sobstr,'MatousekAffineOwen'); %scramble it
+sobstr = scramble(sobstr,'MatousekAffineOwen'); %scramble it
 kappanumap_fx2_fx = bsxfun(@times,(1:2^out_param.mmin)', [1 1]); %initialize map
 Stilde_fx2_fx = zeros(out_param.mmax-out_param.mmin+1, 2); %initialize sum of DFWT terms for fx2 and fx
 CStilde_low_fx2_fx = -inf(out_param.mmax-l_star+1, 2); %initialize various sums of DFWT terms for necessary conditions for fx2 and fx
@@ -294,7 +294,13 @@ for u = 1:out_param.d
             INDICES(r,u).CStilde_up = CStilde_up_fx2_fx(:, 1:numerator_size);
             INDICES(r,u).Smin = Sfo_min;
             INDICES(r,u).Smax = Sfo_max;
-            INDICES(r,u).f = {ffo}; % {ffo1, ffo2} {ffo}
+            if numerator_size == 1
+                INDICES(r,u).f = {ffo}; % {ffo1, ffo2} {ffo}
+            elseif numerator_size == 2
+                INDICES(r,u).f = {ffo1, ffo2}; % {ffo1, ffo2} {ffo}
+            else
+                error('Check first order Sobol indices, number of functions in numerator')
+            end
             INDICES(r,u).est_int = est_int_fx2_fx(:, 1:numerator_size); %initialize mean estimates for each integral in the numerator
             INDICES(r,u).err_bound_int = err_bound_int_fx2_fx(:, 1:numerator_size); %initialize error estimates for each integral in the numerator
         else
@@ -401,7 +407,6 @@ for u = 1:out_param.d + 1 % u == d+1 is the kappanumap for fx2 and fx
                    flip = find(newone > oldone); %which in the pair are the larger ones
                    if ~isempty(flip)
                        flipall = bsxfun(@plus, flip, 0:2^(l+1):2^out_param.mmin-1);
-%                        flipall = flipall(:); % converting flipall matrix to vector
                        temp = INDICES(r,u).kappanumap(nl+1+flipall, p); %then flip
                        INDICES(r,u).kappanumap(nl+1+flipall, p) = INDICES(r,u).kappanumap(1+flipall, p); %them
                        INDICES(r,u).kappanumap(1+flipall, p) = temp; %around
@@ -464,9 +469,9 @@ for l = l_star:out_param.mmin % Storing the information for the necessary condit
     C_up = 1/(1-omg_hat(out_param.mmin-l)*omg_circ(out_param.mmin-l));
     for u = 1:out_param.d
         for r = 1:2
-            INDICES(r,u).CStilde_low(l-l_star+1, :) = max(INDICES(r,u).CStilde_low(l-l_star+1, :), C_low*sum(abs(INDICES(r,u).y(INDICES(r,u).kappanumap(2^(l-1)+1:2^l, :)))));
+            INDICES(r,u).CStilde_low(l-l_star+1, :) = max(INDICES(r,u).CStilde_low(l-l_star+1, :), C_low*sum(abs(INDICES(r,u).y(INDICES(r,u).kappanumap(2^(l-1)+1:2^l, :))), 1));
             if (omg_hat(out_param.mmin-l)*omg_circ(out_param.mmin-l) < 1)
-                INDICES(r,u).CStilde_up(l-l_star+1, :) = min(INDICES(r,u).CStilde_up(l-l_star+1, :), C_up*sum(abs(INDICES(r,u).y(INDICES(r,u).kappanumap(2^(l-1)+1:2^l, :)))));
+                INDICES(r,u).CStilde_up(l-l_star+1, :) = min(INDICES(r,u).CStilde_up(l-l_star+1, :), C_up*sum(abs(INDICES(r,u).y(INDICES(r,u).kappanumap(2^(l-1)+1:2^l, :))), 1));
             end
         end
     end
@@ -477,10 +482,10 @@ for l = l_star:out_param.mmin % Storing the information for the necessary condit
         CStilde_up_fx2_fx(l-l_star+1,2) = min(CStilde_up_fx2_fx(l-l_star+1,2),C_up*sum(abs(fx(kappanumap_fx2_fx(2^(l-1)+1:2^l,2)))));
     end
 end
-aux_bool = any(CStilde_low_fx2_fx(:) > CStilde_up_fx2_fx(:)); % Variable that checks conditions violated for fx2 and fx
+aux_bool = any(any(CStilde_low_fx2_fx > CStilde_up_fx2_fx)); % Variable that checks conditions violated for fx2 and fx
 for u = 1:out_param.d
     for r = 1:2
-        if any(INDICES(r,u).CStilde_low(:) > INDICES(r,u).CStilde_up(:)) || aux_bool
+        if any(any(INDICES(r,u).CStilde_low > INDICES(r,u).CStilde_up)) || aux_bool
             out_param.exit(2,r,u) = true;
         end
     end
@@ -557,23 +562,25 @@ for m = out_param.mmin+1:out_param.mmax
     fx2(~ptind)=(evenval-oddval)/2;
     %% Update kappanumap only for fx and fx2
     kappanumap_fx2_fx = [kappanumap_fx2_fx ; 2^(m-1) + kappanumap_fx2_fx]; %initialize map only for fx and fx2
-    for r = 1:2
-        for l=m-1:-1:m-r_lag
-            nl=2^l;
-            if r == 1 % We keep the kappamap for int fx2 in (1,d+1)
-               oldone=abs(fx2(kappanumap_fx2_fx(2:nl,r))); %earlier values of kappa, don't touch first one
-               newone=abs(fx2(kappanumap_fx2_fx(nl+2:2*nl,r))); %later values of kappa
-            else
-               oldone=abs(fx(kappanumap_fx2_fx(2:nl,r))); %earlier values of kappa, don't touch first one
-               newone=abs(fx(kappanumap_fx2_fx(nl+2:2*nl,r))); %later values of kappa
-            end
-            flip=find(newone>oldone);
-            if ~isempty(flip)
-              flipall=bsxfun(@plus,flip,0:2^(l+1):2^m-1);
-              temp=kappanumap_fx2_fx(nl+1+flipall,r);
-              kappanumap_fx2_fx(nl+1+flipall,r)=kappanumap_fx2_fx(1+flipall,r);
-              kappanumap_fx2_fx(1+flipall,r)=temp;
-            end
+    for l=m-1:-1:m-r_lag
+        nl=2^l;
+        oldone=abs(fx2(kappanumap_fx2_fx(2:nl,1))); %earlier values of kappa, don't touch first one
+        newone=abs(fx2(kappanumap_fx2_fx(nl+2:2*nl,1))); %later values of kappa
+        flip=find(newone>oldone);
+        if ~isempty(flip)
+          flipall=bsxfun(@plus,flip,0:2^(l+1):2^m-1);
+          temp=kappanumap_fx2_fx(nl+1+flipall,1);
+          kappanumap_fx2_fx(nl+1+flipall,1)=kappanumap_fx2_fx(1+flipall,1);
+          kappanumap_fx2_fx(1+flipall,1)=temp;
+        end
+        oldone=abs(fx(kappanumap_fx2_fx(2:nl,2))); %earlier values of kappa, don't touch first one
+        newone=abs(fx(kappanumap_fx2_fx(nl+2:2*nl,2))); %later values of kappa
+        flip=find(newone>oldone);
+        if ~isempty(flip)
+          flipall=bsxfun(@plus,flip,0:2^(l+1):2^m-1);
+          temp=kappanumap_fx2_fx(nl+1+flipall,2);
+          kappanumap_fx2_fx(nl+1+flipall,2)=kappanumap_fx2_fx(1+flipall,2);
+          kappanumap_fx2_fx(1+flipall,2)=temp;
         end
     end
 
@@ -650,7 +657,6 @@ for m = out_param.mmin+1:out_param.mmax
                       flip = find(newone > oldone);
                       if ~isempty(flip)
                           flipall = bsxfun(@plus, flip, 0:2^(l+1):2^m-1);
-%                           flipall=flipall(:);
                           temp = INDICES(r,u).kappanumap(nl+1+flipall, p);
                           INDICES(r,u).kappanumap(nl+1+flipall, p) = INDICES(r,u).kappanumap(1+flipall, p);
                           INDICES(r,u).kappanumap(1+flipall, p) = temp;
@@ -679,9 +685,9 @@ for m = out_param.mmin+1:out_param.mmax
         for u = 1:out_param.d
             for r = 1:2
                 if ~converged(r,u)
-                    INDICES(r,u).CStilde_low(l-l_star+1, :) = max(INDICES(r,u).CStilde_low(l-l_star+1, :), C_low*sum(abs(INDICES(r,u).y(INDICES(r,u).kappanumap(2^(l-1)+1:2^l, :)))));
+                    INDICES(r,u).CStilde_low(l-l_star+1, :) = max(INDICES(r,u).CStilde_low(l-l_star+1, :), C_low*sum(abs(INDICES(r,u).y(INDICES(r,u).kappanumap(2^(l-1)+1:2^l, :))), 1));
                     if (omg_hat(out_param.mmin-l)*omg_circ(out_param.mmin-l) < 1)
-                        INDICES(r,u).CStilde_up(l-l_star+1, :) = min(INDICES(r,u).CStilde_up(l-l_star+1, :), C_up*sum(abs(INDICES(r,u).y(INDICES(r,u).kappanumap(2^(l-1)+1:2^l, :)))));
+                        INDICES(r,u).CStilde_up(l-l_star+1, :) = min(INDICES(r,u).CStilde_up(l-l_star+1, :), C_up*sum(abs(INDICES(r,u).y(INDICES(r,u).kappanumap(2^(l-1)+1:2^l, :))), 1));
                     end
                 end
             end
@@ -693,10 +699,10 @@ for m = out_param.mmin+1:out_param.mmax
             CStilde_up_fx2_fx(l-l_star+1,2) = min(CStilde_up_fx2_fx(l-l_star+1,2),C_up*sum(abs(fx(kappanumap_fx2_fx(2^(l-1)+1:2^l,2)))));
         end
     end
-    aux_bool = any(CStilde_low_fx2_fx(:) > CStilde_up_fx2_fx(:)); % Variable that checks conditions violated for fx2 and fx
+    aux_bool = any(any(CStilde_low_fx2_fx > CStilde_up_fx2_fx)); % Variable that checks conditions violated for fx2 and fx
     for u = 1:out_param.d
         for r = 1:2
-            if ~converged(r,u) && (any(INDICES(r,u).CStilde_low(:) > INDICES(r,u).CStilde_up(:)) || aux_bool)
+            if ~converged(r,u) && (any(any(INDICES(r,u).CStilde_low > INDICES(r,u).CStilde_up)) || aux_bool)
                 out_param.exit(2,r,u) = true;
             end
         end

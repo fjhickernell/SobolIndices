@@ -225,9 +225,7 @@ function [q,int,out_param] = cubSobol_SI_fo_g(varargin)
 t_start = tic;
 %% Initial important cone factors and Check-initialize parameters
 r_lag = 4; %distance between coefficients summed and those computed
-threshold_small = 0.1; % Threshold for changing the estimators for small indices
 [f,hyperbox,out_param] = cubSobol_SI_fo_g_param(r_lag,varargin{:});
-out_param.small = false(1,out_param.d); % Boolean that states whether we are dealing with small indices estimators
 converged = false(1,out_param.d); % We flag the indices that converged
 l_star = out_param.mmin - r_lag; % Minimum gathering of points for the sums of DFWT
 omg_circ = @(m) 2.^(-m);
@@ -240,12 +238,19 @@ elseif strcmp(out_param.measure,'uniform')
    f=@(x) Cnorm*f(bsxfun(@plus,hyperbox(1,:),bsxfun(@times,(hyperbox(2,:)-hyperbox(1,:)),x))); % a + (b-a)x = u
 end
 
-% First and total order indices estimators and function evaluations
-Sfo  = @(b,c) min(max(max(b(:,1),0)./max((c(:,2)-b(:,3).^2),0),0),1); % S function for first order
-ffo = @(xpts,u,fx,fy,fxy) (fx - 1/2*mean(fx + fxy)).*(fxy - 1/2*mean(fx + fxy));
+% Below, both numerator and denominator need to be positive. In addition,
+% the final value needs to be between 0 and 1.
+numerator_size = 1;
+% Sfo_min = @(down, up) estimate_min(down, up); % S function for first order
+% Sfo_max = @(down, up) estimate_max(down, up); % S function for first order
+% ffo1 = @(fx,fy,fxy) fx.*fxy;
+% ffo2 = @(fx,fy,fxy) 1/2*(fx + fxy);
+Sfo_min = @(down, up) estimate_min([down(1) 0 down(2:end)], [up(1) 0 up(2:end)]); % S function for first order
+Sfo_max = @(down, up) estimate_max([down(1) 0 down(2:end)], [up(1) 0 up(2:end)]); % S function for first order
+ffo = @(fx,fy,fxy) fx.*(fxy - fy);
 
 %% Main algorithm (we added 2xd dimensions for each index and and additional 2 for mean of f and f^2)
-sobstr = sobolset(3*out_param.d); %generate a Sobol' sequence 3*d to consider the changing to the estimator for some smaller size indices
+sobstr = sobolset(2*out_param.d); %generate a Sobol' sequence 3*d to consider the changing to the estimator for some smaller size indices
 % sobstr = scramble(sobstr,'MatousekAffineOwen'); %scramble it
 kappanumap_fx2_fx = bsxfun(@times,(1:2^out_param.mmin)', [1 1]); %initialize map
 Stilde_fx2_fx = zeros(out_param.mmax-out_param.mmin+1, 2); %initialize sum of DFWT terms for fx2 and fx
@@ -257,14 +262,21 @@ exit_len = 2;
 out_param.exit = false(exit_len, out_param.d); %we start the algorithm with all warning flags down
 
 for u = 1:out_param.d
-    INDICES(u).kappanumap = kappanumap_fx2_fx(:,1);
-    INDICES(u).Stilde = zeros(out_param.mmax-out_param.mmin+1,1);
-    INDICES(u).CStilde_low = CStilde_low_fx2_fx(:,1);
-    INDICES(u).CStilde_up = CStilde_up_fx2_fx(:,1);
-    INDICES(u).S = Sfo;
-    INDICES(u).f = ffo;
-    INDICES(u).est_int = est_int_fx2_fx(:,1); %initialize mean estimates for each integral in the numerator
-    INDICES(u).err_bound_int = err_bound_int_fx2_fx(:,1); %initialize error estimates for each integral in the numerator
+    INDICES(u).kappanumap = kappanumap_fx2_fx(:, 1:numerator_size);
+    INDICES(u).Stilde = zeros(out_param.mmax-out_param.mmin+1, numerator_size);
+    INDICES(u).CStilde_low = CStilde_low_fx2_fx(:, 1:numerator_size);
+    INDICES(u).CStilde_up = CStilde_up_fx2_fx(:, 1:numerator_size);
+    INDICES(u).Smin = Sfo_min;
+    INDICES(u).Smax = Sfo_max;
+    if numerator_size == 1
+        INDICES(u).f = {ffo}; % {ffo1, ffo2} {ffo}
+    elseif numerator_size == 2
+        INDICES(u).f = {ffo1, ffo2}; % {ffo1, ffo2} {ffo}
+    else
+        error('Check first order Sobol indices, number of functions in numerator')
+    end
+    INDICES(u).est_int = est_int_fx2_fx(:, 1:numerator_size); %initialize mean estimates for each integral in the numerator
+    INDICES(u).err_bound_int = err_bound_int_fx2_fx(:, 1:numerator_size); %initialize error estimates for each integral in the numerator
     INDICES(u).errest = inf(out_param.mmax-out_param.mmin+1); %initialize error estimates for each indice
 end
 
@@ -272,17 +284,42 @@ end
 %% Initial points and FWT
 out_param.n = 2^out_param.mmin*ones(1,out_param.d); %total number of points to start with
 n0 = out_param.n(1); %initial number of points
-xpts = sobstr(1:n0,1:3*out_param.d); %grab Sobol' points
+xpts = sobstr(1:n0,1:2*out_param.d); %grab Sobol' points
 fx = f(xpts(:,1:out_param.d)); %evaluate integrands y3
 fx2 = fx.^2; %evaluate integrands y2
 fxval = fx; % We store fx because fx will later contain the fast transform
 fx2val = fx2; % We store fx2 because fx2 will later contain the fast transform
-fy = f(xpts(:,out_param.d+1:2*out_param.d)); % We evaluate the f at the replicated points
+% We only need fy if we use the estimator that includes ffo
+fy = [];
+if numerator_size == 1
+    fy = f(xpts(:,out_param.d+1:2*out_param.d)); % We evaluate the f at the replicated points
+end
 
-fxy = f();
+%% In this section we apply the replicated method
+% For the replication method, we want to sort dimension u+d with the same
+% order as dimension u. In other words, if dimension u is sorted according
+% to permutation tau and u+d according to sigma, we want to find psi such
+% that sigma(psi) = tau. Therefore, psi = sigma-1(tau). To find sigma-1 we
+% use the sorting Matlab function. The original order is sigma, so we only
+% need to call the function values at order psi.
+% Note that with scrambled points, to keep the replicated property,
+% dimensions u and u+d need to share the same scrambling for all u (for
+% each u we can choose a different scrambling). This means that the sorting
+% psi is always the same that can be found with non-scr Sobol points (S for
+% the Scrambling): S(sigma(psi)) = S(tau) -> psi = sigma-1(S-1(S(tau))) =
+% sigma-1(tau). Therefore, the sorting can be found with non-scr Sobol
+% points and applied to the scrambled points.
+tau = 2^(out_param.mmin)*xpts(:, 1:out_param.d) + 1;
+sigma = 2^(out_param.mmin)*xpts(:, out_param.d+1:2*out_param.d) + 1;
+fxy_base = f(xpts(:, out_param.d+1:2*out_param.d)); % In sigma order
 for u = 1:out_param.d
-    INDICES(u).y = INDICES(u).f(xpts,u,fx,fy,fxy);
-    INDICES(u).est_int(1) = mean(INDICES(u).y); % Estimate the integral
+    [~, sigma_inv] = sort(sigma(:, u));
+    fxy = fxy_base(sigma_inv(tau(:, u)));
+    INDICES(u).y = [];
+    for p = 1:numerator_size
+        INDICES(u).y = [INDICES(u).y INDICES(u).f{p}(fx,fy,fxy)];
+    end
+    INDICES(u).est_int(1, :) = mean(INDICES(u).y, 1); % Estimate the integral
 end
 
 
@@ -293,10 +330,10 @@ for l=0:out_param.mmin-1 % We need the FWT for fx, fx^2, and the y values (a1/[a
     nmminlm1=2^(out_param.mmin-l-1);
     ptind=repmat([true(nl,1); false(nl,1)],nmminlm1,1);
     for u = 1:out_param.d
-        evenval=INDICES(u).y(ptind);
-        oddval=INDICES(u).y(~ptind);
-        INDICES(u).y(ptind)=(evenval+oddval)/2;
-        INDICES(u).y(~ptind)=(evenval-oddval)/2;
+        evenval=INDICES(u).y(ptind, :);
+        oddval=INDICES(u).y(~ptind, :);
+        INDICES(u).y(ptind, :)=(evenval+oddval)/2;
+        INDICES(u).y(~ptind, :)=(evenval-oddval)/2;
     end
     evenval=fx(ptind);
     oddval=fx(~ptind);
@@ -313,17 +350,22 @@ for u = 1:out_param.d + 1 % u == d+1 is the kappanumap for fx2 and fx
     %% Create kappanumap implicitly from the data
     for l=out_param.mmin-1:-1:1
        nl=2^l;
+       % for u = d+1 we compute the denominator which is the same for
+       % all indices. That is why we store the y values and kappanumap
+       % separetly for the denominator
        if u < out_param.d + 1
-            oldone=abs(INDICES(u).y(INDICES(u).kappanumap(2:nl))); %earlier values of kappa, don't touch first one
-            newone=abs(INDICES(u).y(INDICES(u).kappanumap(nl+2:2*nl))); %later values of kappa
-            flip=find(newone>oldone); %which in the pair are the larger ones
-            if ~isempty(flip)
-               flipall=bsxfun(@plus,flip,0:2^(l+1):2^out_param.mmin-1);
-               temp = INDICES(u).kappanumap(nl+1+flipall); %then flip 
-               INDICES(u).kappanumap(nl+1+flipall) = INDICES(u).kappanumap(1+flipall); %them
-               INDICES(u).kappanumap(1+flipall) = temp; %around
-            end
-       else % We keep the kappamap for int fxw and fx
+           for p = 1:numerator_size
+                oldone=abs(INDICES(u).y(INDICES(u).kappanumap(2:nl, p), p)); %earlier values of kappa, don't touch first one
+                newone=abs(INDICES(u).y(INDICES(u).kappanumap(nl+2:2*nl, p), p)); %later values of kappa
+                flip=find(newone>oldone); %which in the pair are the larger ones
+                if ~isempty(flip)
+                   flipall=bsxfun(@plus,flip,0:2^(l+1):2^out_param.mmin-1);
+                   temp = INDICES(u).kappanumap(nl+1+flipall, p); %then flip 
+                   INDICES(u).kappanumap(nl+1+flipall, p) = INDICES(u).kappanumap(1+flipall, p); %them
+                   INDICES(u).kappanumap(1+flipall, p) = temp; %around
+                end
+           end
+       else % We keep the kappamap for int fx2 and fx
            oldone=abs(fx2(kappanumap_fx2_fx(2:nl,1))); %earlier values of kappa, don't touch first one
            newone=abs(fx2(kappanumap_fx2_fx(nl+2:2*nl,1))); %later values of kappa
            flip=find(newone>oldone); %which in the pair are the larger ones
@@ -358,13 +400,13 @@ err_bound_int_fx2_fx(1,2) = out_param.fudge(out_param.mmin)*Stilde_fx2_fx(1,2);
 int = est_int_fx2_fx(1,2); % Estimate of the expectation of the function
 
 for u = 1:out_param.d
-    INDICES(u).Stilde(1) = sum(abs(INDICES(u).y(INDICES(u).kappanumap(nllstart+1:2*nllstart))));
-    INDICES(u).err_bound_int(1) = out_param.fudge(out_param.mmin)*INDICES(u).Stilde(1);
+    INDICES(u).Stilde(1, :) = sum(abs(INDICES(u).y(INDICES(u).kappanumap(nllstart+1:2*nllstart, :))), 1);
+    INDICES(u).err_bound_int(1, :) = out_param.fudge(out_param.mmin)*INDICES(u).Stilde(1, :);
 
-    b = [INDICES(u).est_int(1) - INDICES(u).err_bound_int(1), est_int_fx2_fx(1,1) - err_bound_int_fx2_fx(1,1), est_int_fx2_fx(1,2) - err_bound_int_fx2_fx(1,2)];
-    c = [INDICES(u).est_int(1) + INDICES(u).err_bound_int(1), est_int_fx2_fx(1,1) + err_bound_int_fx2_fx(1,1), est_int_fx2_fx(1,2) + err_bound_int_fx2_fx(1,2)];
-    q(u) = 1/2*(min(INDICES(u).S(c,b),1) + max(INDICES(u).S(b,c),0));
-    out_param.bound_err(u) = 1/2*(min(INDICES(u).S(c,b),1) - max(INDICES(u).S(b,c),0));
+    down = [INDICES(u).est_int(1, :) - INDICES(u).err_bound_int(1, :), est_int_fx2_fx(1, :) - err_bound_int_fx2_fx(1, :)];
+    up = [INDICES(u).est_int(1, :) + INDICES(u).err_bound_int(1, :), est_int_fx2_fx(1, :) + err_bound_int_fx2_fx(1, :)];
+    q(u) = 1/2*(INDICES(u).Smax(down,up) + INDICES(u).Smin(down,up));
+    out_param.bound_err(u) = 1/2*(INDICES(u).Smax(down,up) - INDICES(u).Smin(down,up));
     INDICES(u).errest(1) = out_param.bound_err(u);
 end
 
@@ -373,9 +415,9 @@ for l = l_star:out_param.mmin % Storing the information for the necessary condit
     C_low = 1/(1+omg_hat(out_param.mmin-l)*omg_circ(out_param.mmin-l));
     C_up = 1/(1-omg_hat(out_param.mmin-l)*omg_circ(out_param.mmin-l));
     for u = 1:out_param.d
-        INDICES(u).CStilde_low(l-l_star+1) = max(INDICES(u).CStilde_low(l-l_star+1),C_low*sum(abs(INDICES(u).y(INDICES(u).kappanumap(2^(l-1)+1:2^l)))));
+        INDICES(u).CStilde_low(l-l_star+1, :) = max(INDICES(u).CStilde_low(l-l_star+1, :),C_low*sum(abs(INDICES(u).y(INDICES(u).kappanumap(2^(l-1)+1:2^l, :))), 1));
         if (omg_hat(out_param.mmin-l)*omg_circ(out_param.mmin-l) < 1)
-            INDICES(u).CStilde_up(l-l_star+1) = min(INDICES(u).CStilde_up(l-l_star+1),C_up*sum(abs(INDICES(u).y(INDICES(u).kappanumap(2^(l-1)+1:2^l)))));
+            INDICES(u).CStilde_up(l-l_star+1, :) = min(INDICES(u).CStilde_up(l-l_star+1, :),C_up*sum(abs(INDICES(u).y(INDICES(u).kappanumap(2^(l-1)+1:2^l, :))), 1));
         end
     end
     CStilde_low_fx2_fx(l-l_star+1,1) = max(CStilde_low_fx2_fx(l-l_star+1,1),C_low*sum(abs(fx2(kappanumap_fx2_fx(2^(l-1)+1:2^l,1)))));
@@ -385,10 +427,10 @@ for l = l_star:out_param.mmin % Storing the information for the necessary condit
         CStilde_up_fx2_fx(l-l_star+1,2) = min(CStilde_up_fx2_fx(l-l_star+1,2),C_up*sum(abs(fx(kappanumap_fx2_fx(2^(l-1)+1:2^l,2)))));
     end
 end
-aux_bool = any(CStilde_low_fx2_fx(:) > CStilde_up_fx2_fx(:)); % Variable that checks conditions violated for fx2 and fx
+aux_bool = any(any(CStilde_low_fx2_fx > CStilde_up_fx2_fx)); % Variable that checks conditions violated for fx2 and fx
 for u = 1:out_param.d
-    if any(INDICES(u).CStilde_low(:) > INDICES(u).CStilde_up(:)) || aux_bool
-        out_param.exit(2,r,u) = true;
+    if any(any(INDICES(u).CStilde_low > INDICES(u).CStilde_up)) || aux_bool
+        out_param.exit(2,u) = true;
     end
 end
 
@@ -419,10 +461,12 @@ for m = out_param.mmin+1:out_param.mmax
     end
     mnext=m-1;
     nnext=2^mnext;
-    xnext=sobstr(n0+(1:nnext),1:3*out_param.d);
+    xnext=sobstr(n0+(1:nnext),1:2*out_param.d);
     n0=n0+nnext;
     fxnext = f(xnext(:,1:out_param.d)); %evaluate integrands y3
-    fy = f(xnext(:,out_param.d+1:2*out_param.d)); % We evaluate the f at the replicated points
+    if numerator_size == 1
+        fy = f(xnext(:,out_param.d+1:2*out_param.d)); % We evaluate the f at the replicated points
+    end
     fx2next = fxnext.^2; %evaluate integrands y2
     fxval = [fxval; fxnext];
 	fx2val = [fx2val; fx2next];
@@ -494,14 +538,31 @@ for m = out_param.mmin+1:out_param.mmax
     err_bound_int_fx2_fx(meff,2) = out_param.fudge(m)*Stilde_fx2_fx(meff,2);
     int = est_int_fx2_fx(meff,2); % Estimate of the expectation of the function
 
+    %% We start computing everything for the numerator. fx and fx2 were for
+    % the denominator only, which is common with all indices
+    fxy_base = f(xnext(:, out_param.d+1:2*out_param.d)); % In sigma order,
+        % and at this point, we now that at least 1 indice did not meet the
+        % error tolerance so we need to evaluate fxy_base. However, the
+        % sorting, FFWT, etc, only needs to be done for those that did not
+        % converge.
     for u = 1:out_param.d
             if ~converged(u)
-                fxy = f([xnext(:,out_param.d+1:out_param.d+u-1) xnext(:,u) xnext(:,out_param.d+u+1:2*out_param.d)]);
-                % Evaluation y only
                 INDICES(u).n = 2^m;
                 out_param.n(u) = 2^m;
-                ynext = INDICES(u).f(xnext,u,fxval(end/2 + 1:end),fy,fxy);
-                INDICES(u).est_int(meff) = 1/2*(INDICES(u).est_int(meff-1) + mean(ynext)); % Estimate the integral
+                tau = (2^m*xnext(:, u) - 1)/2 + 1; % The following Sobol 
+                    % points have the nice property that can give us the
+                    % order doing this operation. The +1 is because in
+                    % Matlab, vectors start at 1, not 0.
+                sigma = (2^m*xnext(:, out_param.d+u) - 1)/2 + 1;
+                [~, sigma_inv] = sort(sigma);
+                fxy = fxy_base(sigma_inv(tau));
+                ynext = [];
+                % fxval already was computed for fx and fx2 above, so fx
+                % contains FFWT coefficients of fx.
+                for p = 1:numerator_size
+                    ynext = [ynext INDICES(u).f{p}(fxval(end/2 + 1:end),fy,fxy)];
+                end
+                INDICES(u).est_int(meff, :) = 1/2*(INDICES(u).est_int(meff-1, :) + mean(ynext, 1)); % Estimate the integral
 
                %% Compute initial FWT on next points only for y
                nllstart=int64(2^(m-r_lag-1));
@@ -510,44 +571,46 @@ for m = out_param.mmin+1:out_param.mmax
                     nl=2^l;
                     nmminlm1=2^(mnext-l-1);
                     ptind=repmat([true(nl,1); false(nl,1)],nmminlm1,1);
-                    evenval=ynext(ptind);
-                    oddval=ynext(~ptind);
-                    ynext(ptind)=(evenval+oddval)/2;
-                    ynext(~ptind)=(evenval-oddval)/2;
+                    evenval=ynext(ptind, :);
+                    oddval=ynext(~ptind, :);
+                    ynext(ptind, :)=(evenval+oddval)/2;
+                    ynext(~ptind, :)=(evenval-oddval)/2;
                 end
                 %% Compute FWT on all points only for y
                 INDICES(u).y = [INDICES(u).y; ynext];
                 nl=2^mnext;
                 ptind=[true(nl,1); false(nl,1)];
-                evenval = INDICES(u).y(ptind);
-                oddval = INDICES(u).y(~ptind);
-                INDICES(u).y(ptind) = (evenval+oddval)/2;
-                INDICES(u).y(~ptind) = (evenval-oddval)/2;
+                evenval = INDICES(u).y(ptind, :);
+                oddval = INDICES(u).y(~ptind, :);
+                INDICES(u).y(ptind, :) = (evenval+oddval)/2;
+                INDICES(u).y(~ptind, :) = (evenval-oddval)/2;
 
                 %% Update kappanumap only for indices
                 INDICES(u).kappanumap = [INDICES(u).kappanumap ; 2^(m-1)+INDICES(u).kappanumap];
                 for l=m-1:-1:m-r_lag
                   nl=2^l;
-                  oldone=abs(INDICES(u).y(INDICES(u).kappanumap(2:nl))); %earlier values of kappa, don't touch first one
-                  newone=abs(INDICES(u).y(INDICES(u).kappanumap(nl+2:2*nl))); %later values of kappa
-                  flip = find(newone>oldone);
-                  if ~isempty(flip)
-                      flipall = bsxfun(@plus,flip,0:2^(l+1):2^m-1);
-                      temp = INDICES(u).kappanumap(nl+1+flipall);
-                      INDICES(u).kappanumap(nl+1+flipall) = INDICES(u).kappanumap(1+flipall);
-                      INDICES(u).kappanumap(1+flipall) = temp;
+                  for p = 1:numerator_size
+                      oldone=abs(INDICES(u).y(INDICES(u).kappanumap(2:nl, p), p)); %earlier values of kappa, don't touch first one
+                      newone=abs(INDICES(u).y(INDICES(u).kappanumap(nl+2:2*nl, p), p)); %later values of kappa
+                      flip = find(newone>oldone);
+                      if ~isempty(flip)
+                          flipall = bsxfun(@plus,flip,0:2^(l+1):2^m-1);
+                          temp = INDICES(u).kappanumap(nl+1+flipall, p);
+                          INDICES(u).kappanumap(nl+1+flipall, p) = INDICES(u).kappanumap(1+flipall, p);
+                          INDICES(u).kappanumap(1+flipall, p) = temp;
+                      end
                   end
                 end
             
                 %% Compute Stilde for y only
-                INDICES(u).Stilde(meff) = sum(abs(INDICES(u).y(INDICES(u).kappanumap(nllstart+1:2*nllstart))));
-                INDICES(u).err_bound_int(meff) = out_param.fudge(m)*INDICES(u).Stilde(meff); % Only error bound for the integral on the numerator
+                INDICES(u).Stilde(meff, :) = sum(abs(INDICES(u).y(INDICES(u).kappanumap(nllstart+1:2*nllstart, :))), 1);
+                INDICES(u).err_bound_int(meff, :) = out_param.fudge(m)*INDICES(u).Stilde(meff, :); % Only error bound for the integral on the numerator
 
-                b = [INDICES(u).est_int(meff) - INDICES(u).err_bound_int(meff), est_int_fx2_fx(meff,1) - err_bound_int_fx2_fx(meff,1), est_int_fx2_fx(meff,2) - err_bound_int_fx2_fx(meff,2)];
-                c = [INDICES(u).est_int(meff) + INDICES(u).err_bound_int(meff), est_int_fx2_fx(meff,1) + err_bound_int_fx2_fx(meff,1), est_int_fx2_fx(meff,2) + err_bound_int_fx2_fx(meff,2)];
+                down = [INDICES(u).est_int(meff, :) - INDICES(u).err_bound_int(meff, :), est_int_fx2_fx(meff, :) - err_bound_int_fx2_fx(meff, :)];
+                up = [INDICES(u).est_int(meff, :) + INDICES(u).err_bound_int(meff, :), est_int_fx2_fx(meff, :) + err_bound_int_fx2_fx(meff, :)];
                 
-                q(u) = 1/2*(min(INDICES(u).S(c,b),1) + max(INDICES(u).S(b,c),0));
-                out_param.bound_err(u) = 1/2*(min(INDICES(u).S(c,b),1) - max(INDICES(u).S(b,c),0));
+                q(u) = 1/2*(INDICES(u).Smax(down,up) + INDICES(u).Smin(down,up));
+                out_param.bound_err(u) = 1/2*(INDICES(u).Smax(down,up) - INDICES(u).Smin(down,up));
                 INDICES(u).errest(meff) = out_param.bound_err(u);
             end
     end
@@ -558,9 +621,9 @@ for m = out_param.mmin+1:out_param.mmax
         C_up = 1/(1-omg_hat(out_param.mmin-l)*omg_circ(out_param.mmin-l));
         for u = 1:out_param.d
             if ~converged(u)
-                INDICES(u).CStilde_low(l-l_star+1) = max(INDICES(u).CStilde_low(l-l_star+1),C_low*sum(abs(INDICES(u).y(INDICES(u).kappanumap(2^(l-1)+1:2^l)))));
+                INDICES(u).CStilde_low(l-l_star+1, :) = max(INDICES(u).CStilde_low(l-l_star+1, :),C_low*sum(abs(INDICES(u).y(INDICES(u).kappanumap(2^(l-1)+1:2^l, :))), 1));
                 if (omg_hat(out_param.mmin-l)*omg_circ(out_param.mmin-l) < 1)
-                    INDICES(u).CStilde_up(l-l_star+1) = min(INDICES(u).CStilde_up(l-l_star+1),C_up*sum(abs(INDICES(u).y(INDICES(u).kappanumap(2^(l-1)+1:2^l)))));
+                    INDICES(u).CStilde_up(l-l_star+1, :) = min(INDICES(u).CStilde_up(l-l_star+1, :),C_up*sum(abs(INDICES(u).y(INDICES(u).kappanumap(2^(l-1)+1:2^l, :))), 1));
                 end
             end
         end
@@ -571,9 +634,9 @@ for m = out_param.mmin+1:out_param.mmax
             CStilde_up_fx2_fx(l-l_star+1,2) = min(CStilde_up_fx2_fx(l-l_star+1,2),C_up*sum(abs(fx(kappanumap_fx2_fx(2^(l-1)+1:2^l,2)))));
         end
     end
-    aux_bool = any(CStilde_low_fx2_fx(:) > CStilde_up_fx2_fx(:)); % Variable that checks conditions violated for fx2 and fx
+    aux_bool = any(any(CStilde_low_fx2_fx > CStilde_up_fx2_fx)); % Variable that checks conditions violated for fx2 and fx
     for u = 1:out_param.d
-        if ~converged(u) & (any(INDICES(u).CStilde_low(:) > INDICES(u).CStilde_up(:)) || aux_bool)
+        if ~converged(u) & (any(any(INDICES(u).CStilde_low > INDICES(u).CStilde_up)) || aux_bool)
             out_param.exit(2,u) = true;
         end
     end
@@ -842,4 +905,25 @@ if (strcmp(out_param.measure,'normal')) && (any(hyperbox(1,:)==hyperbox(2,:)) ||
     hyperbox = [-inf*ones(1,out_param.d);inf*ones(1,out_param.d)];
 end
 
+end
+
+
+function y = estimate_min(down, up)
+    if down(4)*up(4) <= 0
+        y = min(max(max(down(1)-max(down(2).^2, up(2).^2)...
+        ,0)./max(up(3), eps), 0),1);
+    else
+        y = min(max(max(down(1)-max(down(2).^2, up(2).^2)...
+        ,0)./max(up(3)-min(down(4).^2, up(4).^2), eps), 0),1);
+    end
+end
+
+function y = estimate_max(down, up)
+    if down(2)*up(2) <= 0
+        y = min(max(max(up(1)...
+    ,0)./max(down(3)-max(down(4).^2, up(4).^2), eps), 0),1);
+    else
+        y = min(max(max(up(1)-min(down(2).^2, up(2).^2)...
+    ,0)./max(down(3)-max(down(4).^2, up(4).^2), eps), 0),1);
+    end
 end
