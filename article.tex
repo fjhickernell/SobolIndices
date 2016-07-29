@@ -27,6 +27,7 @@ mathtools,bbm,extraipa,mathabx,graphicx,algorithm}
 \newcommand{\e}{\text{e}}
 \newcommand{\bvec}[1]{\boldsymbol{#1}}
 \newcommand{\vx}{\bvec{x}}
+\newcommand{\vI}{\bvec{I}}
 \newcommand{\vk}{\bvec{k}}
 \newcommand{\vz}{\bvec{z}}
 \newcommand{\dif}{\mathsf{d}}
@@ -101,13 +102,13 @@ $\underline{\tau}_u^2$ and $\ov{$\tau$}_u^2$ satisfy the following relations: $ 
 The problem of interest here is the evaluation of first-order and total effect Sobol' indices. The computation of these indices is performed based on the following integral formula:
 \begin{align}
 \label{first.order}
-\underline{\tau}_u^2  &= \int_{[0,1)^{2d-1}} (f(\vx)-\mu)(f(\vx_{u}:{\vx'}_{-u})-\mu), \\
+\underline{\tau}_u^2  &= \int_{[0,1)^{2d-1}} (f(\vx)-\mu)(f(\vx_{u}:{\vx'}_{-u})-\mu)d\vx d{\vx'}, \\
 \label{total.effect}
-\ov{$\tau$}_u^2 &= \int_{[0,1)^{d+1}}(f(\vx')-f(\vx_u:{\vx'}_{-u}))^2d\vx d{\vx'}, \qquad u \in \mathcal{D},
+\ov{$\tau$}_u^2 &= \frac{1}{2}\int_{[0,1)^{d+1}}(f(\vx')-f(\vx_u:{\vx'}_{-u}))^2d\vx d{\vx'}, \qquad u \in \mathcal{D},
 \end{align}
 where mean and variance of $f$ respectively writes as:
-\[ \mu = \int_{[0,1)^{2d}} f(\vx) d{\vx}, \ \qquad
-\sigma^2 = \int_{[0,1)^{2d}} f(\vx)^2d{\vx} - \mu^2 .\]
+\[ \mu = \int_{[0,1)^{d}} f(\vx) d{\vx}, \ \qquad
+\sigma^2 = \int_{[0,1)^{d}} f(\vx)^2d{\vx} - \mu^2 .\]
 Most of the time, the complexity of $f$ causes the computation of $\mu$, $\sigma^2$ and integrals (\ref{first.order}) and (\ref{total.effect}) to be intractable. In such case, one needs to rely on an estimation of these quantities. In the following, we propose two iterative estimation procedures to evaluate first-order and total-effect Sobol' indices.
 
 \subsection{Estimation of Sobol' indices}
@@ -250,25 +251,47 @@ $${C'}_1U_u,\dots,{C'}_{u-1}U_u,C_u,{C'}_{u+1}U_u,{C'}_dU_u$$ where $U_u$ is a a
 
 \section{Reliable Error Estimation for Cubatures}
 \label{section.error} 
-We assume that we have an algorithm $\widehat{I}(f;\varepsilon)$ such that $\abs{I(f)-\widehat{I}(f;\varepsilon)}\leq \varepsilon$. For instance, the guaranteed quasi-Monte Carlo cubatures described in \cite{-} and \cite{-}. Therefore, we will always assume that the true integral $I(f)$ lies in $[\widehat{I}(f;\varepsilon)-\varepsilon,\widehat{I}(f;\varepsilon)+\varepsilon]$.
-
-Sobol' indices can be seen as operators over functions that can be simplified as functions whose entries are integrals.
-
-The case of $correlation 2$
-Je viens de comprendre, prendre S(LB,UB) comme le minimum (LowerBound, UpperBound) et S(UB,LB) comme le maximum est trop simple. Il faut construire le $S_{max}$ et $S_{min}$ en fonction du cas.
-Pour nous, $a - b*c + c^2$ est un paraboloïde hyperbolique. La droite avec plus de décroissement est $0+\lambda(2,1)$ [prends la dérivée par rapport à $c$ et l'on a $c=b/2$] et la perpendiculaire, celle de plus accroissement (symmetrie). Sur notre région carré, le point de max valeur de $S$ sera le point le plus eloignée de la droite $0+\lambda(2,1)$, et le minimum, sera sur cette droite le plus eloignée de $b = 0$ (si l'on substitue $c=b/2$, on obtient que restreint à cette droite, la fonction est $a-b^2/4$).
-
-$\bullet$ Max at $= \hat{a} + e_a$  ,  $\hat{b} - sign(\hat{c}-\hat{b}/2) e_b$,  $\hat{c} + sign(\hat{c}-\hat{b}/2) e_c$
-
-$\bullet$ Min at $= \hat{a} - e_a$  ,  $\hat{b} + sign(\hat{b}) e_b$  ,  $(\hat{b} + sign(\hat{b}) e_b)/2$
 \subsection{Definition of $\widehat{S}$ (fix it with max and min)}
+In some applications, it is more useful to estimate the normalized Sobol' indices, $S_u = \underline{\tau}_u^2/\sigma^2$ and $\overline{S}_u = \overline{\tau}_u^2/\sigma^2$. In both cases, regular and normalized indices can be approximated by estimating some integrals,
+\begin{align*}
+S_u & = \frac{\int_{[0,1)^{2d-1}} f(\vx)f(\vx_{u}:{\vx'}_{-u})d\vx d{\vx'} - \mu^2 }{\int_{[0,1)^{d}} f(\vx)^2 d{\vx}-\mu^2} = \frac{I_1-(I_3)^2}{I_2-(I_3)^2}, \\
+\overline{S}_u & = \frac{\frac{1}{2}\int_{[0,1)^{d+1}}(f(\vx')-f(\vx_u:{\vx'}_{-u}))^2d\vx d{\vx'}}{\int_{[0,1)^{d}} f(\vx)^2 d{\vx}-\mu^2} = \frac{I_1}{I_2-(I_3)^2}.
+\end{align*}
+Therefore, we can define $S_u(\vI)$ and $\overline{S}_u(\vI)$ as functions over a vector of integrals $\vI$. If we can estimate $\vI$ such that $\vI\in B_{\varepsilon_{\vI}}(\widehat{\vI}):=[\widehat{\vI}-\varepsilon_{\vI},\widehat{\vI}+\varepsilon_{\vI} ]$, then we can define the following estimators for the Sobol' indices:
+\begin{align*}
+\widehat{S}_u & = \frac{1}{2}\left(\min\left(\max_{\vI\in B_{\varepsilon_{\vI}}(\widehat{\vI})} S_u(\vI),1\right) + \max\left(\min_{\vI\in B_{\varepsilon_{\vI}}(\widehat{\vI})} S_u(\vI),0\right) \right) \\
+\varepsilon_{S_u} & = \frac{1}{2}\left(\min\left(\max_{\vI\in B_{\varepsilon_{\vI}}(\widehat{\vI})} S_u(\vI),1\right) - \max\left(\min_{\vI\in B_{\varepsilon_{\vI}}(\widehat{\vI})} S_u(\vI),0\right) \right)
+\end{align*}
+where the true value $S_u\in [\widehat{S}_u - \varepsilon_{S_u}, \widehat{S}_u + \varepsilon_{S_u}]$.
+
+\subsection{Reliable Estimation Using Quasi-Monte Carlo}
+In \cite{HicJim} we proposed an algorithm based on digital nets that estimates hight dimensional integrals whose error lies within a user-input error tolerance. This algorithm finds the number of data points automatically. We will refer to it as $\widehat{I}(f;\varepsilon)$, where $f$ is the function to integrate and $\varepsilon$ the user-input error tolerance.
+
+The main result from the article if that for all $f\in\mathcal{C}$,
+\[
+\abs{\int_{\cube} f(\vx)\,d\vx - \widehat{I}(f;\varepsilon)}\leq a(r,m)\sum_{\kappa=\left \lfloor 2^{m-r-1}\right \rfloor}^{2^{m-r}-1} \abs{\tf_{m,\kappa}}\leq \varepsilon.
+\]
+\begin{itemize}
+\item $\tf_{m,\kappa}=$ discrete Fourier Walsh coefficients of $f$.
+\item $a(r,m)=$ inflation factor that depends on $\mathcal{C}$.
+\end{itemize}
+
+
 
 
 \section{Applications}
 \label{appli}
 \subsection{Classical test functions}
 \subsection{Real case model}
+The Brownian motion is widely used in many applications. Thus, the following example might be interesting to understand what Sobol' indices can explain in some of these applications. For instance, if we want to estimate the expected value of the maximum of a discretized Brownian motion whose covariance matrix is $\Sigma$, our goal is to estimate
+\begin{align*}
+\mathbb{E} \left[\max(\bvec{B}_t)\right] &= \int_{\mathbb{R}^d} \max(\bvec{B}_t) \frac{{\rm e}^{\bvec{B}_t^T\Sigma^{-1}\bvec{B}_t}}{(2\pi)^{d/2}|\Sigma|^{1/2}}\,d\bvec{B}_t \\
+&= \int_{[0,1]^d} \max(f_{\rm Chol}(\vx)) \,d\vx \\
+&= \int_{[0,1]^d} \max(f_{\rm PCA}(\vx)) \,d\vx.
+\end{align*}
+The last two equalities are obtained through two different subsitutions corresponding to the \textit{Cholesky} construction of the Brownian motion, and the \textit{PCA} construction. For instance, if we take 10 dimensions and $t_i=i/10$, using the Cholesky construction $S_{1} = 24\%$, $S_{2} = 16\%$, $S_{3} = 13\%$, $S_{4} = 10\%$, and $\overline{S}_{1}=24\%$, $\overline{S}_{2}=18\%$, $\overline{S}_{3}=15\%$, $\overline{S}_{4} = 13\%$. However, using the PCA construction, $S_{1} = 89\%$, $S_{2} = 2\%$, $S_{3} = 1\%$, $S_{4} = 0\%$, and $\overline{S}_{1}=94\%$, $\overline{S}_{2}=7\%$, $\overline{S}_{3}=3\%$, $\overline{S}_{4} = 2\%$. This shows that the PCA construction will be better to estimate the above expectation using quasi-Monte Carlo methods since it has a lower effective dimensionality.
 
+For those who were curious about the actual value of $\mathbb{E} \left[\max(\bvec{B}_t)\right]$, it is approximately 0.5935. Nevertheless, the Brownian Motion is a continuous time process. Thus, in order to estimate the expected value on a continuous time Browninan motion, one could either use a multilevel method, or a multivariate decomposition method to estimate this infinite dimensional integral.
 
 \newpage
 \section{Annexes}
