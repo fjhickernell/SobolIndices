@@ -76,9 +76,10 @@ mathtools,bbm,extraipa,mathabx,graphicx,algorithm}
 \item[$\bullet$] problem: when to stop? $\rightarrow$ reliable error estimation 
 \end{itemize}
 
-\section{Estimation of Sobol' indices}
+\section{Backgrounds on Sobol' indices}
+
 \subsection{Definition of Sobol' indices}
-We adopt the same notations introduced by Owen in \cite{Owen}. Denote by $\vx \in [0,1)^d$ a point with components $x_1,\dots,x_d$ and set $\mathcal{D}=\{1,\dots,d\}$. Let $u$ be a subset of $\mathcal{D}$, $-u$ its complement and $|u|$ its cardinality. $\vx_u$ represents a point in $[0,1)^u$ with components $x_j, j \in u$. Given two points $\vx$ and $\vx'$, the hybrid point $\vz=(\vx_u:{\vx'}_{-u})$ is defined as $z_j=x_j$ if $j \in u$ and $z_j={x'}_j$ if $j \notin u$.
+We adopt the same notations introduced by Owen in \cite{Owen}. Denote by $f$ a numerical model, by $\vx=(x_1,\dots,x_d)$ its vector of inputs and set $\mathcal{D}=\{1,\dots,d\}$. The uncertainty on $\vx$ is modeled by a random vector that we suppose uniformly distributed on $\cube$. Let $u$ be a subset of $\mathcal{D}$, $-u$ its complement and $|u|$ its cardinality. $\vx_u$ represents a point in $[0,1)^u$ with components $x_j, j \in u$. Given two points $\vx$ and $\vx'$, the hybrid point $\vz=(\vx_u:{\vx'}_{-u})$ is defined as $z_j=x_j$ if $j \in u$ and $z_j={x'}_j$ if $j \notin u$.
 
 Let $f$ be the symbol representing the numerical model studied. We assume $f \in \mathcal{L}^2[0,1)^d$. Denote by $\mu$ and $\sigma^2$ the mean and variance of $f$.
 The uncertainty on $\vx$ is modeled by random variables such that $\vx \iid \mathcal{U}[0,1)^d$. Recall the Hoeffding decomposition \cite{Hoeffding} of $f$:
@@ -99,33 +100,35 @@ For $u \subsetneq \mathcal{D}$, the two quantities $\underline{\tau}_u^2$ and $\
 $\underline{\tau}_u^2$ and $\ov{$\tau$}_u^2$ satisfy the following relations: $ 0 \leq  \underline{\tau}_u^2 \leq \ov{$\tau$}_u^2$ and $\underline{\tau}_u^2 = \sigma^2 - \ov{$\tau$}_{-u}^2$. These two measure are commonly found in the litterature in their normalized form: $\underline{S}_u = \underline{\tau}_u^2 / \sigma^2$ is the closed $|u|$-order Sobol' index for the set $u$, while $\ov{$S$}_u = \ov{$\tau$}_u^2 / \sigma^2$ is the total effect Sobol' index for the set $u$.
 \bigskip
 
-The problem of interest here is the evaluation of first-order and total effect Sobol' indices. The computation of these indices is performed based on the following integral formula:
+The problem of interest here is the evaluation of first-order and total effect Sobol' indices. The computation of these indices is performed based on the following integral formula for their numerators:
 \begin{align}
 \label{first.order}
-\underline{\tau}_u^2  &= \int_{[0,1)^{2d-1}} (f(\vx)-\mu)(f(\vx_{u}:{\vx'}_{-u})-\mu)d\vx d{\vx'}, \\
+\underline{\tau}_u^2  &= \int_{[0,1)^{2d-1}} \left(f(\vx)-
+f(\vx_u:{\vx'}_{-u})\right)f(\vx')d\vx d{\vx'}, \\
 \label{total.effect}
 \ov{$\tau$}_u^2 &= \frac{1}{2}\int_{[0,1)^{d+1}}(f(\vx')-f(\vx_u:{\vx'}_{-u}))^2d\vx d{\vx'}, \qquad u \in \mathcal{D},
 \end{align}
-where mean and variance of $f$ respectively writes as:
-\[ \mu = \int_{[0,1)^{d}} f(\vx) d{\vx}, \ \qquad
-\sigma^2 = \int_{[0,1)^{d}} f(\vx)^2d{\vx} - \mu^2 .\]
-Most of the time, the complexity of $f$ causes the computation of $\mu$, $\sigma^2$ and integrals (\ref{first.order}) and (\ref{total.effect}) to be intractable. In such case, one needs to rely on an estimation of these quantities. In the following, we propose two iterative estimation procedures to evaluate first-order and total-effect Sobol' indices.
+The variance of $f$ is evaluated by:
+\[ \sigma^2 = \int_{[0,1)^{d}} f(\vx)^2d{\vx} - \mu^2, \text{ with } \ \mu = \int_{[0,1)^{d}} f(\vx) d{\vx}.\]
+Most of the time, the complexity of $f$ causes the computation of $\mu$, $\sigma^2$ and integrals (\ref{first.order}) and (\ref{total.effect}) to be intractable. In such case, one needs to rely on an estimation of these quantities.
 
 \subsection{Estimation of Sobol' indices}
+In this section we review two Monte Carlo procedures for the estimation of Sobol' indices. We define by design a point set $\mathcal{P}=\{\vx_i\}_{i=0}^{n-1}$ obtained by sampling each variable $x_j$ $n$ times. Each row of the design is a point $\vx_i$ in $[0,1)^d$. Each column of the design refers to a variable $x_j$. Consider $\mathcal{P}=\{\vx_i\}_{i=0}^{n-1}$ and $\mathcal{P'}=\{{\vx'}_i\}_{i=0}^{n-1}$ two designs where $(\vx_i,{\vx'}_i) \iid [0,1)^{2d}$. 
+\bigskip
 
-We define by design a point set $\mathcal{P}=\{\vx_i\}_{i=0}^{n-1}$ obtained by sampling each variable $x_j$ $n$ times. Each row of the design is a point $\vx_i$ in $[0,1)^d$. Each column of the design refers to a variable $x_j$. Consider $\mathcal{P}=\{\vx_i\}_{i=0}^{n-1}$ and $\mathcal{P'}=\{{\vx'}_i\}_{i=0}^{n-1}$ two designs where $(\vx_i,{\vx'}_i) \iid [0,1)^{2d}$. One way to estimate the two quantities (\ref{first.order}) and (\ref{total.effect}) is via:
+One way to estimate the two quantities (\ref{first.order}) and (\ref{total.effect}) is via:
 \begin{align}
 \label{first.order.est}
-\widehat{\underline{\tau}_u^2} & = \frac{1}{n} \sum \limits_{i=0}^{n-1} (f(\vx_i)-\hat{\mu})(f(\vx_{i,u}:{\vx'}_{i,-u})-\hat{\mu}),\\
+\widehat{\underline{\tau}_u^2} & = \frac{1}{n} \sum \limits_{i=0}^{n-1} \left(f(\vx_i)-f(\vx_{i,u}:{\vx'}_{i,-u}\right)f(\vx'_i),\\
 \label{total.effect.est}
-\widehat{\ov{$\tau$}_u^2} & = \frac{1}{2n} \sum \limits_{i=0}^{n-1} (f({\vx'}_i) - f(\vx_{i,u}:{\vx'}_{i,-u}))^2, \qquad u \in \mathcal{D}
+\widehat{\ov{$\tau$}_u^2} & = \frac{1}{2n} \sum \limits_{i=0}^{n-1} (f({\vx'}_i) - f(\vx_{i,u}:{\vx'}_{i,-u}))^2, \qquad u \in \mathcal{D},
 \end{align}
-using for $\mu$ the efficient estimator introduced in \cite{Monod, Janon}:
+using for $\sigma^2$ the classic estimator:
 \begin{equation}
- \hat{\mu} = \frac{1}{2n} \sum \limits_{i=0}^{n-1} f(\vx_i) + f(\vx_{i,u}:{\vx'}_{i,-u}).
+ \widehat{\sigma}^2 = \frac{1}{n} \sum \limits_{i=0}^{n-1} f(\vx_i)^2 - \widehat{\mu}^2, \text{ with } \ \widehat{\mu} =  \frac{1}{n} \sum \limits_{i=0}^{n-1} f(\vx_i).
 \label{mu.est}
 \end{equation}
-The estimation of a single pair ($\underline{\tau}_u^2$, $\ov{$\tau$}_u^2$) requires $3n$ evaluations of the model $f$. Using a combinatorial formalism, Saltelli \cite[Theorem 1]{Saltelli} proposed the following strategy to reduce the estimation cost:
+The estimation of a single pair ($\underline{\tau}_u^2$, $\ov{$\tau$}_u^2$) requires $3n$ evaluations of the model $f$. Using a combinatorial formalism, in \cite[Theorem 1]{Saltelli} Saltelli proposes the following estimation strategy:
 \begin{theorem}
 \label{saltelli.theorem}
 The $d+2$ designs $\{\vx_{i,u},{\vx'}_{i,-u}\}_{i=0}^{n-1}$ constructed for $u \in \{\varnothing,\{1\},\dots,$ $\{d\},\mathcal{D}\}$ allows to estimate all first-order and all total effect Sobol' indices at a cost of $n(d+2)$ evaluations of the model.
@@ -136,118 +139,26 @@ An efficient alternative to evaluate all first-order indices was proposed by Mar
 \begin{definition}
 \label{rep.designs}
 Let $\mathcal{P}=\{\vx_i\}_{i=0}^{n-1}$ and $\mathcal{P}'=\{{\vx'}_i\}_{i=0}^{n-1}$ be two point sets in
-$[0,1)^{d}$. Let $\mathcal{P}^u=\{\vx_{i,u}\}_{i=0}^{n-1}$ (resp. ${\mathcal{P}'}^u$), $u \subsetneq \mathcal{D}$, denote the subset of dimensions of $\mathcal{P}$ (resp. $\mathcal{P}'$) indexed by $u$. We say that $\mathcal{P}$ and $\mathcal{P}'$ are two replicated designs of order $a$ if $\forall \ u \subsetneq \mathcal{D}$ of cardinality $|u|=a$, $\mathcal{P}^u$ and ${\mathcal{P}'}^u$ are the same point set in $[0,1)^a$. We note $\pi_u$ the permutation reordering the rows of ${\mathcal{P}'}^u$ into $\mathcal{P}^u$.
+$[0,1)^{d}$. Let $\mathcal{P}^u=\{\vx_{i,u}\}_{i=0}^{n-1}$ (resp. ${\mathcal{P}'}^u$), $u \subsetneq \mathcal{D}$, denote the subset of dimensions of $\mathcal{P}$ (resp. $\mathcal{P}'$) indexed by $u$. We say that $\mathcal{P}$ and $\mathcal{P}'$ are two replicated designs of order $a \in \{1,\dots,d-1\}$ if $\forall \ u \subsetneq \mathcal{D}$ of cardinality $|u|=a$, $\mathcal{P}^u$ and ${\mathcal{P}'}^u$ are the same point set in $[0,1)^a$. We note $\pi_u$ the permutation reordering the rows of ${\mathcal{P}'}^u$ into $\mathcal{P}^u$.
 \end{definition}
 The method introduced in \cite{Mara} allows to estimate all first-order Sobol' indices with only two replicated designs of order $1$. The key point of this method is to use the permutations resulting from the structure of the two replicated designs to mimic the hybrid points in formula (\ref{first.order.est}). 
 
 More specifically, let $\mathcal{P}=\{\vx_i\}_{i=0}^{n-1}$ and $\mathcal{P}'=\{{\vx'}_i\}_{i=0}^{n-1}$ be two replicated designs of order $1$. Denote by $\{f(\vx_i)\}_{i=0}^{n-1}$ and $\{f({\vx'}_i)\}_{i=0}^{n-1}$ the two sets of model evaluations obtained with $\mathcal{P}$ and $\mathcal{P}'$. Consider $u \in \mathcal{D}$, from Definition \ref{rep.designs} there exists a permutation $\pi_u$ such that ${\vx'}_{\pi_u(i),u}={\vx}_{i,u}$. Then, remark that $\forall i \in \{0,\dots,n-1\}$:
 \[\pi_u(f({\vx'}_i))=f({\vx'}_{\pi_u(i)})=f(\vx'_{\pi_u(i),u}:{\vx'}_{\pi_u(i),-u})=f(\vx_{i,u}:{\vx'}_{\pi_u(i),-u})\]
 %\pi_u(f({\vx'}_{i,u}:{\vx'}_{i,-u}))
-Each $\underline{\tau}^2_u$ can be estimated via formula (\ref{first.order.est}) with $\{f(\vx_i)\}_{i=0}^{n-1}$ and $\{\pi_u(f({\vx'}_i))\}_{i=0}^{n-1}$ without requiring further model evaluations. This estimation method has been deeply studied and generalized in Tissot et al. \cite{Mara} to the case of closed second-order indices.
+Each $\underline{\tau}^2_u$ can be estimated via formula (\ref{first.order.est}) with $\{f(\vx_i)\}_{i=0}^{n-1}$ and $\{\pi_u(f({\vx'}_i))\}_{i=0}^{n-1}$ without requiring further model evaluations. This estimation method has been deeply studied and generalized in Tissot et al. \cite{Mara} to the case of closed second-order indices. In the following we refer to this method as replication procedure.
 \bigskip
 
-\subsection{Recursive estimation procedures}
-We propose here two recursive procedures two estimate first-order and total effect Sobol' indices. Each procedure combines quasi-Monte Carlo sampling with respectively the estimation strategy proposed by Saltelli (Theorem \ref{saltelli.theorem}) and the estimation strategy based on replicated designs. In the following, we refer to these two procedures as procedure $A$ and $B$.
+\subsection{Towards a robust estimation}
+The aim of this paper is to propose a recursive estimation procedure to estimate Sobol' indices. The choice of the stopping criterion is the key point of this paper. The two estimation procedures reviewed in the previous section can be rendered recursive. In \cite{Gilquin16}, the authors propose a recursive version of the replication procedure. The stopping criterion of the recursive algorithm is an absolute difference between estimates computed on consecutive steps. 
+
+More generally, in most recursive approaches that estimate Sobol' indices, the stopping criterion is a quantity of interest build directly upon the estimates. Such stopping criteria often involved hyperparameters hard to tweak but above all fail to guarantee any error bound on the estimation. 
 \bigskip
 
-Using a recursive estimation procedure requires to write a recursive formula for estimators (\ref{first.order.est}) and (\ref{total.effect.est}). For the sake of readability of the paper, the corresponding recursive formulas are detailed in equations (\ref{first.order.est.rec}) and (\ref{total.effect.est.rec}) in the Annexe \ref{recursive.formulas}.
+Our recursive procedure stands apart from others approaches by the construction of a robust stopping criterion. This criterion is an error bound based on the discrete Walsh decomposition of integrals (\ref{first.order}) and (\ref{total.effect}). This decomposition use the close set property of digital sequences. As such, our recursive procedure relies on the iterative construction of Sobol' sequence. 
 
-Procedures $A$ and $B$ also require to iteratively construct two designs $\mathcal{P}_\ell=\{\vx_i\}_{i=0}^{2^\ell-1}$ and $\mathcal{P}'_\ell=\{{\vx'}_i\}_{i=0}^{2^\ell-1}$. These two designs are two Sobol' sequences. Background on Sobol' sequences are provided in \cite{crass}. We recall here that a $d$-dimensional Sobol' sequence is generated with a set of $d$ generating matrices (one per coordinate). The construction of $\mathcal{P}_\ell$ and $\mathcal{P}'_\ell$ is carried out according to the following recursive scheme :
-\begin{equation}
-\left\lbrace \begin{array}{l}
-\mathcal{P}_0= B_0 \\
-\mathcal{P}_\ell= \mathcal{P}_{\ell-1} \cup B_\ell \end{array}\right. ,\qquad
-\hspace*{0.5cm}
-\left\lbrace \begin{array}{l}
-\mathcal{P}'_0= {B'}_0 \\
-\mathcal{P}'_\ell= \mathcal{P}'_{\ell-1} \cup {B'}_\ell \end{array}\right.,
-\label{rec.scheme}
-\end{equation}
-where at step $\ell\geq0$, $B_\ell$ and $B'_\ell$ are new sets of $2^{\ell-1}$ points added to refine $\mathcal{P}_{\ell-1}$ and $\mathcal{P}'_{\ell-1}$. In the following, $\mathcal{P}_\ell$ and $\mathcal{P}'_\ell$ refer to the two Sobol' sequences constructed following the multiplicative approach presented in \cite{crass}. This approach guarantee that at each step $\ell\geq0$, $\mathcal{P}_{\ell}$ and $\mathcal{P}'_{\ell}$ are two replicated designs of order $1$.
+Background on Sobol' sequences are provided in \cite{crass}. The iterative construction of the Sobol' sequences is performed accordingly to the multiplicative  approach presented in \cite{crass}. The construction of our stopping criterion is the subject of the next section \ref{section.error}. Our recursive estimation procedure is presented in section \ref{section.recursive.procedure}.
 
-$\mathcal{P}_{\ell}$ and $\mathcal{P}'_{\ell}$ can either be used with procedure $A$ to estimate all first-order and all total effect Sobol' indices or with procedure $B$ to estimate all first-order Sobol' indices. Algorithms \ref{procedureA} and \ref{procedureB} summarize the main steps of each procedure.
-\begin{algorithm}[!ht]
-\caption{Procedure $A$}
-\begin{algorithmic}[1]
-\vspace*{0.2cm}
-\State Set: $\ell \leftarrow 1$, $\mathcal{P}_{0} \leftarrow B_0$, ${\mathcal{P}'}_{0} \leftarrow {B'}_0$
-\While {stopping criterion}
-\State $\mathcal{P}_\ell \leftarrow \mathcal{P}_{\ell-1} \cup B_\ell$
-
-\hspace*{-0.3cm} $\mathcal{P}'_\ell \leftarrow \mathcal{P}'_{\ell-1} \cup {B'}_\ell$
-\State Compute $\{f(\vx_i)\}_{i=2^{\ell-1}}^{2^\ell-1}$ and $\{f({\vx'}_i)\}_{i=2^{\ell-1}}^{2^\ell-1}$
-\For {$u \in \{\varnothing,\{1\},\dots,$ $\{d\},\mathcal{D}\}$}
-\State Construct design $\{\vx_{i,u},{\vx'}_{i,-u}\}_{i=2^{\ell-1}}^{2^{\ell}-1}$
-\State Compute  $\{f(\vx_{i,u},{\vx'}_{i,-u})\}_{i=2^{\ell-1}}^{2^\ell-1}$
-\State Estimate $\widehat{\underline{\tau}_u^2}^{(\ell)}$ and $\widehat{\ov{$\tau$}_u^2}^{(\ell)}$ with formula (\ref{first.order.est.rec}) and (\ref{total.effect.est.rec})
-\EndFor
-\State $\ell \leftarrow \ell + 1$
-\EndWhile
-\State Return $\widehat{\underline{\tau}_u^2}^{(\ell)}$ and $\widehat{\ov{$\tau$}_u^2}^{(\ell)}$ for all $u \in \mathcal{D}$.
-\end{algorithmic}
-\label{procedureA}
-\end{algorithm}
-\begin{algorithm}[!ht]
-\caption{Procedure $B$}
-\begin{algorithmic}[1]
-\vspace*{0.2cm}
-\State Set: $\ell \leftarrow 1$, $\mathcal{P}_{0} \leftarrow B_0$, ${\mathcal{P}'}_{0} \leftarrow {B'}_0$
-\While {stopping criterion}
-\State $\mathcal{P}_\ell \leftarrow \mathcal{P}_{\ell-1} \cup B_\ell$
-
-\hspace*{-0.3cm} $\mathcal{P}'_\ell \leftarrow \mathcal{P}'_{\ell-1} \cup {B'}_\ell$
-\State Compute $\{f(\vx_i)\}_{i=2^{\ell-1}}^{2^\ell-1}$ and $\{f({\vx'}_i)\}_{i=2^{\ell-1}}^{2^\ell-1}$
-\For {$u \in \mathcal{D}$}
-\State  order $\{f({\vx'}_i)\}_{i=2^{\ell-1}}^{2^\ell-1}$ into $\{\pi_u(f({\vx'}_i))\}_{i=2^{\ell-1}}^{2^\ell-1}$
-\State Estimate $\widehat{\underline{\tau}_u^2}^{(\ell)}$ with formula (\ref{first.order.est.rec})
-\EndFor
-\State $\ell \leftarrow \ell + 1$
-\EndWhile
-\State Return $\widehat{\underline{\tau}_u^2}^{(\ell)}$ for all $u \in \mathcal{D}$.
-\end{algorithmic}
-\label{procedureB}
-\end{algorithm}
-
-The choice of the stopping criterion is the key point of this paper. In most recursive approaches that estimate Sobol' indices, the stopping criterion is a quantity of interest build directly from the estimates. For example, an absolute difference between estimates computed on consecutive steps. Such stopping criteria are often hard to tweak but above all fail to guarantee any error bound on the estimation. Our stopping criterion is presented and discussed in Section \ref{section.error}. The criterion is an error bound based on the discrete Walsh decomposition of integrals (\ref{first.order}) and (\ref{total.effect}). 
-
-\subsection{Improvements}
-This section discusses two improvements to ease the estimation of Sobol' indices with procedures $A$ and $B$. 
-
-\bigskip
-
-The first improvement focus on the use of a better estimator to evaluate small first-order Sobol' indices with procedure $A$. This estimator is called ``Correlation 2" and was introduced by Owen in \cite{Owen}. Owen discussed and highlighted the efficiency of ``Correlation 2" when estimating small closed Sobol' indices. Our aim is to show that using ``Correlation 2" in procedure $A$ may reduces the total number of model evaluations. ``Correlation 2" formula writes as follows:
-\begin{equation}
-\widehat{\underline{\tau}_u^2} = \frac{1}{n} \sum \limits_{i=0}^{n-1} (f(\vx_i)-f({\vz}_{i,u}:{\vx}_{i,-u}))(f(\vx_{i,u}:{\vx'}_{i,-u})-f({\vx'}_i))
-\label{correlation2}
-\end{equation}
-It uses an extra set of $n$ model evaluations to estimate $\widehat{\underline{\tau}_u^2}$. Owen explains the effectiveness of ``Correlation 2" as follows. If the main effect of $\vx_u$ is small then $f(\vx)$ will be almost entirely explained by $\vx_{-u}$. The two terms $(f(\vx_i)-f({\vz}_{i,u}:{\vx}_{i,-u}))$ and $(f(\vx_{i,u}:{\vx'}_{i,-u})-f({\vx'}_i))$ should then be small quantities as well as (\ref{correlation2}). 
-
-We discuss now the potential improvement brought by the use of ``Correlation 2". Assume that the number of small first-order indices is known and equals $\alpha$. Then, the cost of procedure $A$ including ``Correlation 2" to estimate small indices writes: 
-\[ n(d-\alpha) + 2 n'\alpha + 2\max(n,n'),\]
-where: \begin{itemize}
-\item[$\bullet$] $n(d-\alpha)$ is the number of evaluations induced by the $d-\alpha$ designs $\{\vx_{i,u}:{\vx'}_{i,-u}\}_{i\geq0}$ to estimate all non small indices, 
-\item[$\bullet$] $2 n'\alpha$ is the number of evaluations induced by the $2\alpha$ designs $\{\vz_{i,u}:\vx_{i,-u}\}_{i\geq0}$ and $\{\vx_{i,u}:{\vx'}_{i,-u}\}_{i\geq0}$ to estimate all small indices,
-\item[$\bullet$] $2\max(n,n')$ is the number of evaluations  induced by the $2$ designs $\{\vx_{i}\}_{i\geq0}$ and $\{{\vx'}_{i}\}_{i\geq0}$.
-\end{itemize}
-At the opposite, the cost of procedure $A$ excluding ``Correlation 2" writes: 
-\[ n(d-\alpha) + n\alpha + 2n.\]
-It is straightforward that procedure $A$ including ``Correlation 2" performs equally well or better when $n' \leq 2n$. Furthermore, since we are working with Sobol' sequences $n'=2^{k'}$ and $n=2^{k}$. Hence, procedure $A$ including ``Correlation 2" performs equally well or better when the recursive estimation procedure finished at least one step sooner. Illustrations of this improvement will be provided in Section \ref{appli}.
-
-\bigskip
-
-The second improvement focus on the choice of the $2d$ generating matrices that generate the two Sobol' sequences $\mathcal{P}_\ell$  and ${\mathcal{P}'}_\ell$ in procedure $B$.
-
-We note by $C_1,\dots,C_d$ the matrices generating $\mathcal{P}_\ell=\{\vx_i\}_{i=0}^{2^\ell-1}$ and ${C'}_1,\dots,{C'}_d$ those generating $\mathcal{P}'_\ell=\{{\vx'}_i\}_{i=0}^{2^\ell-1}$.
-In the multiplicative approach \cite{crass}, these $2d$ matrices are selected as the first $2d$ elements of the set found by Kuo and Joe in \cite{Kuo}. This set is composed of generating matrices that optimize the $2$-dimensional projection $t$-values. 
-
-%In procedure $A$, each design $\{\vx_{i,u},{\vx'}_{i,-u}\}_{i\geq0}$ constructed in step $6$ of Algorithm \ref{procedureA} is a $d$-dimensional Sobol' sequence generated by the $d$-subset: $${C'}_1,\dots,{C'}_{u-1},C_u,{C'}_{u+1},\dots,C_d.$$ Therefore, $2$-dimensional projection $t$-values are still optimized.
-
-In procedure $B$, each permutation $\pi_u$ applied in step $6$ of Algorithm \ref{procedureB} results in a design $\{\vx_{i,u}:{\vx'}_{\pi_u(i),-u}\}_{i=0}^{2^\ell-1}$. The $d$ generating matrices corresponding to this design are:
-$${C'}_1U_u,\dots,{C'}_{u-1}U_u,C_u,{C'}_{u+1}U_u,{C'}_dU_u$$ where $U_u$ is a a full rank upper triangular matrix verifying $C_u={C'}_uU_u$. The right multiplication by $U_u$ is the digital representation of the ordering by $\pi_u$. 
-
-%\section{Estimators: Correlation 2 Oracle 2}
-%\subsection{Choice and parameters (threshold small?)}
-%\subsection{Cost discussion: for first-order Consider or not total order}
 
 \section{Reliable Error Estimation for Cubatures}
 \label{section.error} 
@@ -301,6 +212,90 @@ The main result from the article if that for all $f\in\mathcal{C}$,
 \item $a(r,m)=$ inflation factor that depends on $\mathcal{C}$.
 \end{itemize}
 
+\section{Recursive estimation procedure}
+\label{section.recursive.procedure}
+%
+%$\mathcal{P}_{\ell}$ and $\mathcal{P}'_{\ell}$ can either be used with procedure $A$ to estimate all first-order and all total effect Sobol' indices or with procedure $B$ to estimate all first-order Sobol' indices. Algorithms \ref{procedureA} and \ref{procedureB} summarize the main steps of each procedure.
+%\begin{algorithm}[!ht]
+%\caption{Procedure $A$}
+%\begin{algorithmic}[1]
+%\vspace*{0.2cm}
+%\State Set: $\ell \leftarrow 1$, $\mathcal{P}_{0} \leftarrow B_0$, ${\mathcal{P}'}_{0} \leftarrow {B'}_0$
+%\While {stopping criterion}
+%\State $\mathcal{P}_\ell \leftarrow \mathcal{P}_{\ell-1} \cup B_\ell$
+%
+%\hspace*{-0.3cm} $\mathcal{P}'_\ell \leftarrow \mathcal{P}'_{\ell-1} \cup {B'}_\ell$
+%\State Compute $\{f(\vx_i)\}_{i=2^{\ell-1}}^{2^\ell-1}$ and $\{f({\vx'}_i)\}_{i=2^{\ell-1}}^{2^\ell-1}$
+%\For {$u \in \{\varnothing,\{1\},\dots,$ $\{d\},\mathcal{D}\}$}
+%\State Construct design $\{\vx_{i,u},{\vx'}_{i,-u}\}_{i=2^{\ell-1}}^{2^{\ell}-1}$
+%\State Compute  $\{f(\vx_{i,u},{\vx'}_{i,-u})\}_{i=2^{\ell-1}}^{2^\ell-1}$
+%\State Estimate $\widehat{\underline{\tau}_u^2}^{(\ell)}$ and $\widehat{\ov{$\tau$}_u^2}^{(\ell)}$ with formula (\ref{first.order.est.rec}) and (\ref{total.effect.est.rec})
+%\EndFor
+%\State $\ell \leftarrow \ell + 1$
+%\EndWhile
+%\State Return $\widehat{\underline{\tau}_u^2}^{(\ell)}$ and $\widehat{\ov{$\tau$}_u^2}^{(\ell)}$ for all $u \in \mathcal{D}$.
+%\end{algorithmic}
+%\label{procedureA}
+%\end{algorithm}
+%\begin{algorithm}[!ht]
+%\caption{Procedure $B$}
+%\begin{algorithmic}[1]
+%\vspace*{0.2cm}
+%\State Set: $\ell \leftarrow 1$, $\mathcal{P}_{0} \leftarrow B_0$, ${\mathcal{P}'}_{0} \leftarrow {B'}_0$
+%\While {stopping criterion}
+%\State $\mathcal{P}_\ell \leftarrow \mathcal{P}_{\ell-1} \cup B_\ell$
+%
+%\hspace*{-0.3cm} $\mathcal{P}'_\ell \leftarrow \mathcal{P}'_{\ell-1} \cup {B'}_\ell$
+%\State Compute $\{f(\vx_i)\}_{i=2^{\ell-1}}^{2^\ell-1}$ and $\{f({\vx'}_i)\}_{i=2^{\ell-1}}^{2^\ell-1}$
+%\For {$u \in \mathcal{D}$}
+%\State  order $\{f({\vx'}_i)\}_{i=2^{\ell-1}}^{2^\ell-1}$ into $\{\pi_u(f({\vx'}_i))\}_{i=2^{\ell-1}}^{2^\ell-1}$
+%\State Estimate $\widehat{\underline{\tau}_u^2}^{(\ell)}$ with formula (\ref{first.order.est.rec})
+%\EndFor
+%\State $\ell \leftarrow \ell + 1$
+%\EndWhile
+%\State Return $\widehat{\underline{\tau}_u^2}^{(\ell)}$ for all $u \in \mathcal{D}$.
+%\end{algorithmic}
+%\label{procedureB}
+%\end{algorithm}
+%
+%\subsection{Improvements}
+%This section discusses two improvements to ease the estimation of Sobol' indices with procedures $A$ and $B$. 
+%
+%\bigskip
+%
+%The first improvement focus on the use of a better estimator to evaluate small first-order Sobol' indices with procedure $A$. This estimator is called ``Correlation 2" and was introduced by Owen in \cite{Owen}. Owen discussed and highlighted the efficiency of ``Correlation 2" when estimating small closed Sobol' indices. Our aim is to show that using ``Correlation 2" in procedure $A$ may reduces the total number of model evaluations. ``Correlation 2" formula writes as follows:
+%\begin{equation}
+%\widehat{\underline{\tau}_u^2} = \frac{1}{n} \sum \limits_{i=0}^{n-1} (f(\vx_i)-f({\vz}_{i,u}:{\vx}_{i,-u}))(f(\vx_{i,u}:{\vx'}_{i,-u})-f({\vx'}_i))
+%\label{correlation2}
+%\end{equation}
+%It uses an extra set of $n$ model evaluations to estimate $\widehat{\underline{\tau}_u^2}$. Owen explains the effectiveness of ``Correlation 2" as follows. If the main effect of $\vx_u$ is small then $f(\vx)$ will be almost entirely explained by $\vx_{-u}$. The two terms $(f(\vx_i)-f({\vz}_{i,u}:{\vx}_{i,-u}))$ and $(f(\vx_{i,u}:{\vx'}_{i,-u})-f({\vx'}_i))$ should then be small quantities as well as (\ref{correlation2}). 
+%
+%We discuss now the potential improvement brought by the use of ``Correlation 2". Assume that the number of small first-order indices is known and equals $\alpha$. Then, the cost of procedure $A$ including ``Correlation 2" to estimate small indices writes: 
+%\[ n(d-\alpha) + 2 n'\alpha + 2\max(n,n'),\]
+%where: \begin{itemize}
+%\item[$\bullet$] $n(d-\alpha)$ is the number of evaluations induced by the $d-\alpha$ designs $\{\vx_{i,u}:{\vx'}_{i,-u}\}_{i\geq0}$ to estimate all non small indices, 
+%\item[$\bullet$] $2 n'\alpha$ is the number of evaluations induced by the $2\alpha$ designs $\{\vz_{i,u}:\vx_{i,-u}\}_{i\geq0}$ and $\{\vx_{i,u}:{\vx'}_{i,-u}\}_{i\geq0}$ to estimate all small indices,
+%\item[$\bullet$] $2\max(n,n')$ is the number of evaluations  induced by the $2$ designs $\{\vx_{i}\}_{i\geq0}$ and $\{{\vx'}_{i}\}_{i\geq0}$.
+%\end{itemize}
+%At the opposite, the cost of procedure $A$ excluding ``Correlation 2" writes: 
+%\[ n(d-\alpha) + n\alpha + 2n.\]
+%It is straightforward that procedure $A$ including ``Correlation 2" performs equally well or better when $n' \leq 2n$. Furthermore, since we are working with Sobol' sequences $n'=2^{k'}$ and $n=2^{k}$. Hence, procedure $A$ including ``Correlation 2" performs equally well or better when the recursive estimation procedure finished at least one step sooner. Illustrations of this improvement will be provided in Section \ref{appli}.
+%
+%\bigskip
+%
+%The second improvement focus on the choice of the $2d$ generating matrices that generate the two Sobol' sequences $\mathcal{P}_\ell$  and ${\mathcal{P}'}_\ell$ in procedure $B$.
+%
+%We note by $C_1,\dots,C_d$ the matrices generating $\mathcal{P}_\ell=\{\vx_i\}_{i=0}^{2^\ell-1}$ and ${C'}_1,\dots,{C'}_d$ those generating $\mathcal{P}'_\ell=\{{\vx'}_i\}_{i=0}^{2^\ell-1}$.
+%In the multiplicative approach \cite{crass}, these $2d$ matrices are selected as the first $2d$ elements of the set found by Kuo and Joe in \cite{Kuo}. This set is composed of generating matrices that optimize the $2$-dimensional projection $t$-values. 
+%
+%%In procedure $A$, each design $\{\vx_{i,u},{\vx'}_{i,-u}\}_{i\geq0}$ constructed in step $6$ of Algorithm \ref{procedureA} is a $d$-dimensional Sobol' sequence generated by the $d$-subset: $${C'}_1,\dots,{C'}_{u-1},C_u,{C'}_{u+1},\dots,C_d.$$ Therefore, $2$-dimensional projection $t$-values are still optimized.
+%
+%In procedure $B$, each permutation $\pi_u$ applied in step $6$ of Algorithm \ref{procedureB} results in a design $\{\vx_{i,u}:{\vx'}_{\pi_u(i),-u}\}_{i=0}^{2^\ell-1}$. The $d$ generating matrices corresponding to this design are:
+%$${C'}_1U_u,\dots,{C'}_{u-1}U_u,C_u,{C'}_{u+1}U_u,{C'}_dU_u$$ where $U_u$ is a a full rank upper triangular matrix verifying $C_u={C'}_uU_u$. The right multiplication by $U_u$ is the digital representation of the ordering by $\pi_u$. 
+
+%\section{Estimators: Correlation 2 Oracle 2}
+%\subsection{Choice and parameters (threshold small?)}
+%\subsection{Cost discussion: for first-order Consider or not total order}
 
 
 
@@ -318,70 +313,70 @@ The last two equalities are obtained through two different subsitutions correspo
 
 For those who were curious about the actual value of $\mathbb{E} \left[\max(\bvec{B}_t)\right]$, it is approximately 0.5935. Nevertheless, the Brownian Motion is a continuous time process. Thus, in order to estimate the expected value on a continuous time Browninan motion, one could either use a multilevel method, or a multivariate decomposition method to estimate this infinite dimensional integral.
 
-\newpage
-\section{Annexes}
+%\newpage
+%\section{Annexes}
 
-\subsection{recursive formulas}
-\label{recursive.formulas}
-
-Let $\mathcal{P}_\ell=\{\vx_i\}_{i=0}^{2^\ell-1}$ and $\mathcal{P}'_\ell=\{{\vx'}_i\}_{i=0}^{2^\ell-1}$ be the two points sets constructed with the recursive scheme (\ref{rec.scheme}).  
-
-\subsection{Recursive formula for $\hat{\mu}$}
-
-The quantity $\hat{\mu}$ defined by formula (\ref{mu.est}) can be recursively estimated by:
-\[\left \lbrace\begin{array}{l}
-\hat{\mu}^{(0)} = \dfrac{1}{2} \Big{(} f(\vx_0)+f(\vx_{0,u}:{\vx'}_{0,-u}) \Big{)} \\
-\\
-\hat{\mu}^{(\ell+1)} = \dfrac{1}{2} \Big{(} \hat{\mu}^{(\ell)} + \dfrac{1}{2^{\ell+1}} \sum \limits_{i=2^{\ell}}^{2^{\ell+1}-1} f(\vx_i) + f(\vx_{i,u}:{\vx'}_{i,-u}) \Big{)}
-\end{array}\right.\]
-\begin{proof}
-By developing $\hat{\mu}^{(\ell+1)}$:
-\begin{align*}
-\hat{\mu}^{(\ell+1)} &= \dfrac{1}{2} \dfrac{1}{2^{\ell+1}} \sum \limits_{i=0}^{2^{\ell+1}-1} f(\vx_i) + f(\vx_{i,u}:{\vx'}_{i,-u}) \\
-\hat{\mu}^{(\ell+1)} &= \dfrac{1}{2} \dfrac{1}{2^{\ell+1}} \Big{(} \sum \limits_{i=0}^{2^{\ell}-1} f(\vx_i) + f(\vx_{i,u}:{\vx'}_{i,-u}) + \sum \limits_{i=2^{\ell}}^{2^{\ell+1}-1} f(\vx_i) + f(\vx_{i,u}:{\vx'}_{i,-u}) \Big{)}\\
-\hat{\mu}^{(\ell+1)} &= \dfrac{1}{2} \dfrac{1}{2^{\ell+1}} \Big{(} 2 \times 2^{\ell}\hat{\mu}^{(\ell)} + \sum \limits_{i=2^{\ell}}^{2^{\ell+1}-1} f(\vx_i) + f(\vx_{i,u}:{\vx'}_{i,-u}) \Big{)}\\
-\end{align*}
-\end{proof}
-
-
-\subsection{Recursive formula for $\widehat{\underline{\tau}_u^2}$}
-
-The quantity $\widehat{\underline{\tau}_u^2}$ defined by formula (\ref{first.order.est}) can be recursively estimated by:
-\begin{equation}
-\left\lbrace \begin{array}{l}
-\widehat{\underline{\tau}_u^2}^{(0)}= (f(\vx_0)-\hat{\mu}^{(0)})(f(\vx_{0,u}:{\vx'}_{0,-u})-\hat{\mu}^{(0)}) \\
-\\
-\widehat{\underline{\tau}_u^2}^{(\ell+1)} =  \dfrac{1}{2} \widehat{\underline{\tau}_u^2}^{(\ell)} - \dfrac{1}{2} (\hat{\mu}^{(\ell)})^2 - (\hat{\mu}^{(\ell+1)})^2 + \dfrac{1}{2^{\ell+1}} \sum \limits_{i=2^{\ell}+1}^{2^{\ell+1}-1} f(\vx_i) f(\vx_{i,u}:{\vx'}_{i,-u})
-\end{array}\right.
-\label{first.order.est.rec}
-\end{equation}
-\begin{proof}
-By developing $\widehat{\underline{\tau}_u^2}^{(\ell+1)}$:
-\begin{align*}
-\widehat{\underline{\tau}_u^2}^{(\ell+1)} &= \frac{1}{2^{\ell+1}} \sum \limits_{i=0}^{2^{\ell+1}-1} (f(\vx_i)-\hat{\mu}^{(\ell+1)})(f(\vx_{i,u}:{\vx'}_{i,-u})-\hat{\mu}^{(\ell+1)}) \\
-\widehat{\underline{\tau}_u^2}^{(\ell+1)} &= \frac{1}{2^{\ell+1}} \sum \limits_{i=0}^{2^{\ell+1}-1} f(\vx_i)f(\vx_{i,u}:{\vx'}_{i,-u})-(\hat{\mu}^{(\ell+1)})^2 \\
-\widehat{\underline{\tau}_u^2}^{(\ell+1)} &= \frac{1}{2^{\ell+1}} \Big{(}\sum \limits_{i=0}^{2^{\ell}-1} f(\vx_i)f(\vx_{i,u}:{\vx'}_{i,-u}) + \sum \limits_{i=2^{\ell}}^{2^{\ell+1}-1} f(\vx_i)f(\vx_{i,u}:{\vx'}_{i,-u})\Big{)} -(\hat{\mu}^{(\ell+1)})^2 \\
-\widehat{\underline{\tau}_u^2}^{(\ell+1)} &= \dfrac{1}{2}\Big{(}\widehat{\underline{\tau}_u^2}^{(\ell)}-(\hat{\mu}^{(\ell)})^2\Big{)} + \frac{1}{2^{\ell+1}} \sum \limits_{i=2^{\ell}}^{2^{\ell+1}-1} f(\vx_i)f(\vx_{i,u}:{\vx'}_{i,-u})-(\hat{\mu}^{(\ell+1)})^2 \\
-\end{align*}
-\end{proof}
-
-\subsection{Recursive formula for} 
-%$\widehat{\ov{$\tau$}_u^2}$}
-
-The quantity $\widehat{\underline{\tau}_u^2}$ defined by formula (\ref{total.effect.est}) can be recursively estimated by:
-\begin{equation}
-\left\lbrace \begin{array}{l}
-\widehat{\ov{$\tau$}_u^2}^{(0)}= \dfrac{1}{2} \Big{(} f(\vx_0)-(f({\vx'}_{0,u}:\vx_{0,-u}) \Big{)}^2 \\
-\\
-\widehat{\ov{$\tau$}_u^2}^{(\ell+1)} = \dfrac{1}{2} \widehat{\ov{$\tau$}_u^2}^{(\ell)} + \dfrac{1}{2^{\ell+1}} \sum \limits_{i=2^{\ell}+1}^{2^{\ell+1}-1} \Big{(}f(\vx_i)- f({\vx'}_{i,u}:\vx_{i,-u})\Big{)}^2 
-\end{array}\right.
-\label{total.effect.est.rec}
-\end{equation}
-\begin{proof}
-Straightforward by developing $\widehat{\ov{$\tau$}_u^2}^{(\ell+1)}$.
-\end{proof}
-
-\subsection{Proof proposition \ref{right.multi}}
-\label{proof.prop}
-
+%\subsection{recursive formulas}
+%\label{recursive.formulas}
+%
+%Let $\mathcal{P}_\ell=\{\vx_i\}_{i=0}^{2^\ell-1}$ and $\mathcal{P}'_\ell=\{{\vx'}_i\}_{i=0}^{2^\ell-1}$ be the two points sets constructed with the recursive scheme (\ref{rec.scheme}).  
+%
+%\subsection{Recursive formula for $\hat{\mu}$}
+%
+%The quantity $\hat{\mu}$ defined by formula (\ref{mu.est}) can be recursively estimated by:
+%\[\left \lbrace\begin{array}{l}
+%\hat{\mu}^{(0)} = \dfrac{1}{2} \Big{(} f(\vx_0)+f(\vx_{0,u}:{\vx'}_{0,-u}) \Big{)} \\
+%\\
+%\hat{\mu}^{(\ell+1)} = \dfrac{1}{2} \Big{(} \hat{\mu}^{(\ell)} + \dfrac{1}{2^{\ell+1}} \sum \limits_{i=2^{\ell}}^{2^{\ell+1}-1} f(\vx_i) + f(\vx_{i,u}:{\vx'}_{i,-u}) \Big{)}
+%\end{array}\right.\]
+%\begin{proof}
+%By developing $\hat{\mu}^{(\ell+1)}$:
+%\begin{align*}
+%\hat{\mu}^{(\ell+1)} &= \dfrac{1}{2} \dfrac{1}{2^{\ell+1}} \sum \limits_{i=0}^{2^{\ell+1}-1} f(\vx_i) + f(\vx_{i,u}:{\vx'}_{i,-u}) \\
+%\hat{\mu}^{(\ell+1)} &= \dfrac{1}{2} \dfrac{1}{2^{\ell+1}} \Big{(} \sum \limits_{i=0}^{2^{\ell}-1} f(\vx_i) + f(\vx_{i,u}:{\vx'}_{i,-u}) + \sum \limits_{i=2^{\ell}}^{2^{\ell+1}-1} f(\vx_i) + f(\vx_{i,u}:{\vx'}_{i,-u}) \Big{)}\\
+%\hat{\mu}^{(\ell+1)} &= \dfrac{1}{2} \dfrac{1}{2^{\ell+1}} \Big{(} 2 \times 2^{\ell}\hat{\mu}^{(\ell)} + \sum \limits_{i=2^{\ell}}^{2^{\ell+1}-1} f(\vx_i) + f(\vx_{i,u}:{\vx'}_{i,-u}) \Big{)}\\
+%\end{align*}
+%\end{proof}
+%
+%
+%\subsection{Recursive formula for $\widehat{\underline{\tau}_u^2}$}
+%
+%The quantity $\widehat{\underline{\tau}_u^2}$ defined by formula (\ref{first.order.est}) can be recursively estimated by:
+%\begin{equation}
+%\left\lbrace \begin{array}{l}
+%\widehat{\underline{\tau}_u^2}^{(0)}= (f(\vx_0)-\hat{\mu}^{(0)})(f(\vx_{0,u}:{\vx'}_{0,-u})-\hat{\mu}^{(0)}) \\
+%\\
+%\widehat{\underline{\tau}_u^2}^{(\ell+1)} =  \dfrac{1}{2} \widehat{\underline{\tau}_u^2}^{(\ell)} - \dfrac{1}{2} (\hat{\mu}^{(\ell)})^2 - (\hat{\mu}^{(\ell+1)})^2 + \dfrac{1}{2^{\ell+1}} \sum \limits_{i=2^{\ell}+1}^{2^{\ell+1}-1} f(\vx_i) f(\vx_{i,u}:{\vx'}_{i,-u})
+%\end{array}\right.
+%\label{first.order.est.rec}
+%\end{equation}
+%\begin{proof}
+%By developing $\widehat{\underline{\tau}_u^2}^{(\ell+1)}$:
+%\begin{align*}
+%\widehat{\underline{\tau}_u^2}^{(\ell+1)} &= \frac{1}{2^{\ell+1}} \sum \limits_{i=0}^{2^{\ell+1}-1} (f(\vx_i)-\hat{\mu}^{(\ell+1)})(f(\vx_{i,u}:{\vx'}_{i,-u})-\hat{\mu}^{(\ell+1)}) \\
+%\widehat{\underline{\tau}_u^2}^{(\ell+1)} &= \frac{1}{2^{\ell+1}} \sum \limits_{i=0}^{2^{\ell+1}-1} f(\vx_i)f(\vx_{i,u}:{\vx'}_{i,-u})-(\hat{\mu}^{(\ell+1)})^2 \\
+%\widehat{\underline{\tau}_u^2}^{(\ell+1)} &= \frac{1}{2^{\ell+1}} \Big{(}\sum \limits_{i=0}^{2^{\ell}-1} f(\vx_i)f(\vx_{i,u}:{\vx'}_{i,-u}) + \sum \limits_{i=2^{\ell}}^{2^{\ell+1}-1} f(\vx_i)f(\vx_{i,u}:{\vx'}_{i,-u})\Big{)} -(\hat{\mu}^{(\ell+1)})^2 \\
+%\widehat{\underline{\tau}_u^2}^{(\ell+1)} &= \dfrac{1}{2}\Big{(}\widehat{\underline{\tau}_u^2}^{(\ell)}-(\hat{\mu}^{(\ell)})^2\Big{)} + \frac{1}{2^{\ell+1}} \sum \limits_{i=2^{\ell}}^{2^{\ell+1}-1} f(\vx_i)f(\vx_{i,u}:{\vx'}_{i,-u})-(\hat{\mu}^{(\ell+1)})^2 \\
+%\end{align*}
+%\end{proof}
+%
+%\subsection{Recursive formula for} 
+%%$\widehat{\ov{$\tau$}_u^2}$}
+%
+%The quantity $\widehat{\underline{\tau}_u^2}$ defined by formula (\ref{total.effect.est}) can be recursively estimated by:
+%\begin{equation}
+%\left\lbrace \begin{array}{l}
+%\widehat{\ov{$\tau$}_u^2}^{(0)}= \dfrac{1}{2} \Big{(} f(\vx_0)-(f({\vx'}_{0,u}:\vx_{0,-u}) \Big{)}^2 \\
+%\\
+%\widehat{\ov{$\tau$}_u^2}^{(\ell+1)} = \dfrac{1}{2} \widehat{\ov{$\tau$}_u^2}^{(\ell)} + \dfrac{1}{2^{\ell+1}} \sum \limits_{i=2^{\ell}+1}^{2^{\ell+1}-1} \Big{(}f(\vx_i)- f({\vx'}_{i,u}:\vx_{i,-u})\Big{)}^2 
+%\end{array}\right.
+%\label{total.effect.est.rec}
+%\end{equation}
+%\begin{proof}
+%Straightforward by developing $\widehat{\ov{$\tau$}_u^2}^{(\ell+1)}$.
+%\end{proof}
+%
+%\subsection{Proof proposition \ref{right.multi}}
+%\label{proof.prop}
+%
 \end{document}
