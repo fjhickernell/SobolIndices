@@ -265,6 +265,31 @@ Therefore, we can define $S_u(\vI)$ and $\overline{S}_u(\vI)$ as functions over 
 where the true value $S_u\in [\widehat{S}_u - \varepsilon_{S_u}, \widehat{S}_u + \varepsilon_{S_u}]$.
 
 \subsection{Reliable Estimation Using Quasi-Monte Carlo}
+
+We assume we have an embedded sequence of digital nets in base $b$,
+\[
+\mathcal{P}_0=\{\bvec{0}\}\subset\dots\subset\mathcal{P}_m=\{\vx_i\}_{i=0}^{b^m}\subset\dots\subset\mathcal{P}_\infty=\{\vx_i\}_{i=0}^{\infty}.
+\]
+
+Each $\mathcal{P}_m$ has a group structure under the digit wise addition. Analogously, we can also define the dual nets as $\mathcal{P}_m^\perp=\{\vk\in\mathbb{N}_0^d:\ip{\vx}{\vk}=0,\, \vx\in\mathcal{P}_m\}$,
+\[
+\mathcal{P}_0^\perp=\left\{\mathbb{N}_0^d\right\}\supset\dots\supset\mathcal{P}_\infty=\{\bvec{0}\}.
+\]
+
+An important property is that for any Walsh basis $\phi_{\vk}(\vx)$
+\[
+\frac{1}{b^m}\sum_{\vx\in\mathcal{P}_m}\phi_{\vk}(\vx)=
+\begin{cases}
+1,\quad \vk\in\mathcal{P}_m^\perp, \\
+0,\quad \vk\notin\mathcal{P}_m^\perp
+\end{cases}
+\]
+
+Therefore,
+\[
+\abs{\int_{\cube} f(\vx)\,d\vx - \frac{1}{b^m}\sum_{\vx\in\mathcal{P}_m}f(\vx)}=\abs{\sum_{\vk\in\mathcal{P}_m^\perp\setminus\{\vzero\}}\hf_{\vk}}
+\]
+
 In \cite{HicJim} we proposed an algorithm based on digital nets that estimates hight dimensional integrals whose error lies within a user-input error tolerance. This algorithm finds the number of data points automatically. We will refer to it as $\widehat{I}(f;\varepsilon)$, where $f$ is the function to integrate and $\varepsilon$ the user-input error tolerance.
 
 The main result from the article if that for all $f\in\mathcal{C}$,
