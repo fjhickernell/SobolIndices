@@ -29,6 +29,7 @@ mathtools,bbm,extraipa,mathabx,graphicx,algorithm}
 \newcommand{\vx}{\bvec{x}}
 \newcommand{\vI}{\bvec{I}}
 \newcommand{\vk}{\bvec{k}}
+\newcommand{\vw}{\bvec{w}}
 \newcommand{\vz}{\bvec{z}}
 \newcommand{\dif}{\mathsf{d}}
 \newcommand{\hf}{\hat{f}}
@@ -79,7 +80,8 @@ mathtools,bbm,extraipa,mathabx,graphicx,algorithm}
 \section{Backgrounds on Sobol' indices}
 
 \subsection{Definition of Sobol' indices}
-We adopt the same notations introduced by Owen in \cite{Owen}. Denote by $f$ a numerical model, by $\vx=(x_1,\dots,x_d)$ its vector of inputs and set $\mathcal{D}=\{1,\dots,d\}$. The uncertainty on $\vx$ is modeled by a random vector that we suppose uniformly distributed on $\cube$. Let $u$ be a subset of $\mathcal{D}$, $-u$ its complement and $|u|$ its cardinality. $\vx_u$ represents a point in $[0,1)^u$ with components $x_j, j \in u$. Given two points $\vx$ and $\vx'$, the hybrid point $\vz=(\vx_u:{\vx'}_{-u})$ is defined as $z_j=x_j$ if $j \in u$ and $z_j={x'}_j$ if $j \notin u$.
+%We adopt the same notations introduced by Owen in \cite{Owen}. 
+Denote by $f$ a numerical model, by $\vx=(x_1,\dots,x_d)$ its vector of inputs and set $\mathcal{D}=\{1,\dots,d\}$. The uncertainty on $\vx$ is modeled by a random vector that we suppose uniformly distributed on $\cube$. Let $u$ be a subset of $\mathcal{D}$, $-u$ its complement and $|u|$ its cardinality. $\vx_u$ represents a point in $[0,1)^u$ with components $x_j, j \in u$. Given two points $\vx$ and $\vx'$, the hybrid point $\vw=(\vx_u:{\vx'}_{-u})$ is defined as $w_j=x_j$ if $j \in u$ and $w_j={x'}_j$ if $j \notin u$.
 
 Let $f$ be the symbol representing the numerical model studied. We assume $f \in \mathcal{L}^2[0,1)^d$. Denote by $\mu$ and $\sigma^2$ the mean and variance of $f$.
 The uncertainty on $\vx$ is modeled by random variables such that $\vx \iid \mathcal{U}[0,1)^d$. Recall the Hoeffding decomposition \cite{Hoeffding} of $f$:
@@ -113,6 +115,7 @@ The variance of $f$ is evaluated by:
 Most of the time, the complexity of $f$ causes the computation of $\mu$, $\sigma^2$ and integrals (\ref{first.order}) and (\ref{total.effect}) to be intractable. In such case, one needs to rely on an estimation of these quantities.
 
 \subsection{Estimation of Sobol' indices}
+\label{estimation.strategies}
 In this section we review two Monte Carlo procedures for the estimation of Sobol' indices. We define by design a point set $\mathcal{P}=\{\vx_i\}_{i=0}^{n-1}$ obtained by sampling each variable $x_j$ $n$ times. Each row of the design is a point $\vx_i$ in $[0,1)^d$. Each column of the design refers to a variable $x_j$. Consider $\mathcal{P}=\{\vx_i\}_{i=0}^{n-1}$ and $\mathcal{P'}=\{{\vx'}_i\}_{i=0}^{n-1}$ two designs where $(\vx_i,{\vx'}_i) \iid [0,1)^{2d}$. 
 \bigskip
 
@@ -149,15 +152,15 @@ More specifically, let $\mathcal{P}=\{\vx_i\}_{i=0}^{n-1}$ and $\mathcal{P}'=\{{
 Each $\underline{\tau}^2_u$ can be estimated via formula (\ref{first.order.est}) with $\{f(\vx_i)\}_{i=0}^{n-1}$ and $\{\pi_u(f({\vx'}_i))\}_{i=0}^{n-1}$ without requiring further model evaluations. This estimation method has been deeply studied and generalized in Tissot et al. \cite{Mara} to the case of closed second-order indices. In the following we refer to this method as replication procedure.
 \bigskip
 
-\subsection{Towards a robust estimation}
-The aim of this paper is to propose a recursive estimation procedure to estimate Sobol' indices. The choice of the stopping criterion is the key point of this paper. The two estimation procedures reviewed in the previous section can be rendered recursive. In \cite{Gilquin16}, the authors propose a recursive version of the replication procedure. The stopping criterion of the recursive algorithm is an absolute difference between estimates computed on consecutive steps. 
+\subsection{Towards a reliable estimation}
+The aim of this paper is to propose a recursive estimation procedure to estimate Sobol' indices. The choice of the stopping criterion is the key point of this paper. 
 
-More generally, in most recursive approaches that estimate Sobol' indices, the stopping criterion is a quantity of interest build directly upon the estimates. Such stopping criteria often involved hyperparameters hard to tweak but above all fail to guarantee any error bound on the estimation. 
+The two estimation procedures reviewed in the previous section can be rendered recursive. In \cite{Gilquin16}, the authors propose a recursive version of the replication procedure. In this recursive version, the stopping criterion is an absolute difference between estimates computed on consecutive steps. More generally, in most recursive approaches that estimate Sobol' indices, the stopping criterion is a quantity of interest build directly upon the estimates. Such stopping criteria often involved hyperparameters hard to tweak but above all fail to guarantee any error bound on the estimation. 
 \bigskip
 
-Our recursive procedure stands apart from others approaches by the construction of a robust stopping criterion. This criterion is an error bound based on the discrete Walsh decomposition of integrals (\ref{first.order}) and (\ref{total.effect}). This decomposition use the close set property of digital sequences. As such, our recursive procedure relies on the iterative construction of Sobol' sequence. 
+Our recursive procedure stands apart from others approaches by the construction of a robust stopping criterion. This criterion is an error bound based on the discrete Walsh decomposition of integrals (\ref{first.order}) and (\ref{total.effect}). This decomposition use the close set property of digital sequences. As such, our recursive procedure relies on the iterative construction of Sobol' sequences. The iterative construction of the Sobol' sequences is performed accordingly to the multiplicative  approach presented in \cite{crass}.
 
-Background on Sobol' sequences are provided in \cite{crass}. The iterative construction of the Sobol' sequences is performed accordingly to the multiplicative  approach presented in \cite{crass}. The construction of our stopping criterion is the subject of the next section \ref{section.error}. Our recursive estimation procedure is presented in section \ref{section.recursive.procedure}.
+The construction of our stopping criterion is the subject of the next section \ref{section.error}. Our recursive estimation procedure is presented in section \ref{section.recursive.procedure}.
 
 
 \section{Reliable Error Estimation for Cubatures}
@@ -167,7 +170,7 @@ Background on Sobol' sequences are provided in \cite{crass}. The iterative const
 
 We assume we have an embedded sequence of digital nets in base $b$,
 \[
-\mathcal{P}_0=\{\bvec{0}\}\subset\dots\subset\mathcal{P}_m=\{\vx_i\}_{i=0}^{b^m}\subset\dots\subset\mathcal{P}_\infty=\{\vx_i\}_{i=0}^{\infty}.
+\mathcal{P}_0=\{\bvec{0}\}\subset\dots\subset\mathcal{P}_m=\{\vx_i\}_{i=0}^{b^m-1}\subset\dots\subset\mathcal{P}_\infty=\{\vx_i\}_{i=0}^{\infty}.
 \]
 
 Each $\mathcal{P}_m$ has a group structure under the digit wise addition. Analogously, we can also define the dual nets as $\mathcal{P}_m^\perp=\{\vk\in\mathbb{N}_0^d:\ip{\vx}{\vk}=0,\, \vx\in\mathcal{P}_m\}$,
@@ -215,6 +218,12 @@ where the true value $S_u\in [\widehat{S}_u - \varepsilon_{S_u}, \widehat{S}_u +
 
 \section{Recursive estimation procedure}
 \label{section.recursive.procedure}
+
+The recursive estimation procedure we propose combine the error bound presented in the previous section with one of the two estimation strategies of section \ref{estimation.strategies}. Namely, Saltelli's strategy and the one based on replicated designs. The form of the error bound is the same for both strategies and is given by equation \ref{}.
+
+We start be detailing our recursive procedure in the form of an algorithm. Then, we discuss a possible improvement by considering an estimator recently introduced by Owen improving the estimation of small first-order indices.
+
+\subsection{Main algorithm}
 %
 %$\mathcal{P}_{\ell}$ and $\mathcal{P}'_{\ell}$ can either be used with procedure $A$ to estimate all first-order and all total effect Sobol' indices or with procedure $B$ to estimate all first-order Sobol' indices. Algorithms \ref{procedureA} and \ref{procedureB} summarize the main steps of each procedure.
 %\begin{algorithm}[!ht]
@@ -259,31 +268,43 @@ where the true value $S_u\in [\widehat{S}_u - \varepsilon_{S_u}, \widehat{S}_u +
 %\label{procedureB}
 %\end{algorithm}
 %
-%\subsection{Improvements}
-%This section discusses two improvements to ease the estimation of Sobol' indices with procedures $A$ and $B$. 
-%
-%\bigskip
-%
-%The first improvement focus on the use of a better estimator to evaluate small first-order Sobol' indices with procedure $A$. This estimator is called ``Correlation 2" and was introduced by Owen in \cite{Owen}. Owen discussed and highlighted the efficiency of ``Correlation 2" when estimating small closed Sobol' indices. Our aim is to show that using ``Correlation 2" in procedure $A$ may reduces the total number of model evaluations. ``Correlation 2" formula writes as follows:
-%\begin{equation}
-%\widehat{\underline{\tau}_u^2} = \frac{1}{n} \sum \limits_{i=0}^{n-1} (f(\vx_i)-f({\vz}_{i,u}:{\vx}_{i,-u}))(f(\vx_{i,u}:{\vx'}_{i,-u})-f({\vx'}_i))
-%\label{correlation2}
-%\end{equation}
-%It uses an extra set of $n$ model evaluations to estimate $\widehat{\underline{\tau}_u^2}$. Owen explains the effectiveness of ``Correlation 2" as follows. If the main effect of $\vx_u$ is small then $f(\vx)$ will be almost entirely explained by $\vx_{-u}$. The two terms $(f(\vx_i)-f({\vz}_{i,u}:{\vx}_{i,-u}))$ and $(f(\vx_{i,u}:{\vx'}_{i,-u})-f({\vx'}_i))$ should then be small quantities as well as (\ref{correlation2}). 
-%
-%We discuss now the potential improvement brought by the use of ``Correlation 2". Assume that the number of small first-order indices is known and equals $\alpha$. Then, the cost of procedure $A$ including ``Correlation 2" to estimate small indices writes: 
-%\[ n(d-\alpha) + 2 n'\alpha + 2\max(n,n'),\]
-%where: \begin{itemize}
-%\item[$\bullet$] $n(d-\alpha)$ is the number of evaluations induced by the $d-\alpha$ designs $\{\vx_{i,u}:{\vx'}_{i,-u}\}_{i\geq0}$ to estimate all non small indices, 
-%\item[$\bullet$] $2 n'\alpha$ is the number of evaluations induced by the $2\alpha$ designs $\{\vz_{i,u}:\vx_{i,-u}\}_{i\geq0}$ and $\{\vx_{i,u}:{\vx'}_{i,-u}\}_{i\geq0}$ to estimate all small indices,
-%\item[$\bullet$] $2\max(n,n')$ is the number of evaluations  induced by the $2$ designs $\{\vx_{i}\}_{i\geq0}$ and $\{{\vx'}_{i}\}_{i\geq0}$.
-%\end{itemize}
-%At the opposite, the cost of procedure $A$ excluding ``Correlation 2" writes: 
-%\[ n(d-\alpha) + n\alpha + 2n.\]
-%It is straightforward that procedure $A$ including ``Correlation 2" performs equally well or better when $n' \leq 2n$. Furthermore, since we are working with Sobol' sequences $n'=2^{k'}$ and $n=2^{k}$. Hence, procedure $A$ including ``Correlation 2" performs equally well or better when the recursive estimation procedure finished at least one step sooner. Illustrations of this improvement will be provided in Section \ref{appli}.
-%
-%\bigskip
-%
+\subsection{Improvements}
+
+We focus on the use of a better estimator to evaluate small first-order Sobol' indices in Variant $A$. This estimator is called ``Correlation 2" and was introduced by Owen in \cite{Owen}. Owen discussed and highlighted the efficiency of ``Correlation 2" when estimating small closed Sobol' indices. Our aim is to show that using ``Correlation 2" in procedure $A$ may reduce the total number of model evaluations. Its formula writes as follows:
+\begin{equation}
+\widehat{\underline{\tau}_u^2} = \frac{1}{n} \sum \limits_{i=0}^{n-1} (f(\vx_i)-f({\vz}_{i,u}:{\vx}_{i,-u}))(f(\vx_{i,u}:{\vx'}_{i,-u})-f({\vx'}_i)),
+\label{correlation2}
+\end{equation}
+It uses an extra set of $n$ model evaluations to estimate $\widehat{\underline{\tau}_u^2}$. %Owen explains the effectiveness of (\ref{correlation2}) as follows. If the main effect of $\vx_u$ is small then $f(\vx)$ will be almost entirely explained by $\vx_{-u}$. The two terms $(f(\vx_i)-f({\vz}_{i,u}:{\vx}_{i,-u}))$ and $(f(\vx_{i,u}:{\vx'}_{i,-u})-f({\vx'}_i))$ should then be small quantities as well as (\ref{correlation2}). 
+\bigskip
+
+We discuss now the potential improvement brought by the use of ``Correlation 2" in Variant $A$. The idea is to replace the current estimator (\ref{first.order.est}) by (\ref{correlation2}) for each small first-order index. Assume that the number of small first-order indices is known and equals $\gamma$. We denote by $u_1,\dots,u_{\gamma}$ the indexes of the corresponding inputs and $\Gamma = \{1,\dots,\gamma\}$. The cost of Variant $A$ including ``Correlation 2" writes: 
+\begin{equation}
+2 \sum \limits_{j \in \Gamma} n'_{u_j} + \sum \limits_{j \in \mathcal{D}/\Gamma} n'_{u_j} + 2 \ n'_{\max},
+\label{cost.improvement}
+\end{equation}
+where: \begin{itemize}
+\item[$\bullet$] $2 \sum \limits_{j \in \Gamma} n'_{u_j}$ is the number of evaluations induces by the $\gamma$ sets \\ $\{f\left(\vz_{i,u_j}:\vx_{i,-u_j}\right)\}_{i=0}^{n'_{u_j}-1}$ and $\gamma$ sets $\{f\left(\vx_{i,u_j}:{\vx'}_{i,-u_j}\right)\}_{i=0}^{n'_{u_j}-1}$,
+\item[$\bullet$] $\sum \limits_{j \in \mathcal{D}/\Gamma} n'_{u_j}$ is the number of evaluations induced by the $d-\gamma$ sets \\ $\{f\left(\vx_{i,u_j}:{\vx'}_{i,-u_j}\right)\}_{i=0}^{n'_{u_j}-1}$, 
+\item[$\bullet$] $2 \ n'_{\max}=2 \ \max \limits_{j \in \mathcal{D}} \ (n'_{u_j})$, is the number of evaluations induced by the $2$ sets $\{f\left(\vx_{i}\right)\}_{i=0}^{n'_{\max}-1}$ and $\{f\left({\vx'}_{i}\right)\}_{i=0}^{n'_{\max}-1}$.
+\end{itemize}
+At the opposite, the cost of Variant $A$ excluding ``Correlation 2" writes: 
+\begin{equation}
+\sum \limits_{j \in \mathcal{D}} n_{u_j} + 2 \ n_{\max}.
+\label{cost.non.improvement}
+\end{equation}
+The comparison between (\ref{cost.improvement}) and (\ref{cost.non.improvement}) is driven by whether or not total effect indices require more evaluations $f\left(\vx_{i,u_j}:{\vx'}_{i,-u_j}\right)$ than their respective first-order indices. We distinguish two extreme cases :
+\begin{itemize}
+\item[1)] $\forall j \in \Gamma$, the total effect index $\ov{$S$}_j$ requires more evaluations $f\left(\vx_{i,u_j}:{\vx'}_{i,-u_j}\right)$ than the first-order index $\underline{S}_j$. As a result, the difference (\ref{cost.improvement}) - (\ref{cost.non.improvement}) is always positive. Thus, using ``Correlation 2" results in a cost regression.
+\item[2)] $\forall j \in \Gamma$, the total effect index $\ov{$S$}_j$ requires less evaluations $f\left(\vx_{i,u_j}:{\vx'}_{i,-u_j}\right)$ than the first-order index $\underline{S}_j$. As a result, the difference (\ref{cost.improvement}) - (\ref{cost.non.improvement}) is always negative. Thus, using ``Correlation 2" results in a cost improvement.
+\end{itemize}
+The standard case varies between these two. That is a portion of indices $\ov{$S$}_j$ require more evaluations and another portion of $\ov{$S$}_j$ require less. Illustrations of this potential improvement are addressed in Section \ref{appli}. 
+\bigskip
+
+In pratice, one does not know which are the small Sobol' indices. To overcome this issue, we proceed as follows in Variant $A$:
+... etc ...
+
+
 %The second improvement focus on the choice of the $2d$ generating matrices that generate the two Sobol' sequences $\mathcal{P}_\ell$  and ${\mathcal{P}'}_\ell$ in procedure $B$.
 %
 %We note by $C_1,\dots,C_d$ the matrices generating $\mathcal{P}_\ell=\{\vx_i\}_{i=0}^{2^\ell-1}$ and ${C'}_1,\dots,{C'}_d$ those generating $\mathcal{P}'_\ell=\{{\vx'}_i\}_{i=0}^{2^\ell-1}$.
@@ -298,11 +319,8 @@ where the true value $S_u\in [\widehat{S}_u - \varepsilon_{S_u}, \widehat{S}_u +
 %\subsection{Choice and parameters (threshold small?)}
 %\subsection{Cost discussion: for first-order Consider or not total order}
 
-
-
 \section{Applications}
 \label{appli}
-\subsection{Classical test functions}
 \subsection{Real case model}
 The Brownian motion is widely used in many applications. Thus, the following example might be interesting to understand what Sobol' indices can explain in some of these applications. For instance, if we want to estimate the expected value of the maximum of a discretized Brownian motion whose covariance matrix is $\Sigma$, our goal is to estimate
 \begin{align*}
@@ -313,6 +331,8 @@ The Brownian motion is widely used in many applications. Thus, the following exa
 The last two equalities are obtained through two different subsitutions corresponding to the \textit{Cholesky} construction of the Brownian motion, and the \textit{PCA} construction. For instance, if we take 10 dimensions and $t_i=i/10$, using the Cholesky construction $S_{1} = 24\%$, $S_{2} = 16\%$, $S_{3} = 13\%$, $S_{4} = 10\%$, and $\overline{S}_{1}=24\%$, $\overline{S}_{2}=18\%$, $\overline{S}_{3}=15\%$, $\overline{S}_{4} = 13\%$. However, using the PCA construction, $S_{1} = 89\%$, $S_{2} = 2\%$, $S_{3} = 1\%$, $S_{4} = 0\%$, and $\overline{S}_{1}=94\%$, $\overline{S}_{2}=7\%$, $\overline{S}_{3}=3\%$, $\overline{S}_{4} = 2\%$. This shows that the PCA construction will be better to estimate the above expectation using quasi-Monte Carlo methods since it has a lower effective dimensionality.
 
 For those who were curious about the actual value of $\mathbb{E} \left[\max(\bvec{B}_t)\right]$, it is approximately 0.5935. Nevertheless, the Brownian Motion is a continuous time process. Thus, in order to estimate the expected value on a continuous time Browninan motion, one could either use a multilevel method, or a multivariate decomposition method to estimate this infinite dimensional integral.
+
+\subsection{Classical test functions}
 
 %\newpage
 %\section{Annexes}
