@@ -163,28 +163,32 @@ Background on Sobol' sequences are provided in \cite{crass}. The iterative const
 \section{Reliable Error Estimation for Cubatures}
 \label{section.error} 
 
-\subsection{Reliable Estimation Using Quasi-Monte Carlo}
+\subsection{Reliable Estimation Using Quasi-Monte Carlo}\label{sec_reliable_error}
 
-We assume we have an embedded sequence of digital nets in base $b$,
+
+Consider an embedded sequence of digital nets in base $b$,
 \[
 \mathcal{P}_0=\{\bvec{0}\}\subset\dots\subset\mathcal{P}_m=\{\vx_i\}_{i=0}^{b^m}\subset\dots\subset\mathcal{P}_\infty=\{\vx_i\}_{i=0}^{\infty}.
 \]
+One example that will be particularly useful for our application is the Sobol' sequence \cite{•}.
 
 Each $\mathcal{P}_m$ has a group structure under the digit wise addition. Analogously, we can also define the dual nets as $\mathcal{P}_m^\perp=\{\vk\in\mathbb{N}_0^d:\ip{\vx}{\vk}=0,\, \vx\in\mathcal{P}_m\}$,
 \[
 \mathcal{P}_0^\perp=\left\{\mathbb{N}_0^d\right\}\supset\dots\supset\mathcal{P}_\infty=\{\bvec{0}\}.
 \]
 
-An important property is that for any Walsh basis $\phi_{\vk}(\vx)$
-\[
+An important property for the error estimation using digital nets is that for any Walsh basis $\phi_{\vk}(\vx)$
+\begin{equation}\label{basis_prop}
 \frac{1}{b^m}\sum_{\vx\in\mathcal{P}_m}\phi_{\vk}(\vx)=
 \begin{cases}
 1,\quad \vk\in\mathcal{P}_m^\perp, \\
-0,\quad \vk\notin\mathcal{P}_m^\perp
+0,\quad \vk\notin\mathcal{P}_m^\perp.
 \end{cases}
-\]
+\end{equation}
 
-Therefore,
+For any function $f\in L^2(\cube)$, one may use its Walsh series $f(\vx)=\sum_{\vk\in\naturals_0^d}\hf_{\vk}\phi_{\vk}(\vx)$ and equation \eqref{basis_prop} to rewrite the error as,
+
+
 \[
 \abs{\int_{\cube} f(\vx)\,d\vx - \frac{1}{b^m}\sum_{\vx\in\mathcal{P}_m}f(\vx)}=\abs{\sum_{\vk\in\mathcal{P}_m^\perp\setminus\{\vzero\}}\hf_{\vk}}
 \]
@@ -201,17 +205,18 @@ The main result from the article if that for all $f\in\mathcal{C}$,
 \end{itemize}
 
 \subsection{Definition of $\widehat{S}$ (fix it with max and min)}
-In some applications, it is more useful to estimate the normalized Sobol' indices, $S_u = \underline{\tau}_u^2/\sigma^2$ and $\overline{S}_u = \overline{\tau}_u^2/\sigma^2$. In both cases, regular and normalized indices can be approximated by estimating some integrals,
-\begin{align*}
-S_u & = \frac{\int_{[0,1)^{2d-1}} f(\vx)f(\vx_{u}:{\vx'}_{-u})d\vx d{\vx'} - \mu^2 }{\int_{[0,1)^{d}} f(\vx)^2 d{\vx}-\mu^2} = \frac{I_1-(I_3)^2}{I_2-(I_3)^2}, \\
+The aim of our algorithm is to estimate the normalized Sobol' indices, $\underline{S}_u = \underline{\tau}_u^2/\sigma^2$ and $\overline{S}_u = \overline{\tau}_u^2/\sigma^2$. In both cases, regular and normalized indices can be approximated by estimating integrals,
+\begin{align}\label{indices_integ_1}
+\underline{S}_u & = \frac{\int_{[0,1)^{2d-1}} f(\vx)f(\vx_{u}:{\vx'}_{-u})d\vx d{\vx'} - \mu^2 }{\int_{[0,1)^{d}} f(\vx)^2 d{\vx}-\mu^2} = \frac{I_1-(I_3)^2}{I_2-(I_3)^2}, \\
+\label{indices_integ_2}
 \overline{S}_u & = \frac{\frac{1}{2}\int_{[0,1)^{d+1}}(f(\vx')-f(\vx_u:{\vx'}_{-u}))^2d\vx d{\vx'}}{\int_{[0,1)^{d}} f(\vx)^2 d{\vx}-\mu^2} = \frac{I_1}{I_2-(I_3)^2}.
-\end{align*}
-Therefore, we can define $S_u(\vI)$ and $\overline{S}_u(\vI)$ as functions over a vector of integrals $\vI$. If we can estimate $\vI$ such that $\vI\in B_{\varepsilon_{\vI}}(\widehat{\vI}):=[\widehat{\vI}-\varepsilon_{\vI},\widehat{\vI}+\varepsilon_{\vI} ]$, then we can define the following estimators for the Sobol' indices:
+\end{align}
+However, to guarantee the error in our $\underline{S}_u$ and $\overline{S}_u$ approximations we need to proceed with an estimator different than the usual. Given equations \eqref{indices_integ_1} and \eqref{indices_integ_2}, one may write $\underline{S}_u(\vI)$ and $\overline{S}_u(\vI)$ as functions over a vector of integrals $\vI$. According to section \ref{sec_reliable_error}, integrals can be estimated such that $\vI\in B_{\varepsilon_{\vI}}(\widehat{\vI}):=[\widehat{\vI}-\varepsilon_{\vI},\widehat{\vI}+\varepsilon_{\vI} ]$. Thus, the following estimator
 \begin{align*}
 \widehat{S}_u & = \frac{1}{2}\left(\min\left(\max_{\vI\in B_{\varepsilon_{\vI}}(\widehat{\vI})} S_u(\vI),1\right) + \max\left(\min_{\vI\in B_{\varepsilon_{\vI}}(\widehat{\vI})} S_u(\vI),0\right) \right) \\
 \varepsilon_{S_u} & = \frac{1}{2}\left(\min\left(\max_{\vI\in B_{\varepsilon_{\vI}}(\widehat{\vI})} S_u(\vI),1\right) - \max\left(\min_{\vI\in B_{\varepsilon_{\vI}}(\widehat{\vI})} S_u(\vI),0\right) \right)
 \end{align*}
-where the true value $S_u\in [\widehat{S}_u - \varepsilon_{S_u}, \widehat{S}_u + \varepsilon_{S_u}]$.
+ensures that the true value $S_u\in [\widehat{S}_u - \varepsilon_{S_u}, \widehat{S}_u + \varepsilon_{S_u}]$.
 
 \section{Recursive estimation procedure}
 \label{section.recursive.procedure}
