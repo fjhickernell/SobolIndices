@@ -27,6 +27,7 @@ mathtools,bbm,extraipa,mathabx,graphicx,algorithm}
 \newcommand{\e}{\text{e}}
 \newcommand{\bvec}[1]{\boldsymbol{#1}}
 \newcommand{\vx}{\bvec{x}}
+\newcommand{\vt}{\bvec{t}}
 \newcommand{\vI}{\bvec{I}}
 \newcommand{\vk}{\bvec{k}}
 \newcommand{\vw}{\bvec{w}}
@@ -175,7 +176,13 @@ Consider an embedded sequence of digital nets in base $b$,
 \]
 One example that will be particularly useful for our application is the Sobol' sequence \cite{•}.
 
-Each $\mathcal{P}_m$ has a group structure under the digit wise addition. Analogously, we can also define the dual nets as $\mathcal{P}_m^\perp=\{\vk\in\mathbb{N}_0^d:\ip{\vx}{\vk}=0,\, \vx\in\mathcal{P}_m\}$,
+Each $\mathcal{P}_m$ has a group structure under the digit-wise addition:
+\[
+\vx\oplus\vt = \left(\sum_{\ell=1}^{\infty} [(x_{j\ell} + t_{j\ell}) \bmod b] b^{-\ell} \pmod{1} \right)_{j=1}^d.
+\]
+where $x_{j\ell}$ and $t_{j\ell}$ are the binary decompositions of $x_j$ and $t_j$.
+
+ Analogously, we can also define the dual nets as $\mathcal{P}_m^\perp=\{\vk\in\mathbb{N}_0^d:\ip{\vx}{\vk}=0,\, \vx\in\mathcal{P}_m\}$,
 \[
 \mathcal{P}_0^\perp=\left\{\mathbb{N}_0^d\right\}\supset\dots\supset\mathcal{P}_\infty=\{\bvec{0}\}.
 \]
@@ -196,7 +203,7 @@ For any function $f\in L^2(\cube)$, one may use its Walsh series $f(\vx)=\sum_{\
 \abs{\int_{\cube} f(\vx)\,d\vx - \frac{1}{b^m}\sum_{\vx\in\mathcal{P}_m}f(\vx)}=\abs{\sum_{\vk\in\mathcal{P}_m^\perp\setminus\{\vzero\}}\hf_{\vk}}
 \]
 
-In \cite{HicJim} we proposed an algorithm based on digital nets that estimates hight dimensional integrals whose error lies within a user-input error tolerance. This algorithm finds the number of data points automatically. We will refer to it as $\widehat{I}(f;\varepsilon)$, where $f$ is the function to integrate and $\varepsilon$ the user-input error tolerance.
+In \cite{HicJim} we proposed an ordering of the wavenumbers $\vk\in\naturals_0^d$ that led to the data-based upper bound below,
 
 The main result from the article if that for all $f\in\mathcal{C}$,
 \[
@@ -207,20 +214,27 @@ The main result from the article if that for all $f\in\mathcal{C}$,
 \item $a(r,m)=$ inflation factor that depends on $\mathcal{C}$.
 \end{itemize}
 
+ algorithm based on digital nets that estimates hight dimensional integrals whose error lies within a user-input error tolerance. This algorithm finds the number of data points automatically. We will refer to it as $\widehat{I}(f;\varepsilon)$, where $f$ is the function to integrate and $\varepsilon$ the user-input error tolerance.
+
 \subsection{Definition of $\widehat{S}$ (fix it with max and min)}
 
 The aim of our algorithm is to estimate the normalized Sobol' indices, $\underline{S}_u = \underline{\tau}_u^2/\sigma^2$ and $\overline{S}_u = \overline{\tau}_u^2/\sigma^2$. In both cases, regular and normalized indices can be approximated by estimating integrals,
 \begin{align}\label{indices_integ_1}
-\underline{S}_u & = \frac{\int_{[0,1)^{2d-1}} f(\vx)f(\vx_{u}:{\vx'}_{-u})d\vx d{\vx'} - \mu^2 }{\int_{[0,1)^{d}} f(\vx)^2 d{\vx}-\mu^2} = \frac{I_1-(I_3)^2}{I_2-(I_3)^2}, \\
+\underline{S}_u & = \frac{\int_{[0,1)^{2d-1}} \left(f(\vx)-
+f(\vx_u:{\vx'}_{-u})\right)f(\vx')d\vx d{\vx'} }{\int_{[0,1)^{d}} f(\vx)^2 d{\vx}-\mu^2} = \frac{I_1}{I_3-(I_4)^2}, \\
 \label{indices_integ_2}
-\overline{S}_u & = \frac{\frac{1}{2}\int_{[0,1)^{d+1}}(f(\vx')-f(\vx_u:{\vx'}_{-u}))^2d\vx d{\vx'}}{\int_{[0,1)^{d}} f(\vx)^2 d{\vx}-\mu^2} = \frac{I_1}{I_2-(I_3)^2}.
+\overline{S}_u & = \frac{\frac{1}{2}\int_{[0,1)^{d+1}}(f(\vx')-f(\vx_u:{\vx'}_{-u}))^2d\vx d{\vx'}}{\int_{[0,1)^{d}} f(\vx)^2 d{\vx}-\mu^2} = \frac{I_2}{I_3-(I_4)^2}.
 \end{align}
 However, to guarantee the error in our $\underline{S}_u$ and $\overline{S}_u$ approximations we need to proceed with an estimator different than the usual. Given equations \eqref{indices_integ_1} and \eqref{indices_integ_2}, one may write $\underline{S}_u(\vI)$ and $\overline{S}_u(\vI)$ as functions over a vector of integrals $\vI$. According to section \ref{sec_reliable_error}, integrals can be estimated such that $\vI\in B_{\varepsilon_{\vI}}(\widehat{\vI}):=[\widehat{\vI}-\varepsilon_{\vI},\widehat{\vI}+\varepsilon_{\vI} ]$. Thus, the following estimator
 \begin{align*}
-\widehat{S}_u & = \frac{1}{2}\left(\min\left(\max_{\vI\in B_{\varepsilon_{\vI}}(\widehat{\vI})} S_u(\vI),1\right) + \max\left(\min_{\vI\in B_{\varepsilon_{\vI}}(\widehat{\vI})} S_u(\vI),0\right) \right) \\
-\varepsilon_{S_u} & = \frac{1}{2}\left(\min\left(\max_{\vI\in B_{\varepsilon_{\vI}}(\widehat{\vI})} S_u(\vI),1\right) - \max\left(\min_{\vI\in B_{\varepsilon_{\vI}}(\widehat{\vI})} S_u(\vI),0\right) \right)
+\widehat{\underline{S}_u} & = \frac{1}{2}\left(\min\left(\max_{\vI\in B_{\varepsilon_{\vI}}(\widehat{\vI})} \underline{S}_u(\vI),1\right) + \max\left(\min_{\vI\in B_{\varepsilon_{\vI}}(\widehat{\vI})} \underline{S}_u(\vI),0\right) \right) \\
+\varepsilon_{\underline{S}_u} & = \frac{1}{2}\left(\min\left(\max_{\vI\in B_{\varepsilon_{\vI}}(\widehat{\vI})} \underline{S}_u(\vI),1\right) - \max\left(\min_{\vI\in B_{\varepsilon_{\vI}}(\widehat{\vI})} \underline{S}_u(\vI),0\right) \right)
 \end{align*}
-ensures that the true value $S_u\in [\widehat{S}_u - \varepsilon_{S_u}, \widehat{S}_u + \varepsilon_{S_u}]$.
+\begin{align*}
+\widehat{\overline{S}_u} & = \frac{1}{2}\left(\min\left(\max_{\vI\in B_{\varepsilon_{\vI}}(\widehat{\vI})} \overline{S}_u(\vI),1\right) + \max\left(\min_{\vI\in B_{\varepsilon_{\vI}}(\widehat{\vI})} \overline{S}_u(\vI),0\right) \right) \\
+\varepsilon_{\overline{S}_u} & = \frac{1}{2}\left(\min\left(\max_{\vI\in B_{\varepsilon_{\vI}}(\widehat{\vI})} \overline{S}_u(\vI),1\right) - \max\left(\min_{\vI\in B_{\varepsilon_{\vI}}(\widehat{\vI})} \overline{S}_u(\vI),0\right) \right)
+\end{align*}
+ensures that the true value $S_u\in [\widehat{S}_u - \varepsilon_{S_u}, \widehat{S}_u + \varepsilon_{S_u}]$. Explain why max min 0, 1.............
 
 \begin{figure}\centering
 \includegraphics[width=1.\textwidth]{Images/scheme_S.eps}
