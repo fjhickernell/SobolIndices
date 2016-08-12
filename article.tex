@@ -14,6 +14,7 @@ mathtools,bbm,extraipa,mathabx,graphicx,algorithm}
 \newtheorem{algo}{Algorithm}
 
 \newcommand{\fudge}{\fC}
+\newcommand{\cc}{\mathcal{C}}
 \newcommand{\dtf}{\textit{\doubletilde{f}}}
 \newcommand{\cube}{[0,1)^d}
 %\renewcommand{\bbK}{\natzero^d}
@@ -29,6 +30,7 @@ mathtools,bbm,extraipa,mathabx,graphicx,algorithm}
 \newcommand{\vk}{\bvec{k}}
 \newcommand{\vw}{\bvec{w}}
 \newcommand{\vz}{\bvec{z}}
+\newcommand{\vt}{\bvec{t}}
 \newcommand{\dif}{\mathsf{d}}
 \newcommand{\hf}{\hat{f}}
 \newcommand{\hS}{\widehat{S}}
@@ -166,40 +168,70 @@ The construction of the error bound is the subject of the next section \ref{sect
 
 \subsection{Reliable Estimation Using Quasi-Monte Carlo}
 
-We assume we have an embedded sequence of digital nets in base $b$,
+We assume we have an embedded sequence of digital nets in base $b$ as in \cite[Sec. 2-3]{HicJim},
 \[
 \mathcal{P}_0=\{\bvec{0}\}\subset\dots\subset\mathcal{P}_m=\{\vx_i\}_{i=0}^{b^m-1}\subset\dots\subset\mathcal{P}_\infty=\{\vx_i\}_{i=0}^{\infty}.
 \]
-
-Each $\mathcal{P}_m$ has a group structure under the digit wise addition. Analogously, we can also define the dual nets as $\mathcal{P}_m^\perp=\{\vk\in\mathbb{N}_0^d:\ip{\vx}{\vk}=0,\, \vx\in\mathcal{P}_m\}$,
+Each $\mathcal{P}_m$ has a group structure under the digit wise addition:
 \[
-\mathcal{P}_0^\perp=\left\{\mathbb{N}_0^d\right\}\supset\dots\supset\mathcal{P}_\infty=\{\bvec{0}\}.
+\vx \oplus \vt = \left(\sum_{\ell=1}^{\infty} [(x_{j\ell} + t_{j\ell}) \bmod b] b^{-\ell} \pmod{1} \right)_{j=1}^d,
 \]
+where $x_{j\ell}$ and $t_{j\ell}$ are the $b$-adic decompositions of the $j^{\rm th}$ component of points $\vx$ and $\vt$.
 
-An important property is that for any Walsh basis $\phi_{\vk}(\vx)$
+In order to relate the group structure of $\mathcal{P}_m$ with the integration error, we introduce the \emph{dual net} which establishes the relationship between any digital net and the \emph{wavenumber} space $\mathbb{N}_0^d$. Hence, a dual net is
 \[
+\mathcal{P}_m^\perp=\{\vk\in\mathbb{N}_0^d:\ip{\vx}{\vk}=0,\, \vx\in\mathcal{P}_m\},
+\]
+and inherits the same embedded structure as for the digital nets,
+\begin{equation}\label{dual_net_structure}
+\mathcal{P}_0^\perp=\left\{\mathbb{N}_0^d\right\}\supset\dots\supset\mathcal{P}_\infty=\{\bvec{0}\}.
+\end{equation}
+
+As shown in \cite[Sec. 3]{HicJim}, the group structure of the digital nets guarantees the property below affecting any Walsh basis $\phi_{\vk}(\vx)$,
+\begin{equation}\label{basis_integ_prop}
 \frac{1}{b^m}\sum_{\vx\in\mathcal{P}_m}\phi_{\vk}(\vx)=
 \begin{cases}
 1,\quad \vk\in\mathcal{P}_m^\perp, \\
 0,\quad \vk\notin\mathcal{P}_m^\perp
 \end{cases}
-\]
+\end{equation}
+Therefore, considering the Walsh decomposition $f(\vx)=\sum_{\vk\in\naturals_0^d}\hf_{\vk}\varphi_{\vk}(\vx)$ for any $f\in L^2([0,1]^d)$ and property \eqref{basis_integ_prop},
+\begin{align*}
+\abs{\int_{\cube} f(\vx)\,d\vx - \frac{1}{b^m}\sum_{\vx\in\mathcal{P}_m}f(\vx)} & = \abs{\hf_{\vzero} - \frac{1}{b^m}\sum_{\vx\in\mathcal{P}_m}\sum_{\vk\in\naturals_0^d}\hf_{\vk}\varphi_{\vk}(\vx)}\\
+& = \abs{\sum_{\vk\in\mathcal{P}_m^\perp\setminus\{\vzero\}}\hf_{\vk}}
+\end{align*}
 
-Therefore,
-\[
-\abs{\int_{\cube} f(\vx)\,d\vx - \frac{1}{b^m}\sum_{\vx\in\mathcal{P}_m}f(\vx)}=\abs{\sum_{\vk\in\mathcal{P}_m^\perp\setminus\{\vzero\}}\hf_{\vk}}
-\]
+Based on the size of $\abs{\hf_{\vk}}$ and the structure of the dual nets \eqref{dual_net_structure}, in \cite[Sec. 4.1]{HicJim} we proposed an ordering of the wavenumbers $\vk(\cdot):\naturals_0\rightarrow\naturals_0^d$. To simplify notation, $\hf_{\kappa}:=\hf_{\vk(\kappa)}$. This mapping leads to the following error bound,
+\begin{equation}
+\abs{\int_{\cube} f(\vx)\,d\vx - \frac{1}{b^m}\sum_{\vx\in\mathcal{P}_m}f(\vx)} \le \sum_{\lambda=1}^{\infty} \left \lvert \hf_{\lambda b^m}\right \rvert.
+\end{equation}
 
-In \cite{HicJim} we proposed an algorithm based on digital nets that estimates hight dimensional integrals whose error lies within a user-input error tolerance. This algorithm finds the number of data points automatically. We will refer to it as $\widehat{I}(f;\varepsilon)$, where $f$ is the function to integrate and $\varepsilon$ the user-input error tolerance.
+However, because the knowledge of the Walsh coefficients $\hf_{\kappa}$ is not assumed, we will estimate them using $\mathcal{P}_m$ instead, and refer to them as $\tf_{m,\kappa}$.
 
-The main result from the article if that for all $f\in\mathcal{C}$,
-\[
-\abs{\int_{\cube} f(\vx)\,d\vx - \widehat{I}(f;\varepsilon)}\leq a(r,m)\sum_{\kappa=\left \lfloor 2^{m-r-1}\right \rfloor}^{2^{m-r}-1} \abs{\tf_{m,\kappa}}\leq \varepsilon.
-\]
-\begin{itemize}
-\item $\tf_{m,\kappa}=$ discrete Fourier Walsh coefficients of $f$.
-\item $a(r,m)=$ inflation factor that depends on $\mathcal{C}$.
-\end{itemize}
+For $\ell,m \in \mathbb{N}_0$ and $\ell \le m$ we introduce the following notation,
+\begin{gather*}
+S_m(f) =  \sum_{\kappa=\left \lfloor b^{m-1} \right \rfloor}^{b^{m}-1} \abs{\hf_{\kappa}}, \qquad 
+\hS_{\ell,m}(f)  = \sum_{\kappa=\left \lfloor b^{\ell-1} \right \rfloor}^{b^{\ell}-1} \sum_{\lambda=1}^{\infty} \abs{ \hf_{\kappa+\lambda b^{m}}}, \\
+\wcS_m(f)=\hS_{0,m}(f) + \cdots + \hS_{m,m}(f)=
+\sum_{\kappa=b^{m}}^{\infty} \abs{\hf_{\kappa}}, \qquad
+\tS_{\ell,m}(f) = \sum_{\kappa=\left \lfloor b^{\ell-1}\right \rfloor}^{b^{\ell}-1} \abs{\tf_{m,\kappa}}.
+\end{gather*}
+
+Finally, we define the set of functions $\cc$,
+\begin{multline} \label{conecond}
+\cc:=\{f \in L^2(\cube) : \hS_{\ell,m}(f) \le \homega(m-\ell) \wcS_m(f),\ \ \ell \le m, \\
+\wcS_m(f) \le \wcomega(m-\ell) S_{\ell}(f),\ \  \ell_* \le \ell \le m\}.
+\end{multline}
+for $\ell_* \in \mathbb{N}$, $\homega$ and $\wcomega$ two non-negative valued functions with $\lim_{m \to \infty} \wcomega(m) = 0$ and such that $\homega(r)\wcomega(r)<1$ for some $r\in\mathbb{N}$.
+
+Hence, in \cite[Sec. 4.2]{HicJim} we prove that for any $f\in\cc$,
+\begin{equation}
+\abs{\int_{\cube} f(\vx)\,d\vx - \frac{1}{b^m}\sum_{\vx\in\mathcal{P}_m}f(\vx)}
+\le \frac{\tS_{\ell,m}(f)\homega(m) \wcomega(m-\ell)}{1 - \homega(m-\ell) \wcomega(m-\ell)}. \label{errbd}
+\end{equation}
+where one may increase $m$ until the error bound is small enough.
+
+The details about the algorithm, mapping of the wavenumber space, or meaning and properties of $\cc$, are discussed in \cite{HicJim}.
 
 \subsection{Definition of $\widehat{S}$ (fix it with max and min)}
 In some applications, it is more useful to estimate the normalized Sobol' indices, $S_u = \underline{\tau}_u^2/\sigma^2$ and $\overline{S}_u = \overline{\tau}_u^2/\sigma^2$. In both cases, regular and normalized indices can be approximated by estimating some integrals,
@@ -213,9 +245,9 @@ Therefore, we can define $\underline{S}_u(\vI)$ and $\overline{S}_u(\vI)$ as fun
 \varepsilon_{S_u} & = \frac{1}{2}\left(\min\left(\max_{\vI\in B_{\varepsilon_{\vI}}(\widehat{\vI})} S_u(\vI),1\right) - \max\left(\min_{\vI\in B_{\varepsilon_{\vI}}(\widehat{\vI})} S_u(\vI),0\right) \right)
 \end{align*}
 where the true value $S_u\in [\widehat{S}_u - \varepsilon_{S_u}, \widehat{S}_u + \varepsilon_{S_u}]$.
-\begin{figure}[!ht]
+\begin{figure}[H]
 \centering
-\includegraphics{scheme_S.eps}
+\includegraphics[width=\textwidth]{Images/scheme_S.eps}
 \end{figure}
 
 \section{Recursive estimation procedure}
