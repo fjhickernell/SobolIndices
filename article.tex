@@ -1,5 +1,3 @@
-% !TEX TS-program = PDFLatexBibtex
-%&LaTeX
 \documentclass[]{elsarticle}
 \setlength{\marginparwidth}{0.5in}
 \usepackage{amsmath,amssymb,amsthm,natbib,
@@ -215,6 +213,10 @@ Therefore, we can define $\underline{S}_u(\vI)$ and $\overline{S}_u(\vI)$ as fun
 \varepsilon_{S_u} & = \frac{1}{2}\left(\min\left(\max_{\vI\in B_{\varepsilon_{\vI}}(\widehat{\vI})} S_u(\vI),1\right) - \max\left(\min_{\vI\in B_{\varepsilon_{\vI}}(\widehat{\vI})} S_u(\vI),0\right) \right)
 \end{align*}
 where the true value $S_u\in [\widehat{S}_u - \varepsilon_{S_u}, \widehat{S}_u + \varepsilon_{S_u}]$.
+\begin{figure}[!ht]
+\centering
+\includegraphics{scheme_S.eps}
+\end{figure}
 
 \section{Recursive estimation procedure}
 \label{section.recursive.procedure}
@@ -225,10 +227,10 @@ We start be detailing our recursive procedure in the form of an algorithm. Then,
 
 \subsection{Recursive procedure algorithm}
 
-Algorithm \ref{recursive.algorithm} summarizes the main steps of our recursive procedure. First, fix the target precision $\epsilon >0$. Set $m=m_0$ and construct the two designs $\mathcal{P}_{m}=\{\vx_i\}_{i=0}^{2^{m}-1}$ and $\mathcal{P}'_{m}=\{\vx'_i\}_{i=0}^{2^{m}-1}$ accordingly to the multiplicative approach detailed in \cite{crass}. With this construction, $\mathcal{P}_{\ell}$ and $\mathcal{P}'_{m}$ correspond to the first $2^{m}$ points of two Sobol' sequences. Furthermore, they possess the structure of two replicated designs of order $1$.
+Algorithm \ref{recursive.algorithm} summarizes the main steps of our recursive procedure. First, fix the target precision $\epsilon >0$. Set $m=m_0$ and construct the two designs $\mathcal{P}_{m}=\{\vx_i\}_{i=0}^{2^{m}-1}$ and $\mathcal{P}'_{m}=\{\vx'_i\}_{i=0}^{2^{m}-1}$ accordingly to the multiplicative approach detailed in \cite{crass}. With this construction, $\mathcal{P}_{m}$ and $\mathcal{P}'_{m}$ correspond to the first $2^{m}$ points of two Sobol' sequences. Furthermore, they possess the structure of two replicated designs of order $1$.
 \bigskip
 
-Then, $\mathcal{P}_{m}$ and $\mathcal{P}'_{m}$ can either be used with Saltelli's strategy to estimate all first-order indices and total effect Sobol' indices. This option is referred as Variant $A$ in Algorithm \ref{recursive.algorithm}. Or $\mathcal{P}_{m}$ and $\mathcal{P}'_{m}$ can be used with the replication procedure to estimate all first-order Sobol' indices. This option is referred as Variant $B$ in Algorithm \ref{recursive.algorithm}.
+$\mathcal{P}_{m}$ and $\mathcal{P}'_{m}$ can either be used with Saltelli's strategy to estimate all first-order indices and total effect Sobol' indices. This option is referred as Variant $A$ in Algorithm \ref{recursive.algorithm}. Or $\mathcal{P}_{m}$ and $\mathcal{P}'_{m}$ can be used with the replication procedure to estimate all first-order Sobol' indices. This option is referred as Variant $B$ in Algorithm \ref{recursive.algorithm}.
 
 If the stopping criterion is satisfied, the algorithm stops and Sobol' estimates are returned. Otherwise, $m$ is incremented by one to perform a new estimation.
 
@@ -263,10 +265,10 @@ The cost of our algorithm varies whether Variant $A$ or Variant $B$ is selected.
 \end{equation*}
 where: 
 \begin{itemize}
-\item[$\bullet$] $2^{m_u}$ is the number of evaluations $f\left(\vx_{i,u}:{\vx'}_{i,-u}\right)$ used to estimate both $\underline{S}_u$ and $\overline{S}_u$.
+\item[$\bullet$] $2^{m_u}$ is the number of evaluations $f\left(\vx_{i,u}:{\vx'}_{i,-u}\right)$ used to estimate both the first-order index $\underline{S}_u$ and the total effect index $\overline{S}_u$.
 \item[$\bullet$] $2 \times 2^{m^{\star}}$ is the number of evaluations $f\left(\vx_{i}\right)$ and $f\left({\vx'}_{i}\right)$ used in the estimation of each first-order and total effect index.
 \end{itemize}
-This cost can be seen as a generalisation of the one specified in Theorem \ref{saltelli.theorem}. If all $m_u$ are equal, the cost of Variant $A$ becomes $2^{m^\star}(d+2)$ and we recover the cost of Theorem \ref{saltelli.theorem} with $n=2^{m^\star}$.
+This cost can be seen as a generalisation of the one specified in Theorem \ref{saltelli.theorem}. If all $m_u$ are equal, the cost of Variant $A$ becomes $2^{m^\star}(d+2)$ and we recover the cost in Theorem \ref{saltelli.theorem} with $n=2^{m^\star}$.
 
 If Variant $B$ is selected the cost of our algorithm equals $2 \times 2^{m^{\star}}$. This cost corresponds to the one specified in the replication procedure with $n=2^{m^{\star}}$.
 
@@ -288,9 +290,9 @@ The cost of Variant $A$ including ``Correlation 2" writes:
 \label{cost.improvement}
 \end{equation}
 where: \begin{itemize}
-\item[$\bullet$] for $j\in \Gamma$, $2^{m''_{u_j}}$ is the number of evaluations $f\left(\vz_{i,u_j}:\vx_{i,-u_j}\right)$ to estimate small first-order indices,
-\item[$\bullet$] for $j\in \Gamma$, $2^{m'_{u_j}}$ is the number of evaluations $f\left(\vx_{i,j}:{\vx'}_{i,-j}\right)$ to estimate both small first-order and total effect indices,
-\item[$\bullet$] for $j\in \mathcal{D}/\Gamma$, $ 2^{m_{u_j}}$ is the number of evaluations $f\left(\vx_{i,j}:{\vx'}_{i,-j}\right)$ to estimate non small first-order indices,
+\item[$\bullet$] for $j\in \Gamma$, $2^{m''_{u_j}}$ is the number of evaluations $f\left(\vz_{i,u_j}:\vx_{i,-u_j}\right)$ to estimate $\underline{S}_{u_j}$,
+\item[$\bullet$] for $j\in \Gamma$, $2^{m'_{u_j}}$ is the number of evaluations $f\left(\vx_{i,j}:{\vx'}_{i,-j}\right)$ to estimate both $\underline{S}_{u_j}$ and  $\overline{S}_{u_j}$,
+\item[$\bullet$] likewise, for $j\in \mathcal{D}/\Gamma$, $ 2^{m_{u_j}}$ is the number of evaluations $f\left(\vx_{i,j}:{\vx'}_{i,-j}\right)$ to estimate both $\underline{S}_{u_j}$ and  $\overline{S}_{u_j}$,
 \item[$\bullet$] $2 \times 2^{m^{\star}}$ is the number of evaluations $f\left(\vx_{i}\right)$ and $f\left({\vx'}_{i}\right)$ used in the estimation of each first-order and total effect index.
 \end{itemize}
 Recall that the cost of Variant $A$ without  ``Correlation 2" writes:
@@ -305,17 +307,16 @@ The difference between costs (\ref{cost.improvement}) and (\ref{cost.non.improve
 \end{equation}
 Hence, the sign of this difference indicates whether or not using ``Correlation 2" bring an improvement to Variant $A$. We distinguish two cases :
 \begin{itemize}
-\item[1)] for $j \in \Gamma$, the total effect index $\ov{$S$}_j$ requires as much or more evaluations $f\left(\vx_{i,u_j}:{\vx'}_{i,-u_j}\right)$ than the first-order index $\underline{S}_j$. Since the total effect estimator is the same, as a consequence we have $m'_{u_j}=m_{u_j}$ and $c_j >0$.
-\item[2)] for $j \in \Gamma$, the total effect index $\ov{$S$}_j$ requires less evaluations $f\left(\vx_{i,u_j}:{\vx'}_{i,-u_j}\right)$ than the first-order index $\underline{S}_j$. In this case, if both $m''_{u_j} < m_{u_j}$ and $m'_{u_j} < m_{u_j}$ then $c_j \leq 0$.  
+\item[1)] for $j \in \Gamma$, the total effect index $\ov{$S$}_{u_j}$ requires as much or more evaluations $f\left(\vx_{i,u_j}:{\vx'}_{i,-u_j}\right)$ than the first-order index $\underline{S}_{u_j}$. Since the total effect estimator is the same, as a consequence we have $m'_{u_j}=m_{u_j}$ and $c_j >0$.
+\item[2)] for $j \in \Gamma$, the total effect index $\ov{$S$}_{u_j}$ requires less evaluations $f\left(\vx_{i,u_j}:{\vx'}_{i,-u_j}\right)$ than the first-order index $\underline{S}_{u_j}$. In this case, if both $m''_{u_j} < m_{u_j}$ and $m'_{u_j} < m_{u_j}$ then $c_j \leq 0$.  
 \end{itemize}
-We can write $\Gamma = \Gamma_1 \cup \Gamma_2$, $\Gamma_1 \cap \Gamma_2=\varnothing$, to separate the number of times case $1)$ or case $2)$ are verified. We expect to have more case $2)$ than case $1)$. The reason is that the numerator of the first-order index (\ref{}) requires to estimate $2d-1$ integrals against only $d+1$ integrals for the numerator of the total effect index (\ref{}). Thus, it seems reasonable to suppose that it takes less points to evaluate (\ref{}) than (\ref{}). 
-Furthermore, in case $2$, we expect the two conditions $m''_{u_j} < m_{u_j}$ and $m'_{u_j} < m_{u_j}$ to be often satisfied as ``Correlation 2" has been shown 
-to perform the best.
+We can write $\Gamma = \Gamma_1 \cup \Gamma_2$, $\Gamma_1 \cap \Gamma_2=\varnothing$, to separate the number of times case $1)$ or case $2)$ are verified. We expect to have more case $2)$ than case $1)$. Indeed, the numerator of the first-order index $\underline{S}_u$ requires to estimate $2d-1$ integrals against only $d+1$ integrals for the numerator of the total effect index $\ov{$S$}_u$. It seems reasonable to suppose that it takes less points to evaluate $\ov{$S$}_u$ than $\underline{S}_u$. 
 
-To support this discussion, illustrations of the use of ``Correlation 2" are presented in Section \ref{appli}. 
+Furthermore, in case $2)$, we expect the two conditions $m''_{u_j} < m_{u_j}$ and $m'_{u_j} < m_{u_j}$ to be often satisfied as ``Correlation 2" has been shown 
+to perform the best for small first-order indices. To support this discussion, illustrations of the use of ``Correlation 2" are presented in Section \ref{appli}. 
 \bigskip
 
-In pratice, one does not know which are the small Sobol' indices. To overcome this issue, we propose the following alternative for Variant $A$. Assume that there exists one or multiple  $u \in \mathcal{D}$ such that estimates $\widehat{\underline{S}_u}^{(m)}$ are smaller than a specified threshold at the end of the first iteration of Algorithm \ref{recursive.algorithm}. Then, for these indices, at the next iteration estimator (\ref{first.order.est}) is switched for (\ref{correlation2}) and a third Sobol' sequence $\mathcal{P''}_{m}=\{\vz_i\}_{i=0}^{2^m-1}$ is constructed for the evaluations $f({\vz}_{i,u}:{\vx}_{i,-u})$.
+In pratice, one does not know which are the small Sobol' indices. To overcome this issue, we propose the following alternative for Variant $A$. If at the end of the first iteration, the estimate $\widehat{\underline{S}_u}^{(m)}$, $u \in \mathcal{D}$, is smaller than a specified threshold, then at the next iteration estimator (\ref{first.order.est}) is switched for (\ref{correlation2}) and a third Sobol' sequence $\mathcal{P''}_{m}=\{\vz_i\}_{i=0}^{2^m-1}$ is constructed for the evaluations $f({\vz}_{i,u}:{\vx}_{i,-u})$.
 
 \section{Applications}
 \label{appli}
