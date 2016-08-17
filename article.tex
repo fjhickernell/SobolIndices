@@ -81,38 +81,42 @@ mathtools,bbm,extraipa,mathabx,graphicx,algorithm}
 
 \subsection{Definition of Sobol' indices}
 %We adopt the same notations introduced by Owen in \cite{Owen}. 
-Denote by $f$ a numerical model, by $\vx=(x_1,\dots,x_d)$ its vector of inputs and set $\mathcal{D}=\{1,\dots,d\}$. The uncertainty on $\vx$ is modeled by a random vector that we suppose uniformly distributed on $\cube$. Let $u$ be a subset of $\mathcal{D}$, $-u$ its complement and $|u|$ its cardinality. $\vx_u$ represents a point in $[0,1)^u$ with components $x_j, j \in u$. Given two points $\vx$ and $\vx'$, the hybrid point $\vw=(\vx_u:{\vx'}_{-u})$ is defined as $w_j=x_j$ if $j \in u$ and $w_j={x'}_j$ if $j \notin u$.
+Denote by $f$ a numerical model, by $\vx=(x_1,\dots,x_d)$ its vector of inputs and set $\mathcal{D}=\{1,\dots,d\}$. %The uncertainty on $\vx$ is modeled by a random vector that we suppose uniformly distributed on $\cube$.
+Let $u$ be a subset of $\mathcal{D}$, $-u$ its complement and $|u|$ its cardinality. $\vx_u$ represents a point in $[0,1)^u$ with components $x_j, j \in u$. Given two points $\vx$ and $\vx'$, the hybrid point $\vw=(\vx_u:{\vx'}_{-u})$ is defined as $w_j=x_j$ if $j \in u$ and $w_j={x'}_j$ if $j \notin u$.
 
 Let $f$ be the symbol representing the numerical model studied. We assume $f \in \mathcal{L}^2[0,1)^d$. Denote by $\mu$ and $\sigma^2$ the mean and variance of $f$.
 The uncertainty on $\vx$ is modeled by random variables such that $\vx \iid \mathcal{U}[0,1)^d$. Recall the Hoeffding decomposition \cite{Hoeffding} of $f$:
 \begin{equation}
-f(\vx)=\mu+\sum \limits_{u \subseteq \mathcal{D}} f_u(\vx),
+f(\vx)=\mu+\sum \limits_{u \subseteq \mathcal{D}, u \neq \varnothing} f_u(\vx),
 \label{anova}
 \end{equation}
 where:
 \[f_u(\vx)= \int_{[0,1)^{|u|}} f(\vx) d{\vx}_{-u} - \sum \limits_{v \subset u} f_v(\vx).\]
 Due to orthogonality, taking the variance of each side in equation (\ref{anova}) leads to the variance decomposition of $f$:
-\[ \sigma^2 = \sum \limits_{u \subseteq \{1,\dots,d\}} \sigma_v^2, \ \text{ with } \ \sigma_v^2=\int_{[0,1)^{|v|}} f_v(\vx)^2 d{\vx}.\]
+\[ \sigma^2 = \sum \limits_{u \subseteq \mathcal{D}, u \neq \varnothing} \sigma_u^2, \ \text{ with } \ \sigma_u^2=\int_{[0,1)^{|u|}} f_u(\vx)^2 d{\vx_u}.\]
 From the variance decomposition of $f$, on can express the following two quantities:
 \[\underline{\tau}_u^2 = \sum \limits_{v \subseteq u} \sigma_v^2, \qquad
 \ov{$\tau$}_u^2 = \sum \limits_{v \cap u \neq \varnothing} \sigma_v^2, \qquad u \subsetneq \mathcal{D}.\]
 
 For $u \subsetneq \mathcal{D}$, the two quantities $\underline{\tau}_u^2$ and $\ov{$\tau$}_u^2$ both measure the importance of the variables in $\vx_u$. $\underline{\tau}_u^2$ quantifies the main effect of $\vx_u$ that is the effect of all interactions between variables in $\vx_u$. $\ov{$\tau$}_u^2$ quantifies the main effect of $\vx_u$ plus all interactions between variables in $\vx_u$ and variables in $\vx_{-u}$.
 
-$\underline{\tau}_u^2$ and $\ov{$\tau$}_u^2$ satisfy the following relations: $ 0 \leq  \underline{\tau}_u^2 \leq \ov{$\tau$}_u^2$ and $\underline{\tau}_u^2 = \sigma^2 - \ov{$\tau$}_{-u}^2$. These two measure are commonly found in the litterature in their normalized form: $\underline{S}_u = \underline{\tau}_u^2 / \sigma^2$ is the closed $|u|$-order Sobol' index for the set $u$, while $\ov{$S$}_u = \ov{$\tau$}_u^2 / \sigma^2$ is the total effect Sobol' index for the set $u$.
+$\underline{\tau}_u^2$ and $\ov{$\tau$}_u^2$ satisfy the following relations: $ 0 \leq  \underline{\tau}_u^2 \leq \ov{$\tau$}_u^2$ and $\underline{\tau}_u^2 = \sigma^2 - \ov{$\tau$}_{-u}^2$. These two measure are commonly found in the litterature in their normalized form: $\underline{S}_u = \underline{\tau}_u^2 / \sigma^2$ is the closed $|u|$-order Sobol' index for the set $u$, while $\ov{$S$}_u = \ov{$\tau$}_u^2 / \sigma^2$ is the total effect Sobol' index.
 \bigskip
 
-The problem of interest here is the evaluation of first-order and total effect Sobol' indices. The computation of these indices is performed based on the following integral formula for their numerators:
+The problem of interest here is the evaluation of first-order and total effect Sobol' indices. The computation of these indices is performed based on the following integral formulas for their numerators:
 \begin{align}
 \label{first.order}
 \underline{\tau}_u^2  &= \int_{[0,1)^{2d-1}} \left(f(\vx)-
-f(\vx_u:{\vx'}_{-u})\right)f(\vx')d\vx d{\vx'}, \\
+f(\vx_u:{\vx'}_{-u})\right)f(\vx')d\vx d{\vx'_{-u}}, \\
 \label{total.effect}
-\ov{$\tau$}_u^2 &= \frac{1}{2}\int_{[0,1)^{d+1}}(f(\vx')-f(\vx_u:{\vx'}_{-u}))^2d\vx d{\vx'}, \qquad u \in \mathcal{D},
+\ov{$\tau$}_u^2 &= \frac{1}{2}\int_{[0,1)^{d+1}}(f(\vx')-f(\vx_u:{\vx'}_{-u}))^2 d{\vx'} d\vx_u, \qquad u \in \mathcal{D},
 \end{align}
 The variance of $f$ is evaluated by:
-\[ \sigma^2 = \int_{[0,1)^{d}} f(\vx)^2d{\vx} - \mu^2, \text{ with } \ \mu = \int_{[0,1)^{d}} f(\vx) d{\vx}.\]
-Most of the time, the complexity of $f$ causes the computation of $\mu$, $\sigma^2$ and integrals (\ref{first.order}) and (\ref{total.effect}) to be intractable. In such case, one needs to rely on an estimation of these quantities.
+\begin{equation}
+\sigma^2 = \int_{[0,1)^{d}} f(\vx)^2d{\vx} - \mu^2, \text{ with } \ \mu = \int_{[0,1)^{d}} f(\vx) d{\vx}.
+\label{eq.sigma.mu}
+\end{equation} 
+Most of the time, the complexity of $f$ causes the computation of integrals (\ref{first.order}), (\ref{total.effect}) and (\ref{eq.sigma.mu}) to be intractable. In such case, one needs to rely on an estimation of these quantities.
 
 \subsection{Estimation of Sobol' indices}
 \label{estimation.strategies}
@@ -131,7 +135,12 @@ using for $\sigma^2$ the classic estimator:
  \widehat{\sigma}^2 = \frac{1}{n} \sum \limits_{i=0}^{n-1} f(\vx_i)^2 - \widehat{\mu}^2, \text{ with } \ \widehat{\mu} =  \frac{1}{n} \sum \limits_{i=0}^{n-1} f(\vx_i).
 \label{mu.est}
 \end{equation}
-The estimation of a single pair ($\underline{\tau}_u^2$, $\ov{$\tau$}_u^2$) requires $3n$ evaluations of the model $f$. Using a combinatorial formalism, in \cite[Theorem 1]{Saltelli} Saltelli proposes the following estimation strategy:
+The Sobol' indices estimators are defined by:
+\begin{equation*}
+\widehat{\underline{S}_u} = \widehat{\underline{\tau}_u^2} / \widehat{\sigma}^2, \qquad
+\widehat{\overline{S}_u} = \widehat{\overline{\tau}_u^2} / \widehat{\sigma}^2.
+\end{equation*}
+The estimation of a single pair ($\widehat{\underline{S}_u}$, $\widehat{\overline{S}_u}$) requires $3n$ evaluations of the model $f$. Using a combinatorial formalism, in \cite[Theorem 1]{Saltelli} Saltelli proposes the following estimation strategy:
 \begin{theorem}
 \label{saltelli.theorem}
 The $d+2$ designs $\{\vx_{i,u},{\vx'}_{i,-u}\}_{i=0}^{n-1}$ constructed for $u \in \{\varnothing,\{1\},\dots,$ $\{d\},\mathcal{D}\}$ allows to estimate all first-order and all total effect Sobol' indices at a cost of $n(d+2)$ evaluations of the model.
@@ -142,31 +151,30 @@ An efficient alternative to evaluate all first-order indices was proposed by Mar
 \begin{definition}
 \label{rep.designs}
 Let $\mathcal{P}=\{\vx_i\}_{i=0}^{n-1}$ and $\mathcal{P}'=\{{\vx'}_i\}_{i=0}^{n-1}$ be two point sets in
-$[0,1)^{d}$. Let $\mathcal{P}^u=\{\vx_{i,u}\}_{i=0}^{n-1}$ (resp. ${\mathcal{P}'}^u$), $u \subsetneq \mathcal{D}$, denote the subset of dimensions of $\mathcal{P}$ (resp. $\mathcal{P}'$) indexed by $u$. We say that $\mathcal{P}$ and $\mathcal{P}'$ are two replicated designs of order $a \in \{1,\dots,d-1\}$ if $\forall \ u \subsetneq \mathcal{D}$ of cardinality $|u|=a$, $\mathcal{P}^u$ and ${\mathcal{P}'}^u$ are the same point set in $[0,1)^a$. We note $\pi_u$ the permutation reordering the rows of ${\mathcal{P}'}^u$ into $\mathcal{P}^u$.
+$[0,1)^{d}$. Let $\mathcal{P}^u=\{\vx_{i,u}\}_{i=0}^{n-1}$ (resp. ${\mathcal{P}'}^u$), $u \subsetneq \mathcal{D}$, denote the subset of dimensions of $\mathcal{P}$ (resp. $\mathcal{P}'$) indexed by $u$. We say that $\mathcal{P}$ and $\mathcal{P}'$ are two replicated designs of order $a \in \{1,\dots,d-1\}$ if $\forall \ u \subsetneq \mathcal{D}$ such that $|u|=a$, $\mathcal{P}^u$ and ${\mathcal{P}'}^u$ are the same point set in $[0,1)^a$. We note $\pi_u$ the permutation arranging the rows of ${\mathcal{P}'}^u$ into $\mathcal{P}^u$.
 \end{definition}
 The method introduced in \cite{Mara} allows to estimate all first-order Sobol' indices with only two replicated designs of order $1$. The key point of this method is to use the permutations resulting from the structure of the two replicated designs to mimic the hybrid points in formula (\ref{first.order.est}). 
 
-More specifically, let $\mathcal{P}=\{\vx_i\}_{i=0}^{n-1}$ and $\mathcal{P}'=\{{\vx'}_i\}_{i=0}^{n-1}$ be two replicated designs of order $1$. Denote by $\{f(\vx_i)\}_{i=0}^{n-1}$ and $\{f({\vx'}_i)\}_{i=0}^{n-1}$ the two sets of model evaluations obtained with $\mathcal{P}$ and $\mathcal{P}'$. Consider $u \in \mathcal{D}$, from Definition \ref{rep.designs} there exists a permutation $\pi_u$ such that ${\vx'}_{\pi_u(i),u}={\vx}_{i,u}$. Then, remark that $\forall i \in \{0,\dots,n-1\}$:
-\[\pi_u(f({\vx'}_i))=f({\vx'}_{\pi_u(i)})=f(\vx'_{\pi_u(i),u}:{\vx'}_{\pi_u(i),-u})=f(\vx_{i,u}:{\vx'}_{\pi_u(i),-u})\]
-%\pi_u(f({\vx'}_{i,u}:{\vx'}_{i,-u}))
-Each $\underline{\tau}^2_u$ can be estimated via formula (\ref{first.order.est}) with $\{f(\vx_i)\}_{i=0}^{n-1}$ and $\{\pi_u(f({\vx'}_i))\}_{i=0}^{n-1}$ without requiring further model evaluations. This estimation method has been deeply studied and generalized in Tissot et al. \cite{Mara} to the case of closed second-order indices. In the following we refer to this method as replication procedure.
-\bigskip
+More precisely, let $\mathcal{P}=\{\vx_i\}_{i=0}^{n-1}$ and $\mathcal{P}'=\{{\vx'}_i\}_{i=0}^{n-1}$ be two replicated designs of order $1$. Denote by $\{f(\vx_i)\}_{i=0}^{n-1}$ and $\{f({\vx'}_i)\}_{i=0}^{n-1}$ the two sets of model evaluations obtained with $\mathcal{P}$ and $\mathcal{P}'$. Consider $u \in \mathcal{D}$, from Definition \ref{rep.designs} there exists a permutation $\pi_u$ such that ${\vx'}_{\pi_u(i),u}={\vx}_{i,u}$. Then, remark that $\forall i \in \{0,\dots,n-1\}$:
+\[\pi_u(f({\vx'}_i))=f({\vx'}_{\pi_u(i)})=f(\vx'_{\pi_u(i),u}:{\vx'}_{\pi_u(i),-u})=f(\vx_{i,u}:{\vx'}_{\pi_u(i),-u}).\]
+Hence, each $\underline{\tau}^2_u$ can be estimated via formula (\ref{first.order.est}) with $\{f(\vx_i)\}_{i=0}^{n-1}$ and $\{\pi_u(f({\vx'}_i))\}_{i=0}^{n-1}$ without requiring further model evaluations. This estimation method has been deeply studied and generalized in Tissot et al. \cite{Mara} to the case of closed second-order indices. In the following we refer to this method as replication procedure.
 
 \subsection{Towards a reliable estimation}
-The aim of this paper is to propose a recursive estimation procedure to estimate Sobol' indices. The choice of the stopping criterion is the key point of this paper. 
+The aim of this paper is to propose a recursive procedure to estimate first-order and total effect Sobol' indices. The choice of the stopping criterion is the key point of this paper. In \cite{Gilquin16}, the authors propose a recursive version of the replication procedure. In this recursive version, the stopping criterion is an absolute difference between estimates computed on consecutive steps. 
 
-In \cite{Gilquin16}, the authors propose a recursive version of the replication procedure. In this recursive version, the stopping criterion is an absolute difference between estimates computed on consecutive steps. More generally, in most recursive approaches that estimate Sobol' indices, the stopping criterion is a quantity of interest build directly upon the estimates. Such stopping criteria often involved hyperparameters hard to tweak but above all fail to guarantee any error bound on the estimation. 
+More generally, in most recursive approaches that estimate Sobol' indices, the stopping criterion is a quantity of interest build directly upon the estimates. Such stopping criteria often involve hyper-parameters hard to tweak but above all fail to guarantee any error bound on the estimates. 
 \bigskip
 
-Our recursive procedure stands apart from others approaches by the construction of a robust stopping criterion. This criterion is an error bound based on the discrete Walsh decomposition of integrals (\ref{first.order}) and (\ref{total.effect}). This decomposition use the close set property of digital sequences. As such, our recursive procedure relies on the iterative construction of Sobol' sequences. The iterative construction of the Sobol' sequences is performed accordingly to the multiplicative  approach presented in \cite{crass}.
+Our recursive procedure stands apart from others approaches with the construction of a robust stopping criterion. This criterion is an error bound based on the discrete Walsh decomposition of integrals (\ref{first.order}) and (\ref{total.effect}). This decomposition use the close set property of digital sequences. As such, our recursive procedure relies on an iterative construction of Sobol' sequences. This construction is performed accordingly to the multiplicative  approach presented in \cite{crass}.
 
-The construction of the error bound is the subject of the next section \ref{section.error}. Our recursive estimation procedure is presented in section \ref{section.recursive.procedure}.
+The construction of the error bound is the subject of the next section. Our recursive estimation procedure is presented in section \ref{section.recursive.procedure}.
 
 
-\section{Reliable Error Estimation for Cubatures}
+\section{Reliable error bound for Sobol' indices}
 \label{section.error} 
 
-\subsection{Reliable Estimation Using Quasi-Monte Carlo}
+
+\subsection{Reliable integral estimation using quasi-Monte Carlo}
 \label{section.error.algo}
 
 We assume we have an embedded sequence of digital nets in base $b$ as in \cite[Sec. 2-3]{HicJim},
@@ -188,7 +196,7 @@ and inherits the same embedded structure as for the digital nets,
 \mathcal{P}_0^\perp=\left\{\mathbb{N}_0^d\right\}\supset\dots\supset\mathcal{P}_\infty=\{\bvec{0}\}.
 \end{equation}
 
-As shown in \cite[Sec. 3]{HicJim}, the group structure of the digital nets guarantees the property below affecting any Walsh basis $\phi_{\vk}(\vx):=\e^{2 \pi \sqrt{-1} \ip{\vk}{\vx}/b}$,
+As shown in \cite[Sec. 3]{HicJim}, the group structure of the digital nets guarantees the property below affecting any Walsh basis $\phi_{\vk}(\vx)$,
 \begin{equation}\label{basis_integ_prop}
 \frac{1}{b^m}\sum_{\vx\in\mathcal{P}_m}\phi_{\vk}(\vx)=
 \begin{cases}
@@ -232,50 +240,63 @@ Hence, in \cite[Sec. 4.2]{HicJim} we prove that for any $f\in\cc$,
 \end{equation}
 where one may increase $m$ until the error bound is small enough.
 
-The details about the algorithm, mapping of the wavenumber space, or meaning and properties of $\cc$, are discussed in \cite{HicJim}.
+Details concerning the algorithm, mapping of the wavenumber space, or meaning and properties of $\cc$, are provided in \cite{HicJim}. For the rest of the paper we only consider Sobol' sequences. These sequences are digital sequences in based $b=2$. Their major interests come from their fast and easy implementation as well as their slow growing size rate. Further details concerning these sequences can be found in \cite{Lemieuxbook,Niederreiter92}.
 
-\subsection{Definition of $\widehat{S}$ (fix it with max and min)}
-In some applications, it is more useful to estimate the normalized Sobol' indices, $S_u = \underline{\tau}_u^2/\sigma^2$ and $\overline{S}_u = \overline{\tau}_u^2/\sigma^2$. In both cases, regular and normalized indices can be approximated by estimating some integrals,
+\subsection{Generalization to Sobol' indices}
+The idea here is to extend the definition of the error bound (\ref{errbd}) to Sobol' indices. To do so, we consider the two integral formulas of the first-order and total effect Sobol' indices:
+%\subsection{Definition of $\widehat{S}$ (fix it with max and min)}
+%In some applications, it is more useful to estimate the normalized Sobol' indices, $S_u = \underline{\tau}_u^2/\sigma^2$ and $\overline{S}_u = \overline{\tau}_u^2/\sigma^2$. In both cases, regular and normalized indices can be approximated by estimating some integrals,
+
 \begin{align*}
-\underline{S}_u & = \frac{\int_{[0,1)^{2d-1}} \left(f(\vx)-
-f(\vx_u:{\vx'}_{-u})\right)f(\vx')d\vx d{\vx'}}{\int_{[0,1)^{d}} f(\vx)^2 d{\vx}-\mu^2} = \frac{I_1}{I_3-(I_4)^2}, \\
-\overline{S}_u & = \frac{\frac{1}{2}\int_{[0,1)^{d+1}}(f(\vx')-f(\vx_u:{\vx'}_{-u}))^2d\vx d{\vx'}}{\int_{[0,1)^{d}} f(\vx)^2 d{\vx}-\mu^2} = \frac{I_2}{I_3-(I_4)^2}.
+\underline{S}_u(\vI) & = \frac{\int_{[0,1)^{2d-1}} \left(f(\vx)-
+f(\vx_u:{\vx'}_{-u})\right)f(\vx')d\vx d{\vx'}}{\int_{[0,1)^{d}} f(\vx)^2 d{\vx}-\left(\int_{[0,1)^{d}} f(\vx) d{\vx}\right)^2} = \frac{I_1}{I_3-(I_4)^2}, \\
+\overline{S}_u(\vI) & = \frac{\frac{1}{2}\int_{[0,1)^{d+1}}(f(\vx')-f(\vx_u:{\vx'}_{-u}))^2d\vx d{\vx'}}{\int_{[0,1)^{d}} f(\vx)^2 d{\vx}-\left(\int_{[0,1)^{d}} f(\vx) d{\vx}\right)^2} = \frac{I_2}{I_3-(I_4)^2},
 \end{align*}
-If $\vI:=(I_1,I_2,I_3,I_4)$, we can define $\underline{S}_u(\vI)$ and $\overline{S}_u(\vI)$ as functions over a vector of integrals $\vI$. If we estimate $\vI$ by $\widehat{\vI}$ and error bound $\varepsilon_{\vI}$ according to \ref{section.error.algo}, then $\vI\in B_{\varepsilon_{\vI}}(\widehat{\vI}):=[\widehat{\vI}-\varepsilon_{\vI},\widehat{\vI}+\varepsilon_{\vI} ]$.
+where $\vI=(I_1,I_2,I_3,I_4)$. Thus, we can define $\underline{S}_u(\vI)$ and $\overline{S}_u(\vI)$ as functions over a vector of integrals $\vI$. If we estimate $\vI$ by $\widehat{\vI}$ and error bound $\varepsilon_{\vI}$ according to \ref{section.error.algo}, then $\vI\in B_{\varepsilon_{\vI}}(\widehat{\vI}):=[\widehat{\vI}-\varepsilon_{\vI},\widehat{\vI}+\varepsilon_{\vI} ]$.
+\bigskip
 
-Alternatively to the common estimators $\widehat{\underline{S}_u}=\underline{S}_u(\widehat{\vI})$ and $\widehat{\overline{S}_u}=\overline{S}_u(\widehat{\vI})$, we propose the following estimators:
-\begin{align*}
+Alternatively to the common estimators $\widehat{\underline{S}_u}=\underline{S}_u(\widehat{\vI})$ and $\widehat{\overline{S}_u}=\overline{S}_u(\widehat{\vI})$, we consider here the following estimators with their respective error bounds:
+\begin{gather}
+\begin{aligned}
 \widehat{\underline{S}_u} & = \frac{1}{2}\left(\min\left(\max_{\vI\in B_{\varepsilon_{\vI}}(\widehat{\vI})} \underline{S}_u(\vI),1\right) + \max\left(\min_{\vI\in B_{\varepsilon_{\vI}}(\widehat{\vI})} \underline{S}_u(\vI),0\right) \right), \\
 \varepsilon_{\underline{S}_u} & = \frac{1}{2}\left(\min\left(\max_{\vI\in B_{\varepsilon_{\vI}}(\widehat{\vI})} \underline{S}_u(\vI),1\right) - \max\left(\min_{\vI\in B_{\varepsilon_{\vI}}(\widehat{\vI})} \underline{S}_u(\vI),0\right) \right),
-\end{align*}
+\end{aligned}
+\label{formula_undersu}
+\end{gather}
 and,
-\begin{align*}
+\begin{gather}
+\begin{aligned}
 \widehat{\overline{S}_u} & = \frac{1}{2}\left(\min\left(\max_{\vI\in B_{\varepsilon_{\vI}}(\widehat{\vI})} \overline{S}_u(\vI),1\right) + \max\left(\min_{\vI\in B_{\varepsilon_{\vI}}(\widehat{\vI})} \overline{S}_u(\vI),0\right) \right), \\
 \varepsilon_{\overline{S}_u} & = \frac{1}{2}\left(\min\left(\max_{\vI\in B_{\varepsilon_{\vI}}(\widehat{\vI})} \overline{S}_u(\vI),1\right) - \max\left(\min_{\vI\in B_{\varepsilon_{\vI}}(\widehat{\vI})} \overline{S}_u(\vI),0\right) \right).
-\end{align*}
-These new estimators allow us to say that $\underline{S}_u\in [\widehat{\underline{S}_u} - \varepsilon_{\underline{S}_u}, \widehat{\underline{S}_u} + \varepsilon_{\underline{S}_u}]$ and $\overline{S}_u\in [\widehat{\overline{S}_u} - \varepsilon_{\overline{S}_u}, \widehat{\overline{S}_u} + \varepsilon_{\overline{S}_u}]$.
-
-For a better understanding of these estimators, we provide and example in dimension 1 below,
+\end{aligned}
+\label{formula_oversu}
+\end{gather}
+These new estimators satisfy: \[ \underline{S}_u\in \left[ \widehat{\underline{S}_u} - \varepsilon_{\underline{S}_u}, \widehat{\underline{S}_u} + \varepsilon_{\underline{S}_u} \right], \qquad \overline{S}_u\in \left[ \widehat{\overline{S}_u} - \varepsilon_{\overline{S}_u}, \widehat{\overline{S}_u} + \varepsilon_{\overline{S}_u} \right] ;\] This property is illustrated below in dimension one.   
 \begin{figure}[H]
 \centering
-\includegraphics[width=\textwidth]{Images/scheme_S.eps}
+\includegraphics[width=0.5\textwidth]{Images/scheme_S.eps}
 \end{figure}
 
 \section{Recursive estimation procedure}
 \label{section.recursive.procedure}
 
-The recursive estimation procedure we propose combine the error bound presented in the previous section with one of the two estimation strategies of section \ref{estimation.strategies}, namely Saltelli's strategy and the replication procedure. The form of the stopping criterion is the same for both strategies. It is defined as $\abs{\varepsilon_{S_u}} \leq \epsilon$, where $\epsilon$ is the desired precision on the Sobol' indices.
+The recursive estimation procedure we propose combine the error bounds $\varepsilon_{\underline{S}_u}$ and $\varepsilon_{\overline{S}_u}$ presented in the previous section with one of the two estimation strategies of section \ref{estimation.strategies}, namely Saltelli's strategy and the replication procedure. 
 
-We start be detailing our recursive procedure in the form of an algorithm. Then, we discuss a possible improvement by considering a new estimator recently introduced in \cite{Owen} for first-order indices.
+We start be detailing our recursive procedure in the form of an algorithm. Then, we discuss a possible improvement by considering a new estimator recently introduced in \cite{Owen} for the first-order indices.
 
 \subsection{Recursive procedure algorithm}
 
-Algorithm \ref{recursive.algorithm} summarizes the main steps of our recursive procedure. First, fix the target precision $\epsilon >0$. Set $m=m_0$ and construct the two designs $\mathcal{P}_{m}=\{\vx_i\}_{i=0}^{2^{m}-1}$ and $\mathcal{P}'_{m}=\{\vx'_i\}_{i=0}^{2^{m}-1}$ accordingly to the multiplicative approach detailed in \cite{crass}. With this construction, $\mathcal{P}_{m}$ and $\mathcal{P}'_{m}$ correspond to the first $2^{m}$ points of two Sobol' sequences. Furthermore, they possess the structure of two replicated designs of order $1$.
+Algorithm \ref{recursive.algorithm} summarizes the main steps of our recursive procedure. First, one must fix the target precision $\epsilon >0$ for the Sobol' estimates. The stopping criterion is initialized with $\zeta=\epsilon+1$. Then, we set $m=m_0$ and construct the two designs $\mathcal{P}_{m}=\{\vx_i\}_{i=0}^{2^{m}-1}$ and $\mathcal{P}'_{m}=\{\vx'_i\}_{i=0}^{2^{m}-1}$ accordingly to the multiplicative approach detailed in \cite{crass}. With this construction, $\mathcal{P}_{m}$ and $\mathcal{P}'_{m}$ correspond to the first $2^{m}$ points of two Sobol' sequences. Furthermore, they possess the structure of two replicated designs of order $1$ (Definition \ref{rep.designs}).
 \bigskip
 
-$\mathcal{P}_{m}$ and $\mathcal{P}'_{m}$ can either be used with Saltelli's strategy to estimate all first-order indices and total effect Sobol' indices. This option is referred as Variant $A$ in Algorithm \ref{recursive.algorithm}. Or $\mathcal{P}_{m}$ and $\mathcal{P}'_{m}$ can be used with the replication procedure to estimate all first-order Sobol' indices. This option is referred as Variant $B$ in Algorithm \ref{recursive.algorithm}.
+$\mathcal{P}_{m}$ and $\mathcal{P}'_{m}$ can be used with Saltelli's strategy to estimate all first-order indices and total effect Sobol' indices. This option is referred as Variant $A$ in Algorithm \ref{recursive.algorithm}.
 
-If the stopping criterion is satisfied, the algorithm stops and Sobol' estimates are returned. Otherwise, $m$ is incremented by one to perform a new estimation.
+Alternatively, $\mathcal{P}_{m}$ and $\mathcal{P}'_{m}$ can be used with the replication procedure to estimate all first-order Sobol' indices. This option is referred as Variant $B$ in Algorithm \ref{recursive.algorithm}. 
+
+In both case we test if the respective error bounds $\varepsilon_{\underline{S}_u}$ and $\varepsilon_{\overline{S}_u}$ are lower than the target precision $\epsilon$.
+\bigskip
+
+If the stopping criterion is satisfied, that is if $bool$ is true, the algorithm stops and Sobol' estimates are returned. Otherwise, $m$ is incremented by one to perform a new estimation. 
 
 \begin{algorithm}[!ht]
 \caption{Recursive estimation of Sobol' indices}
@@ -283,18 +304,22 @@ If the stopping criterion is satisfied, the algorithm stops and Sobol' estimates
 \vspace*{0.2cm}
 \State choose $\epsilon >0$
 \State set: $m \leftarrow m_0$
-\While {$\abs{\varepsilon_{S_u}} \leq \epsilon$}
+\State $bool \leftarrow false$
+\While {$! bool$}
 \State $\mathcal{P}_m \leftarrow \mathcal{P}_{m-1} \cup B_m$
 
 \hspace*{-0.3cm} $\mathcal{P}'_m \leftarrow \mathcal{P}'_{m-1} \cup {B'}_m$
-\For {$u \in \{\varnothing,\{1\},\dots,$ $\{d\},\mathcal{D}\}$}
+\For {$u =1,\dots,d$}
 \If {Variant $A$}
-\State estimate $\widehat{\underline{S}_u}^{(m)}$ and $\widehat{\ov{$S$}_u}^{(m)}$ with formula \ref{} and Saltelli's strategy
+\State estimate $\widehat{\underline{S}_u}^{(m)}$ and $\widehat{\ov{$S$}_u}^{(m)}$ with formulas (\ref{formula_undersu}) and (\ref{formula_oversu}) and Saltelli's strategy
+\State $bool_u \leftarrow \abs{\varepsilon_{\underline{S}_u}} \leq \epsilon \ \& \ \abs{\varepsilon_{\overline{S}_u}} \leq \epsilon$
 \EndIf
 \If {Variant $B$}
-\State estimate $\widehat{\underline{S}_u}^{(m)}$ with formula \ref{} and the replication procedure
+\State estimate $\widehat{\underline{S}_u}^{(m)}$ with formula (\ref{formula_undersu}) and the replication procedure
+\State $bool_u \leftarrow \abs{\varepsilon_{\underline{S}_u}} \leq \epsilon$
 \EndIf
 \EndFor
+\State $bool \leftarrow \forall u: \ bool_u$
 \State $m \leftarrow m + 1$
 \EndWhile
 \State return the Sobol' estimates.
@@ -308,7 +333,7 @@ The cost of our algorithm varies whether Variant $A$ or Variant $B$ is selected.
 \end{equation*}
 where: 
 \begin{itemize}
-\item[$\bullet$] $2^{m_u}$ is the number of evaluations $f\left(\vx_{i,u}:{\vx'}_{i,-u}\right)$ used to estimate both the first-order index $\underline{S}_u$ and the total effect index $\overline{S}_u$.
+\item[$\bullet$] $2^{m_u}$ is the number of evaluations $f\left(\vx_{i,u}:{\vx'}_{i,-u}\right)$ used to estimate both the first-order index $\underline{S}_u$ and the total effect index $\overline{S}_u$,
 \item[$\bullet$] $2 \times 2^{m^{\star}}$ is the number of evaluations $f\left(\vx_{i}\right)$ and $f\left({\vx'}_{i}\right)$ used in the estimation of each first-order and total effect index.
 \end{itemize}
 This cost can be seen as a generalisation of the one specified in Theorem \ref{saltelli.theorem}. If all $m_u$ are equal, the cost of Variant $A$ becomes $2^{m^\star}(d+2)$ and we recover the cost in Theorem \ref{saltelli.theorem} with $n=2^{m^\star}$.
@@ -317,7 +342,7 @@ If Variant $B$ is selected the cost of our algorithm equals $2 \times 2^{m^{\sta
 
 \subsection{Improvement}
 
-We focus on the use of a better estimator to evaluate small first-order Sobol' indices in Variant $A$. This estimator is called ``Correlation 2" and was introduced by Owen in \cite{Owen}. Owen discussed and highlighted the efficiency of ``Correlation 2" when estimating small closed Sobol' indices. Our aim is to show that using ``Correlation 2" in procedure $A$ may reduce the total number of model evaluations. Its formula writes as follows:
+We focus on the use of a recent estimator to evaluate small first-order Sobol' indices in Variant $A$. This estimator is called ``Correlation 2" and was introduced by Owen in \cite{Owen}. Owen discussed and highlighted the efficiency of ``Correlation 2" when estimating small first-order indices. Our aim is to show that using ``Correlation 2" in Variant $A$ may reduce the total number of model evaluations. Its formula writes as follows:
 \begin{equation}
 \widehat{\underline{\tau}_u^2} = \frac{1}{n} \sum \limits_{i=0}^{n-1} (f(\vx_i)-f({\vz}_{i,u}:{\vx}_{i,-u}))(f(\vx_{i,u}:{\vx'}_{i,-u})-f({\vx'}_i)),
 \label{correlation2}
@@ -325,9 +350,9 @@ We focus on the use of a better estimator to evaluate small first-order Sobol' i
 where $(\vx_i,{\vx'}_i, \vz_i) \iid [0,1)^{3d}$. It uses an extra set of $n$ model evaluations to estimate $\underline{\tau}_u^2$.
 \bigskip
 
-We discuss below the potential improvement brought by the use of ``Correlation 2" in Variant $A$. The idea is to replace the current estimator (\ref{first.order.est}) by (\ref{correlation2}) for each small first-order index. Assume that the number of small first-order indices is known and equals $\gamma$. We denote by $u_1,\dots,u_{\gamma}$ the indexes of the corresponding inputs and $\Gamma = \{1,\dots,\gamma\}$. 
+We discuss below the potential improvement brought by the use of ``Correlation 2" in Variant $A$. The idea is to replace the current estimator (\ref{first.order.est}) by (\ref{correlation2}) for each small first-order index. 
 
-The cost of Variant $A$ including ``Correlation 2" writes: 
+Assume that the number of small first-order indices is known and equals $\gamma$. We denote by $u_1,\dots,u_{\gamma}$ the indexes of the corresponding inputs and $\Gamma = \{1,\dots,\gamma\}$. The cost of Variant $A$ including ``Correlation 2" writes: 
 \begin{equation}
 \sum \limits_{j \in \Gamma} 2^{m''_{u_j}} + \sum \limits_{j \in \Gamma} 2^{m'_{u_j}} + \sum \limits_{j \in \mathcal{D}/\Gamma} 2^{m_{u_j}} + 2 \times 2^{m^\star}, \qquad m'_{u_j}\leq m^{\star}, \ m_{u_j} \leq m^{\star},
 \label{cost.improvement}
@@ -350,13 +375,15 @@ The difference between costs (\ref{cost.improvement}) and (\ref{cost.non.improve
 \end{equation}
 Hence, the sign of this difference indicates whether or not using ``Correlation 2" bring an improvement to Variant $A$. We distinguish two cases :
 \begin{itemize}
-\item[1)] for $j \in \Gamma$, the total effect index $\ov{$S$}_{u_j}$ requires as much or more evaluations $f\left(\vx_{i,u_j}:{\vx'}_{i,-u_j}\right)$ than the first-order index $\underline{S}_{u_j}$. Since the total effect estimator is the same, as a consequence we have $m'_{u_j}=m_{u_j}$ and $c_j >0$.
-\item[2)] for $j \in \Gamma$, the total effect index $\ov{$S$}_{u_j}$ requires less evaluations $f\left(\vx_{i,u_j}:{\vx'}_{i,-u_j}\right)$ than the first-order index $\underline{S}_{u_j}$. In this case, if both $m''_{u_j} < m_{u_j}$ and $m'_{u_j} < m_{u_j}$ then $c_j \leq 0$.  
+\item[1)] for $j \in \Gamma$, the total effect index $\ov{$S$}_{u_j}$ requires as much or more evaluations than the first-order index $\underline{S}_{u_j}$. Since the total effect estimator is the same, as a consequence we have $m'_{u_j}=m_{u_j}$ and $c_j >0$.
+\item[2)] for $j \in \Gamma$, the total effect index $\ov{$S$}_{u_j}$ requires less evaluations than the first-order index $\underline{S}_{u_j}$. In this case, if both $m''_{u_j} < m_{u_j}$ and $m'_{u_j} < m_{u_j}$ then $c_j \leq 0$.  
 \end{itemize}
-We can write $\Gamma = \Gamma_1 \cup \Gamma_2$, $\Gamma_1 \cap \Gamma_2=\varnothing$, to separate the number of times case $1)$ or case $2)$ are verified. We expect to have more case $2)$ than case $1)$. Indeed, the numerator of the first-order index $\underline{S}_u$ requires to estimate $2d-1$ integrals against only $d+1$ integrals for the numerator of the total effect index $\ov{$S$}_u$. It seems reasonable to suppose that it takes less points to evaluate $\ov{$S$}_u$ than $\underline{S}_u$. 
+Overall we expect to have more case $2)$ than case $1)$. Indeed, the numerator of $\underline{S}_u$ requires to estimate $2d-1$ integrals against only $d+1$ integrals for the numerator of $\ov{$S$}_u$. Hence, it seems reasonable to suppose that it takes less points to evaluate $\ov{$S$}_u$ than $\underline{S}_u$. 
 
-Furthermore, in case $2)$, we expect the two conditions $m''_{u_j} < m_{u_j}$ and $m'_{u_j} < m_{u_j}$ to be often satisfied as ``Correlation 2" has been shown 
-to perform the best for small first-order indices. To support this discussion, illustrations of the use of ``Correlation 2" are presented in Section \ref{appli}. 
+Furthermore, in case $2)$, we expect the two conditions $m''_{u_j} < m_{u_j}$ and $m'_{u_j} < m_{u_j}$ to be always satisfied as ``Correlation 2" has been shown 
+to perform the best for small first-order indices. 
+
+To support this discussion, illustrations of the use of ``Correlation 2" are presented in Section \ref{appli}. 
 \bigskip
 
 In pratice, one does not know which are the small Sobol' indices. To overcome this issue, we propose the following alternative for Variant $A$. If at the end of the first iteration, the estimate $\widehat{\underline{S}_u}^{(m)}$, $u \in \mathcal{D}$, is smaller than a specified threshold, then at the next iteration estimator (\ref{first.order.est}) is switched for (\ref{correlation2}) and a third Sobol' sequence $\mathcal{P''}_{m}=\{\vz_i\}_{i=0}^{2^m-1}$ is constructed for the evaluations $f({\vz}_{i,u}:{\vx}_{i,-u})$.
