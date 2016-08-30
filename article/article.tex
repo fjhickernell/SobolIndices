@@ -126,7 +126,7 @@ In this section we review two Monte Carlo procedures for the estimation of Sobol
 One way to estimate the two quantities (\ref{first.order}) and (\ref{total.effect}) is via:
 \begin{align}
 \label{first.order.est}
-\widehat{\underline{\tau}_u^2} & = \frac{1}{n} \sum \limits_{i=0}^{n-1} \left(f(\vx_i)-f(\vx_{i,u}:{\vx'}_{i,-u}\right)f(\vx'_i),\\
+\widehat{\underline{\tau}_u^2} & = \frac{1}{n} \sum \limits_{i=0}^{n-1} \left(f(\vx_i)-f(\vx_{i,u}:{\vx'}_{i,-u})\right)f(\vx'_i),\\
 \label{total.effect.est}
 \widehat{\ov{$\tau$}_u^2} & = \frac{1}{2n} \sum \limits_{i=0}^{n-1} (f({\vx'}_i) - f(\vx_{i,u}:{\vx'}_{i,-u}))^2, \qquad u \in \mathcal{D},
 \end{align}
@@ -136,10 +136,11 @@ using for $\sigma^2$ the classic estimator:
 \label{mu.est}
 \end{equation}
 The Sobol' indices estimators are defined by:
-\begin{equation*}
+\begin{equation}
 \widehat{\underline{S}_u} = \widehat{\underline{\tau}_u^2} / \widehat{\sigma}^2, \qquad
 \widehat{\overline{S}_u} = \widehat{\overline{\tau}_u^2} / \widehat{\sigma}^2.
-\end{equation*}
+\label{common.sobol.est}
+\end{equation}
 The estimation of a single pair ($\widehat{\underline{S}_u}$, $\widehat{\overline{S}_u}$) requires $3n$ evaluations of the model $f$. Using a combinatorial formalism, in \cite[Theorem 1]{Saltelli} Saltelli proposes the following estimation strategy:
 \begin{theorem}
 \label{saltelli.theorem}
@@ -157,7 +158,7 @@ The method introduced in \cite{Mara} allows to estimate all first-order Sobol' i
 
 More precisely, let $\mathcal{P}=\{\vx_i\}_{i=0}^{n-1}$ and $\mathcal{P}'=\{{\vx'}_i\}_{i=0}^{n-1}$ be two replicated designs of order $1$. Denote by $\{f(\vx_i)\}_{i=0}^{n-1}$ and $\{f({\vx'}_i)\}_{i=0}^{n-1}$ the two sets of model evaluations obtained with $\mathcal{P}$ and $\mathcal{P}'$. Consider $u \in \mathcal{D}$, from Definition \ref{rep.designs} there exists a permutation $\pi_u$ such that ${\vx'}_{\pi_u(i),u}={\vx}_{i,u}$. Then, remark that $\forall i \in \{0,\dots,n-1\}$:
 \[\pi_u(f({\vx'}_i))=f({\vx'}_{\pi_u(i)})=f(\vx'_{\pi_u(i),u}:{\vx'}_{\pi_u(i),-u})=f(\vx_{i,u}:{\vx'}_{\pi_u(i),-u}).\]
-Hence, each $\underline{\tau}^2_u$ can be estimated via formula (\ref{first.order.est}) with $\{f(\vx_i)\}_{i=0}^{n-1}$ and $\{\pi_u(f({\vx'}_i))\}_{i=0}^{n-1}$ without requiring further model evaluations. This estimation method has been deeply studied and generalized in Tissot et al. \cite{Mara} to the case of closed second-order indices. In the following we refer to this method as replication procedure.
+Hence, each $\underline{\tau}^2_u$ can be estimated via formula (\ref{first.order.est}) with $\pi_u(f({\vx'}_i))$ in place of $f(\vx_{i,u}:{\vx'}_{i,-u})$ without requiring further model evaluations. This estimation method has been deeply studied and generalized in Tissot et al. \cite{Mara} to the case of closed second-order indices. In the following we refer to this method as replication procedure.
 
 \subsection{Towards a reliable estimation}
 The aim of this paper is to propose a recursive procedure to estimate first-order and total effect Sobol' indices. The choice of the stopping criterion is the key point of this paper. In \cite{Gilquin16}, the authors propose a recursive version of the replication procedure. In this recursive version, the stopping criterion is an absolute difference between estimates computed on consecutive steps. 
@@ -172,7 +173,7 @@ The construction of the error bound is the subject of the next section. Our recu
 
 \section{Reliable error bound for Sobol' indices}
 \label{section.error} 
-
+We start by reviewing the construction of an error bound for a multidimensional integral. This construction is based on the Walsh decomposition of the integrand and relies on quasi-Monte Carlo points sets. Then, we propose an extension of this error bound to Sobol' indices. This extension exploits the integral formula of a Sobol' index.
 
 \subsection{Reliable integral estimation using quasi-Monte Carlo}
 \label{section.error.algo}
@@ -242,7 +243,7 @@ where one may increase $m$ until the error bound is small enough.
 
 Details concerning the algorithm, mapping of the wavenumber space, or meaning and properties of $\cc$, are provided in \cite{HicJim}. For the rest of the paper we only consider Sobol' sequences. These sequences are digital sequences in based $b=2$. Their major interests come from their fast and easy implementation as well as their slow growing size rate. Further details concerning these sequences can be found in \cite{Lemieuxbook,Niederreiter92}.
 
-\subsection{Generalization to Sobol' indices}
+\subsection{Extension to Sobol' indices}
 The idea here is to extend the definition of the error bound (\ref{errbd}) to Sobol' indices. To do so, we consider the two integral formulas of the first-order and total effect Sobol' indices:
 %\subsection{Definition of $\widehat{S}$ (fix it with max and min)}
 %In some applications, it is more useful to estimate the normalized Sobol' indices, $S_u = \underline{\tau}_u^2/\sigma^2$ and $\overline{S}_u = \overline{\tau}_u^2/\sigma^2$. In both cases, regular and normalized indices can be approximated by estimating some integrals,
@@ -252,10 +253,9 @@ The idea here is to extend the definition of the error bound (\ref{errbd}) to So
 f(\vx_u:{\vx'}_{-u})\right)f(\vx')d\vx d{\vx'}}{\int_{[0,1)^{d}} f(\vx)^2 d{\vx}-\left(\int_{[0,1)^{d}} f(\vx) d{\vx}\right)^2} = \frac{I_1}{I_3-(I_4)^2}, \\
 \overline{S}_u(\vI) & = \frac{\frac{1}{2}\int_{[0,1)^{d+1}}(f(\vx')-f(\vx_u:{\vx'}_{-u}))^2d\vx d{\vx'}}{\int_{[0,1)^{d}} f(\vx)^2 d{\vx}-\left(\int_{[0,1)^{d}} f(\vx) d{\vx}\right)^2} = \frac{I_2}{I_3-(I_4)^2},
 \end{align*}
-where $\vI=(I_1,I_2,I_3,I_4)$. Thus, we can define $\underline{S}_u(\vI)$ and $\overline{S}_u(\vI)$ as functions over a vector of integrals $\vI$. If we estimate $\vI$ by $\widehat{\vI}$ and error bound $\varepsilon_{\vI}$ according to \ref{section.error.algo}, then $\vI\in B_{\varepsilon_{\vI}}(\widehat{\vI}):=[\widehat{\vI}-\varepsilon_{\vI},\widehat{\vI}+\varepsilon_{\vI} ]$.
-\bigskip
+where $\vI=(I_1,I_2,I_3,I_4)$. Thus, we can define $\underline{S}_u(\vI)$ and $\overline{S}_u(\vI)$ as functions over a vector of integrals $\vI$. If we estimate $\vI$ by $\widehat{\vI}$ with the error bound $\varepsilon_{\vI}$ according to \ref{section.error.algo}, then $\vI\in B_{\varepsilon_{\vI}}(\widehat{\vI}):=[\widehat{\vI}-\varepsilon_{\vI},\widehat{\vI}+\varepsilon_{\vI} ]$. 
 
-Alternatively to the common estimators $\widehat{\underline{S}_u}=\underline{S}_u(\widehat{\vI})$ and $\widehat{\overline{S}_u}=\overline{S}_u(\widehat{\vI})$, we consider here the following estimators with their respective error bounds:
+Then, alternatively to the common Sobol' indices estimators (\ref{common.sobol.est}), we can define the two following estimators with their respective error bounds:
 \begin{gather}
 \begin{aligned}
 \widehat{\underline{S}_u} & = \frac{1}{2}\left(\min\left(\max_{\vI\in B_{\varepsilon_{\vI}}(\widehat{\vI})} \underline{S}_u(\vI),1\right) + \max\left(\min_{\vI\in B_{\varepsilon_{\vI}}(\widehat{\vI})} \underline{S}_u(\vI),0\right) \right), \\
@@ -271,7 +271,7 @@ and,
 \end{aligned}
 \label{formula_oversu}
 \end{gather}
-These new estimators satisfy: \[ \underline{S}_u\in \left[ \widehat{\underline{S}_u} - \varepsilon_{\underline{S}_u}, \widehat{\underline{S}_u} + \varepsilon_{\underline{S}_u} \right], \qquad \overline{S}_u\in \left[ \widehat{\overline{S}_u} - \varepsilon_{\overline{S}_u}, \widehat{\overline{S}_u} + \varepsilon_{\overline{S}_u} \right] ;\] This property is illustrated below in dimension one.   
+We will consider these two estimators for the rest of the paper. These new estimators satisfy: \[ \underline{S}_u\in \left[ \widehat{\underline{S}_u} - \varepsilon_{\underline{S}_u}, \widehat{\underline{S}_u} + \varepsilon_{\underline{S}_u} \right], \qquad \overline{S}_u\in \left[ \widehat{\overline{S}_u} - \varepsilon_{\overline{S}_u}, \widehat{\overline{S}_u} + \varepsilon_{\overline{S}_u} \right] .\] This property is illustrated below in dimension one.   
 \begin{figure}[H]
 \centering
 \includegraphics[width=0.5\textwidth]{Images/scheme_S.eps}
@@ -286,14 +286,16 @@ We start be detailing our recursive procedure in the form of an algorithm. Then,
 
 \subsection{Recursive procedure algorithm}
 
-Algorithm \ref{recursive.algorithm} summarizes the main steps of our recursive procedure. First, one must fix the target precision $\epsilon >0$ for the Sobol' estimates. The stopping criterion is initialized with $\zeta=\epsilon+1$. Then, we set $m=m_0$ and construct the two designs $\mathcal{P}_{m}=\{\vx_i\}_{i=0}^{2^{m}-1}$ and $\mathcal{P}'_{m}=\{\vx'_i\}_{i=0}^{2^{m}-1}$ accordingly to the multiplicative approach detailed in \cite{crass}. With this construction, $\mathcal{P}_{m}$ and $\mathcal{P}'_{m}$ correspond to the first $2^{m}$ points of two Sobol' sequences. Furthermore, they possess the structure of two replicated designs of order $1$ (Definition \ref{rep.designs}).
+Algorithm \ref{recursive.algorithm} summarizes the main steps of our recursive procedure. First, one must fix the target precision $\epsilon >0$ for the Sobol' estimates. Then, we set $m=m_0$ and construct the two designs $\mathcal{P}_{m}=\{\vx_i\}_{i=0}^{2^{m}-1}$ and $\mathcal{P}'_{m}=\{\vx'_i\}_{i=0}^{2^{m}-1}$ accordingly to the multiplicative approach detailed in \cite{crass}. With this construction, $\mathcal{P}_{m}$ and $\mathcal{P}'_{m}$ correspond to the first $2^{m}$ points of two Sobol' sequences. Furthermore, they possess the structure of two replicated designs of order $1$ (Definition \ref{rep.designs}). The choice of $m_0$ must be large enough to insure that $f \in \cc$, where $\cc$ is the set of functions defined by (\ref{conecond}).
 \bigskip
 
 $\mathcal{P}_{m}$ and $\mathcal{P}'_{m}$ can be used with Saltelli's strategy to estimate all first-order indices and total effect Sobol' indices. This option is referred as Variant $A$ in Algorithm \ref{recursive.algorithm}.
 
 Alternatively, $\mathcal{P}_{m}$ and $\mathcal{P}'_{m}$ can be used with the replication procedure to estimate all first-order Sobol' indices. This option is referred as Variant $B$ in Algorithm \ref{recursive.algorithm}. 
 
-In both case we test if the respective error bounds $\varepsilon_{\underline{S}_u}$ and $\varepsilon_{\overline{S}_u}$ are lower than the target precision $\epsilon$.
+In both case we test if the respective error bounds $\varepsilon_{\underline{S}_u}$ and $\varepsilon_{\overline{S}_u}$ are lower than the target precision $\epsilon$. The stopping criterion checks if all Sobol' estimates satisfy the test. For Variant $A$ it writes: $ \forall u \in \mathcal{D}, \abs{\varepsilon_{\underline{S}_u}} \leq \epsilon \text{ and } \abs{\varepsilon_{\overline{S}_u}} \leq \epsilon$,
+for Variant $B$:
+$ \forall u \in \mathcal{D}, \abs{\varepsilon_{\underline{S}_u}} \leq \epsilon.$ 
 \bigskip
 
 If the stopping criterion is satisfied, that is if $bool$ is true, the algorithm stops and Sobol' estimates are returned. Otherwise, $m$ is incremented by one to perform a new estimation. 
@@ -469,4 +471,6 @@ For those who were curious about the actual value of $\mathbb{E} \left[\max(\bve
 %\subsection{Proof proposition \ref{right.multi}}
 %\label{proof.prop}
 %
+
+
 \end{document}
