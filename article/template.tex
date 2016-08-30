@@ -85,7 +85,7 @@ mathtools,bm,extraipa,mathabx,graphicx,algorithm}
 \newcommand{\hf}{\hat{f}}
 \newcommand{\hS}{\widehat{S}}
 \newcommand{\tS}{\widetilde{S}}
-\newcommand{\tf}{\tilde{f}}
+\newcommand{\tf}{\widetilde{f}}
 \newcommand{\fC}{\mathfrak{C}}
 \newcommand{\homega}{\widehat{\omega}}
 \newcommand{\wcomega}{\mathring{\omega}}
@@ -240,7 +240,7 @@ For $u \subsetneq \mathcal{D}$, the two quantities $\underline{\tau}_u^2$ and $\
 $\underline{\tau}_u^2$ and $\ov{$\tau$}_u^2$ satisfy the following relations: $ 0 \leq  \underline{\tau}_u^2 \leq \ov{$\tau$}_u^2$ and $\underline{\tau}_u^2 = \sigma^2 - \ov{$\tau$}_{-u}^2$. These two measures are commonly found in the literature in their normalized form: $\underline{S}_u = \underline{\tau}_u^2 / \sigma^2$ is the closed $|u|$-order Sobol' index for inputs $u$, while $\ov{$S$}_u = \ov{$\tau$}_u^2 / \sigma^2$ is the total effect Sobol' index of order $|u|$.
 \bigskip
 
-The problem of interest is the evaluation of first-order and total effect Sobol' indices. In our framework, we are only interested in single input indices, $|u|=1$. To this effect we restrain $u \in \mathcal{D}$. The computation of the normalized indices is performed based on the following integral formulas for their numerators:
+The problem of interest is the evaluation of first-order and total effect Sobol' indices. In our framework, we are only interested in single input indices, namely $|u|=1$. The computation of the normalized indices is performed based on the following integral formulas for their numerators:
 \begin{align}
 \label{first.order}
 \underline{\tau}_u^2  &= \int_{[0,1)^{2d-1}} \left(f(\vx)-
@@ -384,7 +384,7 @@ for $\ell_* \in \mathbb{N}$, $\homega$ and $\wcomega$ two non-negative valued fu
 Hence, in \cite[Sec. 4.2]{HicJim} it is proved that for any $f\in\cc$,
 \begin{equation}
 \absolute{I(f) - \frac{1}{b^m}\sum_{\vx\in\mathcal{P}_m}f(\vx)}
-\le \overbrace{\frac{\tS_{\ell,m}(f)\homega(m) \wcomega(m-\ell)}{1 - \homega(m-\ell) \wcomega(m-\ell)}}^{\epsilon_{I(f)}=}, \label{errbd}
+\le \frac{\tS_{\ell,m}(f)\homega(m) \wcomega(m-\ell)}{1 - \homega(m-\ell) \wcomega(m-\ell)}=\epsilon_{I(f)}, \label{errbd}
 \end{equation}
 where one may increase $m$ until the error bound $\epsilon_{I(f)}$ is small enough.
 
@@ -496,7 +496,7 @@ where:
 \end{itemize}
 If all $m_u$ are equal, the cost of Variant $A$ becomes $2^{m^\star}(d+2)$ and we recover the cost specified in Theorem \ref{saltelli.theorem} with $n=2^{m^\star}$.
 
-If Variant $B$ is selected the cost of our algorithm equals $2 \times 2^{m^{\star}}$. This cost corresponds to the one of the replication procedure claimed in the introduction, where $2n=2\times 2^{m^{\star}}$ independent of $d$.
+If Variant $B$ is selected the cost of our algorithm equals $2 \times 2^{m^{\star}}$. This cost corresponds to the one of the replication procedure introduced in Section \ref{sec:2.2}, where $2n=2\times 2^{m^{\star}}$ independent of $d$.
 
 \subsection{Improvement}
 \label{sec:4.2}
@@ -515,7 +515,7 @@ Assume that the number of small first-order indices is known and equals $\gamma$
 \sum \limits_{j \in \Gamma} 2^{m''_{u_j}} + \sum \limits_{j \in \Gamma} 2^{m'_{u_j}} + \sum \limits_{j \in \mathcal{D}\setminus{\Gamma}} 2^{m_{u_j}} + 2 \times 2^{m^\star},
 \label{cost.improvement}
 \end{equation}
-where $m'_{u_j}\leq m^{\star}$, $\ m_{u_j} \leq m^{\star}$, and: 
+where: %$m'_{u_j}\leq m^{\star}$, $\ m_{u_j} \leq m^{\star}$, and: 
 \begin{itemize}
 \item[$\bullet$] for $j\in \Gamma$, $2^{m''_{u_j}}$ is the number of evaluations \\ $f\left(\vz_{i,u_j}:\vx_{i,-u_j}\right)$ to estimate $\underline{S}_{u_j}$,
 \item[$\bullet$] for $j\in \Gamma$, $2^{m'_{u_j}}$ is the number of evaluations \\ $f\left(\vx_{i,u_j}:{\vx'}_{i,-u_j}\right)$ to estimate both $\underline{S}_{u_j}$ and  $\overline{S}_{u_j}$,
@@ -524,10 +524,11 @@ where $m'_{u_j}\leq m^{\star}$, $\ m_{u_j} \leq m^{\star}$, and:
 \end{itemize}
 Recall that the cost of Variant $A$ without  ``Correlation 2" writes:
 \begin{equation}
-\sum \limits_{j \in \Gamma} 2^{m_{u_j}} + \sum \limits_{j \in \mathcal{D}\setminus{\Gamma}} 2^{m_{u_j}} + 2 \times 2^{m^{\star}}, \qquad m_{u_j} \leq m^{\star}.
+\sum \limits_{j \in \Gamma} 2^{m_{u_j}} + \sum \limits_{j \in \mathcal{D}\setminus{\Gamma}} 2^{m_{u_j}} + 2 \times 2^{m^{\star}}. 
+%\qquad m_{u_j} \leq m^{\star}.
 \label{cost.non.improvement}
 \end{equation}
-The difference between costs (\ref{cost.improvement}) and (\ref{cost.non.improvement}) equals:
+The difference (\ref{cost.improvement}) $-$ (\ref{cost.non.improvement}) equals:
 \begin{equation}
  \sum \limits_{j \in \Gamma} 2^{m_{u_j}} \left(2^{m''_{u_j}-m_{u_j}}  + 2^{m'_{u_j}-m_{u_j}} - 1 \right) = \sum \limits_{j \in \Gamma} c_j.
 \label{cost.comparison}
@@ -539,10 +540,9 @@ Hence, the sign of this difference indicates whether or not using ``Correlation 
 \end{itemize}
 Overall we expect to observe case $2)$ more often than case $1)$. Indeed, the numerator of $\underline{S}_u$ requires to estimate $2d-1$ dimensional integrals against only $d+1$ dimensional integrals for the numerator of $\ov{$S$}_u$. Hence, it seems reasonable to expect that it will take less points to estimate $\ov{$S$}_u$ than $\underline{S}_u$. 
 
-Furthermore, in case $2)$, we expect the two conditions $m''_{u_j} < m_{u_j}$ and $m'_{u_j} < m_{u_j}$ to always hold as ``Correlation 2" is shown 
-to perform better for small first-order indices. To support this discussion, illustrations of the use of ``Correlation 2" are presented in Section \ref{sec:5}. 
+Furthermore, in case $2)$, we expect the two conditions $m''_{u_j} < m_{u_j}$ and $m'_{u_j} < m_{u_j}$ to always hold as ``Correlation 2" is shown in \cite{Owen} to perform better for small first-order indices. To support this discussion, illustrations of the use of ``Correlation 2" are presented in Section \ref{sec:5}. 
 
-In practice, one does not know which are the small Sobol' indices. To overcome this issue, we propose the following alternative for Variant $A$. If at the end of the first iteration, the estimate $\widehat{\underline{S}}_u$, $u \in \mathcal{D}$, is smaller than a threshold, then at the next iteration estimator (\ref{first.order.est}) is switched for ``Correlation 2" and a third Sobol' sequence $\mathcal{P''}_{m}=\{\vz_i\}_{i=0}^{2^m-1}$ is constructed to obtain the corresponding evaluations $f({\vz}_{i,u}:{\vx}_{i,-u})$.
+In practice, one does not know which are the small Sobol' indices ($u_1,\dots,u_\gamma)$. To overcome this issue, we propose the following alternative for Variant $A$. If at the end of the first iteration, the estimate $\widehat{\underline{S}}_u$, $u \in \mathcal{D}$, is smaller than a threshold (here $0.1$), then at the next iteration estimator (\ref{first.order.est}) is switched for ``Correlation 2" and a third Sobol' sequence $\mathcal{P''}_{m}=\{\vz_i\}_{i=0}^{2^m-1}$ is constructed to obtain the corresponding evaluations $f({\vz}_{i,u}:{\vx}_{i,-u})$.
 
 \section{Applications}
 \label{sec:5}
@@ -587,8 +587,8 @@ Gilquin, L., Jim\'enez Rugama, Ll.A., Arnaud, E., Hickernell, F.J., Monod, H., P
 Hickernell, F.J., Jim\'enez Rugama, Ll.A.: Reliable Adaptative Cubature Using Digital Sequences: Monte Carlo and Quasi-Monte Carlo Methods, vol. 163, 367-383 (2016)
 \bibitem{Hoeffding}
 Hoeffding, W.F.: A class of statistics with asymptotically normal distribution, Ann. Math. Stat. \textbf{19}(3), 293-325 (1948)
-%\bibitem{Janon}
-%Janon, A., Klein, T., Lagnoux A., Nodet, M., Prieur C.: Asymptotic normality and efficiency of two {S}obol' index estimators, ESAIM Probab. Stat. \textbf{18}, 342-364 (2014)
+\bibitem{Janon}
+Janon, A., Klein, T., Lagnoux A., Nodet, M., Prieur C.: Asymptotic normality and efficiency of two {S}obol' index estimators, ESAIM Probab. Stat. \textbf{18}, 342-364 (2014)
 \bibitem{Lemieuxbook}
 Lemieux,C.: Monte Carlo and Quasi-Monte Carlo Sampling, Springer, New-York (2009)
 \bibitem{Mara}
