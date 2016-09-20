@@ -6,9 +6,9 @@
 
 S = @(x) exp(-(x-1).^2) + 1;
 
-Ireal = I - err + 0.03;
 I = 0.90;
 err = 0.2;
+Ireal = I - err + 0.03;
 Smax = S(1); xmax = 1;
 Smin = S(I - err); xmin = I - err;
 

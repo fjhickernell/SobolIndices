@@ -255,12 +255,12 @@ numerator_size = 1;
 % Sfo_max = @(down, up) estimate_max(down, up); % S function for first order
 % ffo1 = @(xpts,u,fx,fy,fxy,fzx) fx.*fxy;
 % ffo2 = @(xpts,u,fx,fy,fxy,fzx) 1/2*(fx + fxy);
-Sfo_min = @(down, up) estimate_min([down(1) down(end) down(2:end)], [up(1) up(end) up(2:end)]); % S function for first order
-Sfo_max = @(down, up) estimate_max([down(1) down(end) down(2:end)], [up(1) up(end) up(2:end)]); % S function for first order
-ffo = @(xpts,u,fx,fy,fxy,fzx) fx.*fxy;
-% Sfo_min = @(down, up) estimate_min([down(1) 0 down(2:end)], [up(1) 0 up(2:end)]); % S function for first order
-% Sfo_max = @(down, up) estimate_max([down(1) 0 down(2:end)], [up(1) 0 up(2:end)]); % S function for first order
-% ffo = @(xpts,u,fx,fy,fxy,fzx) fx.*(fxy - fy); % ffo = @(xpts,u,fx,fy,fxy,fzx) (fx - 1/2*mean(fx + fxy)).*(fxy - 1/2*mean(fx + fxy));
+% Sfo_min = @(down, up) estimate_min([down(1) down(end) down(2:end)], [up(1) up(end) up(2:end)]); % S function for first order
+% Sfo_max = @(down, up) estimate_max([down(1) down(end) down(2:end)], [up(1) up(end) up(2:end)]); % S function for first order
+% ffo = @(xpts,u,fx,fy,fxy,fzx) fx.*fxy;
+Sfo_min = @(down, up) estimate_min([down(1) 0 down(2:end)], [up(1) 0 up(2:end)]); % S function for first order
+Sfo_max = @(down, up) estimate_max([down(1) 0 down(2:end)], [up(1) 0 up(2:end)]); % S function for first order
+ffo = @(xpts,u,fx,fy,fxy,fzx) fx.*(fxy - fy); % ffo = @(xpts,u,fx,fy,fxy,fzx) (fx - 1/2*mean(fx + fxy)).*(fxy - 1/2*mean(fx + fxy));
 
 Sfo_s_min = @(down,up) estimate_min([down(1) 0 down(2:end)], [up(1) 0 up(2:end)]); % S function for first order small
 Sfo_s_max = @(down,up) estimate_max([down(1) 0 down(2:end)], [up(1) 0 up(2:end)]); % S function for first order small

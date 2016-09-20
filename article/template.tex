@@ -422,14 +422,14 @@ and,
 \end{aligned}
 \label{formula_oversu}
 \end{gather}
-Because numerator and denominator are known to be positive, maximizing $\underline{S}_u(\vI)$ (resp. $\overline{S}_u(\vI)$) is done through maximizing the numerator $I_1$ (resp. $I_2$) and minimizing the denominator $I_3-I_4^2$. Analogously, to minimize $\underline{S}_u(\vI)$ (resp. $\overline{S}_u(\vI)$) one minimizes the numerator $I_1$ (resp. $I_2$) and maximizes the denominator $I_3-I_4^2$. %As an example, Figure \ref{fig:1} below illustrate the maximization process for $\vI$ unidimensional.
-%\begin{figure*}
-%\centering
-%\includegraphics[width=0.75\textwidth]{scheme_S.eps}
-% figure caption is below the figure
-%\caption{Estimator property.}
-%\label{fig:1}       % Give a unique label
-%\end{figure*} 
+Because numerator and denominator are known to be positive, maximizing $\underline{S}_u(\vI)$ (resp. $\overline{S}_u(\vI)$) is done through maximizing the numerator $I_1$ (resp. $I_2$) and minimizing the denominator $I_3-I_4^2$. Analogously, to minimize $\underline{S}_u(\vI)$ (resp. $\overline{S}_u(\vI)$) one minimizes the numerator $I_1$ (resp. $I_2$) and maximizes the denominator $I_3-I_4^2$. As an example, Figure \ref{fig:1} below illustrate the maximization process for $\vI$ unidimensional.
+\begin{figure*}
+\centering
+\includegraphics[width=1\textwidth]{Images/estimator_3d_small.eps}
+ figure caption is below the figure
+\caption{Estimator property.}
+\label{fig:1}       % Give a unique label
+\end{figure*} 
 
 Under the assumption that each integrand of $\vI$ is in $\cc$, these new estimators satisfy: \[ \underline{S}_u\in \left[ \widehat{\underline{S}}_u - \varepsilon_{\underline{S}_u}, \widehat{\underline{S}}_u + \varepsilon_{\underline{S}_u} \right], \qquad \overline{S}_u\in \left[ \widehat{\overline{S}}_u - \varepsilon_{\overline{S}_u}, \widehat{\overline{S}}_u + \varepsilon_{\overline{S}_u} \right] .\]
 For the rest of the paper, we will consider $\widehat{\underline{S}}_u$ and $\widehat{\overline{S}}_u$   as defined in formulas (\ref{formula_undersu}) and (\ref{formula_oversu}).
@@ -546,8 +546,92 @@ In practice, one does not know which are the small Sobol' indices ($u_1,\dots,u_
 
 \section{Applications}
 \label{sec:5}
-\subsection{Real case model}
+
+\subsection{Classical test functions}
 \label{sec:5.1}
+
+Running Ishigami example ... $\varepsilon=10^{-2}$
+
+\[
+\begin{array}{lccc}
+   & u=\{1\} & u=\{2\} & u=\{3\} \\ \hline \hline
+ \widehat{\underline{S}}_u & 0.3144  &  0.4371  &  0 \\ \hline
+ n & 4096  &  2048  &  1024 \\ \hline
+ \text{error} & 0.0005  &  0.0054   &   0 \\ \hline
+ \widehat{\overline{S}}_u & 0.5608  &  0.4428  &   0.2445 \\  \hline
+ n & 2048   &   2048   &   2048 \\ \hline
+ \text{error} & 0.0032  &  0.0004  &  0.0008 \\ \hline
+\end{array}
+\]
+
+\begin{tabular}{ ccc }
+     0  &   0  &   0 \\
+     0  &   0  &   0
+\end{tabular}
+
+
+
+Running Bratley et al. example ...
+
+\[
+\begin{array}{lcccccc}
+   & u=\{1\} & u=\{2\} & u=\{3\} & u=\{4\} & u=\{5\} & u=\{6\} \\ \hline \hline
+ \widehat{\underline{S}}_u & 0.6551  &  0.1792  &  0.0362  &  0.0007  &   0  &  0.0002 \\ \hline
+ n & 4096 & 2048  &  1024  &  1024  &  1024  &  1024 \\ \hline
+ \text{error} & 0.0023  &  0.0001  &  0.0008  &  0.0126  &  0.0015 &  0.0013 \\ \hline
+ \widehat{\overline{S}}_u & 0.7397  &  0.2655  &  0.0786 &  0.0355  &  0.0078  &  0.0061 \\  \hline
+ n & 4096  &  2048  &   1024  &   1024  &   1024  &  1024 \\ \hline
+ \text{error} & 0.0001  &  0.0004  &  0.0022  &  0.0012  &  0.0016   & 0.0002 \\ \hline
+\end{array}
+\]
+
+\begin{tabular}{ cccccc }
+     0  &   0  &   0  &  1  &   0  &   0 \\
+     0  &   0  &   0  &  0  &   0  &   0
+\end{tabular}
+
+
+Running Sobol g-function example ...
+
+\[
+\begin{array}{lcccccc}
+   & u=\{1\} & u=\{2\} & u=\{3\} & u=\{4\} & u=\{5\} & u=\{6\} \\ \hline \hline
+ \widehat{\underline{S}}_u & 0.5868 & 0.2609  &  0.0373 & 0.0006  &  0  &  0 \\ \hline
+ n & 4096  &  4096  &  1024  &  1024  &   1024  &  1024 \\ \hline
+ \text{error} & 0.0000  &  0.0002  &  0.0006  &  0.0053 &   0.0001  &  0.0001 \\ \hline
+ \widehat{\overline{S}}_u & 0.6910  &  0.3554  &  0.0563  &  0.0092  &  0.0001  &  0.0001 \\  \hline
+ n & 4096  &   2048  &   1024  &   1024  &   1024  &  1024 \\ \hline
+ \text{error} & 0.0009  &  0.0008  &  0.0001  &  0.0000  &  0.0000  &  0.0000 \\ \hline
+\end{array}
+\]
+
+\begin{tabular}{ cccccc }
+     0  &   0  &   0  &  0  &   0  &   0 \\
+     0  &   0  &   0  &  0  &   0  &   0
+\end{tabular}
+
+
+Running Morokoff and Caflish example ...
+
+\[
+\begin{array}{lcccccc}
+   & u=\{1\} & u=\{2\} & u=\{3\} & u=\{4\} & u=\{5\} & u=\{6\} \\ \hline \hline
+ \widehat{\underline{S}}_u & 0.1609 & 0.1570 & 0.1594 & 0.1577 & 0.1576 & 0.1572 \\ \hline
+ n & 4096  & 4096  &  4096  & 4096  &  4096  &  4096 \\ \hline
+ \text{error} & 0.0027  &  0.0012 &  0.0012 & 0.0005 & 0.0006 &  0.0010 \\ \hline
+ \widehat{\overline{S}}_u & 0.1726 & 0.1753 & 0.1748 & 0.1767  &  0.1740  & 0.1767 \\  \hline
+ n & 2048 & 2048  &  2048 & 2048  &   2048  &  2048 \\ \hline
+ \text{error} & 0.0028  &  0.0000 &  0.0006  &  0.0013 & 0.0014  &  0.0013 \\ \hline
+\end{array}
+\]
+
+\begin{tabular}{ cccccc }
+     0  &   0  &   0  &  0  &   0  &   0 \\
+     0  &   0  &   0  &  0  &   0  &   0
+\end{tabular}
+
+\subsection{Real case model}
+\label{sec:5.2}
 %The Brownian motion is widely used in many applications. Thus, the following example might be interesting to understand what Sobol' indices can explain in some of these applications. For instance, if we want to estimate the expected value of the maximum of a discretized Brownian motion whose covariance matrix is $\Sigma$, our goal is to estimate
 %\begin{align*}
 %\mathbb{E} \left[\max(\vect{B}_t)\right] &= \int_{\mathbb{R}^d} \max(\vect{B}_t) \frac{{\rm e}^{\vect{B}_t^T\Sigma^{-1}\vect{B}_t}}{(2\pi)^{d/2}|\Sigma|^{1/2}}\,d\vect{B}_t \\
@@ -557,9 +641,6 @@ In practice, one does not know which are the small Sobol' indices ($u_1,\dots,u_
 %The last two equalities are obtained through two different subsitutions corresponding to the \textit{Cholesky} construction of the Brownian motion, and the \textit{PCA} construction. For instance, if we take 10 dimensions and $t_i=i/10$, using the Cholesky construction $S_{1} = 24\%$, $S_{2} = 16\%$, $S_{3} = 13\%$, $S_{4} = 10\%$, and $\overline{S}_{1}=24\%$, $\overline{S}_{2}=18\%$, $\overline{S}_{3}=15\%$, $\overline{S}_{4} = 13\%$. However, using the PCA construction, $S_{1} = 89\%$, $S_{2} = 2\%$, $S_{3} = 1\%$, $S_{4} = 0\%$, and $\overline{S}_{1}=94\%$, $\overline{S}_{2}=7\%$, $\overline{S}_{3}=3\%$, $\overline{S}_{4} = 2\%$. This shows that the PCA construction will be better to estimate the above expectation using quasi-Monte Carlo methods since it has a lower effective dimensionality.
 %
 %For those who were curious about the actual value of $\mathbb{E} \left[\max(\vect{B}_t)\right]$, it is approximately 0.5935. Nevertheless, the Brownian Motion is a continuous time process. Thus, in order to estimate the expected value on a continuous time Browninan motion, one could either use a multilevel method, or a multivariate decomposition method to estimate this infinite dimensional integral.
-
-\subsection{Classical test functions}
-\label{sec:5.2}
 
 \begin{acknowledgements}
 This work is supported by the CITiES project funded by the Agence Nationale de la Recherche (grant ANR-12-\newline MONU-0020) and by the United States National Science Foundation (grant DMS-1522687).

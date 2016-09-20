@@ -1,14 +1,14 @@
 clearvars
 
-abstol = 1*1e-3;
+abstol = 5*1e-3;
 reltol = 0e-2; % Pure absolute tolerance
-mmin = 10;
+mmin = 9;
 mmax = 24; % I adjust that not to run out of memory. It can go up to 54. Type help cubSobol_SI_g for more information.
 wronga = 0; % Wrong estimates with all indices method
 wrong = 0; % Wrong estimates using the one by one algo
 s = .0; %time in seconds used delay each function evaluation
 
-fudge = @(m,d) 5*2.^-(m);
+fudge = @(m,d) 5*2.^-(1.*m);
 
 %% Ishigami
 disp('Running Ishigami example ...')
@@ -25,8 +25,9 @@ SI_s = out_param.small;
 disp(SI)
 % disp(out_param.bound_err)
 disp(SI_n)
+disp(abs(R - SI))
 % disp(SI_s)
-% disp(abs(R-SI) > max(abstol,R*reltol))
+disp(abs(R-SI) > max(abstol,R*reltol))
 % disp(out_param.exitflag)
 % wronga = wronga + sum(sum(abs(R-SI) > max(abstol,R*reltol)));
 % disp(['Time:' num2str(SI_t)])
@@ -74,8 +75,9 @@ SI_s = out_param.small;
 disp(SI)
 % disp(out_param.bound_err)
 disp(SI_n)
+disp(abs(R - SI))
 % disp(SI_s)
-% disp(abs(R-SI) > max(abstol,R*reltol))
+disp(abs(R-SI) > max(abstol,R*reltol))
 % wronga = wronga + sum(sum(abs(R-SI) > max(abstol,R*reltol)));
 % disp(['Time:' num2str(SI_t)])
 
@@ -99,7 +101,6 @@ disp(SI_n)
 % disp(SI)
 % disp(SI_n)
 % disp(SI_s)
-% disp(abs(R-SI) > abstol)
 % wrong = wrong + sum(sum(abs(R-SI) > abstol));
 % if any(sum(exitflag) > 0) || any(sum(exitflagt) > 0)
 %     warning('Results cannot be guaranteed due to reaching maximum budget or failing necessary conditions.')
@@ -124,8 +125,9 @@ SI_s = out_param.small;
 disp(SI)
 % disp(out_param.bound_err)
 disp(SI_n)
+disp(abs(R - SI))
 % disp(SI_s)
-% disp(abs(R-SI) > max(abstol,R*reltol))
+disp(abs(R-SI) > max(abstol,R*reltol))
 % wronga = wronga + sum(sum(abs(R-SI) > max(abstol,R*reltol)));
 % disp(['Time:' num2str(SI_t)])
 
@@ -173,8 +175,9 @@ SI_s = out_param.small;
 disp(SI)
 % disp(out_param.bound_err)
 disp(SI_n)
+disp(abs(R - SI))
 % disp(SI_s)
-% disp(abs(R-SI) > max(abstol,R*reltol))
+disp(abs(R-SI) > max(abstol,R*reltol))
 % wronga = wronga + sum(sum(abs(R-SI) > max(abstol,R*reltol)));
 % disp(['Time:' num2str(SI_t)])
 % disp(['Wrong estimates with all:' num2str(wronga)]);
@@ -199,7 +202,6 @@ disp(SI_n)
 % disp(SI)
 % disp(SI_n)
 % disp(SI_s)
-% disp(abs(R-SI) > abstol)
 % wrong = wrong + sum(sum(abs(R-SI) > abstol));
 % if any(sum(exitflag) > 0) || any(sum(exitflagt) > 0)
 %     warning('Results cannot be guaranteed due to reaching maximum budget or failing necessary conditions.')
@@ -209,50 +211,51 @@ disp(SI_n)
 
 
 %% Example Laurent
-disp('Running Laurents example ...')
-d = 6;
-f = @(x) (x(:,3).^3).*exp(x(:,4)).*(x(:,5).^2).*(x(:,2).^3.*x(:,3)+sin(x(:,4)+1).*x(:,6))./(1+x(:,1)).^(1/2);
-hyperbox = [zeros(1,d) ; ones(1,d)];
-
-R = [0.1949202354e-2, 0.2167739767e-1, .2765283730, 0.1658947475e-1, .1561007328, 0.3242382766e-1 0.118205783e-1, .1184436834, .7035364275, 0.934641572e-1, .5311670735, .1464118928];
-[q,app_int,out_param] = cubSobol_SI_all_g(f,hyperbox,'abstol',abstol,'reltol',reltol,'mmin',mmin,'mmax',mmax,'fudge',@(m) fudge(m,d));
-SI = q;
-SI_n = out_param.n;
-SI_t = out_param.time;
-SI_s = out_param.small;
-disp(SI)
-% disp(out_param.bound_err)
-disp(SI_n)
-% disp(SI_s)
-% disp(abs(R-SI) > max(abstol,R*reltol))
-% wronga = wronga + sum(sum(abs(R-SI) > max(abstol,R*reltol)));
-% disp(['Time:' num2str(SI_t)])
-% disp(['Wrong estimates with all:' num2str(wronga)]);
-
-% disp('Running Morokoff and Caflish example ...')
-% exitflag = [];
-% exitflagt = [];
-% for j = 1:d
-%     [q,app_int,out_param] = cubSobol_SI_g(f,hyperbox,j,'measure','uniform','abstol',abstol,'reltol',reltol,'mmin',mmin,'mmax',mmax,'fudge',fudge);
-%     exitflag = [exitflag out_param.exitflag];
-%     SI(1,j) = q;
-%     SI_n(1,j) = out_param.n;
-%     SI_t(1,j) = out_param.time;
-%     SI_s(1,j) = out_param.small;
-%     [q,app_int,out_param] = cubSobol_SI_g(f,hyperbox,-j,'measure','uniform','abstol',abstol,'reltol',reltol,'mmin',mmin,'mmax',mmax,'fudge',fudge);
-%     exitflagt = [exitflagt out_param.exitflag];
-%     SI(2,j) = q;
-%     SI_n(2,j) = out_param.n;
-%     SI_t(2,j) = out_param.time;
-%     SI_s(2,j) = out_param.small;
-% end
+% disp('Running Laurents example ...')
+% d = 6;
+% f = @(x) (x(:,3).^3).*exp(x(:,4)).*(x(:,5).^2).*(x(:,2).^3.*x(:,3)+sin(x(:,4)+1).*x(:,6))./(1+x(:,1)).^(1/2);
+% hyperbox = [zeros(1,d) ; ones(1,d)];
+% 
+% R = [0.1949202354e-2, 0.2167739767e-1, .2765283730, 0.1658947475e-1, .1561007328, 0.3242382766e-1 ; 0.118205783e-1, .1184436834, .7035364275, 0.934641572e-1, .5311670735, .1464118928];
+% [q,app_int,out_param] = cubSobol_SI_all_g(f,hyperbox,'abstol',abstol,'reltol',reltol,'mmin',mmin,'mmax',mmax,'fudge',@(m) fudge(m,d));
+% SI = q;
+% SI_n = out_param.n;
+% SI_t = out_param.time;
+% SI_s = out_param.small;
 % disp(SI)
+% % disp(out_param.bound_err)
 % disp(SI_n)
-% disp(SI_s)
-% disp(abs(R-SI) > abstol)
-% wrong = wrong + sum(sum(abs(R-SI) > abstol));
-% if any(sum(exitflag) > 0) || any(sum(exitflagt) > 0)
-%     warning('Results cannot be guaranteed due to reaching maximum budget or failing necessary conditions.')
-% end
-% disp(['Time:' num2str(sum(sum(SI_t)))])
-% disp(['Wrong estimates one by one:' num2str(wrong)]);
+% disp(abs(R - SI))
+% % disp(SI_s)
+% disp(abs(R-SI) > max(abstol,R*reltol))
+% % wronga = wronga + sum(sum(abs(R-SI) > max(abstol,R*reltol)));
+% % disp(['Time:' num2str(SI_t)])
+% % disp(['Wrong estimates with all:' num2str(wronga)]);
+% 
+% % disp('Running Morokoff and Caflish example ...')
+% % exitflag = [];
+% % exitflagt = [];
+% % for j = 1:d
+% %     [q,app_int,out_param] = cubSobol_SI_g(f,hyperbox,j,'measure','uniform','abstol',abstol,'reltol',reltol,'mmin',mmin,'mmax',mmax,'fudge',fudge);
+% %     exitflag = [exitflag out_param.exitflag];
+% %     SI(1,j) = q;
+% %     SI_n(1,j) = out_param.n;
+% %     SI_t(1,j) = out_param.time;
+% %     SI_s(1,j) = out_param.small;
+% %     [q,app_int,out_param] = cubSobol_SI_g(f,hyperbox,-j,'measure','uniform','abstol',abstol,'reltol',reltol,'mmin',mmin,'mmax',mmax,'fudge',fudge);
+% %     exitflagt = [exitflagt out_param.exitflag];
+% %     SI(2,j) = q;
+% %     SI_n(2,j) = out_param.n;
+% %     SI_t(2,j) = out_param.time;
+% %     SI_s(2,j) = out_param.small;
+% % end
+% % disp(SI)
+% % disp(SI_n)
+% % disp(SI_s)
+% % disp(abs(R-SI) > abstol)
+% % wrong = wrong + sum(sum(abs(R-SI) > abstol));
+% % if any(sum(exitflag) > 0) || any(sum(exitflagt) > 0)
+% %     warning('Results cannot be guaranteed due to reaching maximum budget or failing necessary conditions.')
+% % end
+% % disp(['Time:' num2str(sum(sum(SI_t)))])
+% % disp(['Wrong estimates one by one:' num2str(wrong)]);
