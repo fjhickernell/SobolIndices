@@ -361,6 +361,7 @@ for u = 1:out_param.d
         INDICES(1,u).err_bound_int = err_bound_int_fx2_fx(:,1); %initialize error estimates for each integral in the numerator
         INDICES(1,u).y = INDICES(1,u).f{1}(xpts,u,fx,fy,fxy,fzx); % We reevaluate the points if we change the estimator
         out_param.small(1,u) = 1;
+        fzx = [];
     end
     INDICES(2,u).y = INDICES(2,u).f{1}(xpts,u,fx,fy,fxy,0);
     INDICES(1,u).est_int = mean(INDICES(1,u).y, 1); % Estimate the integral
@@ -627,6 +628,7 @@ for m = out_param.mmin+1:out_param.mmax
                 for func = 1:size(INDICES(r,u).f, 2)
                     ynext = [ynext INDICES(r,u).f{func}(xnext,u,fxval(end/2 + 1:end),fy,fxy,fzx)];
                 end
+                fzx = [];
                 INDICES(r,u).est_int(meff, :) = 1/2*(INDICES(r,u).est_int(meff-1, :) + mean(ynext, 1)); % Estimate the integral
 
                %% Compute initial FWT on next points only for y

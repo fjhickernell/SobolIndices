@@ -1,8 +1,8 @@
 clearvars
 
-abstol = 5*1e-3;
+abstol = 1*1e-3;
 reltol = 0e-2; % Pure absolute tolerance
-mmin = 9;
+mmin = 10;
 mmax = 24; % I adjust that not to run out of memory. It can go up to 54. Type help cubSobol_SI_g for more information.
 wronga = 0; % Wrong estimates with all indices method
 wrong = 0; % Wrong estimates using the one by one algo
