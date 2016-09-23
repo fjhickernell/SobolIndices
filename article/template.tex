@@ -550,52 +550,9 @@ In practice, one does not know which are the small Sobol' indices ($u_1,\dots,u_
 \subsection{Classical test functions}
 \label{sec:5.1}
 
-$\varepsilon=10^{-3}$, initial $1024$ points, $fudge = @(m,d) 10*2.^-(.9*m)$, run $100$ samples to estimate the mean:
+$\varepsilon=0.005$, initial $512$ points, $fudge = @(m,d) 10*2.^{-m}$, run $100$ samples and show the average values for the whole set of samples:
 
-
-\subsubsection{With small indices estimator}
-Bratley et al. example:
-
-\[
-\begin{array}{lcccccc}
-   & u=\{1\} & u=\{2\} & u=\{3\} & u=\{4\} & u=\{5\} & u=\{6\} \\ \hline \hline
- \widehat{\underline{S}}_u & 0.6530  &  0.1790  &  0.0370  &  0.0134  &  0.0016  &  0.0015 \\ \hline
- n & 521667  &    262144  &     65536  &  17039  &   1055  &      1096 \\ \hline
- \text{error } 10^{-3} & 0.0211  &  0.0520  &  0.1160  &  0.1550  &  0.3220  &  0.3210 \\ \hline
- \widehat{\overline{S}}_u & 0.7400  &  0.2660  &  0.0764  &  0.0343  &  0.0060  &  0.0061 \\  \hline
- n & 262144  &    131072  &   65536  &   40960  &  4936  &      6031 \\ \hline
- \text{error } 10^{-3} & 0.0578  &  0.0374  &  0.0761  &  0.1820  &  0.5530  &  0.2740 \\ \hline
-\end{array}
-\]
-Reliability on the results,
-\[
-\begin{array}{ cccccc }
-     100  & 100  & 100  & 100  &  99  & 100 \\
-     100  & 100  & 100  &  99  &  84  &  90
-\end{array}
-\]
-
-
-Sobol g-function example:
-
-\[
-\begin{array}{lcccccc}
-   & u=\{1\} & u=\{2\} & u=\{3\} & u=\{4\} & u=\{5\} & u=\{6\} \\ \hline \hline
- \widehat{\underline{S}}_u & 0.5870  &  0.2610  &  0.0365 &   0.0059  &  0.0001  &  0.0001 \\ \hline
- n & 131072   &  130417  &  17695  &  1987  &  1024  &   1024 \\ \hline
- \text{error } 10^{-3} & 0.0235  &  0.0228  &  0.2140 & 0.1560  &  0.0026  &  0.0023 \\ \hline
- \widehat{\overline{S}}_u & 0.6900  &  0.3560  &  0.0563 &   0.0092  &  0.0001  &  0.0001 \\  \hline
- n & 110756  &  65536  &  16056  &  2550  &  1024  &  1024 \\ \hline
- \text{error } 10^{-3} & 0.0366 &  0.0413  &  0.0856 & 0.0838  &  0.0022  &  0.0028 \\ \hline
-\end{array}
-\]
-Reliability on the results,
-\[
-\begin{array}{ cccccc }
-     100  & 100  & 93  & 100  &  100  & 100 \\
-     98  &  99  &  98 &  100  & 100 &  100
-\end{array}
-\]
+(We use the scrambled replicated points, should we mention that somewhere and explain the requirement? Replicated points should share the same scrambling, u and u+d)
 
 \subsubsection{Without small indices estimator}
 Bratley et al. example:
@@ -603,19 +560,19 @@ Bratley et al. example:
 \[
 \begin{array}{lcccccc}
    & u=\{1\} & u=\{2\} & u=\{3\} & u=\{4\} & u=\{5\} & u=\{6\} \\ \hline \hline
- \widehat{\underline{S}}_u & 0.6530 & 0.1790 & 0.0370 & 0.0133 & 0.0014 & 0.0015 \\ \hline
- n & 524288 & 262144  &  222822 & 131072 & 57190 & 64901 \\ \hline
- \text{error } 10^{-3} & 0.0275 & 0.0592 & 0.0536 & 0.0667 &  0.2030 & 0.1180 \\ \hline
- \widehat{\overline{S}}_u & 0.7400 & 0.2660 & 0.0764 & 0.0343 & 0.0060 & 0.0062 \\  \hline
- n & 262144 & 131072 &  65536 &  39322 & 4710 & 6339 \\ \hline
- \text{error } 10^{-3} & 0.0781 & 0.0371 & 0.1090 & 0.2150 &  0.4850 & 0.1740 \\ \hline
+ \widehat{\underline{S}}_u & 0.6500 & 0.1800 & 0.0370 & 0.0120 & 0.0034 & 0.0033 \\ \hline
+ n & 17531 & 8438 & 4137 & 3686 & 625 & 650\\ \hline
+ \text{error } & 0.0004 & 0.0006 & 0.0058 & 0.0022 & 0.0024 & 0.0021 \\ \hline
+ \widehat{\overline{S}}_u & 0.7400 & 0.2700 & 0.0760 & 0.0340 & 0.0065 & 0.0064 \\  \hline
+ n & 16384 & 8192 & 3113 & 1060 & 512 & 512 \\ \hline
+ \text{error } & 0.0003 & 0.0004 & 0.0012 & 0.0020 & 0.0014 & 0.0010 \\ \hline
 \end{array}
 \]
 Reliability on the results,
 \[
 \begin{array}{ cccccc }
-     100  & 100  & 100  & 100  &  97  & 99 \\
-     100  & 100  & 100  &  99  &  88  &  98
+     100  & 100  & 29  & 88  &  89  & 94 \\
+     100  & 100  & 98  &  93  &  97  &  100
 \end{array}
 \]
 
@@ -625,19 +582,63 @@ Sobol g-function example:
 \[
 \begin{array}{lcccccc}
    & u=\{1\} & u=\{2\} & u=\{3\} & u=\{4\} & u=\{5\} & u=\{6\} \\ \hline \hline
- \widehat{\underline{S}}_u & 0.5870 & 0.2610 & 0.0367 &  0.0059 & 0.0004 & 0.0004 \\ \hline
- n & 131072 & 131072 & 63898 & 19825 & 1024 & 1024 \\ \hline
- \text{error } 10^{-3} & 0.0280 & 0.0262 & 0.0476 & 0.0736 & 0.3390 & 0.3440 \\ \hline
- \widehat{\overline{S}}_u & 0.6900 & 0.3560 & 0.0563 & 0.0092 & 0.0001 &  0.0001 \\  \hline
- n & 105513 & 65536 & 16056 & 2703 & 1024 & 1024 \\ \hline
- \text{error } 10^{-3} & 0.0507 & 0.0442 & 0.1270 & 0.0703 & 0.0022 & 0.0027 \\ \hline
+ \widehat{\underline{S}}_u & 0.5900 & 0.2600 & 0.0370 & 0.0060 & 0.0003 & 0.0003 \\ \hline
+ n & 16138 & 9011 & 3748 & 891 & 512 & 512 \\ \hline
+ \text{error } & 0.0004 & 0.0006 & 0.0011 & 0.0012 & 0.0003 & 0.0003 \\ \hline
+ \widehat{\overline{S}}_u & 0.6900 & 0.3600 & 0.0560 & 0.0093 & 0.0001 & 0.0001 \\  \hline
+ n & 11796 & 7496 & 1475 & 512 & 512 & 512 \\ \hline
+ \text{error } & 0.0005 & 0.0004 & 0.0008 & 0.0003 & 0.0000 & 0.0000 \\ \hline
 \end{array}
 \]
 Reliability on the results,
 \[
 \begin{array}{ cccccc }
-     100  & 100  & 99  & 100  &  100  & 100 \\
-     98  &  99  &  97 &  100  & 100 &  100
+     98  & 98  & 97  & 98  &  100  & 100 \\
+     98  &  100  &  100 &  100  & 100 &  100
+\end{array}
+\]
+
+\subsubsection{With small indices estimator (threshold $0.1$)}
+Bratley et al. example:
+
+\[
+\begin{array}{lcccccc}
+   & u=\{1\} & u=\{2\} & u=\{3\} & u=\{4\} & u=\{5\} & u=\{6\} \\ \hline \hline
+ \widehat{\underline{S}}_u & 0.6500 & 0.1800 & 0.0380 & 0.0140 & 0.0014 & 0.0016 \\ \hline
+ n & 17203 & 8520 & 1362 & 517 & 512 & 512 \\ \hline
+ \text{error } & 0.0004 & 0.0006 & 0.0019 & 0.0016 & 0.0003 & 0.0004 \\ \hline
+ \widehat{\overline{S}}_u & 0.7400 & 0.2700 & 0.0760 & 0.0340 & 0.0063 & 0.0065 \\  \hline
+ n & 16384 & 8192 & 2847 & 1142 & 512 & 512 \\ \hline
+ \text{error } & 0.0003 & 0.0005 & 0.0013 & 0.0017 & 0.0015 & 0.0011 \\ \hline
+\end{array}
+\]
+Reliability on the results,
+\[
+\begin{array}{ cccccc }
+     100  & 100  & 96  & 99  &  100  & 100 \\
+     100  & 100  & 99  &  98  &  96  &  100
+\end{array}
+\]
+
+
+Sobol g-function example:
+
+\[
+\begin{array}{lcccccc}
+   & u=\{1\} & u=\{2\} & u=\{3\} & u=\{4\} & u=\{5\} & u=\{6\} \\ \hline \hline
+ \widehat{\underline{S}}_u & 0.5900 & 0.2600 & 0.0370 & 0.0060 & 0.0001 & 0.0001 \\ \hline
+ n & 16056 & 8929 & 1070 & 512 & 512 & 512 \\ \hline
+ \text{error } & 0.0005 & 0.0007 & 0.0015 & 0.0003 & 0.0000 & 0.0000 \\ \hline
+ \widehat{\overline{S}}_u & 0.6900 & 0.3600 & 0.0560 & 0.0093 & 0.0001 & 0.0001 \\  \hline
+ n & 11551 & 7741 & 1464 & 512 & 512 & 512 \\ \hline
+ \text{error } & 0.0006 & 0.0003 & 0.0009 & 0.0003 & 0.0000 & 0.0000 \\ \hline
+\end{array}
+\]
+Reliability on the results,
+\[
+\begin{array}{ cccccc }
+     97  & 97  & 95  & 100  &  100  & 100 \\
+     98  &  100  &  100 &  100  & 100 &  100
 \end{array}
 \]
 
@@ -647,15 +648,15 @@ Bratley et al. example:
 \[
 \begin{array}{lcccccc}
    & u=\{1\} & u=\{2\} & u=\{3\} & u=\{4\} & u=\{5\} & u=\{6\} \\ \hline \hline
- \widehat{\underline{S}}_u & 0.6530 & 0.1790 & 0.0370 & 0.0133 & 0.0014 & 0.0015 \\ \hline
- n & 524288 & 262144  &  222822 & 131072 & 57190 & 64901 \\ \hline
- \text{error } 10^{-3} & 0.0275 & 0.0592 & 0.0536 & 0.0667 &  0.2030 & 0.1180 \\ \hline
+ \widehat{\underline{S}}_u & 0.6500 & 0.1800 & 0.0370 & 0.0100 & 0.0038 & 0.0040 \\ \hline
+ n & 32768 & 16384 & 16384 & 12447 & 8637 & 9196 \\ \hline
+ \text{error } & 0.0003 & 0.0006 & 0.0010 & 0.0038 & 0.0024 & 0.0026 \\ \hline
 \end{array}
 \]
 Reliability on the results,
 \[
 \begin{array}{ cccccc }
-     100  & 100  & 100  & 100  &  97  & 99
+     100  & 100  & 100  & 75  &  100  & 100
 \end{array}
 \]
 
@@ -665,15 +666,15 @@ Sobol g-function example:
 \[
 \begin{array}{lcccccc}
    & u=\{1\} & u=\{2\} & u=\{3\} & u=\{4\} & u=\{5\} & u=\{6\} \\ \hline \hline
- \widehat{\underline{S}}_u & 0.5870 & 0.2610 & 0.0367 &  0.0059 & 0.0004 & 0.0004 \\ \hline
- n & 131072 & 131072 & 63898 & 19825 & 1024 & 1024 \\ \hline
- \text{error } 10^{-3} & 0.0280 & 0.0262 & 0.0476 & 0.0736 & 0.3390 & 0.3440 \\ \hline
+ \widehat{\underline{S}}_u & 0.5900 & 0.2600 & 0.0360 & 0.0059 & 0.0031 & 0.0036 \\ \hline
+ n & 16384 & 16384 & 16225 & 14612 & 7086 & 6661 \\ \hline
+ \text{error } & 0.0011 & 0.0013 & 0.0018 & 0.0013 & 0.0031 & 0.0036 \\ \hline
 \end{array}
 \]
 Reliability on the results,
 \[
 \begin{array}{ cccccc }
-     100  & 100  & 99  & 100  &  100  & 100
+     93  & 92  & 91  & 90  &  96  & 95
 \end{array}
 \]
 
@@ -690,6 +691,8 @@ Reliability on the results,
 %The last two equalities are obtained through two different subsitutions corresponding to the \textit{Cholesky} construction of the Brownian motion, and the \textit{PCA} construction. For instance, if we take 10 dimensions and $t_i=i/10$, using the Cholesky construction $S_{1} = 24\%$, $S_{2} = 16\%$, $S_{3} = 13\%$, $S_{4} = 10\%$, and $\overline{S}_{1}=24\%$, $\overline{S}_{2}=18\%$, $\overline{S}_{3}=15\%$, $\overline{S}_{4} = 13\%$. However, using the PCA construction, $S_{1} = 89\%$, $S_{2} = 2\%$, $S_{3} = 1\%$, $S_{4} = 0\%$, and $\overline{S}_{1}=94\%$, $\overline{S}_{2}=7\%$, $\overline{S}_{3}=3\%$, $\overline{S}_{4} = 2\%$. This shows that the PCA construction will be better to estimate the above expectation using quasi-Monte Carlo methods since it has a lower effective dimensionality.
 %
 %For those who were curious about the actual value of $\mathbb{E} \left[\max(\vect{B}_t)\right]$, it is approximately 0.5935. Nevertheless, the Brownian Motion is a continuous time process. Thus, in order to estimate the expected value on a continuous time Browninan motion, one could either use a multilevel method, or a multivariate decomposition method to estimate this infinite dimensional integral.
+
+\section{Conclusions}
 
 \begin{acknowledgements}
 This work is supported by the CITiES project funded by the Agence Nationale de la Recherche (grant ANR-12-\newline MONU-0020) and by the United States National Science Foundation (grant DMS-1522687).

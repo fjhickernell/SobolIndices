@@ -1,14 +1,14 @@
 clearvars
 
-abstol = 1*1e-3;
-pre = 3; % Precision to display according to 1*1e-3 (3 digits)
+abstol = 5*1e-3;
+pre = 2; % Precision to display according to 1*1e-3 (3 digits)
 reltol = 0e-2; % Pure absolute tolerance
-mmin = 10;
+mmin = 9;
 mmax = 24; % I adjust that not to run out of memory. It can go up to 54. Type help cubSobol_SI_g for more information.
 wronga = 0; % Wrong estimates with all indices method
 wrong = 0; % Wrong estimates using the one by one algo
 s = .0; %time in seconds used delay each function evaluation
-samples = 1;
+samples = 100;
 
 fudge = @(m,d) 10*2.^-(1.*m);
 
@@ -23,11 +23,13 @@ SI = zeros(1, d);
 SI_n = SI;
 error = SI;
 reliability = SI;
+error_all = [];
 for k = 1:samples
     [q,app_int,out_param] = cubSobol_SI_fo_g(f,hyperbox,'abstol',abstol,'reltol',reltol,'mmin',mmin,'mmax',mmax,'fudge',@(m) fudge(m,d));
     SI = SI + q;
     SI_n = SI_n + out_param.n;
     error = error + abs(R-q);
+    error_all = [error_all; abs(R-q)];
     reliability = reliability + 1*(abs(R-q) > max(abstol,R*reltol));
 end
 SI = SI/samples; SI_n = SI_n/samples; reliability = 1 - reliability/samples; error = error/samples;
@@ -35,6 +37,9 @@ round(SI, pre, 'significant')
 round(SI_n)
 round(error, pre, 'significant')
 round(reliability*100)
+
+% csvwrite('bratley_replicated.csv', error_all)
+
 
 
 %% Sobol' g-function
@@ -49,11 +54,13 @@ SI = zeros(1, d);
 SI_n = SI;
 error = SI;
 reliability = SI;
+error_all = [];
 for k = 1:samples
     [q,app_int,out_param] = cubSobol_SI_fo_g(f,hyperbox,'abstol',abstol,'reltol',reltol,'mmin',mmin,'mmax',mmax,'fudge',@(m) fudge(m,d));
     SI = SI + q;
     SI_n = SI_n + out_param.n;
     error = error + abs(R-q);
+    error_all = [error_all; abs(R-q)];
     reliability = reliability + 1*(abs(R-q) > max(abstol,R*reltol));
 end
 SI = SI/samples; SI_n = SI_n/samples; reliability = 1 - reliability/samples; error = error/samples;
@@ -64,3 +71,5 @@ round(SI, pre,'significant')
 round(SI_n)
 round(error, pre, 'significant')
 round(reliability*100)
+
+% csvwrite('sobolg_replicated.csv', error_all)

@@ -1,16 +1,17 @@
 clearvars
 
-abstol = 1*1e-3;
-pre = 3; % Precision to display according to 1*1e-3 (3 digits)
+abstol = 5*1e-3;
+pre = 2; % Precision to display according to 1*1e-3 (3 digits)
 reltol = 0e-2; % Pure absolute tolerance
-mmin = 10;
+mmin = 9;
 mmax = 24; % I adjust that not to run out of memory. It can go up to 54. Type help cubSobol_SI_g for more information.
+threshold_small = 0.; % Below which sizes do we use correl2 estimator
 wronga = 0; % Wrong estimates with all indices method
 wrong = 0; % Wrong estimates using the one by one algo
 s = .0; %time in seconds used delay each function evaluation
 samples = 100;
 
-fudge = @(m,d) 10*2.^-(.9*m);
+fudge = @(m,d) 10*2.^-(1.*m);
 
 %% Bratley et al.
 disp('Running Bratley et al. example ...')
@@ -23,11 +24,13 @@ SI = zeros(2, d);
 SI_n = SI;
 error = SI;
 reliability = SI;
+error_all = [];
 for k = 1:samples
-    [q,app_int,out_param] = cubSobol_SI_all_g(f,hyperbox,'abstol',abstol,'reltol',reltol,'mmin',mmin,'mmax',mmax,'fudge',@(m) fudge(m,d));
+    [q,app_int,out_param] = cubSobol_SI_all_g(f,hyperbox,'abstol',abstol,'reltol',reltol,'mmin',mmin,'mmax',mmax,'fudge',@(m) fudge(m,d), 'threshold_small', threshold_small);
     SI = SI + q;
     SI_n = SI_n + out_param.n;
     error = error + abs(R-q);
+    error_all = [error_all; abs(R-q)];
     reliability = reliability + 1*(abs(R-q) > max(abstol,R*reltol));
 end
 SI = SI/samples; SI_n = SI_n/samples; reliability = 1 - reliability/samples; error = error/samples;
@@ -36,6 +39,11 @@ round(SI_n)
 round(error, pre, 'significant')
 round(reliability*100)
 
+% if threshold_small == 0
+%     csvwrite('bratley_non_small.csv', error_all)
+% else
+%     csvwrite('bratley_with_small.csv', error_all)
+% end
 
 %% Sobol' g-function
 disp('Running Sobol g-function example ...')
@@ -49,11 +57,13 @@ SI = zeros(2, d);
 SI_n = SI;
 error = SI;
 reliability = SI;
+error_all = [];
 for k = 1:samples
-    [q,app_int,out_param] = cubSobol_SI_all_g(f,hyperbox,'abstol',abstol,'reltol',reltol,'mmin',mmin,'mmax',mmax,'fudge',@(m) fudge(m,d));
+    [q,app_int,out_param] = cubSobol_SI_all_g(f,hyperbox,'abstol',abstol,'reltol',reltol,'mmin',mmin,'mmax',mmax,'fudge',@(m) fudge(m,d), 'threshold_small', threshold_small);
     SI = SI + q;
     SI_n = SI_n + out_param.n;
     error = error + abs(R-q);
+    error_all = [error_all; abs(R-q)];
     reliability = reliability + 1*(abs(R-q) > max(abstol,R*reltol));
 end
 SI = SI/samples; SI_n = SI_n/samples; reliability = 1 - reliability/samples; error = error/samples;
@@ -64,3 +74,9 @@ round(SI, pre,'significant')
 round(SI_n)
 round(error, pre, 'significant')
 round(reliability*100)
+
+% if threshold_small == 0
+%     csvwrite('sobolg_non_small.csv', error_all)
+% else
+%     csvwrite('sobolg_with_small.csv', error_all)
+% end

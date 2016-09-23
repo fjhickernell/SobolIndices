@@ -250,8 +250,10 @@ Sfo_max = @(down, up) estimate_max([down(1) 0 down(2:end)], [up(1) 0 up(2:end)])
 ffo = @(fx,fy,fxy) fx.*(fxy - fy);
 
 %% Main algorithm (we added 2xd dimensions for each index and and additional 2 for mean of f and f^2)
-sobstr = sobolset(2*out_param.d); %generate a Sobol' sequence 3*d to consider the changing to the estimator for some smaller size indices
-% sobstr = scramble(sobstr,'MatousekAffineOwen'); %scramble it
+sobstr = sobolset(2*out_param.d); %generate a Sobol' sequence 2*d
+sobstr_scr = sobolset(out_param.d); % This will be the first scrambled sequence...
+    % The replicated sequence will have to use the same scrambling
+sobstr_scr = scramble(sobstr_scr,'MatousekAffineOwen'); %scramble it
 kappanumap_fx2_fx = bsxfun(@times,(1:2^out_param.mmin)', [1 1]); %initialize map
 Stilde_fx2_fx = zeros(out_param.mmax-out_param.mmin+1, 2); %initialize sum of DFWT terms for fx2 and fx
 CStilde_low_fx2_fx = -inf(out_param.mmax-l_star+1, 2); %initialize various sums of DFWT terms for necessary conditions for fx2 and fx
@@ -282,36 +284,47 @@ end
 
 
 %% Initial points and FWT
-out_param.n = 2^out_param.mmin*ones(1,out_param.d); %total number of points to start with
-n0 = out_param.n(1); %initial number of points
-xpts = sobstr(1:n0,1:2*out_param.d); %grab Sobol' points
-fx = f(xpts(:,1:out_param.d)); %evaluate integrands y3
-fx2 = fx.^2; %evaluate integrands y2
-fxval = fx; % We store fx because fx will later contain the fast transform
-fx2val = fx2; % We store fx2 because fx2 will later contain the fast transform
-% We only need fy if we use the estimator that includes ffo
-fy = [];
-if numerator_size == 1
-    fy = f(xpts(:,out_param.d+1:2*out_param.d)); % We evaluate the f at the replicated points
-end
 
 %% In this section we apply the replicated method
 % For the replication method, we want to sort dimension u+d with the same
 % order as dimension u. In other words, if dimension u is sorted according
 % to permutation tau and u+d according to sigma, we want to find psi such
-% that sigma(psi) = tau. Therefore, psi = sigma-1(tau). To find sigma-1 we
+% that sigma(psi) = tau. Therefore, psi = sigma^-1(tau). To find sigma^-1 we
 % use the sorting Matlab function. The original order is sigma, so we only
 % need to call the function values at order psi.
 % Note that with scrambled points, to keep the replicated property,
 % dimensions u and u+d need to share the same scrambling for all u (for
 % each u we can choose a different scrambling). This means that the sorting
 % psi is always the same that can be found with non-scr Sobol points (S for
-% the Scrambling): S(sigma(psi)) = S(tau) -> psi = sigma-1(S-1(S(tau))) =
-% sigma-1(tau). Therefore, the sorting can be found with non-scr Sobol
-% points and applied to the scrambled points.
+% the Scrambling + shift): S(sigma(psi)) = S(tau) -> psi = 
+% sigma^-1(S^-1(S(tau))) = sigma^-1(tau). Therefore, the sorting can be
+% found with non-scr Sobol points and applied to the scrambled points.
+out_param.n = 2^out_param.mmin*ones(1,out_param.d); %total number of points to start with
+n0 = out_param.n(1); %initial number of points
+xpts = sobstr(1:n0,1:2*out_param.d); %grab Sobol' points
 tau = 2^(out_param.mmin)*xpts(:, 1:out_param.d) + 1;
 sigma = 2^(out_param.mmin)*xpts(:, out_param.d+1:2*out_param.d) + 1;
-fxy_base = f(xpts(:, out_param.d+1:2*out_param.d)); % In sigma order
+
+%We create the replicated points
+xpts_1 = sobstr_scr(1:n0, 1:out_param.d); xpts_2 = zeros(size(xpts_1));
+for u = 1:out_param.d
+    [~, tau_inv] = sort(tau(:, u));
+    xpts_2(:, u) = xpts_1(tau_inv(sigma(:, u)), u);
+end
+
+% We perform some evaluations
+fx = f(xpts_1); %evaluate integrands y3
+fx2 = fx.^2; %evaluate integrands y2
+fxval = fx; % We store fx because fx will later contain the fast transform
+fx2val = fx2; % We store fx2 because fx2 will later contain the fast transform
+% We only need fy if we use the estimator that includes ffo
+fy = [];
+if numerator_size == 1
+    fy = f(xpts_2); % We evaluate the f at the replicated points
+end
+
+% We apply the replicated method
+fxy_base = f(xpts_2); % In sigma order
 for u = 1:out_param.d
     [~, sigma_inv] = sort(sigma(:, u));
     fxy = fxy_base(sigma_inv(tau(:, u)));
@@ -461,11 +474,23 @@ for m = out_param.mmin+1:out_param.mmax
     end
     mnext=m-1;
     nnext=2^mnext;
-    xnext=sobstr(n0+(1:nnext),1:2*out_param.d);
+    xnext=sobstr(n0+(1:nnext),1:2*out_param.d); % The following Sobol 
+                    % points have the nice property that can give us the
+                    % order doing this operation. The +1 is because in
+                    % Matlab, vectors start at 1, not 0.
+    tau = (2^m*xnext(:, 1:out_param.d) - 1)/2 + 1;
+    sigma = (2^m*xnext(:, out_param.d+1:2*out_param.d) - 1)/2 + 1;
+    %We create the replicated points
+    xnext_1 = sobstr_scr(n0+(1:nnext),1:out_param.d); xnext_2 = zeros(size(xnext_1));
+    for u = 1:out_param.d
+        [~, tau_inv] = sort(tau(:, u));
+        xnext_2(:, u) = xnext_1(tau_inv(sigma(:, u)), u);
+    end
+
     n0=n0+nnext;
-    fxnext = f(xnext(:,1:out_param.d)); %evaluate integrands y3
+    fxnext = f(xnext_1); %evaluate integrands y3
     if numerator_size == 1
-        fy = f(xnext(:,out_param.d+1:2*out_param.d)); % We evaluate the f at the replicated points
+        fy = f(xnext_2); % We evaluate the f at the replicated points
     end
     fx2next = fxnext.^2; %evaluate integrands y2
     fxval = [fxval; fxnext];
@@ -540,7 +565,7 @@ for m = out_param.mmin+1:out_param.mmax
 
     %% We start computing everything for the numerator. fx and fx2 were for
     % the denominator only, which is common with all indices
-    fxy_base = f(xnext(:, out_param.d+1:2*out_param.d)); % In sigma order,
+    fxy_base = f(xnext_2); % In sigma order,
         % and at this point, we now that at least 1 indice did not meet the
         % error tolerance so we need to evaluate fxy_base. However, the
         % sorting, FFWT, etc, only needs to be done for those that did not
@@ -549,13 +574,8 @@ for m = out_param.mmin+1:out_param.mmax
             if ~converged(u)
                 INDICES(u).n = 2^m;
                 out_param.n(u) = 2^m;
-                tau = (2^m*xnext(:, u) - 1)/2 + 1; % The following Sobol 
-                    % points have the nice property that can give us the
-                    % order doing this operation. The +1 is because in
-                    % Matlab, vectors start at 1, not 0.
-                sigma = (2^m*xnext(:, out_param.d+u) - 1)/2 + 1;
-                [~, sigma_inv] = sort(sigma);
-                fxy = fxy_base(sigma_inv(tau));
+                [~, sigma_inv] = sort(sigma(:, u));
+                fxy = fxy_base(sigma_inv(tau(:, u)));
                 ynext = [];
                 % fxval already was computed for fx and fx2 above, so fx
                 % contains FFWT coefficients of fx.

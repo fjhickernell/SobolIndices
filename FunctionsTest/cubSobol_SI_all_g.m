@@ -99,6 +99,9 @@ function [q,int,out_param] = cubSobol_SI_all_g(varargin)
 %     theta*abstol+(1-theta)*reltol*| integral(f) |. Note that for theta = 1, 
 %     we have pure absolute tolerance while for theta = 0, we have pure 
 %     relative tolerance. By default, theta=1.
+% 
+%     in_param.threshold_small --- this input is the size at which we use
+%     the small indices estimator instead of the usual. By default is 0.1.
 %
 %   Output Arguments
 %
@@ -227,7 +230,6 @@ function [q,int,out_param] = cubSobol_SI_all_g(varargin)
 t_start = tic;
 %% Initial important cone factors and Check-initialize parameters
 r_lag = 4; %distance between coefficients summed and those computed
-threshold_small = 0.1; % Threshold for changing the estimators for small indices
 [f,hyperbox,out_param] = cubSobol_SI_all_g_param(r_lag,varargin{:});
 out_param.small = false(2, out_param.d); % Boolean that states whether we are dealing with small indices estimators
 converged = false(2, out_param.d); % We flag the indices that converged
@@ -346,7 +348,7 @@ for u = 1:out_param.d
         INDICES(1,u).y = [INDICES(1,u).y INDICES(1,u).f{p}(xpts,u,fx,fy,fxy,0)];
     end
     aux_double = INDICES(1,u).Smin([mean(INDICES(1,u).y, 1) mean(fx2) mean(fx)],[mean(INDICES(1,u).y, 1) mean(fx2) mean(fx)]);
-    if aux_double < threshold_small % If the normalized first order index is small, we change to a better estimator estimator
+    if aux_double < out_param.threshold_small % If the normalized first order index is small, we change to a better estimator estimator
         if isempty(fzx)
             fzx = f([xpts(:,1:u-1) xpts(:,2*out_param.d + u) xpts(:,u+1:out_param.d)]);
         end
@@ -763,6 +765,7 @@ default.mmax  = 24;
 default.fudge = @(m) 5*2.^-m;
 default.toltype  = 'max';
 default.theta  = 1;
+default.threshold_small = 0.1;
 
 if numel(varargin)<2
     help cubSobol_SI_all_g
@@ -821,6 +824,7 @@ if ~validvarargin
     out_param.fudge = default.fudge;
     out_param.toltype = default.toltype;
     out_param.theta = default.theta;
+    out_param.threshold_small = default.threshold_small;
 else
     p = inputParser;
     addRequired(p,'f',@gail.isfcn);
@@ -836,6 +840,7 @@ else
         addOptional(p,'toltype',default.toltype,...
             @(x) any(validatestring(x, {'max','comb'})));
         addOptional(p,'theta',default.theta,@isnumeric);
+        addOptional(p,'threshold_small', default.threshold_small, @isnumeric);
     else
         if isstruct(in3) %parse input structure
             p.StructExpand = true;
@@ -851,6 +856,7 @@ else
         f_addParamVal(p,'toltype',default.toltype,...
             @(x) any(validatestring(x, {'max','comb'})));
         f_addParamVal(p,'theta',default.theta,@isnumeric);
+        f_addParamVal(p,'threshold_small',default.threshold_small,@isnumeric);
     end
     parse(p,f,hyperbox,varargin{3:end})
     out_param = p.Results;
@@ -858,14 +864,14 @@ end
 
 out_param.d = size(hyperbox,2);
 
-fdgyes = 0; % We store how many functions are in varargin. There can only
-            % two functions as input, the function f and the fudge factor.
-for j = 1:size(varargin,2)
-    fdgyes = gail.isfcn(varargin{j})+fdgyes;
-end
-if fdgyes < 2 % No fudge factor given as input
-    default.fudge = @(m) 5*2.^-(m/d);
-end
+% fdgyes = 0; % We store how many functions are in varargin. There can only
+%             % two functions as input, the function f and the fudge factor.
+% for j = 1:size(varargin,2)
+%     fdgyes = gail.isfcn(varargin{j})+fdgyes;
+% end
+% if fdgyes < 2 % No fudge factor given as input
+%     default.fudge = @(m) 5*2.^-(m/d);
+% end
 
 %hyperbox should be 2 x dimension
 if ~isnumeric(hyperbox) || ~(size(hyperbox,1)==2) || ~(out_param.d<370)
@@ -940,6 +946,13 @@ if (out_param.theta < 0) || (out_param.theta > 1)
     warning('GAIL:cubSobol_SI_all_g:thetanonunit',['Theta should be chosen in [0,1].' ...
             ' Using default theta ' num2str(default.theta)])
     out_param.theta = default.theta;
+end
+
+% Force threshold_small to be in [0,1]
+if (out_param.threshold_small < 0) || (out_param.threshold_small > 1)
+    warning('GAIL:cubSobol_SI_all_g:threshold_smallnonunit',['Threshold_small should be chosen in [0,1].' ...
+            ' Using default threshold_small ' num2str(default.threshold_small)])
+    out_param.threshold_small = default.threshold_small;
 end
 
 % Checking on pure absolute/relative error

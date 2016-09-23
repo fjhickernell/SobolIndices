@@ -106,6 +106,11 @@ yy = ones(n,1)*(I(2)+err(2)+width);
 zz = ones(n,1)*(Smin+Smax)/2; %S(I(1)-err(1), I(2)-err(2))
 plot3(xx, yy, zz, 'k.', 'Linewidth', .5)
 
+xx = linspace(I(1)-err(1)-width, I(1)+err(1)+width, n)'; % Axis line for (Smin+Smax)/2 line
+yy = ones(n,1)*(I(2)+err(2)+width); 
+zz = ones(n,1)*(Smin+Smax)/2; %S(I(1)-err(1), I(2)-err(2))
+plot3(xx, yy, zz, 'k.', 'Linewidth', .5)
+
 axis([xmin xmax ymin ymax zmin zmax*1.01 ])
 
 %area(I - err:0.02:I + err, S(I - err:0.02:I + err))
