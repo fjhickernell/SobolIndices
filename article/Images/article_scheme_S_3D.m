@@ -102,12 +102,13 @@ a = I(1) + err(1)/2; b = I(2) + err(2)/2;
 % text(a, b, (Smin+Smax)/2, '$(S_{\min}+S_{\max})/2$')
 
 xx = linspace(I(1)-err(1)-width, I(1)+err(1)+width, n)'; % Axis line for (Smin+Smax)/2 line
-yy = ones(n,1)*(I(2)+err(2)+width); 
+yy = ones(n,1)*(ymax); 
 zz = ones(n,1)*(Smin+Smax)/2; %S(I(1)-err(1), I(2)-err(2))
 plot3(xx, yy, zz, 'k.', 'Linewidth', .5)
 
-xx = linspace(I(1)-err(1)-width, I(1)+err(1)+width, n)'; % Axis line for (Smin+Smax)/2 line
-yy = ones(n,1)*(I(2)+err(2)+width); 
+aux = sqrt(abs(xmin - indice/((Smin+Smax)/2)));
+yy = linspace(aux, I(2)+err(2)+width, n)'; % Axis line for (Smin+Smax)/2 line
+xx = ones(n,1)*(xmin);
 zz = ones(n,1)*(Smin+Smax)/2; %S(I(1)-err(1), I(2)-err(2))
 plot3(xx, yy, zz, 'k.', 'Linewidth', .5)
 
@@ -154,5 +155,4 @@ az = -15.5; e1 = 30;
 view(az,e1)
 
 colormap autumn
-set(gcf, 'Renderer', 'painters'); 
 print '-depsc2' -opengl  'estimator_3d_small.eps'

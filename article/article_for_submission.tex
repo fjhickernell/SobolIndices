@@ -775,15 +775,24 @@ Looking at the results, using Variant $B$ leads to higher failure rates than tho
 
 \subsection{Real case model}
 \label{sec:5.2}
-%The Brownian motion is widely used in many applications. Thus, the following example might be interesting to understand what Sobol' indices can explain in some of these applications. For instance, if we want to estimate the expected value of the maximum of a discretized Brownian motion whose covariance matrix is $\Sigma$, our goal is to estimate
-%\begin{align*}
-%\mathbb{E} \left[\max(\vect{B}_t)\right] &= \int_{\mathbb{R}^d} \max(\vect{B}_t) \frac{{\rm e}^{\vect{B}_t^T\Sigma^{-1}\vect{B}_t}}{(2\pi)^{d/2}|\Sigma|^{1/2}}\,d\vect{B}_t \\
-%&= \int_{[0,1]^d} \max(f_{\rm Chol}(\vx)) \,d\vx \\
-%&= \int_{[0,1]^d} \max(f_{\rm PCA}(\vx)) \,d\vx.
-%\end{align*}
-%The last two equalities are obtained through two different subsitutions corresponding to the \textit{Cholesky} construction of the Brownian motion, and the \textit{PCA} construction. For instance, if we take 10 dimensions and $t_i=i/10$, using the Cholesky construction $S_{1} = 24\%$, $S_{2} = 16\%$, $S_{3} = 13\%$, $S_{4} = 10\%$, and $\overline{S}_{1}=24\%$, $\overline{S}_{2}=18\%$, $\overline{S}_{3}=15\%$, $\overline{S}_{4} = 13\%$. However, using the PCA construction, $S_{1} = 89\%$, $S_{2} = 2\%$, $S_{3} = 1\%$, $S_{4} = 0\%$, and $\overline{S}_{1}=94\%$, $\overline{S}_{2}=7\%$, $\overline{S}_{3}=3\%$, $\overline{S}_{4} = 2\%$. This shows that the PCA construction will be better to estimate the above expectation using quasi-Monte Carlo methods since it has a lower effective dimensionality.
-%
-%For those who were curious about the actual value of $\mathbb{E} \left[\max(\vect{B}_t)\right]$, it is approximately 0.5935. Nevertheless, the Brownian Motion is a continuous time process. Thus, in order to estimate the expected value on a continuous time Browninan motion, one could either use a multilevel method, or a multivariate decomposition method to estimate this infinite dimensional integral.
+As a real case example, we will study the payoff function of an arithmetic mean Asian call option.
+
+For a discretized Brownian motion $\vect{B}=(B_{t_1}, B_{t_2},\dots, B_{t_d})$ at given times $t_1,\dots,t_d$, the payoff of the option is:
+
+\[
+f_{\rm payoff}(\vect{B}) = \max\left(\frac{1}{d}\sum_{i=1}^d S_0\e^{(r-\sigma^2/2)t_i+\sigma B_{t_i}}-K, 0\right)
+\]
+
+The Brownian motion is widely used in many applications. Thus, the following example might be interesting to understand what Sobol' indices can explain in some of these applications. For instance, if we want to estimate the expected value of the maximum of a discretized Brownian motion whose covariance matrix is $\Sigma$, our goal is to estimate
+\begin{align*}
+\mathbb{E} \left[\max(\vect{B}_t)\right] &= \int_{\mathbb{R}^d} \max(\vect{B}_t) \frac{{\rm e}^{\vect{B}_t^T\Sigma^{-1}\vect{B}_t}}{(2\pi)^{d/2}|\Sigma|^{1/2}}\,d\vect{B}_t \\
+&= \int_{[0,1]^d} \max(f_{\rm Chol}(\vx)) \,d\vx \\
+&= \int_{[0,1]^d} \max(f_{\rm PCA}(\vx)) \,d\vx.
+\end{align*}
+The last two equalities are obtained through two different subsitutions corresponding to the \textit{Cholesky} construction of the Brownian motion, and the \textit{PCA} construction. For instance, if we take 10 dimensions and $t_i=i/10$, using the Cholesky construction $S_{1} = 24\%$, $S_{2} = 16\%$, $S_{3} = 13\%$, $S_{4} = 10\%$, and $\overline{S}_{1}=24\%$, $\overline{S}_{2}=18\%$, $\overline{S}_{3}=15\%$, $\overline{S}_{4} = 13\%$. However, using the PCA construction, $S_{1} = 89\%$, $S_{2} = 2\%$, $S_{3} = 1\%$, $S_{4} = 0\%$, and $\overline{S}_{1}=94\%$, $\overline{S}_{2}=7\%$, $\overline{S}_{3}=3\%$, $\overline{S}_{4} = 2\%$. This shows that the PCA construction will be better to estimate the above expectation using quasi-Monte Carlo methods since it has a lower effective dimensionality.
+
+For those who were curious about the actual value of $\mathbb{E} \left[\max(\vect{B}_t)\right]$, it is approximately 0.5935. Nevertheless, the Brownian Motion is a continuous time process. Thus, in order to estimate the expected value on a continuous time Browninan motion, one could either use a multilevel method, or a multivariate decomposition method to estimate this infinite dimensional integral.
+
 
 \section{Conclusions}
 
