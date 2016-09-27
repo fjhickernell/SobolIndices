@@ -55,6 +55,8 @@
 \usepackage{amssymb,
 mathtools,bm,extraipa,mathabx,graphicx,algorithm}
 \usepackage{algpseudocode}
+\usepackage{booktabs}
+\usepackage{multirow}
 \usepackage{url}
 
 %\usepackage{latexsym}
@@ -542,141 +544,232 @@ Overall we expect to observe case $2)$ more often than case $1)$. Indeed, the nu
 
 Furthermore, in case $2)$, we expect the two conditions $m''_{u_j} < m_{u_j}$ and $m'_{u_j} < m_{u_j}$ to always hold as ``Correlation 2" is shown in \cite{Owen} to perform better for small first-order indices. To support this discussion, illustrations of the use of ``Correlation 2" are presented in Section \ref{sec:5}. 
 
-In practice, one does not know which are the small Sobol' indices ($u_1,\dots,u_\gamma)$. To overcome this issue, we propose the following alternative for Variant $A$. If at the end of the first iteration, the estimate $\widehat{\underline{S}}_u$, $u \in \mathcal{D}$, is smaller than a threshold (here $0.1$), then at the next iteration estimator (\ref{first.order.est}) is switched for ``Correlation 2" and a third Sobol' sequence $\mathcal{P''}_{m}=\{\vz_i\}_{i=0}^{2^m-1}$ is constructed to obtain the corresponding evaluations $f({\vz}_{i,u}:{\vx}_{i,-u})$.
+In practice, one does not know which are the small Sobol' indices ($u_1,\dots,u_\gamma)$. To overcome this issue, we propose the following alternative for Variant $A$. If at the end of the first iteration, the estimate $\widehat{\underline{S}}_u$, $u \in \mathcal{D}$, is smaller than a threshold (here $0.1$), then estimator (\ref{first.order.est}) is switched for ``Correlation 2" and a third Sobol' sequence $\mathcal{P''}_{m}=\{\vz_i\}_{i=0}^{2^m-1}$ is constructed to obtain the corresponding evaluations $f({\vz}_{i,u}:{\vx}_{i,-u})$.
 
 \section{Applications}
 \label{sec:5}
 
+We propose to illustrate our sequential estimation procedure on two classical test functions and one real model. For each case, we compare results obtained with each of the three methods:
+\begin{itemize}
+\item[$\bullet$] Variant $A$ without using ``Correlation 2'', refers as Variant $A.a$, 
+\item[$\bullet$] Variant $A$ using ``Correlation 2'', refers as Variant $A.b$,
+\item[$\bullet$] Variant $B$.
+\end{itemize}
+The threshold to decide whether or not a first-order index is small is set to $0.1$.
+
+The comparison is based on error bounds, namely $\varepsilon_{\underline{S}_u}$ and $\varepsilon_{\overline{S}_u}$, and total number of evaluations. Boxplots of error bounds are provided to support tables of results. Results are averaged over $r=100$ repeats. For each repeat, we fix the tolerance $\varepsilon$ to $5.10^{-3}$ and set the starting size $m_0$ to $2^9$ (the Sobol' sequences are initiated with $512$ points).
+
+We also evaluate the failure rate over the $100$ repeats that is the ratio of error bounds failing to satisfy respectively $\varepsilon_{\underline{S}_u} \leq \varepsilon$ and $\varepsilon_{\underline{S}_u} \leq \varepsilon$. Failure rates are denoted by ${err}_{\varepsilon_{\underline{S}_u}}$ and  ${err}_{\varepsilon_{\overline{S}_u}}$.
+
+%$\varepsilon=0.005$, initial $512$ points, $fudge = @(m,d) 10*2.^{-m}$, run $100$ samples and show the average values for the whole set of samples:
+%
+%(We use the scrambled replicated points, should we mention that somewhere and explain the requirement? Replicated points should share the same scrambling, u and u+d)
+
 \subsection{Classical test functions}
 \label{sec:5.1}
 
-$\varepsilon=0.005$, initial $512$ points, $fudge = @(m,d) 10*2.^{-m}$, run $100$ samples and show the average values for the whole set of samples:
+The two classical test functions considered are the g-function introduced by Sobol' \cite{Sobol'} and the function introduced by Bratley \textit{et al.} \cite{Bratley}. The idea is to test our method over two categories of functions: additive (g-function) and multiplicative (Bratley \textit{et al.} function).
 
-(We use the scrambled replicated points, should we mention that somewhere and explain the requirement? Replicated points should share the same scrambling, u and u+d)
+\subsubsection{Sobol' g-function}
 
-\subsubsection{Without small indices estimator}
-Bratley et al. example:
+The g-function is defined as follows:
+\begin{equation*}
+f(\vx)= \prod \limits_{i=1}^{d}g_i(x_i), \qquad g_i(x_i)=\frac{\left |4x_i-2 \right | + a_i}{1 + a_i}, \ a_i \geq 0.
+\end{equation*}
+Each value $a_i$ determines the relative importance of the $x_i$. When the value of $a_i$ gets closer to zero the variable $x_i$ becomes more influential. Here, the dimension is $d=6$ and values chosen for the $a_i$ are given by the following vector $(a_1=0,=a_2=0.5, a_3=3, a_4=9, a_5=99$, $a_6=99)$.
 
-\[
-\begin{array}{lcccccc}
-   & u=\{1\} & u=\{2\} & u=\{3\} & u=\{4\} & u=\{5\} & u=\{6\} \\ \hline \hline
- \widehat{\underline{S}}_u & 0.6500 & 0.1800 & 0.0370 & 0.0120 & 0.0034 & 0.0033 \\ \hline
- n & 17531 & 8438 & 4137 & 3686 & 625 & 650\\ \hline
- \text{error } & 0.0004 & 0.0006 & 0.0058 & 0.0022 & 0.0024 & 0.0021 \\ \hline
- \widehat{\overline{S}}_u & 0.7400 & 0.2700 & 0.0760 & 0.0340 & 0.0065 & 0.0064 \\  \hline
- n & 16384 & 8192 & 3113 & 1060 & 512 & 512 \\ \hline
- \text{error } & 0.0003 & 0.0004 & 0.0012 & 0.0020 & 0.0014 & 0.0010 \\ \hline
-\end{array}
-\]
-Reliability on the results,
-\[
-\begin{array}{ cccccc }
-     100  & 100  & 29  & 88  &  89  & 94 \\
-     100  & 100  & 98  &  93  &  97  &  100
-\end{array}
-\]
+Table \ref{res.gfunc.Aa} shows the averaged error bounds obtained with Variant $A.a$ as well as the averaged total number of evaluations performed. Table \ref{res.gfunc.Ab} shows the same results obtained with Variant $A.b$.
+\renewcommand{\arraystretch}{1.3}
+\begin{table}[!ht]
+\caption{Averaged error bounds $\varepsilon_{\underline{S}_u}$ and $\varepsilon_{\overline{S}_u}$ obtained with Variant $A.a$ over $100$ repeats. Failure rates are denoted by ${err}_{\varepsilon_{\underline{S}_u}}$ and  ${err}_{\varepsilon_{\overline{S}_u}}$.}
+\centering
+\begin{tabular}{ccccccc}
+\hline
+ input & $\underline{S}_u$ & $\varepsilon_{\underline{S}_u}$ & ${err}_{\varepsilon_{\underline{S}_u}}$ & $\overline{S}_u$ & $\varepsilon_{\overline{S}_u}$ &$err_{\varepsilon_{\overline{S}_u}}$ \\ \hline
+ $x_1$ & $0.5868$ &  $0.0004$ & $0.02$ & $0.6901$ & $0.0005$ & $0.02$ \\ \hline
+ $x_2$ & $0.2608$ &  $0.0006$ & $0.02$ & $0.3562$ & $0.0004$ & $0$ \\ \hline
+ $x_3$ & $0.0367$ &  $0.0011$ & $0.03$ & $0.0563$ & $0.0008$ & $0$ \\ \hline
+ $x_4$ & $0.0058$ &  $0.0012$ & $0.02$ & $0.0092$ & $0.0003$ & $0$ \\ \hline
+ $x_5$ & $5.10^{-5}$ & $0.0003$ & $0$ & $9.10^{-5}$ & $0.0000$ & $0$ \\ \hline
+ $x_6$ & $5.10^{-5}$ & $0.0003$ & $0$  & $9.10^{-5}$ & $0.0000$ & $0$ \\ \hline \hline
+\multicolumn{4}{l}{Total number of evaluations: $63 \ 088$} & & &\\ \hline 
+\end{tabular}
+\label{res.gfunc.Aa}
+\end{table}
+\begin{table}[!ht]
+\caption{Averaged error bounds $\varepsilon_{\underline{S}_u}$ and $\varepsilon_{\overline{S}_u}$ obtained with Variant $A.b$ over $100$ repeats. Failure rates are denoted by ${err}_{\varepsilon_{\underline{S}_u}}$ and  ${err}_{\varepsilon_{\overline{S}_u}}$.}
+\centering
+\begin{tabular}{ccccccc}
+\hline
+ input & $\underline{S}_u$ & $\varepsilon_{\underline{S}_u}$ & ${err}_{\varepsilon_{\underline{S}_u}}$ & $\overline{S}_u$ & $\varepsilon_{\overline{S}_u}$ &$err_{\varepsilon_{\overline{S}_u}}$ \\ \hline
+ $x_1$ & $0.5868$ &  $0.0005$ & $0.03$ & $0.6901$ & $0.0006$ & $0.02$ \\ \hline
+ $x_2$ & $0.2608$ &  $0.0007$ & $0.03$ & $0.3562$ & $0.0003$ & $0$ \\ \hline
+ $x_3$ & $0.0367$ &  $0.0015$ & $0.05$ & $0.0563$ & $0.0009$ & $0$ \\ \hline
+ $x_4$ & $0.0058$ &  $0.0003$ & $0$ & $0.0092$ & $0.0003$ & $0$ \\ \hline
+ $x_5$ & $5.10^{-5}$ & $0.0000$ & $0$ & $9.10^{-5}$ & $0.0000$ & $0$ \\ \hline
+ $x_6$ & $5.10^{-5}$ & $0.0000$ & $0$  & $9.10^{-5}$ & $0.0000$ & $0$ \\ \hline \hline
+\multicolumn{4}{l}{Total number of evaluations: $62 \ 703$} & & &\\ \hline 
+\end{tabular}
+\label{res.gfunc.Ab}
+\end{table}
 
+The main observation is that both approaches give similar results both in terms of error bounds and total number of evaluations. Looking at those averaged results, the use of ``Correlation 2'' to estimate the four small first-order Sobol' indices $\underline{S}_3, \underline{S}_4, \underline{S}_5, \underline{S}_6$ does not seems to bring any improvements. We propose to draw boxplots to further investigate the results. 
 
-Sobol g-function example:
+Figure \ref{boxplots.gfunc} shows boxplots of the $100$ error bounds $\varepsilon_{\underline{S}_u}$ for the four inputs $x_3,x_4,x_5,x_6$ obtained with both Variant $A.a$ and $A.b$.
+\begin{figure}[!ht]
+\caption{Boxplots of error bounds $\varepsilon_{\underline{S}_u}$ for the four inputs $x_3,x_4,x_5,x_6$ obtained with both Variant $A.a$ and $A.b$.}
+\centering
+\includegraphics[width=0.45\textwidth]{Images/boxplots.pdf}
+\label{boxplots.gfunc}
+\end{figure}
+As expected, the use of ``Correlation 2'' in Variant $A.b$ allows to obtain better error bounds. The discrepancy observed does not show off in Table \ref{res.gfunc.Ab} due to its low magnitude varying between $10^{-4}$ and $10^{-5}$.
+\bigskip
 
-\[
-\begin{array}{lcccccc}
-   & u=\{1\} & u=\{2\} & u=\{3\} & u=\{4\} & u=\{5\} & u=\{6\} \\ \hline \hline
- \widehat{\underline{S}}_u & 0.5900 & 0.2600 & 0.0370 & 0.0060 & 0.0003 & 0.0003 \\ \hline
- n & 16138 & 9011 & 3748 & 891 & 512 & 512 \\ \hline
- \text{error } & 0.0004 & 0.0006 & 0.0011 & 0.0012 & 0.0003 & 0.0003 \\ \hline
- \widehat{\overline{S}}_u & 0.6900 & 0.3600 & 0.0560 & 0.0093 & 0.0001 & 0.0001 \\  \hline
- n & 11796 & 7496 & 1475 & 512 & 512 & 512 \\ \hline
- \text{error } & 0.0005 & 0.0004 & 0.0008 & 0.0003 & 0.0000 & 0.0000 \\ \hline
-\end{array}
-\]
-Reliability on the results,
-\[
-\begin{array}{ cccccc }
-     98  & 98  & 97  & 98  &  100  & 100 \\
-     98  &  100  &  100 &  100  & 100 &  100
-\end{array}
-\]
-
-\subsubsection{With small indices estimator (threshold $0.1$)}
-Bratley et al. example:
-
-\[
-\begin{array}{lcccccc}
-   & u=\{1\} & u=\{2\} & u=\{3\} & u=\{4\} & u=\{5\} & u=\{6\} \\ \hline \hline
- \widehat{\underline{S}}_u & 0.6500 & 0.1800 & 0.0380 & 0.0140 & 0.0014 & 0.0016 \\ \hline
- n & 17203 & 8520 & 1362 & 517 & 512 & 512 \\ \hline
- \text{error } & 0.0004 & 0.0006 & 0.0019 & 0.0016 & 0.0003 & 0.0004 \\ \hline
- \widehat{\overline{S}}_u & 0.7400 & 0.2700 & 0.0760 & 0.0340 & 0.0063 & 0.0065 \\  \hline
- n & 16384 & 8192 & 2847 & 1142 & 512 & 512 \\ \hline
- \text{error } & 0.0003 & 0.0005 & 0.0013 & 0.0017 & 0.0015 & 0.0011 \\ \hline
-\end{array}
-\]
-Reliability on the results,
-\[
-\begin{array}{ cccccc }
-     100  & 100  & 96  & 99  &  100  & 100 \\
-     100  & 100  & 99  &  98  &  96  &  100
-\end{array}
-\]
-
-
-Sobol g-function example:
-
-\[
-\begin{array}{lcccccc}
-   & u=\{1\} & u=\{2\} & u=\{3\} & u=\{4\} & u=\{5\} & u=\{6\} \\ \hline \hline
- \widehat{\underline{S}}_u & 0.5900 & 0.2600 & 0.0370 & 0.0060 & 0.0001 & 0.0001 \\ \hline
- n & 16056 & 8929 & 1070 & 512 & 512 & 512 \\ \hline
- \text{error } & 0.0005 & 0.0007 & 0.0015 & 0.0003 & 0.0000 & 0.0000 \\ \hline
- \widehat{\overline{S}}_u & 0.6900 & 0.3600 & 0.0560 & 0.0093 & 0.0001 & 0.0001 \\  \hline
- n & 11551 & 7741 & 1464 & 512 & 512 & 512 \\ \hline
- \text{error } & 0.0006 & 0.0003 & 0.0009 & 0.0003 & 0.0000 & 0.0000 \\ \hline
-\end{array}
-\]
-Reliability on the results,
-\[
-\begin{array}{ cccccc }
-     97  & 97  & 95  & 100  &  100  & 100 \\
-     98  &  100  &  100 &  100  & 100 &  100
-\end{array}
-\]
-
-\subsubsection{Replicated method}
-Bratley et al. example:
-
-\[
-\begin{array}{lcccccc}
-   & u=\{1\} & u=\{2\} & u=\{3\} & u=\{4\} & u=\{5\} & u=\{6\} \\ \hline \hline
- \widehat{\underline{S}}_u & 0.6500 & 0.1800 & 0.0370 & 0.0100 & 0.0038 & 0.0040 \\ \hline
- n & 32768 & 16384 & 16384 & 12447 & 8637 & 9196 \\ \hline
- \text{error } & 0.0003 & 0.0006 & 0.0010 & 0.0038 & 0.0024 & 0.0026 \\ \hline
-\end{array}
-\]
-Reliability on the results,
-\[
-\begin{array}{ cccccc }
-     100  & 100  & 100  & 75  &  100  & 100
-\end{array}
-\]
+Table \ref{res.gfunc.B} shows the averaged error bounds $\varepsilon_{\underline{S}_u}$ obtained with Variant $B$ and the averaged total number of evaluations performed. 
+\begin{table}[!ht]
+\caption{Averaged error bounds $\varepsilon_{\underline{S}_u}$  obtained with Variant $B$ over $100$ repeats. Failure rate is denoted by ${err}_{\varepsilon_{\underline{S}_u}}$.}
+\centering
+\begin{tabular}{cccc}
+\hline
+ input & $\underline{S}_u$ & $\varepsilon_{\underline{S}_u}$ & ${err}_{\varepsilon_{\underline{S}_u}}$ \\ \hline
+ $x_1$ & $0.5868$ &  $0.0011$ & $0.07$ \\ \hline
+ $x_2$ & $0.2608$ &  $0.0013$ & $0.08$ \\ \hline
+ $x_3$ & $0.0367$ &  $0.0018$ & $0.09$ \\ \hline
+ $x_4$ & $0.0058$ &  $0.0013$ & $0.1$    \\ \hline
+ $x_5$ & $5.10^{-5}$ & $0.0031$ & $0.04$  \\ \hline
+ $x_6$ & $5.10^{-5}$ & $0.0036$ & $0.05$  \\ \hline \hline
+\multicolumn{4}{l}{Total number of evaluations: $32 \ 768$}\\ \hline 
+\end{tabular}
+\label{res.gfunc.B}
+\end{table}
+Looking at the results, using Variant $B$ leads to higher failure rates than those obtained with Variant $A.a$ or $A.b$. The compromise is a total number of evaluations twice as small as the others two variants. As such, this approach remains interesting when one want to estimate only first-order indices.
 
 
-Sobol g-function example:
-
-\[
-\begin{array}{lcccccc}
-   & u=\{1\} & u=\{2\} & u=\{3\} & u=\{4\} & u=\{5\} & u=\{6\} \\ \hline \hline
- \widehat{\underline{S}}_u & 0.5900 & 0.2600 & 0.0360 & 0.0059 & 0.0031 & 0.0036 \\ \hline
- n & 16384 & 16384 & 16225 & 14612 & 7086 & 6661 \\ \hline
- \text{error } & 0.0011 & 0.0013 & 0.0018 & 0.0013 & 0.0031 & 0.0036 \\ \hline
-\end{array}
-\]
-Reliability on the results,
-\[
-\begin{array}{ cccccc }
-     93  & 92  & 91  & 90  &  96  & 95
-\end{array}
-\]
+\subsubsection{Bratley et al. function}
+%
+%\subsubsection{Without small indices estimator}
+%Bratley et al. example:
+%
+%\[
+%\begin{array}{lcccccc}
+%   & u=\{1\} & u=\{2\} & u=\{3\} & u=\{4\} & u=\{5\} & u=\{6\} \\ \hline \hline
+% \widehat{\underline{S}}_u & 0.6500 & 0.1800 & 0.0370 & 0.0120 & 0.0034 & 0.0033 \\ \hline
+% n & 17531 & 8438 & 4137 & 3686 & 625 & 650\\ \hline
+% \text{error } & 0.0004 & 0.0006 & 0.0058 & 0.0022 & 0.0024 & 0.0021 \\ \hline
+% \widehat{\overline{S}}_u & 0.7400 & 0.2700 & 0.0760 & 0.0340 & 0.0065 & 0.0064 \\  \hline
+% n & 16384 & 8192 & 3113 & 1060 & 512 & 512 \\ \hline
+% \text{error } & 0.0003 & 0.0004 & 0.0012 & 0.0020 & 0.0014 & 0.0010 \\ \hline
+%\end{array}
+%\]
+%Reliability on the results,
+%\[
+%\begin{array}{ cccccc }
+%     100  & 100  & 29  & 88  &  89  & 94 \\
+%     100  & 100  & 98  &  93  &  97  &  100
+%\end{array}
+%\]
+%
+%
+%Sobol g-function example:
+%
+%\[
+%\begin{array}{lcccccc}
+%   & u=\{1\} & u=\{2\} & u=\{3\} & u=\{4\} & u=\{5\} & u=\{6\} \\ \hline \hline
+% \widehat{\underline{S}}_u & 0.5900 & 0.2600 & 0.0370 & 0.0060 & 0.0003 & 0.0003 \\ \hline
+% n & 16138 & 9011 & 3748 & 891 & 512 & 512 \\ \hline
+% \text{error } & 0.0004 & 0.0006 & 0.0011 & 0.0012 & 0.0003 & 0.0003 \\ \hline
+% \widehat{\overline{S}}_u & 0.6900 & 0.3600 & 0.0560 & 0.0093 & 0.0001 & 0.0001 \\  \hline
+% n & 11796 & 7496 & 1475 & 512 & 512 & 512 \\ \hline
+% \text{error } & 0.0005 & 0.0004 & 0.0008 & 0.0003 & 0.0000 & 0.0000 \\ \hline
+%\end{array}
+%\]
+%Reliability on the results,
+%\[
+%\begin{array}{ cccccc }
+%     98  & 98  & 97  & 98  &  100  & 100 \\
+%     98  &  100  &  100 &  100  & 100 &  100
+%\end{array}
+%\]
+%
+%\subsubsection{With small indices estimator (threshold $0.1$)}
+%Bratley et al. example:
+%
+%\[
+%\begin{array}{lcccccc}
+%   & u=\{1\} & u=\{2\} & u=\{3\} & u=\{4\} & u=\{5\} & u=\{6\} \\ \hline \hline
+% \widehat{\underline{S}}_u & 0.6500 & 0.1800 & 0.0380 & 0.0140 & 0.0014 & 0.0016 \\ \hline
+% n & 17203 & 8520 & 1362 & 517 & 512 & 512 \\ \hline
+% \text{error } & 0.0004 & 0.0006 & 0.0019 & 0.0016 & 0.0003 & 0.0004 \\ \hline
+% \widehat{\overline{S}}_u & 0.7400 & 0.2700 & 0.0760 & 0.0340 & 0.0063 & 0.0065 \\  \hline
+% n & 16384 & 8192 & 2847 & 1142 & 512 & 512 \\ \hline
+% \text{error } & 0.0003 & 0.0005 & 0.0013 & 0.0017 & 0.0015 & 0.0011 \\ \hline
+%\end{array}
+%\]
+%Reliability on the results,
+%\[
+%\begin{array}{ cccccc }
+%     100  & 100  & 96  & 99  &  100  & 100 \\
+%     100  & 100  & 99  &  98  &  96  &  100
+%\end{array}
+%\]
+%
+%
+%Sobol g-function example:
+%
+%\[
+%\begin{array}{lcccccc}
+%   & u=\{1\} & u=\{2\} & u=\{3\} & u=\{4\} & u=\{5\} & u=\{6\} \\ \hline \hline
+% \widehat{\underline{S}}_u & 0.5900 & 0.2600 & 0.0370 & 0.0060 & 0.0001 & 0.0001 \\ \hline
+% n & 16056 & 8929 & 1070 & 512 & 512 & 512 \\ \hline
+% \text{error } & 0.0005 & 0.0007 & 0.0015 & 0.0003 & 0.0000 & 0.0000 \\ \hline
+% \widehat{\overline{S}}_u & 0.6900 & 0.3600 & 0.0560 & 0.0093 & 0.0001 & 0.0001 \\  \hline
+% n & 11551 & 7741 & 1464 & 512 & 512 & 512 \\ \hline
+% \text{error } & 0.0006 & 0.0003 & 0.0009 & 0.0003 & 0.0000 & 0.0000 \\ \hline
+%\end{array}
+%\]
+%Reliability on the results,
+%\[
+%\begin{array}{ cccccc }
+%     97  & 97  & 95  & 100  &  100  & 100 \\
+%     98  &  100  &  100 &  100  & 100 &  100
+%\end{array}
+%\]
+%
+%\subsubsection{Replicated method}
+%Bratley et al. example:
+%
+%\[
+%\begin{array}{lcccccc}
+%   & u=\{1\} & u=\{2\} & u=\{3\} & u=\{4\} & u=\{5\} & u=\{6\} \\ \hline \hline
+% \widehat{\underline{S}}_u & 0.6500 & 0.1800 & 0.0370 & 0.0100 & 0.0038 & 0.0040 \\ \hline
+% n & 32768 & 16384 & 16384 & 12447 & 8637 & 9196 \\ \hline
+% \text{error } & 0.0003 & 0.0006 & 0.0010 & 0.0038 & 0.0024 & 0.0026 \\ \hline
+%\end{array}
+%\]
+%Reliability on the results,
+%\[
+%\begin{array}{ cccccc }
+%     100  & 100  & 100  & 75  &  100  & 100
+%\end{array}
+%\]
+%
+%
+%Sobol g-function example:
+%
+%\[
+%\begin{array}{lcccccc}
+%   & u=\{1\} & u=\{2\} & u=\{3\} & u=\{4\} & u=\{5\} & u=\{6\} \\ \hline \hline
+% \widehat{\underline{S}}_u & 0.5900 & 0.2600 & 0.0360 & 0.0059 & 0.0031 & 0.0036 \\ \hline
+% n & 16384 & 16384 & 16225 & 14612 & 7086 & 6661 \\ \hline
+% \text{error } & 0.0011 & 0.0013 & 0.0018 & 0.0013 & 0.0031 & 0.0036 \\ \hline
+%\end{array}
+%\]
+%Reliability on the results,
+%\[
+%\begin{array}{ cccccc }
+%     93  & 92  & 91  & 90  &  96  & 95
+%\end{array}
+%\]
 
 
 
@@ -712,6 +805,10 @@ The authors thank Fred J. Hickernell and Cl\'ementine Prieur for initiating this
 % and use \bibitem to create references. Consult the Instructions
 % for authors for reference list style.
 %
+
+\bibitem{Bratley}
+Bratley, P., Fox, B.L., Niederreiter, H.: Implementation and tests of low-discrepancy sequences, ACM Trans. Model. Comput. Simul. \textbf{2}(3), 195-213 (1992)
+Hickernell, F.J., Jim\'enez Rugama, Ll.A.: Reliable Adaptative Cubature Using Digital Sequences: Monte Carlo and Quasi-Monte Carlo Methods, vol. 163, 367-383 (2016)
 \bibitem{Gilquin.rec}
 Gilquin, L., Arnaud, E., Monod, H., Prieur, C.: Recursive estimation procedure of Sobol' indices based on replicated designs, preprint available at \url{https://hal.inria.fr/hal-01291769}, (2016).
 \bibitem{GJAHMP}
