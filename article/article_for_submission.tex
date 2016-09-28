@@ -110,30 +110,24 @@ mathtools,bm,extraipa,mathabx,graphicx,algorithm}
 %
 \begin{document}
 
-\title{Reliable error estimation for Sobol' indices%\thanks{Grants or other notes
-%about the article that should go on the front page should be
-%placed here. General acknowledgments should be placed at the end of the article.}
+\title{Reliable error estimation for Sobol' indices\thanks{This work is supported by the CITiES project funded by the Agence Nationale de la Recherche (grant ANR-12-MONU-0020) and by the United States National Science Foundation (grant DMS-1522687).}
 }
 %\subtitle{Do you have a subtitle?\\ If so, write it here}
 
 %\titlerunning{Short form of title}        % if too long for running head
 
-\author{Laurent Gilquin \and
-        Llu\'{i}s Antoni Jim\'{e}nez Rugama %etc.
-}
+\author{
+        Llu\'{i}s Antoni Jim\'{e}nez Rugama \and  Laurent Gilquin}
 
 %\authorrunning{Short form of author list} % if too long for running head
 
-\institute{Laurent Gilquin \at
-              Inria Grenoble - Rh\^{o}ne-Alpes, Inovall\'{e}e, 655 avenue de l'Europe, 38330 Montbonnot \\
-              %Tel.: +123-45-678910\\
-              %Fax: +123-45-678910\\
-              \email{gilquin.laurent@inria.fr}           %  \\
-%             \emph{Present address:} of F. Author  %  if needed
-           \and
-           Llu\'{i}s Antoni Jim\'{e}nez Rugama \at
+\institute{Llu\'{i}s Antoni Jim\'{e}nez Rugama \at
               Illinois Institute of Technology, Rettaliata Engineering Center, 10 W 32st, Chicago, IL 60616 \\
 \email{ljimene1@hawk.iit.edu}
+           \and
+           Laurent Gilquin \at
+              Inria Grenoble - Rh\^{o}ne-Alpes, Inovall\'{e}e, 655 avenue de l'Europe, 38330 Montbonnot \\
+\email{gilquin.laurent@inria.fr}   
 }
 
 \date{Received: date / Accepted: date}
@@ -143,11 +137,15 @@ mathtools,bm,extraipa,mathabx,graphicx,algorithm}
 \maketitle
 
 \begin{abstract}
-Insert your abstract here. Include keywords,\\ PACS and mathematical
-subject classification numbers as needed.
-\keywords{First keyword \and Second keyword \and More}
+In the field of sensitivity analysis, Sobol' indices are sensitivity measures widely used to assess the importance of inputs of a model on its output. The estimation of these indices is often performed trough Monte Carlo or quasi-Monte Carlo methods. A notable method is the replication procedure that estimate first-order indices at a reduced cost. 
+
+An inherent practical problem is how to quantity the number of model evaluations to ensure that estimates satisfy a desired tolerance. This paper addresses this challenge by proposing a reliable error bound for first-order and total effect Sobol' indices. Starting from the integral formula of the indices, the error bound is defined in terms of the discrete Walsh coefficients of the different integrands. 
+
+We propose a sequential estimation procedure of Sobol' indices using the latter error bound as stopping criterion. The sequential procedure combines Sobol' sequences with either Saltelli's strategy to estimate both first-order and total effect indices, or the replication procedure to estimate only first-order indices.
+
+\keywords{Sobol' indices \and error bound \and sequential method \and Sobol' sequences}
 % \PACS{PACS code1 \and PACS code2 \and more}
-% \subclass{MSC code1 \and MSC code2 \and more}
+\subclass{49Q12 \and 62L10 \and 65R10}
 \end{abstract}
 
 %\section{Introduction}
@@ -210,7 +208,7 @@ When dealing with complex numerical models, analytical expressions of Sobol' ind
 
 A practical problem concerning the use of these methods is how to quantify the number of model evaluations to ensure that Sobol' estimates are accurate enough. This paper addresses this challenge by proposing a reliable error bound for Sobol' indices based on digital sequences. The error bound is defined in terms of the discrete Walsh coefficients of the integrands involved in the Sobol' indices definition. We propose a sequential estimation procedure of Sobol' indices using the error bound as stopping criterion. The procedure operates under the assumption that all integrands lie inside a particular cone of functions (see \cite{HicJim}).
 
-Firstly, section \ref{sec:2} introduces Sobol' indices and reviews both Saltelli's strategy to estimate first-order and total effect Sobol' indices, and the replication procedure. Our main contribution is detailed in  Section \ref{sec:3}. There we review the construction of the error bound for the estimation of integrals based on digital nets, and then generalize it for Sobol' indices. Section \ref{sec:4} is devoted to analyze the cost in terms of model evaluations of our sequential estimation algorithm. It combines the error bound in Section \ref{sec:3} and either one of the two estimation procedures of Section \ref{sec:2}. We also discuss a potential improvement to estimate small first-order indices according to \cite{Owen}. Finally, examples and illustrations of our procedure are presented in Section \ref{sec:5}. 
+Firstly, section \ref{sec:2} introduces Sobol' indices and reviews both Saltelli's strategy to estimate first-order and total effect Sobol' indices, and the replication procedure. Our main contribution is detailed in  Section \ref{sec:3}. There, we review the construction of the error bound proposed in \cite{HicJim} for the estimation of integrals based on digital sequences, then generalize it for Sobol' indices. Section \ref{sec:4} is devoted to analyze the cost in terms of model evaluations of our sequential estimation algorithm. It combines the error bound in Section \ref{sec:3} and either one of the two estimation procedures of Section \ref{sec:2}. We also discuss a potential improvement to estimate small first-order indices according to \cite{Owen}. Finally, examples and illustrations of our procedure are presented in Section \ref{sec:5}. 
 
 \section{Backgrounds on Sobol' indices}
 \label{sec:2}
@@ -424,14 +422,14 @@ and,
 \end{aligned}
 \label{formula_oversu}
 \end{gather}
-Because numerator and denominator are known to be positive, maximizing $\underline{S}_u(\vI)$ (resp. $\overline{S}_u(\vI)$) is done through maximizing the numerator $I_1$ (resp. $I_2$) and minimizing the denominator $I_3-I_4^2$. Analogously, to minimize $\underline{S}_u(\vI)$ (resp. $\overline{S}_u(\vI)$) one minimizes the numerator $I_1$ (resp. $I_2$) and maximizes the denominator $I_3-I_4^2$. As an example, Figure \ref{fig:1} below illustrate the maximization process for $\vI$ unidimensional.
-\begin{figure*}
-\centering
-\includegraphics[width=1\textwidth]{Images/estimator_3d_small.eps}
- figure caption is below the figure
-\caption{Estimator property.}
-\label{fig:1}       % Give a unique label
-\end{figure*} 
+Because numerator and denominator are known to be positive, maximizing $\underline{S}_u(\vI)$ (resp. $\overline{S}_u(\vI)$) is done through maximizing the numerator $I_1$ (resp. $I_2$) and minimizing the denominator $I_3-I_4^2$. Analogously, to minimize $\underline{S}_u(\vI)$ (resp. $\overline{S}_u(\vI)$) one minimizes the numerator $I_1$ (resp. $I_2$) and maximizes the denominator $I_3-I_4^2$. %As an example, Figure \ref{fig:1} below illustrate the maximization of $\underline{S}_u(\vI)$.
+%\begin{figure*}
+%\centering
+%\textbf{•}\includegraphics[width=1\textwidth]{Images/%estimator_3d_small.eps}
+% figure caption is below the figure
+%\caption{Estimator property.}
+%\label{fig:1}       % Give a unique label
+%\end{figure*} 
 
 Under the assumption that each integrand of $\vI$ is in $\cc$, these new estimators satisfy: \[ \underline{S}_u\in \left[ \widehat{\underline{S}}_u - \varepsilon_{\underline{S}_u}, \widehat{\underline{S}}_u + \varepsilon_{\underline{S}_u} \right], \qquad \overline{S}_u\in \left[ \widehat{\overline{S}}_u - \varepsilon_{\overline{S}_u}, \widehat{\overline{S}}_u + \varepsilon_{\overline{S}_u} \right] .\]
 For the rest of the paper, we will consider $\widehat{\underline{S}}_u$ and $\widehat{\overline{S}}_u$   as defined in formulas (\ref{formula_undersu}) and (\ref{formula_oversu}).
@@ -557,9 +555,9 @@ We propose to illustrate our sequential estimation procedure on two classical te
 \end{itemize}
 The threshold to decide whether or not a first-order index is small is set to $0.1$.
 
-The comparison is based on error bounds, namely $\varepsilon_{\underline{S}_u}$ and $\varepsilon_{\overline{S}_u}$, and total number of evaluations. Boxplots of error bounds are provided to support tables of results. Results are averaged over $r=100$ repeats. For each repeat, we fix the tolerance $\varepsilon$ to $5.10^{-3}$ and set the starting size $m_0$ to $2^9$ (the Sobol' sequences are initiated with $512$ points).
+The comparison is based on error bounds, namely $\varepsilon_{\underline{S}_u}$ and $\varepsilon_{\overline{S}_u}$, and total number of evaluations. Boxplots of error bounds are drawn to support table of results. Results are averaged over $r=100$ repeats. For each repeat, we fix the tolerance $\varepsilon$ to $5.10^{-3}$ and set the starting size $m_0$ to $2^9$ (the Sobol' sequences are initiated with $512$ points).
 
-We also evaluate the failure rate over the $100$ repeats that is the ratio of error bounds failing to satisfy respectively $\varepsilon_{\underline{S}_u} \leq \varepsilon$ and $\varepsilon_{\underline{S}_u} \leq \varepsilon$. Failure rates are denoted by ${err}_{\varepsilon_{\underline{S}_u}}$ and  ${err}_{\varepsilon_{\overline{S}_u}}$.
+We also evaluate the failure rate of each variant over the $100$ repeats. The failure rate corresponds to the ratio of error bounds failing to satisfy respectively $\varepsilon_{\underline{S}_u} \leq \varepsilon$ and $\varepsilon_{\underline{S}_u} \leq \varepsilon$. Failure rates are denoted by ${err}_{\varepsilon_{\underline{S}_u}}$ and  ${err}_{\varepsilon_{\overline{S}_u}}$.
 
 %$\varepsilon=0.005$, initial $512$ points, $fudge = @(m,d) 10*2.^{-m}$, run $100$ samples and show the average values for the whole set of samples:
 %
@@ -568,20 +566,20 @@ We also evaluate the failure rate over the $100$ repeats that is the ratio of er
 \subsection{Classical test functions}
 \label{sec:5.1}
 
-The two classical test functions considered are the g-function introduced by Sobol' \cite{Sobol'} and the function introduced by Bratley \textit{et al.} \cite{Bratley}. The idea is to test our method over two categories of functions: additive (g-function) and multiplicative (Bratley \textit{et al.} function).
+The two classical test functions considered are the g-function introduced by Sobol' \cite{Sobol'} and the function introduced by Bratley \textit{et al.} \cite{Bratley}. The idea is to test our method over two categories of functions: additive (Bratley \textit{et al.} function) and multiplicative (g-function).
 
 \subsubsection{Sobol' g-function}
 
 The g-function is defined as follows:
 \begin{equation*}
-f(\vx)= \prod \limits_{i=1}^{d}g_i(x_i), \qquad g_i(x_i)=\frac{\left |4x_i-2 \right | + a_i}{1 + a_i}, \ a_i \geq 0.
+f(\vx)= \prod \limits_{j=1}^{d}g_j(x_j), \qquad g_j(x_j)=\frac{\left |4x_j-2 \right | + a_j}{1 + a_j}, \ a_j \geq 0.
 \end{equation*}
-Each value $a_i$ determines the relative importance of the $x_i$. When the value of $a_i$ gets closer to zero the variable $x_i$ becomes more influential. Here, the dimension is $d=6$ and values chosen for the $a_i$ are given by the following vector $(a_1=0,=a_2=0.5, a_3=3, a_4=9, a_5=99$, $a_6=99)$.
+Each value $a_j$ determines the relative importance of the $x_j$. When the value of $a_j$ gets closer to zero the variable $x_i$ becomes more influent. Here, the dimension is $d=6$ and values chosen for the $a_j$ are given by the following vector $(a_1=0,=a_2=0.5, a_3=3, a_4=9, a_5=99$, $a_6=99)$.
 
 Table \ref{res.gfunc.Aa} shows the averaged error bounds obtained with Variant $A.a$ as well as the averaged total number of evaluations performed. Table \ref{res.gfunc.Ab} shows the same results obtained with Variant $A.b$.
-\renewcommand{\arraystretch}{1.3}
+\renewcommand{\arraystretch}{1.25}
 \begin{table}[!ht]
-\caption{Averaged error bounds $\varepsilon_{\underline{S}_u}$ and $\varepsilon_{\overline{S}_u}$ obtained with Variant $A.a$ over $100$ repeats. Failure rates are denoted by ${err}_{\varepsilon_{\underline{S}_u}}$ and  ${err}_{\varepsilon_{\overline{S}_u}}$.}
+\caption{Averaged error bounds $\varepsilon_{\underline{S}_u}$ , $\varepsilon_{\overline{S}_u}$ and total number of evaluations of Variant $A.a$.}
 \centering
 \begin{tabular}{ccccccc}
 \hline
@@ -590,14 +588,14 @@ Table \ref{res.gfunc.Aa} shows the averaged error bounds obtained with Variant $
  $x_2$ & $0.2608$ &  $0.0006$ & $0.02$ & $0.3562$ & $0.0004$ & $0$ \\ \hline
  $x_3$ & $0.0367$ &  $0.0011$ & $0.03$ & $0.0563$ & $0.0008$ & $0$ \\ \hline
  $x_4$ & $0.0058$ &  $0.0012$ & $0.02$ & $0.0092$ & $0.0003$ & $0$ \\ \hline
- $x_5$ & $5.10^{-5}$ & $0.0003$ & $0$ & $9.10^{-5}$ & $0.0000$ & $0$ \\ \hline
- $x_6$ & $5.10^{-5}$ & $0.0003$ & $0$  & $9.10^{-5}$ & $0.0000$ & $0$ \\ \hline \hline
+ $x_5$ & $5.10^{-5}$ & $0.0003$ & $0$ & $9.10^{-5}$ & $< 10^{-4}$ & $0$ \\ \hline
+ $x_6$ & $5.10^{-5}$ & $0.0003$ & $0$  & $9.10^{-5}$ & $< 10^{-4}$ & $0$ \\ \hline \hline
 \multicolumn{4}{l}{Total number of evaluations: $63 \ 088$} & & &\\ \hline 
 \end{tabular}
 \label{res.gfunc.Aa}
 \end{table}
 \begin{table}[!ht]
-\caption{Averaged error bounds $\varepsilon_{\underline{S}_u}$ and $\varepsilon_{\overline{S}_u}$ obtained with Variant $A.b$ over $100$ repeats. Failure rates are denoted by ${err}_{\varepsilon_{\underline{S}_u}}$ and  ${err}_{\varepsilon_{\overline{S}_u}}$.}
+\caption{Averaged error bounds $\varepsilon_{\underline{S}_u}$ , $\varepsilon_{\overline{S}_u}$ and total number of evaluations of Variant $A.b$.}
 \centering
 \begin{tabular}{ccccccc}
 \hline
@@ -606,28 +604,27 @@ Table \ref{res.gfunc.Aa} shows the averaged error bounds obtained with Variant $
  $x_2$ & $0.2608$ &  $0.0007$ & $0.03$ & $0.3562$ & $0.0003$ & $0$ \\ \hline
  $x_3$ & $0.0367$ &  $0.0015$ & $0.05$ & $0.0563$ & $0.0009$ & $0$ \\ \hline
  $x_4$ & $0.0058$ &  $0.0003$ & $0$ & $0.0092$ & $0.0003$ & $0$ \\ \hline
- $x_5$ & $5.10^{-5}$ & $0.0000$ & $0$ & $9.10^{-5}$ & $0.0000$ & $0$ \\ \hline
- $x_6$ & $5.10^{-5}$ & $0.0000$ & $0$  & $9.10^{-5}$ & $0.0000$ & $0$ \\ \hline \hline
+ $x_5$ & $5.10^{-5}$ & $< 10^{-4}$ & $0$ & $9.10^{-5}$ & $< 10^{-4}$ & $0$ \\ \hline
+ $x_6$ & $5.10^{-5}$ & $< 10^{-4}$ & $0$  & $9.10^{-5}$ & $< 10^{-4}$ & $0$ \\ \hline \hline
 \multicolumn{4}{l}{Total number of evaluations: $62 \ 703$} & & &\\ \hline 
 \end{tabular}
 \label{res.gfunc.Ab}
 \end{table}
+The main observation is that both approaches give similar results both in terms of error bounds, failure rates and total number of evaluations. The use of ``Correlation 2'' in Variant $A.b$ to estimate the four small first-order Sobol' indices $\underline{S}_3, \underline{S}_4, \underline{S}_5, \underline{S}_6$ does not seem to bring any improvement. We propose to draw boxplots of error bounds to further investigate the results. 
 
-The main observation is that both approaches give similar results both in terms of error bounds and total number of evaluations. Looking at those averaged results, the use of ``Correlation 2'' to estimate the four small first-order Sobol' indices $\underline{S}_3, \underline{S}_4, \underline{S}_5, \underline{S}_6$ does not seems to bring any improvements. We propose to draw boxplots to further investigate the results. 
-
-Figure \ref{boxplots.gfunc} shows boxplots of the $100$ error bounds $\varepsilon_{\underline{S}_u}$ for the four inputs $x_3,x_4,x_5,x_6$ obtained with both Variant $A.a$ and $A.b$.
+Figure \ref{boxplots.gfunc} shows boxplots of the $100$ error bounds $\varepsilon_{\underline{S}_u}$ obtained with both Variant $A.a$ and Variant $A.b$ for the four inputs $x_3,x_4,x_5,x_6$. The horizontal line marks the tolerance $\varepsilon=5.10^{-3}$.
 \begin{figure}[!ht]
-\caption{Boxplots of error bounds $\varepsilon_{\underline{S}_u}$ for the four inputs $x_3,x_4,x_5,x_6$ obtained with both Variant $A.a$ and $A.b$.}
+\caption{Boxplots of error bounds $\varepsilon_{\underline{S}_u}$ for the four inputs $x_3,x_4,x_5,x_6$ obtained with both Variant $A.a$ and Variant $A.b$. The horizontal line marks the tolerance $\varepsilon=5.10^{-3}$.}
 \centering
 \includegraphics[width=0.45\textwidth]{Images/boxplots.pdf}
 \label{boxplots.gfunc}
 \end{figure}
-As expected, the use of ``Correlation 2'' in Variant $A.b$ allows to obtain better error bounds. The discrepancy observed does not show off in Table \ref{res.gfunc.Ab} due to its low magnitude varying between $10^{-4}$ and $10^{-5}$.
+As expected, we observe that the use of ``Correlation 2'' in Variant $A.b$ results in lower error bounds for these four inputs. The discrepancy observed does not stand out in Table \ref{res.gfunc.Ab} due to its low magnitude ($10^{-4} \sim 10^{-5}$).
 \bigskip
 
-Table \ref{res.gfunc.B} shows the averaged error bounds $\varepsilon_{\underline{S}_u}$ obtained with Variant $B$ and the averaged total number of evaluations performed. 
+Table \ref{res.gfunc.B} shows averaged error bounds $\varepsilon_{\underline{S}_u}$ and total number of evaluations of Variant $B$. 
 \begin{table}[!ht]
-\caption{Averaged error bounds $\varepsilon_{\underline{S}_u}$  obtained with Variant $B$ over $100$ repeats. Failure rate is denoted by ${err}_{\varepsilon_{\underline{S}_u}}$.}
+\caption{Averaged error bound $\varepsilon_{\underline{S}_u}$ and total number of evaluations of Variant $B$.}
 \centering
 \begin{tabular}{cccc}
 \hline
@@ -642,10 +639,93 @@ Table \ref{res.gfunc.B} shows the averaged error bounds $\varepsilon_{\underline
 \end{tabular}
 \label{res.gfunc.B}
 \end{table}
-Looking at the results, using Variant $B$ leads to higher failure rates than those obtained with Variant $A.a$ or $A.b$. The compromise is a total number of evaluations twice as small as the others two variants. As such, this approach remains interesting when one want to estimate only first-order indices.
-
+Looking at the results, using Variant $B$ leads to smaller error bounds and higher failure rates than those obtained with Variant $A.a$ or Variant $A.b$. The compromise is a total number of evaluations twice as small. As such, this approach remains interesting when one wants to estimate only first-order indices.
 
 \subsubsection{Bratley et al. function}
+
+For the second example, we consider the Bratley \textit{et al.} function defined by:
+$$f(x_1,\dots,x_d)=\sum \limits_{i=1}^{d} (-1)^i \prod \limits_{j=1}^{i} x_j \ .$$
+The importance of each variable $x_j$ depends on their own rank. More explicitly, $x_1$ is more influent than $x_2$ that is respectively more influent than $x_3$ and so on. 
+
+As for the g-function, Tables \ref{res.bratley.Aa} and \ref{res.bratley.Ab} show averaged error bounds and averaged total number of evaluations for Variant $A.a$ and Variant $A.b$.
+\begin{table}[!ht]
+\caption{Averaged error bounds $\varepsilon_{\underline{S}_u}$, $\varepsilon_{\overline{S}_u}$ and total number of evaluations of Variant $A.a$.}
+\centering
+\begin{tabular}{ccccccc}
+\hline
+ input & $\underline{S}_u$ & $\varepsilon_{\underline{S}_u}$ & ${err}_{\varepsilon_{\underline{S}_u}}$ & $\overline{S}_u$ & $\varepsilon_{\overline{S}_u}$ &$err_{\varepsilon_{\overline{S}_u}}$ \\ \hline
+ $x_1$ & $0.6529$ &  $0.0004$ & $0$ & $0.7396$ & $0.0003$ & $0.$ \\ \hline
+ $x_2$ & $0.1791$ &  $0.0006$ & $0$ & $0.2659$ & $0.0004$ & $0$ \\ \hline
+ $x_3$ & $0.0370$ &  $0.0058$ & $0.71$ & $0.0764$ & $0.0012$ & $0.02$ \\ \hline
+ $x_4$ & $0.0133$ &  $0.0022$ & $0.12$ & $0.0343$ & $0.0020$ & $0.07$ \\ \hline
+ $x_5$ & $0.0015$ &  $0.0024$ & $0.11$ & $0.0062$ & $0.0014$ & $0$ \\ \hline
+ $x_6$ & $0.0015$ & $0.0021$ & $0.06$  & $0.0062$ & $0.0010$ & $0.03$ \\ \hline \hline
+\multicolumn{4}{l}{Total number of evaluations: $70 \ 129$} & & &\\ \hline 
+\end{tabular}
+\label{res.bratley.Aa}
+\end{table}
+\begin{table}[!ht]
+\caption{Averaged error bounds $\varepsilon_{\underline{S}_u}$, $\varepsilon_{\overline{S}_u}$ and total number of evaluations of Variant $A.b$.}
+\centering
+\begin{tabular}{ccccccc}
+\hline
+ input & $\underline{S}_u$ & $\varepsilon_{\underline{S}_u}$ & ${err}_{\varepsilon_{\underline{S}_u}}$ & $\overline{S}_u$ & $\varepsilon_{\overline{S}_u}$ &$err_{\varepsilon_{\overline{S}_u}}$ \\ \hline
+ $x_1$ & $0.6529$ &  $0.0004$ & $0$ & $0.7396$ & $0.0003$ & $0$ \\ \hline
+ $x_2$ & $0.1791$ &  $0.0006$ & $0$ & $0.2659$ & $0.0005$ & $0$ \\ \hline
+ $x_3$ & $0.0370$ &  $0.0019$ & $0.04$ & $0.0764$ & $0.0013$ & $0.01$ \\ \hline
+ $x_4$ & $0.0133$ &  $0.0016$ & $0.01$ & $0.0343$ & $0.0017$ & $0.02$ \\ \hline
+ $x_5$ & $0.0015$ &  $0.0003$ & $0$ & $0.0062$ & $0.0015$ & $0.04$ \\ \hline
+ $x_6$ & $0.0015$ &  $0.0004$ & $0$  & $0.0062$ & $0.0011$ & $0$ \\ \hline \hline
+\multicolumn{4}{l}{Total number of evaluations: $68 \ 045$} & & &\\ \hline 
+\end{tabular}
+\label{res.bratley.Ab}
+\end{table}
+Variant $A.b$ provides better error bounds than Variant $A.a$ on the four small first-indices $\underline{S}_3,\underline{S}_4,\underline{S}_5$, $\underline{S}_6$ which highlights the performance of ``Correlation 2''. The discrepancy is particularly notable for input $x_3$ where Variant $A.a$ reaches a failure rate of $71\%$ against only $4\%$ for Variant $A.b$. Furthermore, Variant $A.b$ requires less evaluations than Variant $A.a$.
+\begin{figure}[!ht]
+\caption{Boxplots of error bounds $\varepsilon_{\underline{S}_u}$ for the four inputs $x_3,x_4,x_5,x_6$ obtained with both Variant $A.a$ and Variant $A.b$. The horizontal line marks the tolerance $\varepsilon=5.10^{-3}$.}
+\centering
+\includegraphics[width=0.45\textwidth]{Images/boxplots_bis.pdf}
+\label{boxplots.bratley}
+\end{figure}
+The boxplots represented in Figure \ref{boxplots.bratley} emphasize the latter observations and remarks.
+
+Table \ref{res.bratley.B} shows averaged error bounds $\varepsilon_{\underline{S}_u}$ and total number of evaluations of Variant $B$. 
+\begin{table}[!ht]
+\caption{Averaged error bound $\varepsilon_{\underline{S}_u}$ and averaged total number of evaluations for Variant $B$.}
+\centering
+\begin{tabular}{cccc}
+\hline
+ input & $\underline{S}_u$ & $\varepsilon_{\underline{S}_u}$ & ${err}_{\varepsilon_{\underline{S}_u}}$ \\ \hline
+ $x_1$ & $0.6529$ &  $0.0003$ & $0$ \\ \hline
+ $x_2$ & $0.1791$ &  $0.0006$ & $0$ \\ \hline
+ $x_3$ & $0.0370$ &  $0.0010$ & $0$ \\ \hline
+ $x_4$ & $0.0133$ &  $0.0038$ & $0.25$    \\ \hline
+ $x_5$ & $0.0015$ & $0.0024$ & $0$  \\ \hline
+ $x_6$ & $0.0015$ & $0.0026$ & $0$  \\ \hline \hline
+\multicolumn{4}{l}{Total number of evaluations: $65 \ 536$}\\ \hline 
+\end{tabular}
+\label{res.bratley.B}
+\end{table}
+The error bounds are better than those of Variant $A.a$ but worse than those of Variant $A.b$. Since the total number of evaluations is close to the one of Variant $A.b$, the conclusion is that Variant $B$ does not bring any improvement for this example.
+\bigskip
+
+From the results on these two functions test, the main conclusion is that Variant $A.b$ performs the best. This highlights the efficiency of ``Correlation 2'' to estimate small first-order indices. Even if ``Correlation 2'' estimator originally requires more samples, this drawback is completely overridden when this estimator is included into a sequential procedure such as ours.
+
+%\[
+%\begin{array}{lcccccc}
+%   & u=\{1\} & u=\{2\} & u=\{3\} & u=\{4\} & u=\{5\} & u=\{6\} \\ \hline \hline
+% \widehat{\underline{S}}_u & 0.6500 & 0.1800 & 0.0370 & 0.0100 & 0.0038 & 0.0040 \\ \hline
+% n & 32768 & 16384 & 16384 & 12447 & 8637 & 9196 \\ \hline
+% \text{error } & 0.0003 & 0.0006 & 0.0010 & 0.0038 & 0.0024 & 0.0026 \\ \hline
+%\end{array}
+%\]
+%Reliability on the results,
+%\[
+%\begin{array}{ cccccc }
+%     100  & 100  & 100  & 75  &  100  & 100
+%\end{array}
+%\]
+
 %
 %\subsubsection{Without small indices estimator}
 %Bratley et al. example:
@@ -794,11 +874,12 @@ The last two equalities are obtained through two different subsitutions correspo
 For those who were curious about the actual value of $\mathbb{E} \left[\max(\vect{B}_t)\right]$, it is approximately 0.5935. Nevertheless, the Brownian Motion is a continuous time process. Thus, in order to estimate the expected value on a continuous time Browninan motion, one could either use a multilevel method, or a multivariate decomposition method to estimate this infinite dimensional integral.
 
 
-\section{Conclusions}
+\section{Conclusion}
+When estimating Sobol' indices, the question of how much evaluations must be performed to reach a desired precision is often raised by practitioners. This question is difficult to address mostly because the number of evaluations needed depends on the complexity of the model studied. As such, it is hard to bring out a general rule of thumb. 
+
+The sequential estimation procedure proposed in this paper offers a practical solution with the construction of an error bound for the Sobol' indices. The number of points is progressively augmented until the error bound becomes lower than a user specified tolerance. The procedure presented combines Sobol' sequences with either Saltelli's strategy to estimate both first-order and total effect indices, or the replication procedure to estimate only first-order indices. Furthermore, we investigated the use of a recent estimator well-suited to the estimation of small first-order indices. The efficiency of this estimator was assessed and highlighted on two test functions and a real case model. More generally, our estimation procedure gave good results in term of precision of the error bounds with low failure rates observed across the indices. 
 
 \begin{acknowledgements}
-This work is supported by the CITiES project funded by the Agence Nationale de la Recherche (grant ANR-12-\newline MONU-0020) and by the United States National Science Foundation (grant DMS-1522687).
-
 The authors thank Fred J. Hickernell and Cl\'ementine Prieur for initiating this collaborative work and Elise Arnaud for her proofreading. The authors are grateful to Stephen Joe, Frances Y. Kuo and Art B. Owen for their helpful answers and suggestions.   
 \end{acknowledgements}
 
@@ -817,7 +898,6 @@ The authors thank Fred J. Hickernell and Cl\'ementine Prieur for initiating this
 
 \bibitem{Bratley}
 Bratley, P., Fox, B.L., Niederreiter, H.: Implementation and tests of low-discrepancy sequences, ACM Trans. Model. Comput. Simul. \textbf{2}(3), 195-213 (1992)
-Hickernell, F.J., Jim\'enez Rugama, Ll.A.: Reliable Adaptative Cubature Using Digital Sequences: Monte Carlo and Quasi-Monte Carlo Methods, vol. 163, 367-383 (2016)
 \bibitem{Gilquin.rec}
 Gilquin, L., Arnaud, E., Monod, H., Prieur, C.: Recursive estimation procedure of Sobol' indices based on replicated designs, preprint available at \url{https://hal.inria.fr/hal-01291769}, (2016).
 \bibitem{GJAHMP}
