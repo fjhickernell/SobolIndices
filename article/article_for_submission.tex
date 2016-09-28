@@ -145,7 +145,7 @@ We propose a sequential estimation procedure of Sobol' indices using the latter 
 
 \keywords{Sobol' indices \and error bound \and sequential method \and Sobol' sequences}
 % \PACS{PACS code1 \and PACS code2 \and more}
-\subclass{49Q12 \and 62L10 \and 65R10}
+\subclass{49Q12 \and 62L12 \and 65R10}
 \end{abstract}
 
 %\section{Introduction}
@@ -547,19 +547,17 @@ In practice, one does not know which are the small Sobol' indices ($u_1,\dots,u_
 \section{Applications}
 \label{sec:5}
 
-We propose to illustrate our sequential estimation procedure on two classical test functions and one real model. In each case, Sobol' indices are estimated with the following three variants:
+We propose to illustrate our sequential estimation procedure on two classical test functions and one real model. For each case, we compare results obtained with each of the three methods:
 \begin{itemize}
 \item[$\bullet$] Variant $A$ without using ``Correlation 2'', refers as Variant $A.a$, 
 \item[$\bullet$] Variant $A$ using ``Correlation 2'', refers as Variant $A.b$,
 \item[$\bullet$] Variant $B$.
 \end{itemize}
-The threshold to decide whether or not a first-order index is small is set to $0.1$. 
+The threshold to decide whether or not a first-order index is small is set to $0.1$.
 
-For the two test functions, results of the three variants are compared based on estimation errors. These errors correspond to absolute difference between true values of indices and estimates. They are defined as follows:
-$$\delta_{\underline{S}_u} = \absolute{\underline{S}_u - \widehat{\underline{S}_u}}, \qquad \delta_{\overline{S}_u} = \absolute{\overline{S}_u - \widehat{\overline{S}_u}}.$$
-We also compare the total number of evaluations of each variant. Results are averaged over $r=100$ repeats. For each repeat, we fix the tolerance $\varepsilon$ to $5.10^{-3}$ and set the starting size $m_0$ to $2^9$ (the Sobol' sequences are initiated with $512$ points).
+The comparison is based on error bounds, namely $\varepsilon_{\underline{S}_u}$ and $\varepsilon_{\overline{S}_u}$, and total number of evaluations. Boxplots of error bounds are drawn to support table of results. Results are averaged over $r=100$ repeats. For each repeat, we fix the tolerance $\varepsilon$ to $5.10^{-3}$ and set the starting size $m_0$ to $2^9$ (the Sobol' sequences are initiated with $512$ points).
 
-The failure rate of each variant is evaluated over the $100$ repeats. The failure rate is defined as the ratio of estimation errors failing to satisfy respectively $\delta_{\underline{S}_u} \leq \varepsilon$ and $\delta_{\underline{S}_u} \leq \varepsilon$. Failure rates are denoted by $r_{\delta_{\underline{S}_u}}$ and  $r_{\delta_{\overline{S}_u}}$.
+We also evaluate the failure rate of each variant over the $100$ repeats. The failure rate corresponds to the ratio of error bounds failing to satisfy respectively $\varepsilon_{\underline{S}_u} \leq \varepsilon$ and $\varepsilon_{\underline{S}_u} \leq \varepsilon$. Failure rates are denoted by ${err}_{\varepsilon_{\underline{S}_u}}$ and  ${err}_{\varepsilon_{\overline{S}_u}}$.
 
 %$\varepsilon=0.005$, initial $512$ points, $fudge = @(m,d) 10*2.^{-m}$, run $100$ samples and show the average values for the whole set of samples:
 %
@@ -576,16 +574,16 @@ The g-function is defined as follows:
 \begin{equation*}
 f(\vx)= \prod \limits_{j=1}^{d}g_j(x_j), \qquad g_j(x_j)=\frac{\left |4x_j-2 \right | + a_j}{1 + a_j}, \ a_j \geq 0.
 \end{equation*}
-Each value $a_j$ determines the relative importance of the $x_j$. When the value of $a_j$ gets closer to zero the variable $x_i$ becomes more influent. Here, the dimension is $d=6$ and values chosen for the $a_j$ are given by the following vector $(a_1=0,=a_2=0.5, a_3=3, a_4=9, a_5=99$, $a_6=99)$.
+Each value $a_j$ determines the relative importance of the $x_j$. When the value of $a_j$ gets closer to zero the variable $x_j$ becomes more influent. Here, the dimension is $d=6$ and values chosen for the $a_j$ are given by the following vector $(a_1=0,=a_2=0.5, a_3=3, a_4=9, a_5=99$, $a_6=99)$.
 
-Table \ref{res.gfunc.Aa} shows the averaged estimation errors obtained with Variant $A.a$ as well as the averaged total number of evaluations performed. Table \ref{res.gfunc.Ab} shows the same results obtained with Variant $A.b$.
+Table \ref{res.gfunc.Aa} shows the averaged error bounds obtained with Variant $A.a$ as well as the averaged total number of evaluations performed. Table \ref{res.gfunc.Ab} shows the same results obtained with Variant $A.b$.
 \renewcommand{\arraystretch}{1.25}
 \begin{table}[!ht]
-\caption{Averaged estimation errors $\delta_{\underline{S}_u}$ , $\delta_{\overline{S}_u}$ and total number of evaluations for Variant $A.a$.}
+\caption{Averaged error bounds $\varepsilon_{\underline{S}_u}$ , $\varepsilon_{\overline{S}_u}$ and total number of evaluations of Variant $A.a$.}
 \centering
 \begin{tabular}{ccccccc}
 \hline
- input & $\underline{S}_u$ & $\delta_{\underline{S}_u}$ & $r_{\delta_{\underline{S}_u}}$ & $\overline{S}_u$ & $\delta_{\overline{S}_u}$ &$r_{\delta_{\overline{S}_u}}$ \\ \hline
+ input & $\underline{S}_u$ & $\varepsilon_{\underline{S}_u}$ & ${err}_{\varepsilon_{\underline{S}_u}}$ & $\overline{S}_u$ & $\varepsilon_{\overline{S}_u}$ &$err_{\varepsilon_{\overline{S}_u}}$ \\ \hline
  $x_1$ & $0.5868$ &  $0.0004$ & $0.02$ & $0.6901$ & $0.0005$ & $0.02$ \\ \hline
  $x_2$ & $0.2608$ &  $0.0006$ & $0.02$ & $0.3562$ & $0.0004$ & $0$ \\ \hline
  $x_3$ & $0.0367$ &  $0.0011$ & $0.03$ & $0.0563$ & $0.0008$ & $0$ \\ \hline
@@ -597,11 +595,11 @@ Table \ref{res.gfunc.Aa} shows the averaged estimation errors obtained with Vari
 \label{res.gfunc.Aa}
 \end{table}
 \begin{table}[!ht]
-\caption{Averaged estimation errors $\delta_{\underline{S}_u}$ , $\delta_{\overline{S}_u}$ and total number of evaluations for Variant $A.b$.}
+\caption{Averaged error bounds $\varepsilon_{\underline{S}_u}$ , $\varepsilon_{\overline{S}_u}$ and total number of evaluations of Variant $A.b$.}
 \centering
 \begin{tabular}{ccccccc}
 \hline
- input & $\underline{S}_u$ & $\delta_{\underline{S}_u}$ & $r_{\delta_{\underline{S}_u}}$ & $\overline{S}_u$ & $\delta_{\overline{S}_u}$ &$r_{\delta_{\overline{S}_u}}$ \\ \hline
+ input & $\underline{S}_u$ & $\varepsilon_{\underline{S}_u}$ & ${err}_{\varepsilon_{\underline{S}_u}}$ & $\overline{S}_u$ & $\varepsilon_{\overline{S}_u}$ &$err_{\varepsilon_{\overline{S}_u}}$ \\ \hline
  $x_1$ & $0.5868$ &  $0.0005$ & $0.03$ & $0.6901$ & $0.0006$ & $0.02$ \\ \hline
  $x_2$ & $0.2608$ &  $0.0007$ & $0.03$ & $0.3562$ & $0.0003$ & $0$ \\ \hline
  $x_3$ & $0.0367$ &  $0.0015$ & $0.05$ & $0.0563$ & $0.0009$ & $0$ \\ \hline
@@ -612,25 +610,25 @@ Table \ref{res.gfunc.Aa} shows the averaged estimation errors obtained with Vari
 \end{tabular}
 \label{res.gfunc.Ab}
 \end{table}
-The main observation is that both approaches give similar results both in terms of estimation errors, failure rates and total number of evaluations. The use of ``Correlation 2'' in Variant $A.b$ to estimate the four small first-order Sobol' indices $\underline{S}_3, \underline{S}_4, \underline{S}_5, \underline{S}_6$ does not seem to bring any improvement. We propose to draw boxplots of estimation errors to further investigate the results. 
+The main observation is that both approaches give similar results both in terms of error bounds, failure rates and total number of evaluations. The use of ``Correlation 2'' in Variant $A.b$ to estimate the four small first-order Sobol' indices $\underline{S}_3, \underline{S}_4, \underline{S}_5, \underline{S}_6$ does not seem to bring any improvement. We propose to draw boxplots of error bounds to further investigate the results. 
 
-Figure \ref{boxplots.gfunc} shows boxplots of the $100$ estimation errors $\delta_{\underline{S}_u}$ obtained with both Variant $A.a$ and Variant $A.b$ for the four inputs $x_3,x_4,x_5,x_6$. The horizontal line marks the tolerance $\varepsilon=5.10^{-3}$.
+Figure \ref{boxplots.gfunc} shows boxplots of the $100$ error bounds $\varepsilon_{\underline{S}_u}$ obtained with both Variant $A.a$ and Variant $A.b$ for the four inputs $x_3,x_4,x_5,x_6$. The horizontal line marks the tolerance $\varepsilon=5.10^{-3}$.
 \begin{figure}[!ht]
-\caption{Boxplots of estimation errors $\delta_{\underline{S}_u}$ for the four inputs $x_3,x_4,x_5,x_6$ obtained with both Variant $A.a$ and Variant $A.b$. The horizontal line marks the tolerance $\varepsilon=5.10^{-3}$.}
+\caption{Boxplots of error bounds $\varepsilon_{\underline{S}_u}$ for the four inputs $x_3,x_4,x_5,x_6$ obtained with both Variant $A.a$ and Variant $A.b$. The horizontal line marks the tolerance $\varepsilon=5.10^{-3}$.}
 \centering
 \includegraphics[width=0.45\textwidth]{Images/boxplots.pdf}
 \label{boxplots.gfunc}
 \end{figure}
-As expected, we observe that the use of ``Correlation 2'' in Variant $A.b$ results in lower estimation errors for these four inputs. The discrepancy observed does not stand out in Table \ref{res.gfunc.Ab} due to its low magnitude ($10^{-4} \sim 10^{-5}$).
+As expected, we observe that the use of ``Correlation 2'' in Variant $A.b$ results in lower error bounds for these four inputs. The discrepancy observed does not stand out in Table \ref{res.gfunc.Ab} due to its low magnitude ($10^{-4} \sim 10^{-5}$).
 \bigskip
 
-Table \ref{res.gfunc.B} shows averaged estimation errors $\delta_{\underline{S}_u}$ and total number of evaluations for Variant $B$. 
+Table \ref{res.gfunc.B} shows averaged error bounds $\varepsilon_{\underline{S}_u}$ and total number of evaluations of Variant $B$. 
 \begin{table}[!ht]
-\caption{Averaged estimation errors $\delta_{\underline{S}_u}$ and total number of evaluations for Variant $B$.}
+\caption{Averaged error bound $\varepsilon_{\underline{S}_u}$ and total number of evaluations of Variant $B$.}
 \centering
 \begin{tabular}{cccc}
 \hline
- input & $\underline{S}_u$ & $\delta_{\underline{S}_u}$ & $r_{\delta_{\underline{S}_u}}$ \\ \hline
+ input & $\underline{S}_u$ & $\varepsilon_{\underline{S}_u}$ & ${err}_{\varepsilon_{\underline{S}_u}}$ \\ \hline
  $x_1$ & $0.5868$ &  $0.0011$ & $0.07$ \\ \hline
  $x_2$ & $0.2608$ &  $0.0013$ & $0.08$ \\ \hline
  $x_3$ & $0.0367$ &  $0.0018$ & $0.09$ \\ \hline
@@ -641,7 +639,7 @@ Table \ref{res.gfunc.B} shows averaged estimation errors $\delta_{\underline{S}_
 \end{tabular}
 \label{res.gfunc.B}
 \end{table}
-Looking at the results, using Variant $B$ leads to higher estimation errors and higher failure rates than those obtained with Variant $A.a$ or Variant $A.b$. The compromise is a total number of evaluations twice as small. As such, this approach remains interesting when one wants to estimate only first-order indices.
+Looking at the results, using Variant $B$ leads to smaller error bounds and higher failure rates than those obtained with Variant $A.a$ or Variant $A.b$. The compromise is a total number of evaluations twice as small. As such, this approach remains interesting when one wants to estimate only first-order indices.
 
 \subsubsection{Bratley et al. function}
 
@@ -649,13 +647,13 @@ For the second example, we consider the Bratley \textit{et al.} function defined
 $$f(x_1,\dots,x_d)=\sum \limits_{i=1}^{d} (-1)^i \prod \limits_{j=1}^{i} x_j \ .$$
 The importance of each variable $x_j$ depends on their own rank. More explicitly, $x_1$ is more influent than $x_2$ that is respectively more influent than $x_3$ and so on. 
 
-As for the g-function, Tables \ref{res.bratley.Aa} and \ref{res.bratley.Ab} show averaged estimation errors and averaged total number of evaluations for Variant $A.a$ and Variant $A.b$.
+As for the g-function, Tables \ref{res.bratley.Aa} and \ref{res.bratley.Ab} show averaged error bounds and averaged total number of evaluations of Variant $A.a$ and Variant $A.b$.
 \begin{table}[!ht]
-\caption{Averaged estimation errors $\delta_{\underline{S}_u}$, $\delta_{\overline{S}_u}$ and total number of evaluations for Variant $A.a$.}
+\caption{Averaged error bounds $\varepsilon_{\underline{S}_u}$, $\varepsilon_{\overline{S}_u}$ and total number of evaluations of Variant $A.a$.}
 \centering
 \begin{tabular}{ccccccc}
 \hline
- input & $\underline{S}_u$ & $\delta_{\underline{S}_u}$ & $r_{\delta_{\underline{S}_u}}$ & $\overline{S}_u$ & $\delta_{\overline{S}_u}$ &$r_{\delta_{\overline{S}_u}}$ \\ \hline
+ input & $\underline{S}_u$ & $\varepsilon_{\underline{S}_u}$ & ${err}_{\varepsilon_{\underline{S}_u}}$ & $\overline{S}_u$ & $\varepsilon_{\overline{S}_u}$ &$err_{\varepsilon_{\overline{S}_u}}$ \\ \hline
  $x_1$ & $0.6529$ &  $0.0004$ & $0$ & $0.7396$ & $0.0003$ & $0.$ \\ \hline
  $x_2$ & $0.1791$ &  $0.0006$ & $0$ & $0.2659$ & $0.0004$ & $0$ \\ \hline
  $x_3$ & $0.0370$ &  $0.0058$ & $0.71$ & $0.0764$ & $0.0012$ & $0.02$ \\ \hline
@@ -667,11 +665,11 @@ As for the g-function, Tables \ref{res.bratley.Aa} and \ref{res.bratley.Ab} show
 \label{res.bratley.Aa}
 \end{table}
 \begin{table}[!ht]
-\caption{Averaged estimation errors $\delta_{\underline{S}_u}$, $\delta_{\overline{S}_u}$ and total number of evaluations for Variant $A.b$.}
+\caption{Averaged error bounds $\varepsilon_{\underline{S}_u}$, $\varepsilon_{\overline{S}_u}$ and total number of evaluations of Variant $A.b$.}
 \centering
 \begin{tabular}{ccccccc}
 \hline
- input & $\underline{S}_u$ & $\delta_{\underline{S}_u}$ & $r_{\delta_{\underline{S}_u}}$ & $\overline{S}_u$ & $\delta_{\overline{S}_u}$ & $r_{\delta_{\overline{S}_u}}$ \\ \hline
+ input & $\underline{S}_u$ & $\varepsilon_{\underline{S}_u}$ & ${err}_{\varepsilon_{\underline{S}_u}}$ & $\overline{S}_u$ & $\varepsilon_{\overline{S}_u}$ &$err_{\varepsilon_{\overline{S}_u}}$ \\ \hline
  $x_1$ & $0.6529$ &  $0.0004$ & $0$ & $0.7396$ & $0.0003$ & $0$ \\ \hline
  $x_2$ & $0.1791$ &  $0.0006$ & $0$ & $0.2659$ & $0.0005$ & $0$ \\ \hline
  $x_3$ & $0.0370$ &  $0.0019$ & $0.04$ & $0.0764$ & $0.0013$ & $0.01$ \\ \hline
@@ -682,21 +680,22 @@ As for the g-function, Tables \ref{res.bratley.Aa} and \ref{res.bratley.Ab} show
 \end{tabular}
 \label{res.bratley.Ab}
 \end{table}
-Variant $A.b$ gives lower estimation errors and fewer failures than Variant $A.a$ on the four small first-indices $\underline{S}_3,\underline{S}_4,\underline{S}_5$, $\underline{S}_6$ which highlights the performance of ``Correlation 2''. The discrepancy is particularly notable for input $x_3$ where Variant $A.a$ reaches a failure rate of $71\%$ against only $4\%$ for Variant $A.b$. Furthermore, Variant $A.b$ requires less evaluations than Variant $A.a$. The boxplots represented in Figure \ref{boxplots.bratley} emphasize the latter observations.
+Variant $A.b$ provides better error bounds than Variant $A.a$ on the four small first-indices $\underline{S}_3,\underline{S}_4,\underline{S}_5$, $\underline{S}_6$ which highlights the performance of ``Correlation 2''. The discrepancy is particularly notable for input $x_3$ where Variant $A.a$ reaches a failure rate of $71\%$ against only $4\%$ for Variant $A.b$. Furthermore, Variant $A.b$ requires less evaluations than Variant $A.a$.
 \begin{figure}[!ht]
-\caption{Boxplots of estimation errors $\delta_{\underline{S}_u}$ for the four inputs $x_3,x_4,x_5,x_6$ obtained with both Variant $A.a$ and Variant $A.b$. The horizontal line marks the tolerance $\varepsilon=5.10^{-3}$.}
+\caption{Boxplots of error bounds $\varepsilon_{\underline{S}_u}$ for the four inputs $x_3,x_4,x_5,x_6$ obtained with both Variant $A.a$ and Variant $A.b$. The horizontal line marks the tolerance $\varepsilon=5.10^{-3}$.}
 \centering
 \includegraphics[width=0.45\textwidth]{Images/boxplots_bis.pdf}
 \label{boxplots.bratley}
 \end{figure}
+The boxplots represented in Figure \ref{boxplots.bratley} emphasize the latter observations and remarks.
 
-Table \ref{res.bratley.B} shows averaged estimation errors $\delta_{\underline{S}_u}$ and total number of evaluations for Variant $B$. 
+Table \ref{res.bratley.B} shows averaged error bounds $\varepsilon_{\underline{S}_u}$ and total number of evaluations of Variant $B$. 
 \begin{table}[!ht]
-\caption{Averaged estimation errors $\delta_{\underline{S}_u}$ and averaged total number of evaluations for Variant $B$.}
+\caption{Averaged error bound $\varepsilon_{\underline{S}_u}$ and averaged total number of evaluations for Variant $B$.}
 \centering
 \begin{tabular}{cccc}
 \hline
- input & $\underline{S}_u$ & $\delta_{\underline{S}_u}$ & $r_{\delta_{\underline{S}_u}}$ \\ \hline
+ input & $\underline{S}_u$ & $\varepsilon_{\underline{S}_u}$ & ${err}_{\varepsilon_{\underline{S}_u}}$ \\ \hline
  $x_1$ & $0.6529$ &  $0.0003$ & $0$ \\ \hline
  $x_2$ & $0.1791$ &  $0.0006$ & $0$ \\ \hline
  $x_3$ & $0.0370$ &  $0.0010$ & $0$ \\ \hline
@@ -707,10 +706,152 @@ Table \ref{res.bratley.B} shows averaged estimation errors $\delta_{\underline{S
 \end{tabular}
 \label{res.bratley.B}
 \end{table}
-The estimation errors are lower than those of Variant $A.a$ but higher than those of Variant $A.b$. Failure rates are similar to those of Variant $A.a$. Since the total number of evaluations is close to the one of Variant $A.b$, the conclusion is that Variant $B$ does not bring any improvement for this example.
+The error bounds are better than those of Variant $A.a$ but worse than those of Variant $A.b$. Since the total number of evaluations is close to the one of Variant $A.b$, the conclusion is that Variant $B$ does not bring any improvement for this example.
 \bigskip
 
 From the results on these two functions test, the main conclusion is that Variant $A.b$ performs the best. This highlights the efficiency of ``Correlation 2'' to estimate small first-order indices. Even if ``Correlation 2'' originally requires more samples, this drawback is completely overridden when this estimator is included into a sequential procedure such as ours.
+
+%\[
+%\begin{array}{lcccccc}
+%   & u=\{1\} & u=\{2\} & u=\{3\} & u=\{4\} & u=\{5\} & u=\{6\} \\ \hline \hline
+% \widehat{\underline{S}}_u & 0.6500 & 0.1800 & 0.0370 & 0.0100 & 0.0038 & 0.0040 \\ \hline
+% n & 32768 & 16384 & 16384 & 12447 & 8637 & 9196 \\ \hline
+% \text{error } & 0.0003 & 0.0006 & 0.0010 & 0.0038 & 0.0024 & 0.0026 \\ \hline
+%\end{array}
+%\]
+%Reliability on the results,
+%\[
+%\begin{array}{ cccccc }
+%     100  & 100  & 100  & 75  &  100  & 100
+%\end{array}
+%\]
+
+%
+%\subsubsection{Without small indices estimator}
+%Bratley et al. example:
+%
+%\[
+%\begin{array}{lcccccc}
+%   & u=\{1\} & u=\{2\} & u=\{3\} & u=\{4\} & u=\{5\} & u=\{6\} \\ \hline \hline
+% \widehat{\underline{S}}_u & 0.6500 & 0.1800 & 0.0370 & 0.0120 & 0.0034 & 0.0033 \\ \hline
+% n & 17531 & 8438 & 4137 & 3686 & 625 & 650\\ \hline
+% \text{error } & 0.0004 & 0.0006 & 0.0058 & 0.0022 & 0.0024 & 0.0021 \\ \hline
+% \widehat{\overline{S}}_u & 0.7400 & 0.2700 & 0.0760 & 0.0340 & 0.0065 & 0.0064 \\  \hline
+% n & 16384 & 8192 & 3113 & 1060 & 512 & 512 \\ \hline
+% \text{error } & 0.0003 & 0.0004 & 0.0012 & 0.0020 & 0.0014 & 0.0010 \\ \hline
+%\end{array}
+%\]
+%Reliability on the results,
+%\[
+%\begin{array}{ cccccc }
+%     100  & 100  & 29  & 88  &  89  & 94 \\
+%     100  & 100  & 98  &  93  &  97  &  100
+%\end{array}
+%\]
+%
+%
+%Sobol g-function example:
+%
+%\[
+%\begin{array}{lcccccc}
+%   & u=\{1\} & u=\{2\} & u=\{3\} & u=\{4\} & u=\{5\} & u=\{6\} \\ \hline \hline
+% \widehat{\underline{S}}_u & 0.5900 & 0.2600 & 0.0370 & 0.0060 & 0.0003 & 0.0003 \\ \hline
+% n & 16138 & 9011 & 3748 & 891 & 512 & 512 \\ \hline
+% \text{error } & 0.0004 & 0.0006 & 0.0011 & 0.0012 & 0.0003 & 0.0003 \\ \hline
+% \widehat{\overline{S}}_u & 0.6900 & 0.3600 & 0.0560 & 0.0093 & 0.0001 & 0.0001 \\  \hline
+% n & 11796 & 7496 & 1475 & 512 & 512 & 512 \\ \hline
+% \text{error } & 0.0005 & 0.0004 & 0.0008 & 0.0003 & 0.0000 & 0.0000 \\ \hline
+%\end{array}
+%\]
+%Reliability on the results,
+%\[
+%\begin{array}{ cccccc }
+%     98  & 98  & 97  & 98  &  100  & 100 \\
+%     98  &  100  &  100 &  100  & 100 &  100
+%\end{array}
+%\]
+%
+%\subsubsection{With small indices estimator (threshold $0.1$)}
+%Bratley et al. example:
+%
+%\[
+%\begin{array}{lcccccc}
+%   & u=\{1\} & u=\{2\} & u=\{3\} & u=\{4\} & u=\{5\} & u=\{6\} \\ \hline \hline
+% \widehat{\underline{S}}_u & 0.6500 & 0.1800 & 0.0380 & 0.0140 & 0.0014 & 0.0016 \\ \hline
+% n & 17203 & 8520 & 1362 & 517 & 512 & 512 \\ \hline
+% \text{error } & 0.0004 & 0.0006 & 0.0019 & 0.0016 & 0.0003 & 0.0004 \\ \hline
+% \widehat{\overline{S}}_u & 0.7400 & 0.2700 & 0.0760 & 0.0340 & 0.0063 & 0.0065 \\  \hline
+% n & 16384 & 8192 & 2847 & 1142 & 512 & 512 \\ \hline
+% \text{error } & 0.0003 & 0.0005 & 0.0013 & 0.0017 & 0.0015 & 0.0011 \\ \hline
+%\end{array}
+%\]
+%Reliability on the results,
+%\[
+%\begin{array}{ cccccc }
+%     100  & 100  & 96  & 99  &  100  & 100 \\
+%     100  & 100  & 99  &  98  &  96  &  100
+%\end{array}
+%\]
+%
+%
+%Sobol g-function example:
+%
+%\[
+%\begin{array}{lcccccc}
+%   & u=\{1\} & u=\{2\} & u=\{3\} & u=\{4\} & u=\{5\} & u=\{6\} \\ \hline \hline
+% \widehat{\underline{S}}_u & 0.5900 & 0.2600 & 0.0370 & 0.0060 & 0.0001 & 0.0001 \\ \hline
+% n & 16056 & 8929 & 1070 & 512 & 512 & 512 \\ \hline
+% \text{error } & 0.0005 & 0.0007 & 0.0015 & 0.0003 & 0.0000 & 0.0000 \\ \hline
+% \widehat{\overline{S}}_u & 0.6900 & 0.3600 & 0.0560 & 0.0093 & 0.0001 & 0.0001 \\  \hline
+% n & 11551 & 7741 & 1464 & 512 & 512 & 512 \\ \hline
+% \text{error } & 0.0006 & 0.0003 & 0.0009 & 0.0003 & 0.0000 & 0.0000 \\ \hline
+%\end{array}
+%\]
+%Reliability on the results,
+%\[
+%\begin{array}{ cccccc }
+%     97  & 97  & 95  & 100  &  100  & 100 \\
+%     98  &  100  &  100 &  100  & 100 &  100
+%\end{array}
+%\]
+%
+%\subsubsection{Replicated method}
+%Bratley et al. example:
+%
+%\[
+%\begin{array}{lcccccc}
+%   & u=\{1\} & u=\{2\} & u=\{3\} & u=\{4\} & u=\{5\} & u=\{6\} \\ \hline \hline
+% \widehat{\underline{S}}_u & 0.6500 & 0.1800 & 0.0370 & 0.0100 & 0.0038 & 0.0040 \\ \hline
+% n & 32768 & 16384 & 16384 & 12447 & 8637 & 9196 \\ \hline
+% \text{error } & 0.0003 & 0.0006 & 0.0010 & 0.0038 & 0.0024 & 0.0026 \\ \hline
+%\end{array}
+%\]
+%Reliability on the results,
+%\[
+%\begin{array}{ cccccc }
+%     100  & 100  & 100  & 75  &  100  & 100
+%\end{array}
+%\]
+%
+%
+%Sobol g-function example:
+%
+%\[
+%\begin{array}{lcccccc}
+%   & u=\{1\} & u=\{2\} & u=\{3\} & u=\{4\} & u=\{5\} & u=\{6\} \\ \hline \hline
+% \widehat{\underline{S}}_u & 0.5900 & 0.2600 & 0.0360 & 0.0059 & 0.0031 & 0.0036 \\ \hline
+% n & 16384 & 16384 & 16225 & 14612 & 7086 & 6661 \\ \hline
+% \text{error } & 0.0011 & 0.0013 & 0.0018 & 0.0013 & 0.0031 & 0.0036 \\ \hline
+%\end{array}
+%\]
+%Reliability on the results,
+%\[
+%\begin{array}{ cccccc }
+%     93  & 92  & 91  & 90  &  96  & 95
+%\end{array}
+%\]
+
+
 
 \subsection{Real case model}
 \label{sec:5.2}
@@ -736,7 +877,7 @@ For those who were curious about the actual value of $\mathbb{E} \left[\max(\vec
 \section{Conclusion}
 When estimating Sobol' indices, the question of how much evaluations must be performed to reach a desired precision is often raised by practitioners. This question is difficult to address mostly because the number of evaluations needed depends on the complexity of the model studied. As such, it is hard to bring out a general rule of thumb. 
 
-The sequential estimation procedure proposed in this paper offers a practical solution with the construction of an error bound for the Sobol' indices. The number of points is progressively augmented until the error bound becomes lower than a user specified tolerance. The procedure presented combines Sobol' sequences with either Saltelli's strategy to estimate both first-order and total effect indices, or the replication procedure to estimate only first-order indices. Furthermore, we investigated the use of a recent estimator well-suited to the estimation of small first-order indices. The efficiency of this estimator, called ``Correlation 2'', was assessed and highlighted on two test functions and a real case model. The variant combining Saltelli's strategy and ``Correlation 2'' gave the best results with low failure rates across all indices. 
+The sequential estimation procedure proposed in this paper offers a practical solution with the construction of an error bound for the Sobol' indices. The number of points is progressively augmented until the error bound becomes lower than a user specified tolerance. The procedure presented combines Sobol' sequences with either Saltelli's strategy to estimate both first-order and total effect indices, or the replication procedure to estimate only first-order indices. Furthermore, we investigated the use of a recent estimator well-suited to the estimation of small first-order indices. The efficiency of this estimator, called ``Correlation 2'', was assessed and highlighted on two test functions and a real case model. The variant combining Saltelli's strategy and ``Correlation 2'' gave the best results in term of precision of the error bounds with low failure rates observed across the indices. 
 
 \begin{acknowledgements}
 The authors thank Fred J. Hickernell and Cl\'ementine Prieur for initiating this collaborative work and Elise Arnaud for her proofreading. The authors are grateful to Stephen Joe, Frances Y. Kuo and Art B. Owen for their helpful answers and suggestions.   
