@@ -647,7 +647,7 @@ For the second example, we consider the Bratley \textit{et al.} function defined
 $$f(x_1,\dots,x_d)=\sum \limits_{i=1}^{d} (-1)^i \prod \limits_{j=1}^{i} x_j \ .$$
 The importance of each variable $x_j$ depends on their own rank. More explicitly, $x_1$ is more influent than $x_2$ that is respectively more influent than $x_3$ and so on. 
 
-As for the g-function, Tables \ref{res.bratley.Aa} and \ref{res.bratley.Ab} show averaged error bounds and averaged total number of evaluations for Variant $A.a$ and Variant $A.b$.
+As for the g-function, Tables \ref{res.bratley.Aa} and \ref{res.bratley.Ab} show averaged error bounds and averaged total number of evaluations of Variant $A.a$ and Variant $A.b$.
 \begin{table}[!ht]
 \caption{Averaged error bounds $\varepsilon_{\underline{S}_u}$, $\varepsilon_{\overline{S}_u}$ and total number of evaluations of Variant $A.a$.}
 \centering
@@ -709,7 +709,7 @@ Table \ref{res.bratley.B} shows averaged error bounds $\varepsilon_{\underline{S
 The error bounds are better than those of Variant $A.a$ but worse than those of Variant $A.b$. Since the total number of evaluations is close to the one of Variant $A.b$, the conclusion is that Variant $B$ does not bring any improvement for this example.
 \bigskip
 
-From the results on these two functions test, the main conclusion is that Variant $A.b$ performs the best. This highlights the efficiency of ``Correlation 2'' to estimate small first-order indices. Even if ``Correlation 2'' estimator originally requires more samples, this drawback is completely overridden when this estimator is included into a sequential procedure such as ours.
+From the results on these two functions test, the main conclusion is that Variant $A.b$ performs the best. This highlights the efficiency of ``Correlation 2'' to estimate small first-order indices. Even if ``Correlation 2'' originally requires more samples, this drawback is completely overridden when this estimator is included into a sequential procedure such as ours.
 
 %\[
 %\begin{array}{lcccccc}
@@ -877,7 +877,7 @@ For those who were curious about the actual value of $\mathbb{E} \left[\max(\vec
 \section{Conclusion}
 When estimating Sobol' indices, the question of how much evaluations must be performed to reach a desired precision is often raised by practitioners. This question is difficult to address mostly because the number of evaluations needed depends on the complexity of the model studied. As such, it is hard to bring out a general rule of thumb. 
 
-The sequential estimation procedure proposed in this paper offers a practical solution with the construction of an error bound for the Sobol' indices. The number of points is progressively augmented until the error bound becomes lower than a user specified tolerance. The procedure presented combines Sobol' sequences with either Saltelli's strategy to estimate both first-order and total effect indices, or the replication procedure to estimate only first-order indices. Furthermore, we investigated the use of a recent estimator well-suited to the estimation of small first-order indices. The efficiency of this estimator was assessed and highlighted on two test functions and a real case model. More generally, our estimation procedure gave good results in term of precision of the error bounds with low failure rates observed across the indices. 
+The sequential estimation procedure proposed in this paper offers a practical solution with the construction of an error bound for the Sobol' indices. The number of points is progressively augmented until the error bound becomes lower than a user specified tolerance. The procedure presented combines Sobol' sequences with either Saltelli's strategy to estimate both first-order and total effect indices, or the replication procedure to estimate only first-order indices. Furthermore, we investigated the use of a recent estimator well-suited to the estimation of small first-order indices. The efficiency of this estimator, called ``Correlation 2'', was assessed and highlighted on two test functions and a real case model. The variant combining Saltelli's strategy and ``Correlation 2'' gave the best results in term of precision of the error bounds with low failure rates observed across the indices. 
 
 \begin{acknowledgements}
 The authors thank Fred J. Hickernell and Cl\'ementine Prieur for initiating this collaborative work and Elise Arnaud for her proofreading. The authors are grateful to Stephen Joe, Frances Y. Kuo and Art B. Owen for their helpful answers and suggestions.   
