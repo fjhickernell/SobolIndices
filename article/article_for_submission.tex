@@ -354,7 +354,7 @@ and,
 property \eqref{basis_integ_prop} leads to
 \begin{align}
 \nonumber
-\absolute{I(f) - \frac{1}{b^m}\sum_{\vx\in\mathcal{P}_m}f(\vx)} &=
+\absolute{I - \frac{1}{b^m}\sum_{\vx\in\mathcal{P}_m}f(\vx)} &=
 \absolute{\hf_{\vzero} - \frac{1}{b^m}\sum_{\vx\in\mathcal{P}_m}\sum_{\vk\in\naturals_0^d}\hf_{\vk}\varphi_{\vk}(\vx)}, \\
 \nonumber
 &= \absolute{\sum_{\vk\in\mathcal{P}_m^\perp\setminus\{\vzero\}}\hf_{\vk}} \\
@@ -362,7 +362,7 @@ property \eqref{basis_integ_prop} leads to
 \end{align}
 Based on the size of $\absolute{\hf_{\vk}}$ and the structure of the dual nets \eqref{dual_net_structure}, in \cite[Sec. 4.1]{HicJim} we proposed an ordering of the wave-numbers $\vk(\cdot):\naturals_0\rightarrow\naturals_0^d$. This ordering will be helpful to address the summation in \eqref{3.1.err_bound}. To simplify notation, $\hf_{\kappa}=\hf_{\vk(\kappa)}$. This mapping leads to the following error bound,
 \begin{equation}
-\absolute{I(f) - \frac{1}{b^m}\sum_{\vx\in\mathcal{P}_m}f(\vx)} \le \sum_{\lambda=1}^{\infty} \left \lvert \hf_{\lambda b^m}\right \rvert.
+\absolute{I - \frac{1}{b^m}\sum_{\vx\in\mathcal{P}_m}f(\vx)} \le \sum_{\lambda=1}^{\infty} \left \lvert \hf_{\lambda b^m}\right \rvert.
 \end{equation}
 However, because the knowledge of the Walsh coefficients $\hf_{\kappa}$ is not assumed, we will estimate them using the fast transform obtained with the precomputed function values, and refer to them as $\tf_{m,\kappa}$. Note that for function values evaluated at $\mathcal{P}_m$, one only generates $b^m$ discrete Walsh coefficients $\tf_{m,\kappa}$.
 
@@ -383,10 +383,10 @@ for $\ell_* \in \mathbb{N}$, $\homega$ and $\wcomega$ two non-negative valued fu
 
 Hence, in \cite[Sec. 4.2]{HicJim} it is proved that for any $f\in\cc$,
 \begin{equation}
-\absolute{I(f) - \frac{1}{b^m}\sum_{\vx\in\mathcal{P}_m}f(\vx)}
-\le \frac{\tS_{\ell,m}(f)\homega(m) \wcomega(m-\ell)}{1 - \homega(m-\ell) \wcomega(m-\ell)}=\epsilon_{I(f)}, \label{errbd}
+\absolute{I - \frac{1}{b^m}\sum_{\vx\in\mathcal{P}_m}f(\vx)}
+\le \frac{\tS_{\ell,m}(f)\homega(m) \wcomega(m-\ell)}{1 - \homega(m-\ell) \wcomega(m-\ell)}=\epsilon_{I}, \label{errbd}
 \end{equation}
-where one may increase $m$ until the error bound $\epsilon_{I(f)}$ is small enough.
+where one may increase $m$ until the error bound $\epsilon_{I}$ is small enough.
 
 Details concerning the algorithm, the mapping of the wavenumber space, or the meaning and properties of $\cc$, are provided in \cite{HicJim}. 
 
