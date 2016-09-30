@@ -9,7 +9,7 @@ threshold_small = 0.; % Below which sizes do we use correl2 estimator
 wronga = 0; % Wrong estimates with all indices method
 wrong = 0; % Wrong estimates using the one by one algo
 s = .0; %time in seconds used delay each function evaluation
-samples = 100;
+samples = 1;
 
 fudge = @(m,d) 10*2.^-(1.*m);
 
