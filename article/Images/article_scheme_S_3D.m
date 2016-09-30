@@ -1,4 +1,4 @@
-set(0,'defaultaxesfontsize',20,'defaulttextfontsize',20) %make font larger
+set(0,'defaultaxesfontsize',18,'defaulttextfontsize',18) %make font larger
 set(0,'defaultLineLineWidth',3) %thick lines
 set(0,'defaultTextInterpreter','latex') %latex axis labels
 set(0,'defaultLegendInterpreter','latex') %latex axis labels
@@ -10,9 +10,9 @@ indice = 0.1791303924*sigma2;
 S = @(I3, I4) min(indice./max(I3-I4.^2, eps), 1);
 
 mu = -21/64;
-I = [(sigma2 + (mu)^2) -mu];
+Ireal = [(sigma2 + (mu)^2) -mu];
 err = [.05 .1]; 
-Ireal = I - .35*err.*[1 -1];
+I = Ireal + .2*err.*[1 -1];
 Smax = S(I(1) - err(1), I(2) + err(2));
 Smin = S(I(1) + err(1), I(2) - err(2));
 
@@ -59,18 +59,18 @@ if S(Ireal(1),Ireal(2)) < Smax & S(Ireal(1),Ireal(2)) > Smin % Not the...
     % same value as Smax and Smin for the Zaxis
     if S(Ireal(1),Ireal(2)) < S(I(1),I(2))
 %         ax.ZTickLabel = {'$S_{\min}$', '$S(I)$','$(S_{\min}+S_{\max})/2$', '$S(\hat{I})$', '$S_{\max}$'};
-        ax.ZTickLabel = {'$\underline{S}_{n,\min}$', '$\widehat{\underline{S}}_u=(\underline{S}_{u}^{\min}+\underline{S}_{u}^{\max})/2$', '$\underline{S}_{u}^{\max}$'};
+        ax.ZTickLabel = {'$\underline{S}_{2}^{\min}$', '$(\underline{S}_{2}^{\min}+\underline{S}_{2}^{\max})/2$', '$\underline{S}_{2}^{\max}$'};
     else
 %         ax.ZTickLabel = {'$S_{\min}$', '$S(\hat{I})$', '$(S_{\min}+S_{\max})/2$', '$S(I)$', '$S_{\max}$'};
-        ax.ZTickLabel = {'$\underline{S}_{u}^{\min}$', '$\widehat{\underline{S}}_u=(\underline{S}_{u}^{\min}+\underline{S}_{u}^{\max})/2$', '$\underline{S}_{u}^{\max}$'};
+        ax.ZTickLabel = {'$\underline{S}_{2}^{\min}$', '$(\underline{S}_{2}^{\min}+\underline{S}_{2}^{\max})/2$', '$\underline{S}_{2}^{\max}$'};
     end
 else
     if S(Ireal(1),Ireal(2)) < S(I(1),I(2))
 %         ax.ZTickLabel = {'$S_{\min}=S(I)$', '$(S_{\min}+S_{\max})/2$', '$S(\hat{I})$', '$S_{\max}$'};
-        ax.ZTickLabel = {'$\underline{S}_{u}^{\min}=S(I)$', '$\widehat{\underline{S}}_u=(\underline{S}_{u}^{\min}+\underline{S}_{u}^{\max})/2$', '$\underline{S}_{u}^{\max}$'};
+        ax.ZTickLabel = {'$\underline{S}_{2}^{\min}=S(I)$', '$(\underline{S}_{2}^{\min}+\underline{S}_{2}^{\max})/2$', '$\underline{S}_{2}^{\max}$'};
     else
 %         ax.ZTickLabel = {'$S_{\min}$', '$S(\hat{I})$', '$(S_{\min}+S_{\max})/2$', '$S_{\max}=S(I)$'};
-        ax.ZTickLabel = {'$\underline{S}_{u}^{\min}$', '$\widehat{\underline{S}}_u=(\underline{S}_{u}^{\min}+\underline{S}_{u}^{\max})/2$', '$\underline{S}_{u}^{\max}=S(I)$'};
+        ax.ZTickLabel = {'$\underline{S}_{2}^{\min}$', '$(\underline{S}_{2}^{\min}+\underline{S}_{2}^{\max})/2$', '$\underline{S}_{2}^{\max}=S(I)$'};
     end
 end
 hold on
@@ -101,33 +101,33 @@ axis([xmin xmax ymin ymax zmin zmax*1.01 ])
 %% Limiting points on the surface and surface of possible S(I) values
 marksize = 25;
 plot3(Ireal(1), Ireal(2), S(Ireal(1), Ireal(2)), 'k.', 'MarkerSize', marksize)
-text(Ireal(1) + 0.01, Ireal(2) + 0.01, S(Ireal(1), Ireal(2)), '$\underline{S}_{u}(\mathbf{I})$')
+text(Ireal(1) + 0.01, Ireal(2) + 0.01, S(Ireal(1), Ireal(2)), '$\underline{S}_{2}(\mathbf{I})$')
 % plot3(I(1), I(2), S(I(1), I(2)), 'k*', 'MarkerSize', marksize)
 % text(I(1) + 0.01, I(2) + 0.01, S(I(1), I(2)), '$S(\hat{I})$')
 plot3(I(1)-err(1), I(2)+err(2), S(I(1)-err(1), I(2)+err(2)), 'k.', 'MarkerSize', marksize)
-text(I(1)-err(1) + 0.00, I(2)+err(2), S(I(1)-err(1), I(2)+err(2)) + 0.07, '$\underline{S}_{u}^{\max}$')
+text(I(1)-err(1) + 0.00, I(2)+err(2), S(I(1)-err(1), I(2)+err(2)) + 0.07, '$\underline{S}_{2}^{\max}$')
 plot3(I(1)+err(1), I(2)-err(2), S(I(1)+err(1), I(2)-err(2)), 'k.', 'MarkerSize', marksize)%, 'Color', .75*[1 1 1])
-text(I(1)+err(1) - 0.005, I(2)-err(2), S(I(1)+err(1), I(2)-err(2)) + 0.1, '$\underline{S}_{u}^{\min}$')%, 'Color', .75*[1 1 1])
+text(I(1)+err(1) - 0.005, I(2)-err(2), S(I(1)+err(1), I(2)-err(2)) + 0.1, '$\underline{S}_{2}^{\min}$')%, 'Color', .75*[1 1 1])
 
 xx = linspace(I(1)-err(1), I(1)+err(1), n)'; % Corner 1
 yy = ones(n,1)*(I(2)-err(2));
 zz = S(xx, yy);
-plot3(xx, yy, zz, 'b.', 'Linewidth', .5)
+plot3(xx, yy, zz, 'k.', 'Linewidth', .5)
 
 xx = linspace(I(1)-err(1), I(1)+err(1), n)'; % Corner 2
 yy = ones(n,1)*(I(2)+err(2));
 zz = S(xx, yy);
-plot3(xx, yy, zz, 'b.', 'Linewidth', .5)
+plot3(xx, yy, zz, 'k.', 'Linewidth', .5)
 
 xx = ones(n,1)*(I(1)-err(1)); % Corner 3
 yy = linspace(I(2)-err(2), I(2)+err(2), n)';
 zz = S(xx, yy);
-plot3(xx, yy, zz, 'b.', 'Linewidth', .5)
+plot3(xx, yy, zz, 'k.', 'Linewidth', .5)
 
 xx = ones(n,1)*(I(1)+err(1)); % Corner 3
 yy = linspace(I(2)-err(2), I(2)+err(2), n)';
 zz = S(xx, yy);
-plot3(xx, yy, zz, 'b.', 'Linewidth', .5)
+plot3(xx, yy, zz, 'k.', 'Linewidth', .5)
 
 hold off
 
@@ -137,5 +137,8 @@ hold off
 az = -15.5; e1 = 30;
 view(az,e1)
 
-colormap autumn
+colorbar
+% colormap autumn
+% print '-depsc2' -opengl  'estimator_3d_small.eps'
+a = colormap(gray); colormap(a/2 + 1/3)
 print '-depsc2' -opengl  'estimator_3d_small.eps'

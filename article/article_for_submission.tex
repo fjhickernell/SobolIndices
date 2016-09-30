@@ -430,9 +430,9 @@ and,
 \end{gather}
 Because numerator and denominator are both known to be positive, maximizing $\underline{S}_u(\vI)$ (resp. $\overline{S}_u(\vI)$) is done through maximizing the numerator $I_1$ (resp. $I_2$) and minimizing the denominator $I_3-I_4^2$. Analogously, to minimize $\underline{S}_u(\vI)$ (resp. $\overline{S}_u(\vI)$) one minimizes the numerator $I_1$ (resp. $I_2$) and maximizes the denominator $I_3-I_4^2$. As an example, Figure \ref{fig:1} illustrates the region of possible values of $\underline{S}_u(\vI)$ given the true value of $I_1$.
 \begin{figure}[!ht]
-\caption{Given the true value of $I_1$, the figure shows in blue the region of all possible values of $\underline{S}_u(\vI)$. There, $\underline{S}_u^{\min}=\max\Big{(}\min_{\vI\in B_{\varepsilon_{\vI}}(\widehat{\vI})} \underline{S}_u(\vI),0\Big{)}$ and $\underline{S}_u^{\max}=\min\Big{(}\max_{\vI\in B_{\varepsilon_{\vI}}(\widehat{\vI})} \underline{S}_u(\vI),1\Big{)}$.}
+\caption{The delimited region on the figure represents the values $\underline{S}_2$ in $\vI\in B_{(0,0,0.05,0.1)}(\widehat{\vI})$ for the Bratley \textit{et al.} function. There, $\underline{S}_2^{\min}=\max\Big{(}\min_{\vI\in B_{\varepsilon_{\vI}}(\widehat{\vI})} \underline{S}_2(\vI),0\Big{)}$ and $\underline{S}_2^{\max}=\min\Big{(}\max_{\vI\in B_{\varepsilon_{\vI}}(\widehat{\vI})} \underline{S}_2(\vI),1\Big{)}$, and $\widehat{\underline{S}}_2=(\underline{S}_2^{\min}+\underline{S}_2^{\max})/2$.}
 \centering
-\includegraphics[width=.5\textwidth]{Images/estimator_3d_small.pdf}
+\includegraphics[width=.5\textwidth]{Images/estimator_3d_small.eps}
 \label{fig:1}       % Give a unique label
 \end{figure}
 
@@ -562,7 +562,7 @@ For the two test functions, results of the three variants are compared based on 
 $$\delta_{\underline{S}_u} = \absolute{\underline{S}_u - \widehat{\underline{S}_u}}, \qquad \delta_{\overline{S}_u} = \absolute{\overline{S}_u - \widehat{\overline{S}_u}}.$$
 We also compare the total number of evaluations of each variant. Results are averaged over $100$ repetitions using Owen's scrambled Sobol' sequences \cite{HonHic00a,Owe95}. For each repetition, we fix the tolerance $\varepsilon=5.10^{-3}$, set $\ell_*=5$, and $r=4$ (the algorithm starts with $512$ Sobol' points). The algorithm error bound factor is set to $\mathfrak{C}(m)=10\times 2^{-m}$.
 
-The failure rates $r_{\delta_{\underline{S}_u}}$ and  $r_{\delta_{\overline{S}_u}}$ of each estimate are evaluated over the $100$ repetitions. These rates are the proportion of the repetitions in which the real errors failed to satisfy $\delta_{\underline{S}_u} \leq \varepsilon$ and $\delta_{\underline{S}_u} \leq \varepsilon$.
+The failure rates $r_{\delta_{\underline{S}_u}}$ and  $r_{\delta_{\overline{S}_u}}$ of each estimate are evaluated over the $100$ repetitions. These rates are the proportion of the repetitions in which the true estimation errors failed to satisfy $\delta_{\underline{S}_u} \leq \varepsilon$ and $\delta_{\underline{S}_u} \leq \varepsilon$. When $\delta_{\underline{S}_u} > \varepsilon$ and $\delta_{\underline{S}_u} > \varepsilon$, we can infer that our integration parameters are not conservative enough and the integrands fell outside the cone \eqref{errbd}.
 
 %$\varepsilon=0.005$, initial $512$ points, $fudge = @(m,d) 10*2.^{-m}$, run $100$ samples and show the average values for the whole set of samples:
 %
@@ -713,7 +713,7 @@ Table \ref{res.bratley.B} shows averaged estimation errors $\delta_{\underline{S
 The estimation errors are lower than those of Variant $A.a$ but higher than those of Variant $A.b$. Failure rates are similar to those of Variant $A.b$. Since the total number of evaluations is close to the one of Variant $A.b$, the conclusion is that Variant $B$ does not bring much improvement for this example.
 \bigskip
 
-From the results on these two test functions, the main conclusion is that Variant $A.b$ performs the best. This highlights the efficiency of ``Correlation 2'' to estimate small first-order indices with quasi-Monte Carlo methods. Even if ``Correlation 2'' originally requires more model evaluations, this drawback is completely overridden when this estimator is included into a sequential procedure such as ours.
+From the results on these two test functions, the main conclusion is that Variant $A.b$ performs the best. This highlights the efficiency of ``Correlation 2'' to estimate small first-order indices with quasi-Monte Carlo methods. Even if ``Correlation 2'' originally requires more model evaluations, this drawback is completely overridden when this estimator is included into a sequential procedure such as ours. For the case where we are only interested in estimating first-order indices, Variant $B$ should be the best choice as illustrated with the g-function.
 
 \subsection{Real case model}
 \label{sec:5.2}
@@ -725,7 +725,9 @@ f_{\rm payoff}(\vect{B}) = \e^{-rT}\max\left(\frac{1}{d}\sum_{i=1}^d S_0\e^{(r-\
 \]
 where $T$ is the maturity of the option, $S_0$ is the initial stock price, $\sigma$ the volatility of the stock, $r$ the interest rate, and $K$ the strike price.
 
-The discretized Brownian motion $\vect{B}$ follows a multivariate normal distribution with mean $\vzero$ and covariance matrix $\mathsf{\Sigma}$, with $\mathsf{\Sigma}_{ij}=\min(t_i,t_j)$. If $\vect{Y}\sim N(\vzero,I_d)$, given a matrix $M$ such that $\mathsf{\Sigma}=MM^t$, then $M\vect{Y}\sim N(\vzero,\mathsf{\Sigma})$. Hence, we can generate the discretized Brownian motion using the inverse normal cumulative distribution function $\phi^{-1}$: $\vect{B}\sim M\phi^{-1}(\vect{X})$ with $\phi^{-1}(\vect{X})=(\phi^{-1}(X_1),\dots,\phi^{-1}(X_d))^t$ and $\vect{X}\sim \mathcal{U}([0,1]^d)$. Thus, we can estimate the Sobol' indices over $f_{\rm payoff}(M\phi^{-1}(\vect{X}))$. We propose to analyze the results with averaged Sobol' estimates and averaged total number of evaluations over $100$ repetitions. The tolerance $\varepsilon$ and parameters $\ell^*$, $r$ and $\mathfrak{C}(m)$ are set as previously.
+The discretized Brownian motion $\vect{B}$ follows a multivariate normal distribution with mean $\vzero$ and covariance matrix $\mathsf{\Sigma}$, with $\mathsf{\Sigma}_{ij}=\min(t_i,t_j)$. If $\vect{Y}\sim N(\vzero,I_d)$, given a matrix $M$ such that $\mathsf{\Sigma}=MM^t$, then $M\vect{Y}\sim N(\vzero,\mathsf{\Sigma})$. Hence, we can generate the discretized Brownian motion using the inverse normal cumulative distribution function $\phi^{-1}$: $\vect{B}\sim M\phi^{-1}(\vect{X})$ with $\phi^{-1}(\vect{X})=(\phi^{-1}(X_1),\dots,\phi^{-1}(X_d))^t$ and $\vect{X}\sim \mathcal{U}([0,1]^d)$. Thus, we can estimate the Sobol' indices over $f_{\rm payoff}(M\phi^{-1}(\vect{X}))$. In this particular application, the choice of $M$ is pivotal to reduce the effective dimensionality of the model. In this regard, Sobol' indices can help us assess whether we reduce the effective dimensionality. We will compare the case with either the Cholesky decomposition and the PCA construction.
+
+We propose to analyze the results with averaged Sobol' estimates and averaged total number of evaluations over $100$ repetitions. The tolerance $\varepsilon$ and parameters $\ell^*$, $r$ and $\mathfrak{C}(m)$ are set as previously.
 
 Tables \ref{res.AsianChol.Aa}, \ref{res.AsianChol.Ab}, and \ref{res.AsianChol.B} show the results when $M$ corresponds to the Cholesky decomposition of $\mathsf{\Sigma}$. 
 \begin{table}[!ht]
@@ -806,10 +808,28 @@ Tables \ref{res.AsianChol.Aa}, \ref{res.AsianChol.Ab}, and \ref{res.AsianChol.B}
 \end{tabular}
 \label{res.AsianChol.B}
 \end{table}
-It turns out that Variant $A.b$ does not better than Variant $A.a$. Averaged Sobol' estimates are similar while the averaged number of model evaluations is slightly worse. The explanation is that total effect Sobol' indices require more evaluations than their corresponding first-order indices. As such, ``Correlation 2'' falls into case 1) explained in Section \ref{sec:4.2}. Variant $B$ shows a drastic improvement on the total number of evaluations with the drawback of a false estimation for input $x_4$. Indeed, the discrepancy is higher than $\epsilon$ when comparing with the other two variants.
+It turns out that Variant $A.b$ does not perform better than Variant $A.a$. Averaged Sobol' estimates are similar but the average total number of model evaluations is slightly worse. The explanation is that total effect Sobol' indices require more evaluations than their corresponding first-order indices. As such, ``Correlation 2'' falls into case 1) explained in Section \ref{sec:4.2}. Variant $B$ shows a drastic improvement on the total number of evaluations with the drawback of a false estimation for input $x_4$. Its discrepancy is higher than $\epsilon$ when comparing to the other two variants.
 
 
-It is also interesting to see the Sobol' indices estimates when $M$ is constructed with the PCA decomposition. For this case, we only show the results for Variant $A.b$ in table \ref{res.AsianPCA.Ab}.
+Table \ref{res.AsianPCA.Ab}, shows the results for Variant $A.b$ when $M$ is constructed with the PCA decomposition.
+
+\begin{table}[!ht]
+\caption{Averaged values of $\widehat{\underline{S}}_u$, ${\widehat{\overline{S}}_u}$ and total number of evaluations of Variant $A.a$ with PCA decomposition.}
+\centering
+\begin{tabular}{ccccc}
+\hline
+ input & $\widehat{\underline{S}}_u$ & $n$ & $\widehat{\overline{S}}_u$ & $n$ \\ \hline
+ $x_1$ & $0.9800$ & $131072$ & $0.9960$ & $117309$ \\ \hline
+ $x_2$ & $0.0037$ & $952$ & $0.0172$ & $824$ \\ \hline
+ $x_3$ & $0.0016$ & $517$ & $0.0023$ & $512$ \\ \hline
+ $x_4$ & $0.0014$ & $512$ & $0.0005$ & $512$ \\ \hline
+ $x_5$ & $0.0005$ & $512$ & $0.0001$ & $512$ \\ \hline
+ $x_6$ & $0.0002$ & $512$ & $0.0000$ & $512$ \\ \hline
+ \multicolumn{3}{l}{Total number of evaluations: }
+ \\ \hline
+\end{tabular}
+\label{res.AsianPCA.Aa}
+\end{table}
 
 \begin{table}[!ht]
 \caption{Averaged values of $\widehat{\underline{S}}_u$, ${\widehat{\overline{S}}_u}$ and total number of evaluations of Variant $A.b$ with PCA decomposition.}
@@ -837,6 +857,25 @@ It is also interesting to see the Sobol' indices estimates when $M$ is construct
 \end{tabular}
 \label{res.AsianPCA.Ab}
 \end{table}
+
+\begin{table}[!ht]
+\caption{Averaged values of $\widehat{\underline{S}}_u$ and total number of evaluations of Variant $B$ with PCA decomposition.}
+\centering
+\begin{tabular}{ccc}
+\hline
+ input & $\widehat{\underline{S}}_u$ & $n$ \\ \hline
+ $x_1$ & $0.9800$ & $131072$ \\ \hline
+ $x_2$ & $0.0037$ & $18422$ \\ \hline
+ $x_3$ & $0.0028$ & $7834$ \\ \hline
+ $x_4$ & $0.0029$ & $10486$ \\ \hline
+ $x_5$ & $0.0017$ & $4613$ \\ \hline
+ $x_6$ & $0.0029$ & $9467$ \\ \hline \hline
+\multicolumn{2}{l}{Total number of evaluations: } \\ \hline 
+\end{tabular}
+\label{res.AsianChol.B}
+\end{table}
+
+
 One may conclude that these estimates explain how the PCA Brownian motion construction reduces the high effective dimensionality of the payoff function, in contrast to the initial Cholesky decomposition.
 
 \section{Conclusion}
