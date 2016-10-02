@@ -1,4 +1,4 @@
-% Created by tikzDevice version 0.10.1 on 2016-09-28 10:42:51
+% Created by tikzDevice version 0.10.1 on 2016-10-02 18:51:35
 % !TEX encoding = UTF-8 Unicode
 \documentclass[10pt]{article}
 \usepackage{tikz}
@@ -183,7 +183,7 @@
 \end{scope}
 \begin{scope}
 \path[clip] ( 52.08, 52.08) rectangle (416.82,344.55);
-\definecolor{drawColor}{RGB}{0,0,255}
+\definecolor{drawColor}{gray}{0.50}
 
 \path[draw=drawColor,line width= 1.2pt,line join=round] (107.15,261.10) -- (127.94,261.10);
 
@@ -320,7 +320,7 @@
 \path[draw=drawColor,line width= 0.4pt,line join=round,line cap=round] ( 52.08,102.48) rectangle (170.41, 52.08);
 
 \path[draw=drawColor,line width= 0.4pt,line join=round,line cap=round] ( 61.53, 82.53) rectangle ( 67.83, 88.83);
-\definecolor{drawColor}{RGB}{0,0,255}
+\definecolor{drawColor}{gray}{0.50}
 
 \path[draw=drawColor,line width= 0.4pt,line join=round,line cap=round] ( 61.53, 65.73) rectangle ( 67.83, 72.03);
 \definecolor{drawColor}{RGB}{0,0,0}
@@ -328,9 +328,8 @@
 \node[text=drawColor,anchor=base west,inner sep=0pt, outer sep=0pt, scale=  1.68] at ( 77.28, 79.89) {Variant A.a};
 
 \node[text=drawColor,anchor=base west,inner sep=0pt, outer sep=0pt, scale=  1.68] at ( 77.28, 63.09) {Variant A.b};
-\definecolor{drawColor}{RGB}{255,0,0}
 
-\path[draw=drawColor,line width= 0.4pt,line join=round,line cap=round] ( 52.08,300.56) -- (416.82,300.56);
+\path[draw=drawColor,line width= 0.4pt,dash pattern=on 1pt off 3pt ,line join=round,line cap=round] ( 52.08,300.56) -- (416.82,300.56);
 \end{scope}
 \end{tikzpicture}
 
