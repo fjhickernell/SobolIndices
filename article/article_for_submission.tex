@@ -428,7 +428,7 @@ and,
 \end{aligned}
 \label{formula_oversu}
 \end{gather}
-Because numerator and denominator are both known to be positive, maximizing $\underline{S}_u(\vI)$ (resp. $\overline{S}_u(\vI)$) is done through maximizing the numerator $I_1$ (resp. $I_2$) and minimizing the denominator $I_3-I_4^2$. Analogously, to minimize $\underline{S}_u(\vI)$ (resp. $\overline{S}_u(\vI)$) one minimizes the numerator $I_1$ (resp. $I_2$) and maximizes the denominator $I_3-I_4^2$. As an example, Figure \ref{fig:1} illustrates the region of possible values of $\underline{S}_u(\vI)$ given the true value of $I_1$.
+Because numerator and denominator are both known to be positive, maximizing $\underline{S}_u(\vI)$ (resp. $\overline{S}_u(\vI)$) is done through maximizing the numerator $I_1$ (resp. $I_2$) and minimizing the denominator $I_3-I_4^2$. Analogously, to minimize $\underline{S}_u(\vI)$ (resp. $\overline{S}_u(\vI)$) one minimizes the numerator $I_1$ (resp. $I_2$) and maximizes the denominator $I_3-I_4^2$. As an example, Figure \ref{fig:1} illustrates the region of possible values of $\underline{S}_2(\vI)$ given the true value of $I_1$ for the test function of Bratley \textit{et al.} \cite{Bratley}. This function is further described in section \ref{sec:5}. 
 \begin{figure}[!ht]
 \caption{The delimited region on the figure represents the values $\underline{S}_2$ in $\vI\in B_{(0,0,0.05,0.1)}(\widehat{\vI})$ for the Bratley \textit{et al.} function. There, $\underline{S}_2^{\min}=\max\Big{(}\min_{\vI\in B_{\varepsilon_{\vI}}(\widehat{\vI})} \underline{S}_2(\vI),0\Big{)}$ and $\underline{S}_2^{\max}=\min\Big{(}\max_{\vI\in B_{\varepsilon_{\vI}}(\widehat{\vI})} \underline{S}_2(\vI),1\Big{)}$, and $\widehat{\underline{S}}_2=(\underline{S}_2^{\min}+\underline{S}_2^{\max})/2$.}
 \centering
@@ -725,7 +725,7 @@ f_{\rm payoff}(\vect{B}) = \e^{-rT}\max\left(\frac{1}{d}\sum_{i=1}^d S_0\e^{(r-\
 \]
 where $T$ is the maturity of the option, $S_0$ is the initial stock price, $\sigma$ the volatility of the stock, $r$ the interest rate, and $K$ the strike price.
 
-The discretized Brownian motion $\vect{B}$ follows a multivariate normal distribution with mean $\vzero$ and covariance matrix $\mathsf{\Sigma}$, with $\mathsf{\Sigma}_{ij}=\min(t_i,t_j)$. If $\vect{Y}\sim N(\vzero,I_d)$, given a matrix $M$ such that $\mathsf{\Sigma}=MM^t$, then $M\vect{Y}\sim N(\vzero,\mathsf{\Sigma})$. Hence, we can generate the discretized Brownian motion using the inverse normal cumulative distribution function $\phi^{-1}$: $\vect{B}\sim M\phi^{-1}(\vect{X})$ with $\phi^{-1}(\vect{X})=(\phi^{-1}(X_1),\dots,\phi^{-1}(X_d))^t$ and $\vect{X}\sim \mathcal{U}([0,1]^d)$. Thus, we can estimate the Sobol' indices over $f_{\rm payoff}(M\phi^{-1}(\vect{X}))$. In this particular application, the choice of $M$ is pivotal to reduce the effective dimensionality of the model. In this regard, Sobol' indices can help us assess whether we reduce the effective dimensionality. We will compare the case with either the Cholesky decomposition and the PCA construction.
+The discretized Brownian motion $\vect{B}$ follows a multivariate normal distribution with mean $\vzero$ and covariance matrix $\mathsf{\Sigma}$, with $\mathsf{\Sigma}_{ij}=\min(t_i,t_j)$. If $\vect{Y}\sim N(\vzero,I_d)$, given a matrix $M$ such that $\mathsf{\Sigma}=MM^t$, then $M\vect{Y}\sim N(\vzero,\mathsf{\Sigma})$. Hence, we can generate the discretized Brownian motion using the inverse normal cumulative distribution function $\phi^{-1}$: $\vect{B}\sim M\phi^{-1}(\vect{X})$ with $\phi^{-1}(\vect{X})=(\phi^{-1}(X_1),\dots,\phi^{-1}(X_d))^t$ and $\vect{X}\sim \mathcal{U}([0,1]^d)$. Thus, we can estimate the Sobol' indices over $f_{\rm payoff}(M\phi^{-1}(\vect{X}))$. In this particular application, the choice of $M$ is pivotal to reduce the effective dimensionality of the model. In this regard, Sobol' indices can help us assess whether we reduce the effective dimensionality. We will compare the case with either the Cholesky decomposition or the PCA construction.
 
 We propose to analyze the results with averaged Sobol' estimates and averaged total number of evaluations over $100$ repetitions. The tolerance $\varepsilon$ and parameters $\ell^*$, $r$ and $\mathfrak{C}(m)$ are set as previously.
 
@@ -811,21 +811,21 @@ Tables \ref{res.AsianChol.Aa}, \ref{res.AsianChol.Ab}, and \ref{res.AsianChol.B}
 It turns out that Variant $A.b$ does not perform better than Variant $A.a$. Averaged Sobol' estimates are similar but the average total number of model evaluations is slightly worse. The explanation is that total effect Sobol' indices require more evaluations than their corresponding first-order indices. As such, ``Correlation 2'' falls into case 1) explained in Section \ref{sec:4.2}. Variant $B$ shows a drastic improvement on the total number of evaluations with the drawback of a false estimation for input $x_4$. Its discrepancy is higher than $\epsilon$ when comparing to the other two variants.
 
 
-Table \ref{res.AsianPCA.Ab}, shows the results for Variant $A.b$ when $M$ is constructed with the PCA decomposition.
+Tables \ref{res.AsianPCA.Aa}, \ref{res.AsianPCA.Ab}, and \ref{res.AsianPCA.B} show the results when $M$ corresponds to the PCA decomposition of $\mathsf{\Sigma}$. 
 
 \begin{table}[!ht]
 \caption{Averaged values of $\widehat{\underline{S}}_u$, ${\widehat{\overline{S}}_u}$ and total number of evaluations of Variant $A.a$ with PCA decomposition.}
 \centering
 \begin{tabular}{ccccc}
 \hline
- input & $\widehat{\underline{S}}_u$ & $n$ & $\widehat{\overline{S}}_u$ & $n$ \\ \hline
- $x_1$ & $0.9800$ & $131072$ & $0.9960$ & $117309$ \\ \hline
- $x_2$ & $0.0037$ & $952$ & $0.0172$ & $824$ \\ \hline
- $x_3$ & $0.0016$ & $517$ & $0.0023$ & $512$ \\ \hline
- $x_4$ & $0.0014$ & $512$ & $0.0005$ & $512$ \\ \hline
- $x_5$ & $0.0005$ & $512$ & $0.0001$ & $512$ \\ \hline
- $x_6$ & $0.0002$ & $512$ & $0.0000$ & $512$ \\ \hline
- \multicolumn{3}{l}{Total number of evaluations: }
+ input & $\widehat{\underline{S}}_u$ & $\widehat{\overline{S}}_u$ \\ \hline
+ $x_1$ & $0.9800$ & $0.9960$  \\ \hline
+ $x_2$ & $0.0037$ & $0.0172$  \\ \hline
+ $x_3$ & $0.0016$ & $0.0023$  \\ \hline
+ $x_4$ & $0.0014$ & $0.0005$  \\ \hline
+ $x_5$ & $0.0005$ & $0.0001$  \\ \hline
+ $x_6$ & $0.0002$ & $0.0000$ \\ \hline
+ \multicolumn{3}{l}{Total number of evaluations: $396 \ 221$}
  \\ \hline
 \end{tabular}
 \label{res.AsianPCA.Aa}
@@ -863,20 +863,20 @@ Table \ref{res.AsianPCA.Ab}, shows the results for Variant $A.b$ when $M$ is con
 \centering
 \begin{tabular}{ccc}
 \hline
- input & $\widehat{\underline{S}}_u$ & $n$ \\ \hline
- $x_1$ & $0.9800$ & $131072$ \\ \hline
- $x_2$ & $0.0037$ & $18422$ \\ \hline
- $x_3$ & $0.0028$ & $7834$ \\ \hline
- $x_4$ & $0.0029$ & $10486$ \\ \hline
- $x_5$ & $0.0017$ & $4613$ \\ \hline
- $x_6$ & $0.0029$ & $9467$ \\ \hline \hline
-\multicolumn{2}{l}{Total number of evaluations: } \\ \hline 
+ input & $\widehat{\underline{S}}_u$  \\ \hline
+ $x_1$ & $0.9800$ \\ \hline
+ $x_2$ & $0.0037$ \\ \hline
+ $x_3$ & $0.0028$ \\ \hline
+ $x_4$ & $0.0029$ \\ \hline
+ $x_5$ & $0.0017$ \\ \hline
+ $x_6$ & $0.0029$ \\ \hline \hline
+\multicolumn{2}{l}{Total number of evaluations: $262 \ 144$} \\ \hline 
 \end{tabular}
-\label{res.AsianChol.B}
+\label{res.AsianPCA.B}
 \end{table}
+Variant $A.b$ performs equally well as Variant $A.a$ in terms of average total number of evaluations while most probably giving better estimates for the small first-order indices. Once 	again, variant $B$ shows an improvement on the total number of evaluations with the drawback of slightly overestimating the small first-order indices.
 
-
-One may conclude that these estimates explain how the PCA Brownian motion construction reduces the high effective dimensionality of the payoff function, in contrast to the initial Cholesky decomposition.
+Overall, each variant captures well how the PCA Brownian motion construction reduces the high effective dimensionality of the payoff function, in contrast to the initial Cholesky decomposition.
 
 \section{Conclusion}
 When estimating Sobol' indices, the question of how much evaluations must be performed to reach a desired precision is often raised by practitioners. This question is difficult to address mostly because the number of evaluations needed depends on the complexity of the model studied. As such, it is hard to bring out a general rule of thumb. 
