@@ -392,7 +392,7 @@ In \cite[Sec. 4.2]{HicJim} it is shown that for any $f\in\cc$,
 \absolute{I - \frac{1}{b^m}\sum_{\vx\in\mathcal{P}_m}f(\vx)}
 \le \tS_{\ell,m}(f)\underbrace{\frac{\homega(m) \wcomega(m-\ell)}{1 - \homega(m-\ell) \wcomega(m-\ell)}}_{\mathfrak{C}(m)}=\epsilon_{\widehat{I}}, \label{errbd}
 \end{equation}
-where one may increase $m$ until the error bound $\epsilon_{I}$ is small enough.
+where one may increase $m$ until the error bound $\epsilon_{I}$ is small enough. 
 
 Details concerning the algorithm, the mapping of the \emph{wavenumber} space, or the meaning and properties of $\cc$, are provided in \cite{HicJim}. 
 
@@ -448,7 +448,9 @@ We start by detailing our procedure under the form of an algorithm. Then, we dis
 \subsection{Sequential algorithm and cost}
 \label{sec:4.1}
 
-Algorithm \ref{recursive.algorithm} summarizes the main steps of our sequential procedure. First, one must fix the tolerance $\epsilon >0$ at which Sobol' indices must be estimated, and set $m=\ell_*+r$, where $\ell_*$ and $r$ are the two hyper-parameters defined in \eqref{conecond}. Then, one must construct the two designs $\mathcal{P}_{m}=\{\vx_i\}_{i=0}^{2^{m}-1}$ and $\mathcal{P}'_{m}=\{\vx'_i\}_{i=0}^{2^{m}-1}$ at Step $5$ according to the multiplicative approach detailed in \cite{GJAHMP}. The choice of $\ell_*$ must be large enough to ensure that each integrand of $\underline{S}_u$ and $\overline{S}_u$ (Section \ref{sec:3.2}) is in $\cc$ (see  (\ref{conecond})).
+Algorithm \ref{recursive.algorithm} summarizes the main steps of our sequential procedure. First, one must fix the tolerance $\epsilon >0$ at which Sobol' indices must be estimated, and set $m=\ell_*+r$, where $\ell_*$ and $r$ are the two hyper-parameters defined in \eqref{conecond}. The choice of $r$ is important. Choosing it too large causes the error bound to depend on the Walsh coefficients with smaller indices, which might be much larger than the Walsh coefficients determining the error. Nonetheless, a smaller $r$ makes $\fC(m)$ larger to guard against aliasing.
+
+Then, one must construct the two designs $\mathcal{P}_{m}=\{\vx_i\}_{i=0}^{2^{m}-1}$ and $\mathcal{P}'_{m}=\{\vx'_i\}_{i=0}^{2^{m}-1}$ at Step $5$ according to the multiplicative approach detailed in \cite{GJAHMP}. The choice of $\ell_*$ must be large enough to ensure that each integrand of $\underline{S}_u$ and $\overline{S}_u$ (Section \ref{sec:3.2}) is in $\cc$ (see  (\ref{conecond})).
 
 Under this construction, $\mathcal{P}_{m}$ and $\mathcal{P}'_{m}$ correspond to the first $2^{m}$ points of two independent Sobol' sequences. Furthermore, they possess the structure of two replicated designs of order $1$, as shown in \cite{GJAHMP}. In addition, $\mathcal{P}_{m}$ and $\mathcal{P}'_{m}$ can also be scrambled as long as both point sets share the same scrambling dimensionwise.
 \bigskip
