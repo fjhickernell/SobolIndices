@@ -202,7 +202,7 @@ We propose a sequential estimation procedure of Sobol' indices using the error b
 \section{Introduction}
 \label{sec:1}
 
-Let $f$ represent a deterministic numerical model in $[0,1]^d$, $d \geq 1$. Sensitivity measures, also known as Sobol' indices, are used to assess which inputs of $f$ are influential for the output. The normalized indices are scalars between $0$ and $1$ whose values are interpreted as follows: the closer to $1$ the more influential the index. Alternatively, they can be interpreted as the percentage of the variance explained by the inputs. Among all Sobol' indices one can distinguish \emph{first-order} and \emph{total effect} indices. The first measure the effect of a single input, while the second measure the effect of a single input plus all its interactions with other inputs.
+Let $f$ represent a deterministic numerical model in $[0,1]^d$, $d \geq 1$. Sensitivity measures, also known as Sobol' indices, are used to assess which inputs of $f$ are influential for the output. The normalized indices are scalars between $0$ and $1$ whose values are interpreted as follows: the closer to $1$ the more influential the index. Alternatively, they can be interpreted as the percentage of the variance explained by the inputs. Among all Sobol' indices one can distinguish first-order and total effect indices. The first measure the effect of a single input, while the second measure the effect of a single input plus all its interactions with other inputs.
 
 When dealing with complex numerical models, analytical expressions of Sobol' indices are often inaccessible. In such cases, one must rely on an estimation of these indices. The original estimation procedure is due to Sobol' \cite{Sobol'}. However, this procedure requires several model evaluations which are usually expensive. Later on, Saltelli \cite{Saltelli} proposed strategies to estimate sets of Sobol' indices at once through the use of a combinatorial formalisms. While elegant, these strategies still require a large number of model evaluations.  A cost efficient alternative to estimate first-order indices was introduced in \cite{Mara}. This alternative, called the replication procedure, has recently been further studied  in \cite{Tissot} and generalized to the estimation of closed second-order indices.
 
@@ -282,7 +282,7 @@ Then, the Sobol' indices estimators are:
 Using this method, the estimation of a single pair ($\widehat{\underline{S}}_u$, $\widehat{\overline{S}}_u$) requires $3n$ evaluations of the model $f$. Thus, for all first order and total effect indices, one would need $3nd$ model evaluations. Using a combinatorial formalism, in \cite{Saltelli} Saltelli proposes the following estimation strategy:
 \begin{theorem}
 \label{saltelli.theorem}
-The $d+2$ designs $\{\vx_{i,u}:{\vx'}_{i,-u}\}_{i=0}^{n-1}$ constructed for $u \in \{\varnothing,\{1\},\dots,$ $\{d\},\mathcal{D}\}$ allow to estimate all first-order and total effect Sobol' indices of order 1 at a cost of $n(d+2)$ evaluations of the model.
+The $d+2$ designs $\{\vx_{i,u}:{\vx'}_{i,-u}\}_{i=0}^{n-1}$ constructed for $u \in \{\varnothing,\{1\},\dots,$ $\{d\},\mathcal{D}\}$ allow to estimate all first-order and total effect Sobol' indices at a cost of $n(d+2)$ evaluations of the model.
 \end{theorem}
 The main idea of the theorem is that there is no need to reevaluate $f({\vx}_i)$ and $f({\vx'}_i)$ for each $u$. Hence, we can simply evaluate $f({\vx}_i)$ $n$ times, $f({\vx'}_i)$ $n$ times, and $f(\vx_{i,u}:{\vx'}_{i,-u})$ $nd$ times, which accounts for the $n(d+2)$ evaluations.
 
@@ -473,12 +473,18 @@ If the stopping criterion is satisfied, the algorithm stops and Sobol' estimates
 \hspace*{-0.3cm} $\mathcal{P}'_m \leftarrow \mathcal{P}'_{m-1} \cup {B'}_m$
 \For {$u =1,\dots,d$}
 \If {Variant $A$}
+\If {$! bool_u$}
 \State compute $\widehat{\underline{S}}_u$ and $\widehat{\ov{$S$}}_u$ with formulas (\ref{formula_undersu}) and (\ref{formula_oversu}), and Saltelli's strategy
 \State $bool_u \leftarrow \varepsilon_{\widehat{\underline{S}}_u} \leq \epsilon \ \& \ \varepsilon_{\widehat{\widehat{\overline{S}}}_u} \leq \epsilon$
+\State $m_u \leftarrow m$
+\EndIf
 \EndIf
 \If {Variant $B$}
+\If {$! bool_u$}
 \State estimate $\widehat{\underline{S}}_u$ with formula (\ref{formula_undersu}) and the replication procedure
 \State $bool_u \leftarrow \varepsilon_{\widehat{\underline{S}}_u} \leq \epsilon$
+\State $m_u \leftarrow m$
+\EndIf
 \EndIf
 \EndFor
 \State $bool \leftarrow \forall u: \ bool_u$
@@ -615,15 +621,17 @@ Table \ref{res.gfunc.Aa} shows the averaged estimation errors obtained with Vari
 \end{tabular}
 \label{res.gfunc.Ab}
 \end{table}
+
 The main observation is that both approaches give similar results both in terms of estimation errors, failure rates and total number of evaluations. The use of ``Correlation 2'' in Variant $A.b$ to estimate the four small first-order Sobol' indices $\underline{S}_3, \underline{S}_4, \underline{S}_5, \underline{S}_6$ does not seem to bring much improvement. We propose to draw boxplots of the estimation errors to further investigate the results. 
 
-Figure \ref{boxplots.gfunc} shows boxplots of the $100$ estimation errors $\delta_{\underline{S}_u}$ obtained with both Variant $A.a$ and Variant $A.b$ for the four inputs $x_3,x_4,x_5,x_6$. The horizontal line marks the tolerance $\varepsilon=5.10^{-3}$.
+Figure \ref{boxplots.gfunc} shows boxplots of the $100$ estimation errors $\delta_{\underline{S}_u}$ obtained with both Variant $A.a$ and Variant $A.b$ for the four inputs $x_3,x_4,x_5,x_6$. The dashed horizontal line marks the tolerance $\varepsilon=5.10^{-3}$.
 \begin{figure}[!ht]
 \caption{Boxplots of estimation errors $\delta_{\underline{S}_u}$ for the four inputs $x_3,x_4,x_5,x_6$ obtained with both Variant $A.a$ and Variant $A.b$. The dashed horizontal line marks the tolerance $\varepsilon=5.10^{-3}$.}
 \centering
 \includegraphics[width=0.45\textwidth]{Images/boxplots.pdf}
 \label{boxplots.gfunc}
 \end{figure}
+
 As expected, we observe that the use of ``Correlation 2'' in Variant $A.b$ results in lower estimation errors for these four inputs. The discrepancy observed does not stand out in Table \ref{res.gfunc.Ab} due to its low magnitude ($10^{-4} \sim 10^{-5}$).
 \bigskip
 
@@ -685,7 +693,8 @@ As for the g-function, Tables \ref{res.bratley.Aa} and \ref{res.bratley.Ab} show
 \end{tabular}
 \label{res.bratley.Ab}
 \end{table}
-Variant $A.b$ gives lower estimation errors and fewer failure rates than Variant $A.a$ on the four small first-indices $\underline{S}_3,\underline{S}_4,\underline{S}_5$, $\underline{S}_6$ which highlights the performance of ``Correlation 2''. The discrepancy is particularly notable for input $x_3$ where Variant $A.a$ reaches a failure rate of $71\%$ against only $4\%$ for Variant $A.b$. Furthermore, Variant $A.b$ requires less evaluations than Variant $A.a$. The boxplots represented in Figure \ref{boxplots.bratley} emphasize the latter observations.
+
+Variant $A.b$ gives lower estimation errors and fewer failure rates than Variant $A.a$ on the four small first-indices $\underline{S}_3$, $\underline{S}_4,\underline{S}_5$, $\underline{S}_6$ which highlights the performance of ``Correlation 2''. The discrepancy is particularly notable for input $x_3$ where Variant $A.a$ reaches a failure rate of $71\%$ against only $4\%$ for Variant $A.b$. Furthermore, Variant $A.b$ requires less evaluations than Variant $A.a$. The boxplots represented in Figure \ref{boxplots.bratley} emphasize the latter observations.
 \begin{figure}[!ht]
 \caption{Boxplots of estimation errors $\delta_{\underline{S}_u}$ for the four inputs $x_3,x_4,x_5,x_6$ obtained with both Variant $A.a$ and Variant $A.b$. The dashed horizontal line marks the tolerance $\varepsilon=5.10^{-3}$.}
 \centering
@@ -710,6 +719,7 @@ Table \ref{res.bratley.B} shows averaged estimation errors $\delta_{\underline{S
 \end{tabular}
 \label{res.bratley.B}
 \end{table}
+
 The estimation errors are lower than those of Variant $A.a$ but higher than those of Variant $A.b$. Failure rates are similar to those of Variant $A.b$. Since the total number of evaluations is close to the one of Variant $A.b$, the conclusion is that Variant $B$ does not bring much improvement for this example.
 \bigskip
 
@@ -808,6 +818,7 @@ Tables \ref{res.AsianChol.Aa}, \ref{res.AsianChol.Ab}, and \ref{res.AsianChol.B}
 \end{tabular}
 \label{res.AsianChol.B}
 \end{table}
+
 It turns out that Variant $A.b$ does not perform better than Variant $A.a$. Averaged Sobol' estimates are similar but the average total number of model evaluations is slightly worse. The explanation is that total effect Sobol' indices require more evaluations than their corresponding first-order indices. As such, ``Correlation 2'' falls into case 1) explained in Section \ref{sec:4.2}. Variant $B$ shows a drastic improvement on the total number of evaluations with the drawback of a false estimation for input $x_4$. Its discrepancy is higher than $\epsilon$ when comparing to the other two variants.
 
 
