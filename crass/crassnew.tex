@@ -174,9 +174,7 @@ Consider $\vx \in [0,1)^s$, and $\vx_u \in [0,1)^{|u|}$ the subset of elements o
 The replication procedure described in \cite{Mara,Tissot} allows the estimation of all first-order Sobol' indices with only two replicated designs of order $1$. This procedure has the major advantage of reducing the number of model evaluations, evaluating only on designs $\mathcal{P}$ and $\mathcal{P}'$ regardless of the input space dimension. However, Sobol' indices estimates may still not be accurate enough if designs $\mathcal{P}$ and $\mathcal{P}'$ do not explore the input space properly.
 \bigskip
 
-In this note, we propose two different constructions of replicated designs of order $1$ based on Sobol' sequences. Both constructions ensure that the input space is properly explored and can be used within the replication procedure to estimate all first-order Sobol' indices. The definition of these constructions is recursive, therefore one can iteratively refine each replicated design by adding the corresponding new set of points.
-
-We first provide a brief introduction on digital sequences and then present two iterative approaches to construct the two replicated point sets. We end this note by analyzing the space-filling properties of the two designs constructed.
+In this note, we propose two different constructions of replicated designs of order $1$ based on Sobol' sequences. Both constructions ensure that the input space is properly explored and can be used within the replication procedure to estimate all first-order Sobol' indices. The definition of these constructions is recursive, therefore one can iteratively refine each replicated design by adding the corresponding new set of points. We first provide a brief introduction on digital sequences and then present two iterative approaches to construct the two replicated point sets. We end this note by analyzing the space-filling properties of the two designs constructed.
 
 \section{Digital sequences background}
 
@@ -214,6 +212,7 @@ Consider the generating matrices $C_1,\dots,C_s$, and $C_1^m,\dots,C_s^m$ their 
 \end{equation}
 where $x_{i,j} = \sum_{k \geq 1}^m x_{i,j,k}2^{-k}$ is the binary expansion of $x_{i,j}$ and $\vi = (i_{0},\dots,i_{m-1})^\intercal$ is the vector obtained from the binary expansion of $i= \sum_{k \geq 0}^{m-1} i_{k}2^{k}$. All matrix operations are performed in $\mathbb{F}_2$. Below we provide an example of how to compute $x_{11,1}=0.8125$ and $x_{9,2}=0.4375$,
 \begin{equation*}
+\renewcommand{\arraystretch}{1.3}
 \begin{pmatrix}
 x_{11,1,1} \\
 x_{11,1,2} \\
@@ -442,8 +441,8 @@ As expected, design $M$ performs the best and the estimated slope of the discrep
 % \label{}
 
 % The Acknowledgements are an un-numbered section
-%\section*{Acknowledgements}
-% Acknowledgements text here
+\section*{Acknowledgements}
+This work is supported by the CITiES project funded by the Agence Nationale de la Recherche (grant ANR-12-MONU-0020). 
 
 
 \begin{thebibliography}{00}
@@ -464,7 +463,7 @@ As expected, design $M$ performs the best and the estimated slope of the discrep
 
 \bibitem{Morokoff} W. J. Morokoff, R. E. Caflisch, Quasi-random sequences and their discrepancies, \emph{SIAM Journal on Scientific Computing} 15, 1994, pp.1251?-1279.
 
-\bibitem{Niederreiter} 	H. Niederreiter, Random Number Generation and Quasi-Monte Carlo Methods, \emph{CBMS-NSF Regional Conference Series in Applied Math.} 63, SIAM,Philadelphia, PA, 1992.
+\bibitem{Niederreiter} H. Niederreiter, Random Number Generation and Quasi-Monte Carlo Methods, \emph{CBMS-NSF Regional Conference Series in Applied Math.} 63, SIAM,Philadelphia, PA, 1992.
 
 \bibitem{NiederreiterXing} H. Niederreiter, C. Xing, Low-Discrepancy Sequences and Global Function Fields with Many Rational Places, \emph{Finite Fields and Their Applications} 2(3), 1996, pp. 241--273.
 
