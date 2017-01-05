@@ -138,7 +138,7 @@ az = -15.5; e1 = 30;
 view(az,e1)
 
 colorbar
-% colormap autumn
+colormap autumn
+print '-depsc2' -opengl  'estimator_3d_small_color.eps'
+% a = colormap(gray); colormap(a/2 + 1/3)
 % print '-depsc2' -opengl  'estimator_3d_small.eps'
-a = colormap(gray); colormap(a/2 + 1/3)
-print '-depsc2' -opengl  'estimator_3d_small.eps'

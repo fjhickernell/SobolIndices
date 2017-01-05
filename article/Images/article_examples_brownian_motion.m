@@ -17,7 +17,7 @@ fPCA = @(x) max((A*(gail.stdnorminv(x)')))';
 hyperbox = [zeros(1,d) ; ones(1,d)];
 abstol = 1e-3;
 reltol = 0;
-mmin = 22;
+mmin = 9;
 mmax = 22;
 [q,app_int,out_param] = cubSobol_SI_all_g(fPCA,hyperbox,'abstol',abstol,'reltol',reltol,'mmin',mmin,'mmax',mmax);
 round(q*100)
