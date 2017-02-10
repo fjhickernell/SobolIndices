@@ -230,7 +230,7 @@ function [q,int,out_param] = cubSobol_SI_all_g(varargin)
 t_start = tic;
 %% Initial important cone factors and Check-initialize parameters
 r_lag = 4; %distance between coefficients summed and those computed
-[f,hyperbox,out_param] = cubSobol_SI_all_g_param(r_lag,varargin{:});
+[f, hyperbox, sobstr, out_param] = cubSobol_SI_all_g_param(r_lag,varargin{:});
 out_param.small = false(2, out_param.d); % Boolean that states whether we are dealing with small indices estimators
 converged = false(2, out_param.d); % We flag the indices that converged
 l_star = out_param.mmin - r_lag; % Minimum gathering of points for the sums of DFWT
@@ -278,8 +278,8 @@ ftot = @(xpts,u,fx,fy,fxy,fzx) 1/2*(fy - fxy).^2;
 
 
 %% Main algorithm (we added 2xd dimensions for each index and and additional 2 for mean of f and f^2)
-sobstr = sobolset(3*out_param.d); %generate a Sobol' sequence 3*d to consider the changing to the estimator for some smaller size indices
-sobstr = scramble(sobstr,'MatousekAffineOwen'); %scramble it
+% sobstr = sobolset(3*out_param.d); %generate a Sobol' sequence 3*d to consider the changing to the estimator for some smaller size indices
+% sobstr = scramble(sobstr,'MatousekAffineOwen'); %scramble it
 kappanumap_fx2_fx = bsxfun(@times,(1:2^out_param.mmin)', [1 1]); %initialize map
 Stilde_fx2_fx = zeros(out_param.mmax-out_param.mmin+1, 2); %initialize sum of DFWT terms for fx2 and fx
 CStilde_low_fx2_fx = -inf(out_param.mmax-l_star+1, 2); %initialize various sums of DFWT terms for necessary conditions for fx2 and fx
@@ -753,7 +753,7 @@ end
 
 
 %% Parsing for the input of cubSobol_SI_all_g
-function [f,hyperbox, out_param] = cubSobol_SI_all_g_param(r_lag,varargin)
+function [f, hyperbox, sobstr, out_param] = cubSobol_SI_all_g_param(r_lag,varargin)
 
 % Default parameter values
 default.hyperbox = [zeros(1,1);ones(1,1)];% default hyperbox
@@ -767,12 +767,14 @@ default.toltype  = 'max';
 default.theta  = 1;
 default.threshold_small = 0.1;
 
-if numel(varargin)<2
+if numel(varargin)<3
     help cubSobol_SI_all_g
     warning('GAIL:cubSobol_SI_all_g:fdnotgiven',...
         'At least, function f and hyperbox need to be specified. Example for f(x)=x^2:')
     f = @(x) x.^2;
     out_param.f=f;
+    sobstr = sobolset(3); %generate a Sobol' sequence 3*d to consider the changing to the estimator for some smaller size indices
+    sobstr = scramble(sobstr,'MatousekAffineOwen'); %scramble it
     hyperbox = default.hyperbox;
 else
     f = varargin{1};
@@ -781,31 +783,36 @@ else
             'The given input f was not a function. Example for f(x)=x^2:')
         f = @(x) x.^2;
         out_param.f=f;
+        sobstr = sobolset(3); %generate a Sobol' sequence 3*d to consider the changing to the estimator for some smaller size indices
+        sobstr = scramble(sobstr,'MatousekAffineOwen'); %scramble it
         hyperbox = default.hyperbox;
     else
         out_param.f=f;
         hyperbox = varargin{2};
+        sobstr = varargin{3};
         if ~isnumeric(hyperbox) || ~(size(hyperbox,1)==2) || ~(size(hyperbox,2)<370)
             warning('GAIL:cubSobol_SI_all_g:hyperbox_error1',...
                 'The hyperbox must be a real matrix of size 2xd where d can not be greater than 370. Example for f(x)=x^2:')
             f = @(x) x.^2;
             out_param.f=f;
+            sobstr = sobolset(3); %generate a Sobol' sequence 3*d to consider the changing to the estimator for some smaller size indices
+            sobstr = scramble(sobstr,'MatousekAffineOwen'); %scramble it
             hyperbox = default.hyperbox;
         end
     end
 end
 
-validvarargin=numel(varargin)>2;
+validvarargin=numel(varargin)>3;
 if validvarargin
-    in3=varargin(3:end);
-    for j=1:numel(varargin)-2
-    validvarargin=validvarargin && (isnumeric(in3{j}) ...
-        || ischar(in3{j}) || isstruct(in3{j}) || gail.isfcn(in3{j}));
+    in4=varargin(4:end);
+    for j=1:numel(varargin)-3
+    validvarargin=validvarargin && (isnumeric(in4{j}) ...
+        || ischar(in4{j}) || isstruct(in4{j}) || gail.isfcn(in4{j}));
     end
     if ~validvarargin
         warning('GAIL:cubSobol_SI_all_g:validvarargin','Optional parameters must be numeric or strings. We will use the default optional parameters.')
     end
-    in3=varargin{3};
+    in4=varargin{4};
 end
 
 MATLABVERSION = gail.matlab_version;
@@ -829,7 +836,7 @@ else
     p = inputParser;
     addRequired(p,'f',@gail.isfcn);
     addRequired(p,'hyperbox',@isnumeric);
-    if isnumeric(in3) || ischar(in3)
+    if isnumeric(in4) || ischar(in4)
         addOptional(p,'measure',default.measure,...
             @(x) any(validatestring(x, {'uniform','normal'})));
         addOptional(p,'abstol',default.abstol,@isnumeric);
@@ -842,7 +849,7 @@ else
         addOptional(p,'theta',default.theta,@isnumeric);
         addOptional(p,'threshold_small', default.threshold_small, @isnumeric);
     else
-        if isstruct(in3) %parse input structure
+        if isstruct(in4) %parse input structure
             p.StructExpand = true;
             p.KeepUnmatched = true;
         end
@@ -858,20 +865,11 @@ else
         f_addParamVal(p,'theta',default.theta,@isnumeric);
         f_addParamVal(p,'threshold_small',default.threshold_small,@isnumeric);
     end
-    parse(p,f,hyperbox,varargin{3:end})
+    parse(p,f,hyperbox,varargin{4:end})
     out_param = p.Results;
 end
 
 out_param.d = size(hyperbox,2);
-
-% fdgyes = 0; % We store how many functions are in varargin. There can only
-%             % two functions as input, the function f and the fudge factor.
-% for j = 1:size(varargin,2)
-%     fdgyes = gail.isfcn(varargin{j})+fdgyes;
-% end
-% if fdgyes < 2 % No fudge factor given as input
-%     default.fudge = @(m) 5*2.^-(m/d);
-% end
 
 %hyperbox should be 2 x dimension
 if ~isnumeric(hyperbox) || ~(size(hyperbox,1)==2) || ~(out_param.d<370)
