@@ -148,5 +148,5 @@ SI = SI/samples; SI_n = SI_n/samples;
 SI_small = SI_small/samples; SI_n_small = SI_n_small/samples;
 
 csvwrite('wingweight_variantAa_nvalues.csv', SI_n_print)
-csvwrite('wingweight_variantAa_nvalues.csv', SI_n_print_small)
-csvwrite('wingweight_variantAa_small_estimates.csv', small)
+csvwrite('wingweight_variantAb_nvalues.csv', SI_n_print_small)
+csvwrite('wingweight_variantAb_small_estimates.csv', small)
