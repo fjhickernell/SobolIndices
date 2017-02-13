@@ -1,7 +1,6 @@
 clearvars
 
 abstol = 5*1e-3;
-pre = 2; % Precision to display according to 1*1e-3 (3 digits)
 reltol = 0e-2; % Pure absolute tolerance
 mmin = 9;
 mmax = 24; % I adjust that not to run out of memory. It can go up to 54. Type help cubSobol_SI_g for more information.
@@ -94,14 +93,15 @@ hyperbox = [150 220 6  -1/18*pi 16 0.5 0.08 2.5 1700 0.025;
 SI = zeros(1, d);
 SI_n = SI;
 SI_n_print = [];
+SI_estimates = [];
 for k = 1:samples
     [q,app_int,out_param] = cubSobol_SI_fo_g(f,hyperbox,'abstol',abstol,'reltol',reltol,'mmin',mmin,'mmax',mmax,'fudge',@(m) fudge(m,d));
     SI = SI + q;
+    SI_estimates = [SI_estimates; q];
     SI_n_print = [SI_n_print; out_param.n];
     SI_n = SI_n + out_param.n;
 end
 SI = SI/samples; SI_n = SI_n/samples;
-% round(SI, pre,'significant')
-% round(SI_n)
 
 csvwrite('wingweight_variantB_replicated_nvalues.csv', SI_n_print)
+csvwrite('wingweight_variantB_replicated_SIvalues.csv', SI_estimates)

@@ -125,6 +125,8 @@ hyperbox = [150 220 6  -1/18*pi 16 0.5 0.08 2.5 1700 0.025;
             200 300 10  1/18*pi 45 1   0.18 6   2500 0.08 ];
 
 SI = zeros(2, d);
+SI_estimates = [];
+SI_estimates_small = [];
 SI_small = zeros(2, d);
 SI_n = SI;
 SI_n_small = SI_small;
@@ -136,10 +138,12 @@ for k = 1:samples
     sobstr = scramble(sobstr,'MatousekAffineOwen'); %scramble it
     [q,app_int,out_param] = cubSobol_SI_all_g(f,hyperbox,sobstr,'abstol',abstol,'reltol',reltol,'mmin',mmin,'mmax',mmax,'fudge',@(m) fudge(m,d), 'threshold_small', 0);
     SI = SI + q;
+    SI_estimates = [SI_estimates; q];
     SI_n_print = [SI_n_print; out_param.n];
     SI_n = SI_n + out_param.n;
     [q,app_int,out_param] = cubSobol_SI_all_g(f,hyperbox,sobstr,'abstol',abstol,'reltol',reltol,'mmin',mmin,'mmax',mmax,'fudge',@(m) fudge(m,d), 'threshold_small', threshold_small);
     SI_small = SI_small + q;
+    SI_estimates_small = [SI_estimates_small; q];
     SI_n_print_small = [SI_n_print_small; out_param.n];
     SI_n_small = SI_n_small + out_param.n;
     small = [small; out_param.small];
@@ -148,5 +152,7 @@ SI = SI/samples; SI_n = SI_n/samples;
 SI_small = SI_small/samples; SI_n_small = SI_n_small/samples;
 
 csvwrite('wingweight_variantAa_nvalues.csv', SI_n_print)
+csvwrite('wingweight_variantAa_SIvalues.csv', SI_estimates)
+csvwrite('wingweight_variantAb_SIvalues.csv', SI_estimates_small)
 csvwrite('wingweight_variantAb_nvalues.csv', SI_n_print_small)
 csvwrite('wingweight_variantAb_small_estimates.csv', small)
