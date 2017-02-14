@@ -69,7 +69,8 @@ a = [0 1/2 3 9 99 99];
 f = @(x) prod(bsxfun(@(x,a) (abs(3*x-2)+a)./(1+a), x , a),2) +  pause_t(s);
 hyperbox = [zeros(1,d) ; ones(1,d)];
 
-R = [.5867811893, .2607916397, 0.3667382378e-1, 0.5867811312e-2, 0.5867753221e-4, 0.5867753221e-4; .6900858920, .3561733634, 0.563335432e-1, 0.91705767e-2, 0.920079e-4, 0.920079e-4];
+% R = [.5867811893, .2607916397, 0.3667382378e-1, 0.5867811312e-2, 0.5867753221e-4, 0.5867753221e-4; .6900858920, .3561733634, 0.563335432e-1, 0.91705767e-2, 0.920079e-4, 0.920079e-4]; % If abs(4x-2)
+R = [.6042800971, .2360469148, 0.2855765831e-1, 0.4339846615e-2, 0.4210460219e-4, 0.4210460219e-4; .7251945137, .3480933667, 0.483463013e-1, 0.74762327e-2, 0.727601e-4, 0.727601e-4]; % If abs(3x-2)
 SI = zeros(2, d);
 SI_small = zeros(2, d);
 SI_n = SI;
@@ -84,6 +85,7 @@ SI_n_print = [];
 SI_n_print_small = [];
 small = [];
 for k = 1:samples
+    disp(k)
     sobstr = sobolset(3*d); %generate a Sobol' sequence 3*d to consider the changing to the estimator for some smaller size indices
     sobstr = scramble(sobstr,'MatousekAffineOwen'); %scramble it
     [q,app_int,out_param] = cubSobol_SI_all_g(f,hyperbox,sobstr,'abstol',abstol,'reltol',reltol,'mmin',mmin,'mmax',mmax,'fudge',@(m) fudge(m,d), 'threshold_small', 0);
