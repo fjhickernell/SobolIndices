@@ -82,11 +82,11 @@ of $0$ through $n-1$. Now we have replicated designs of order $a$ for any $a = 1
 Also, how is $\pi_u$ defined when there is more than one permutation that rearranges the rows $\vx'_i$ into $\vx_i$? Maybe it should say ``to be any permutation
 that rearranges the rows ... ''.
 
-{\color{blue} Thank you for this remark. The definition was intended to include only point sets where all points are coordinate-wise different. Namely, consider a point set $\mathcal{P}=\{\vx_i\}_{i=0}^{n-1}$ and two points $\vx_{i_1}$, $\vx_{i_2}$, $i_1 \neq i_2$. Then $\vx_{i_1}$ and $\vx_{i_2}$ are coordinate-wise different if: 
+{\color{blue} We thank the reviewer for this remark. The definition was intended for point sets where all points are coordinate-wise different. More precisely, consider a point set $\mathcal{P}=\{\vx_i\}_{i=0}^{n-1}$ and two points $\vx_{i_1}$, $\vx_{i_2}$, $i_1 \neq i_2$. Then $\vx_{i_1}$ and $\vx_{i_2}$ are coordinate-wise different if: 
 $$ x_{i_1,j} \neq x_{i_2,j}, \qquad \forall j=1,\dots,d .$$
-Definition 1 has been reworked to include this property. This also tackles the issue of having more than one permutation that would rearranges the rows $\vx'_i$ into $\vx_i$. Now, the permutation is unique.
+Definition 1 has been reworked to include this property. This also tackles the issue of having more than one permutation that would rearrange the rows $\vx'_i$ into $\vx_i$. Now, the permutation is unique.
 
-Furthermore, a remark was added to specify that in this paper $\mathcal{P}$ and $\mathcal{P}'$ are constructed to avoid the degenerate case $\forall i, \ \vx'_i=\vx_i$.}
+Furthermore, a remark was added to specify that in this paper $\mathcal{P}$ and $\mathcal{P}'$ are constructed to avoid the degenerate case: $\forall i, \ \vx'_i=\vx_i$.}
 
 
 
@@ -97,6 +97,11 @@ be detectable, and what can we do in the face of bounds that might or might not 
 
 \item[4.]If we replace $f$ by $f-c$ for some constant shift $c$, then the Sobol' indices do not change. But the bounds for $\underline{S}_u$ and $\overline{S}_u$ do change because $\vI_3$ is affected. What could/should we do about this?
 
+{\color {blue} We acknowledge that Sobol' indices are theoretically invariant by adding a constant shift $c$ to the studied function. As underlined by the reviewer, the addition of a constant shift $c$ modifies the error bound for $\vI_3$ but also the errors bounds for the others integrands ($\vI_1$, $\vI_2$ and $\vI_4$). More generally, our algorithm depends on the analytical expression of the Sobol' index estimator considered.
+
+However, that is not a concerns since error bounds for any estimator can be calculated. That is, our algorithm can be adapted to any Sobol' index estimator. In particular, this is done when ``Correlation 2'' is used in Variant A.b instead of (5).}
+
+
 \item[5.] Page $7$ lines $22:27$. The discussion here is saying that the higher dimensional integrand is likely to be the one that needs more evaluations. That is not in line with the last couple of decades of QMC theory. The nominal dimension might not be very telling. Maybe only a few of the inputs are important in the higher dimensional integrand, or maybe the higher order variable interactions are less important for that integrand.
 
 So, can you give a better reason for why that integrand might need larger $n$? Alternatively, in the numerical examples, which integrands required the most evaluations?
@@ -106,13 +111,21 @@ So, can you give a better reason for why that integrand might need larger $n$? A
 That makes it a particularly favorable problem for Sobol' points or any points in base $2$. The problem might just be too QMC-friendly. It would be better to use $g_j(x_j) = (|3x_j-2| + a_j)/(1 + a_j)$ which has issues when
 $x_j = 2/3$ which is not dyadic. The QMC friendly version might still work exactly the same as the unfriendly version, but changing $g$ just removes that issue from consideration.
 
+{\color{blue} The Sobol' g-function has been modified according to the reviewer remark. Corresponding tables and figures have changed.} 
+
 \item[7.] The Asian option is very over used in QMC problems. We already know that BB and PC make the first component most important. It might be interesting to compare these two, although the answer might depend on
 the strike price and volatility. 
 
 For the same amount of work, the authors could use a real function where the answer would be interesting. Derek Bingham maintains a site of test functions for computer experiments. Some of those would be more suitable.
 
+{\color{blue} The Asian option problem has been replaced by the wing weight test function taken from the suggested database. Section $5.2$ has been reworked to introduce this new test function. Our results are compared to formers obtained by screening approaches.} 
+
 \item[8.] Sobol' indices are often motivated by the need to identify important variables when $f$ is expensive to evaluate; perhaps half a day for $n = 1$. Estimates that require $n$ to be several hundred thousand do not fitthat motivating context. If the authors can describe a context where it would be worth having $n = 400000$ to get a Sobol' estimate, that would be great. Nobody else has properly addressed this issue, so this point is a
 suggestion, not a requirement.
+
+{\color{blue} We understand and agree with the issue raised by the reviewer. A possible solution is to choose a higher target precision $\epsilon$ when dealing with time-expensive function. In the proposed examples, $\epsilon$ was intentionally fixed small to put forward the performance of our algorithm. To cover both situations (small and high value of $\epsilon$), the bratley example has been reworked.
+
+On another hand, if one has to deal with a function where one day is required to obtain one evaluation, perhaps the use of Sobol' indices should be dropped for a screening method (less accurate but less greedy). Or if available, one could make use of a cluster to perform multiple model evaluations in parallel.}
 \end{itemize}
 
 \textbf{Minor comments}:
@@ -130,4 +143,6 @@ new letter.
 
 \item[f.] page $8$ line $16$: twice as small  $\rightarrow$ half as large
 \end{itemize}
+
+{\color{blue} All minors points have been dealt with. For point c., equation (7) was replaced with the unbiased estimator of $\sigma^2$. For point e., the distinction has been noted in the paper given that notations cannot be changed (they need to match those of the sourced paper).
 \end{document}
