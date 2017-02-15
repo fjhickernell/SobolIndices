@@ -23,13 +23,13 @@ Reviewer #1: This paper proposes a method for estimating Sobol' indices for the 
 
 Minor comments (page numbers refer to the actual paper and do not include the cover page)
 
-*page 1, column 1, lines 23-24: "through" instead of "trough"
-*page 2, column 2, equation (7): why use a biased estimator for sigma^2 ?
+DONE *page 1, column 1, lines 23-24: "through" instead of "trough"
+DONE *page 2, column 2, equation (7): why use a biased estimator for sigma^2 ? 
 *page 4, column 2, equation (14): it is not clear how l ($\ell$) is chosen on the RHS, and whether or not the inequality holds for all \ell <= m or for some specific value of \ell? Please clarify.
-*page 4, column 2, line 42: is it not instead "...the error bound $\epsilon_{\hat{I}}$" (hat on subscript I?)?
-*page 5, column 2 line 55: not clear what you mean by "independent" in "two independent Sobol' sequences", especially if the designs are not randomized. From [4] it looks like you are using a 2d-dimensional Sobol' sequence and assign the first d coordinates to the first design and the next d ones to the second design. Please explain this more and state what properties you need for these sequences.
+DONE *page 4, column 2, line 42: is it not instead "...the error bound $\epsilon_{\hat{I}}$" (hat on subscript I?)?
+DONE *page 5, column 2 line 55: not clear what you mean by "independent" in "two independent Sobol' sequences", especially if the designs are not randomized. From [4] it looks like you are using a 2d-dimensional Sobol' sequence and assign the first d coordinates to the first design and the next d ones to the second design. Please explain this more and state what properties you need for these sequences.
 *page 6, column 2, line 32: is the "iid" property valid across the indices i, i.e., the n vectors have to be independent? If so, this would invalidate the use of a Sobol' sequence to create these vectors, so please clarify this point.
-*page 9, column 2 , "real case model". There are some imprecisions in this part: lines 15-16, it should be the "discounted payoff" and not just "payoff", rho is the risk-free interest rate (not just interest rate). More importantly, the authors directly give the discounted payoff in terms of the Brownian motion without stating what model is used for the stock price and without stating that for the purpose of pricing one should work under the risk-neutral measure. Please clarify this so that the financial motivation for this problem is properly done.
+DONE *page 9, column 2 , "real case model". There are some imprecisions in this part: lines 15-16, it should be the "discounted payoff" and not just "payoff", rho is the risk-free interest rate (not just interest rate). More importantly, the authors directly give the discounted payoff in terms of the Brownian motion without stating what model is used for the stock price and without stating that for the purpose of pricing one should work under the risk-neutral measure. Please clarify this so that the financial motivation for this problem is properly done.
 
 ==============================================================================================
 
