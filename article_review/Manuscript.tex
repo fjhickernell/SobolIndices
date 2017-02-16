@@ -543,7 +543,7 @@ If Variant $B$ is selected, the cost of our algorithm equals $2 \times 2^{m^{\st
 \subsection{Improvement}
 \label{sec:4.2}
 
-When $\underline{S}_u$ is small, it usually becomes harder to estimate. For this reason, we consider the use of a new estimator to evaluate small first-order Sobol' indices in Variant $A$. This estimator called ``Correlation 2" has been introduced by Owen in \cite{Owen}. In this article, he discussed and highlighted the efficiency of ``Correlation 2" when estimating small first-order indices. Our aim is to show that the use of ``Correlation 2" in Variant $A$ may reduce the total number of model evaluations. This new estimator is,
+When $\underline{S}_u$ is small, it usually becomes harder to estimate. For this reason, we consider the use of a new estimator to evaluate small first-order Sobol' indices in Variant $A$. This estimator called ``Correlation 2" has been introduced by Owen in \cite{Owen}. In this article, he discussed and highlighted the efficiency of ``Correlation 2" when estimating small first-order indices. Our aim is to show that the use of ``Correlation 2" in Variant $A$ {\color{purple} (Lolo) improves the estimation of small first-order indices while potentially reducing the total number of model evaluations required.} This new estimator is,
 \begin{equation*}
 \widehat{\underline{\tau}_u^2} = \frac{1}{n} \sum \limits_{i=0}^{n-1} (f(\vx_i)-f({\vz}_{i,u}:{\vx}_{i,-u}))(f(\vx_{i,u}:{\vx'}_{i,-u})-f({\vx'}_i)),
 \end{equation*}
