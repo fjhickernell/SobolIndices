@@ -60,12 +60,25 @@ Laurent Gilquin and Llu\'{i}s Antoni Jim\'{e}nez Rugama}
 \textbf{Minor comments}:
 \begin{itemize}
 \item[a.] page 1, column 1, lines 23-24: "through" instead of "trough"
+
+{\color{blue} The typo has been corrected.}
 \item[b.] page 2, column 2, equation (7): why use a biased estimator for $\sigma^2$ ?
+
+{\color{blue} The biased estimator has been replaced by the unbiased one.}
 \item[c.] page 4, column 2, equation (14): it is not clear how $\ell$ is chosen on the RHS, and whether or not the inequality holds for all $\ell \leq m$ or for some specific value of $\ell$ ? Please clarify.
 \item[d.] page 4, column 2, line 42: is it not instead "...the error bound $\epsilon_{\hat{I}}$" (hat on subscript I?)?
+
+{\color{blue} The typo has been corrected.}
 \item[e.] page 5, column 2 line 55: not clear what you mean by "independent" in "two independent Sobol' sequences", especially if the designs are not randomized. From [4] it looks like you are using a 2d-dimensional Sobol' sequence and assign the first d coordinates to the first design and the next d ones to the second design. Please explain this more and state what properties you need for these sequences.
+
+{\color{blue} The paragraph has been reworked. The reviewer guessed right. We use a 2d-dimensional Sobol' sequence and assign its first d dimensions to the first design and the remaining ones to the second design. Then, each Sobol' sequence is scrambled independently; except in Variant B where the scrambling is the same to insure that the two designs are replicated designs of order one.
+
+As for the properties of the Sobol' sequences, the ones used in this paper are generated with the directional numbers found by S. Joe and F. Y. Kuo (2008). These directional numbers insure better two-dimensional projections of the resulting Sobol' sequences.}
+
 \item[f.] page 6, column 2, line 32: is the "iid" property valid across the indices i, i.e., the n vectors have to be independent? If so, this would invalidate the use of a Sobol' sequence to create these vectors, so please clarify this point.
 \item[g.] page 9, column 2 , "real case model". There are some imprecisions in this part: lines 15-16, it should be the "discounted payoff" and not just "payoff", rho is the risk-free interest rate (not just interest rate). More importantly, the authors directly give the discounted payoff in terms of the Brownian motion without stating what model is used for the stock price and without stating that for the purpose of pricing one should work under the risk-neutral measure. Please clarify this so that the financial motivation for this problem is properly done.
+
+{\color{blue} The ``real case model'' has been replaced with a new one as suggested by the second reviewer. Nonetheless, we thank the reviewer for these corrections.} 
 \end{itemize}
 
 \textbf{\large{Reviewer $2$}}
@@ -82,7 +95,7 @@ of $0$ through $n-1$. Now we have replicated designs of order $a$ for any $a = 1
 Also, how is $\pi_u$ defined when there is more than one permutation that rearranges the rows $\vx'_i$ into $\vx_i$? Maybe it should say ``to be any permutation
 that rearranges the rows ... ''.
 
-{\color{blue} TO REVIEW, THE COORDINATE-WISE DIFFERENT CLASS INCLUDES THE EXAMPLE HE PROPOSES --- We thank the reviewer for this remark. The definition was intended for point sets where all points are coordinate-wise different. More precisely, consider a point set $\mathcal{P}=\{\vx_i\}_{i=0}^{n-1}$ and two points $\vx_{i_1}$, $\vx_{i_2}$, $i_1 \neq i_2$. Then $\vx_{i_1}$ and $\vx_{i_2}$ are coordinate-wise different if: 
+{\color{blue} We thank the reviewer for this remark. The definition was intended for point sets where all points are coordinate-wise different. More precisely, consider a point set $\mathcal{P}=\{\vx_i\}_{i=0}^{n-1}$ and two points $\vx_{i_1}$, $\vx_{i_2}$, $i_1 \neq i_2$. Then $\vx_{i_1}$ and $\vx_{i_2}$ are coordinate-wise different if: 
 $$ x_{i_1,j} \neq x_{i_2,j}, \qquad \forall j=1,\dots,d .$$
 Definition 1 has been reworked to include this property. This also tackles the issue of having more than one permutation that would rearrange the rows $\vx'_i$ into $\vx_i$. Now, the permutation is unique.
 
@@ -97,7 +110,7 @@ be detectable, and what can we do in the face of bounds that might or might not 
 
 \item[4.]If we replace $f$ by $f-c$ for some constant shift $c$, then the Sobol' indices do not change. But the bounds for $\underline{S}_u$ and $\overline{S}_u$ do change because $\vI_3$ is affected. What could/should we do about this?
 
-{\color {blue} We acknowledge that Sobol' indices are theoretically invariant by adding a constant shift $c$ to the studied function. As underlined by the reviewer, the addition of a constant shift $c$ modifies the error bound for $\vI_3$ but also the errors bounds for the others integrands ($\vI_1$, $\vI_2$ and $\vI_4$). More generally, our algorithm depends on the analytical expression of the Sobol' index estimator considered.
+{\color {blue} We acknowledge that analytical formulas of Sobol' indices are invariant by adding a constant shift $c$ to the function $f$. As underlined by the reviewer, in our algorithm the addition of a constant shift $c$ modifies the error bound for $\vI_3$ but also the errors bounds for the others integrands ($\vI_1$, $\vI_2$ and $\vI_4$). More generally, our algorithm depends on the analytical expression of the Sobol' index estimator considered.
 
 However, that is not a concerns since error bounds for any estimator can be calculated. That is, our algorithm can be adapted to any Sobol' index estimator. In particular, this is done when ``Correlation 2'' is used in Variant A.b instead of (5).}
 
@@ -107,18 +120,23 @@ However, that is not a concerns since error bounds for any estimator can be calc
 So, can you give a better reason for why that integrand might need larger $n$? Alternatively, in the numerical examples, which integrands required the most evaluations?
 (This point touches on the circular issue, perhaps best avoided, of finding which variables are important when you're estimating a Sobol' index.)
 
+{\color{blue} We agree with the reviewer that the effective dimension of the higher dimensions integrand might be lower than its lower dimensions counterpart. However, evaluating the effective dimension of each integrands already requires a large number of model evaluations itself (\textit{c.f.} Wang. X and Fang. K.-T., 2003).
+
+Since evaluating the effective dimension is not in the scope of this paper, we propose the following. The original statement has been replaced with the assumption that the higher dimensions integrand possesses a higher effective dimension. Then, this assumption is tested on each example by plotting the repartition of the sum of the $c_j$ (equation (19)) over the $100$ repeats. The sign of the sum tells us if, in average, this assumption is validated across the Sobol' indices.}
+
+
 \item[6.] In Section $5.1.1$, the Sobol' g-function looks like a potentially misleading choice. It is completely smooth except when one of the inputs is $1/2$.
 That makes it a particularly favorable problem for Sobol' points or any points in base $2$. The problem might just be too QMC-friendly. It would be better to use $g_j(x_j) = (|3x_j-2| + a_j)/(1 + a_j)$ which has issues when
 $x_j = 2/3$ which is not dyadic. The QMC friendly version might still work exactly the same as the unfriendly version, but changing $g$ just removes that issue from consideration.
 
-{\color{blue} The Sobol' g-function has been modified according to the reviewer remark. Corresponding tables and figures have changed.} 
+{\color{blue} The Sobol' g-function has been modified according to the reviewer remark. There were no drastic changes observed. As a matter of fact, the failure rates have improved for all three approaches (Variant A.a, A.b and B).} 
 
 \item[7.] The Asian option is very over used in QMC problems. We already know that BB and PC make the first component most important. It might be interesting to compare these two, although the answer might depend on
 the strike price and volatility. 
 
 For the same amount of work, the authors could use a real function where the answer would be interesting. Derek Bingham maintains a site of test functions for computer experiments. Some of those would be more suitable.
 
-{\color{blue} The Asian option problem has been replaced by the wing weight test function taken from the suggested database. Section $5.2$ has been reworked to introduce this new test function. Our results are compared to formers obtained by screening approaches.} 
+{\color{blue} The Asian option problem has been replaced by the wing weight test function taken from the suggested database. Section $5.2$ has been reworked to introduce this new test function. Our results are compared to formers obtained by screening approaches (Moon, H. (2010)).} 
 
 \item[8.] Sobol' indices are often motivated by the need to identify important variables when $f$ is expensive to evaluate; perhaps half a day for $n = 1$. Estimates that require $n$ to be several hundred thousand do not fitthat motivating context. If the authors can describe a context where it would be worth having $n = 400000$ to get a Sobol' estimate, that would be great. Nobody else has properly addressed this issue, so this point is a
 suggestion, not a requirement.
