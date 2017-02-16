@@ -418,7 +418,7 @@ Finally, we define the set of functions $\cc$,
 \cc:=\{f \in \mathbb{L}^2(\cube) : \hS_{\ell,m}(f) \le \homega(m-\ell) \wcS_m(f),\ \ \ell \le m, \\
 \wcS_m(f) \le \wcomega(m-\ell) S_{\ell}(f),\ \  \ell_* \le \ell \le m\}.
 \end{multline}
-for a fixed $\ell_* \in \mathbb{N}$, $\homega$ and $\wcomega$ two non-negative valued functions with $\lim_{m \to \infty} \wcomega(m) = 0$. \comment{The decay rate assumptions on the Walsh coefficients are encoded in $\cc$ and controlled by $\homega$ and $\wcomega$. First, we assume that $\wcS_m(f)$ bounds $\hS_{\ell,m}(f)$ in some sense, in particular it bounds $\hS_{0,m}(f)$. This means that we can use $\wcS_m(f)$ as a good indicator for the error bound. Then, we also need $S_{\ell}(f)$ to bound $\wcS_m(f)$ which helps transforming the infinite sum into a finite sum. In this step, we are assuming that if $S_{\ell}(f)$ is small enough, we expect the high frequency coefficients, i.e. $\wcS_m(f)$, to also be small. By defining $r=m-\ell$, and assuming that $\homega(r)\wcomega(r)<1$ with $r\in\mathbb{N}$, one may see $r$ as a distance between $S_{\ell}(f)$ and $\wcS_m(f)$: larger values of $r$ will imply a smaller error bound but more dependence on smaller Walsh coefficients. Finally, we can write the error bound in terms of $\tS_{\ell,m}(f)$ instead of $\wcS_m(f)$ by using \eqref{discrite_true_relationship}.} In \cite[Sec. 4.2]{HicJim} it is shown that for any $f\in\cc$,
+for a fixed $\ell_* \in \mathbb{N}$, $\homega$ and $\wcomega$ two non-negative valued functions with $\lim_{m \to \infty} \wcomega(m) = 0$. \comment{The decay rate assumptions on the Walsh coefficients are encoded in $\cc$ and controlled by $\homega$ and $\wcomega$. First, we assume that $\wcS_m(f)$ bounds $\hS_{\ell,m}(f)$ in some sense, in particular it bounds $\hS_{0,m}(f)$. This means that we can use $\wcS_m(f)$ as an indicator of the error bound. Then, we also need $S_{\ell}(f)$ to bound $\wcS_m(f)$ which helps transforming the infinite sum into a finite sum. In this step, we are assuming that if $S_{\ell}(f)$ is small enough, we expect the high frequency coefficients, i.e. $\wcS_m(f)$, to also be small. By defining $r=m-\ell$, and assuming that $\homega(r)\wcomega(r)<1$ with $r\in\mathbb{N}$, one may intuitively see $r$ as a distance between $S_{\ell}(f)$ and $\wcS_m(f)$ to tune: larger values of $r$ will imply a smaller error bound but more dependence on smaller Walsh coefficients. Finally, we can write the error bound in terms of $\tS_{\ell,m}(f)$ instead of $\wcS_m(f)$ by using \eqref{discrite_true_relationship}.} With this reasoning, in \cite[Sec. 4.2]{HicJim} we showed that for any $f\in\cc$,
 \begin{equation}
 \absolute{I - \frac{1}{b^m}\sum_{\vx\in\mathcal{P}_m}f(\vx)}
 \le \tS_{\ell,m}(f)\underbrace{\frac{\homega(m) \wcomega(r)}{1 - \homega(r) \wcomega(r)}}_{\mathfrak{C}(m)}=\epsilon_{\widehat{I}}, \label{errbd}
@@ -777,6 +777,26 @@ From the results on these two test functions, the main conclusion is that Varian
 
 \subsection{Real case model}
 \label{sec:5.2}
+\comment{As a real case example, we will study the wing weight function:
+\begin{align*}
+f(\vx)=0.036 x_1^{0.758} & x_2^{0.0035} \left(\frac{x_3}{\cos(x_4)^2}\right)^{0.6} x_5^{0.006} x_6^{0.04}\times \\
+ & \times\left(\frac{100 x_7}{\cos(x_4)}\right)^{-0.3} (x_8 x_9)^{0.49} + x_1 x_10
+\end{align*}
+\begin{tabular}{|l|l|}
+\hline
+$x_1\in[150, 200]$ & wing area (ft$^2$) \\
+$x_2\in[220, 300]$ & weight of fuel in the wing (lb) \\
+$x_3\in[6, 10]$ & aspect ratio \\
+$x_4\in[-10, 10]$ & quarter-chord sweep (degrees) \\
+$x_5\in[16, 45]$ & dynamic pressure at cruise (lb/ft$^2$) \\
+$x_6\in[0.5, 1]$ & taper ratio \\
+$x_7\in[0.08, 0.18]$ & aerofoil thickness to chord ratio \\
+$x_8\in[2.5, 6]$ & ultimate load factor \\
+$x_9\in[1700, 2500]$ & flight design gross weight (lb) \\
+$x_{10}\in[0.025, 0.08]$ & paint weight (lb/ft$^2$) \\
+\hline
+\end{tabular}
+}
 
 As a real case example, we will study the payoff function of an arithmetic mean Asian call option. For a discretized Brownian motion $\vect{B}=(B_{t_1}, B_{t_2},\dots, B_{t_d})$ at times $t_i=T\times i/d$, the payoff of the option is:
 
