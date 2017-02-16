@@ -80,6 +80,7 @@ mathtools,bm,extraipa,mathabx,graphicx,algorithm}
 %\newcommand{\bvec}[1]{\boldsymbol{#1}}
 \newcommand{\vect}[1]{\boldsymbol{\mathbf{#1}}}
 \newcommand{\vx}{\vect{x}}
+\newcommand{\vl}{\vect{l}}
 \newcommand{\vI}{\vect{I}}
 \newcommand{\vk}{\vect{k}}
 \newcommand{\vw}{\vect{w}}
@@ -107,6 +108,7 @@ mathtools,bm,extraipa,mathabx,graphicx,algorithm}
 \let\oldemptyset\emptyset
 \let\emptyset\varnothing
 
+\newcommand{\comment}[1]{{\color{cyan} (Toni) #1 }}
 % Insert the name of "your journal" with
 % \journalname{myjournal}
 %
@@ -323,26 +325,42 @@ We start by reviewing the construction of the error bound proposed in \cite{HicJ
 \subsection{Reliable integral estimation using digital sequences}
 \label{sec:3.1}
 
-We assume we have an embedded sequence of digital nets in base $b$ as in \cite[Sec. 2-3]{HicJim},
-\[
+We will assume that we have an embedded sequence of digital nets \comment{in $\cube$, base $b$ and dimension d} as described in \cite[Sec. 2-3]{HicJim},
+\begin{equation}\label{embedded_digital}
 \mathcal{P}_0=\{\vect{0}\}\subset\dots\subset\mathcal{P}_m=\{\vx_i\}_{i=0}^{b^m-1}\subset\dots\subset\mathcal{P}_\infty=\{\vx_i\}_{i=0}^{\infty}.
-\]
-Each $\mathcal{P}_m$ has a group structure under the digitwise addition:
+\end{equation}
+\comment{The Sobol' sequence is an example of a digital net in base two satisfying \eqref{embedded_digital}, which in dimension one corresponds to: $\mathcal{P}_0=\{0\}$, $\mathcal{P}_1=\{0,0.5\}$, $\mathcal{P}_2=\{0,0.5,0.25,0.75\}$, $\mathcal{P}_3=\{0,0.5,0.25,0.75,0.125,0.625,0.375,0.875\}$,...}
+
+\comment{For this sequence of digital nets,} each $\mathcal{P}_m$ has a group structure under the digitwise addition:
 \[
 \vx \oplus \vt = \left(\sum_{\ell=1}^{\infty} [(x_{j\ell} + t_{j\ell}) \bmod b] b^{-\ell} \pmod{1} \right)_{j=1}^d,
 \]
-where $x_{j\ell}$ and $t_{j\ell}$ are the $b$-adic decompositions of the $j^{\rm th}$ component of points $\vx$ and $\vt$.
+where $x_{j\ell}$ and $t_{j\ell}$ are the $b$-adic decompositions of the $j^{\rm th}$ component of points $\vx$ and $\vt$,\comment{ i.e.
+\[
+x_{j} = \sum_{\ell=1}^{\infty} x_{j\ell}b^{-\ell},\qquad t_{j} = \sum_{\ell=1}^{\infty} t_{j\ell}b^{-\ell}.
+\]
+For $b=2$, the digitwise addition is equivalent to the XOR operation.
 
-To relate the group structure of $\mathcal{P}_m$ with the integration error, we introduce the \emph{dual net} which establishes the relationship between any digital net and the \emph{wavenumber} space of non-negative integers $\mathbb{N}_0^d$. A dual net is
+In addition, we consider the \emph{wavenumber} space of non-negative integers $\mathbb{N}_0^d$. These non-negative integers will index the frequencies in which we decompose our integrand as a Fourier series. The space $\mathbb{N}_0^d$ is also a group under the digitwise addition:
+\[
+\vk \oplus \vl = \left(\sum_{\ell=0}^{\infty} [(k_{j\ell} + l_{j\ell}) \bmod b] b^{\ell} \right)_{j=1}^d,
+\]
+where $k_{j\ell}$ and $l_{j\ell}$ are the $b$-adic decompositions of the $j^{\rm th}$ components,
+\[
+k_{j} = \sum_{\ell=0}^{\infty} k_{j\ell}b^{\ell},\qquad l_{j} = \sum_{\ell=0}^{\infty} l_{j\ell}b^{\ell}.
+\]
+}
+To relate the group structure of $\mathcal{P}_m$ with the integration error, we introduce the \emph{dual net} which establishes the link between any digital net and the \emph{wavenumber} space. A dual net $\mathcal{P}_m^\perp$ is
 \begin{align*}
-\mathcal{P}_m^\perp=\{\vk\in\mathbb{N}_0^d:\ip{\vk}{\vx}=0,\, \vx\in\mathcal{P}_m\}, \\
-\ip{\vk}{\vx} = \sum_{j=1}^{d} \sum_{\ell=0}^{\infty} k_{j\ell}x_{j,\ell+1}  \pmod b,
+\mathcal{P}_m^\perp=\{\vk\in\mathbb{N}_0^d:\ip{\vk}{\vx}=0,\, \text{ for all } \vx\in\mathcal{P}_m\}, \\
+\ip{\vk}{\vx} = \left(\sum_{j=1}^{d} \sum_{\ell=0}^{\infty} k_{j\ell}x_{j,\ell+1}  \pmod b \right)/b,
 \end{align*}
-and inherits the same embedded structure as for digital nets,
+and inherits the inverted embedded structure \eqref{embedded_digital},
 \begin{equation}\label{dual_net_structure}
 \mathcal{P}_0^\perp=\mathbb{N}_0^d\supset\dots\supset\mathcal{P}_\infty^\perp=\{\vect{0}\}.
 \end{equation}
-As shown in \cite[Sec. 3]{HicJim}, the group structure of digital nets guarantees the property below affecting any Walsh basis \\$\varphi_{\vk}(\vx)=\e^{2 \pi \sqrt{-1} \ip{\vk}{\vx}/b}$,
+
+As shown in \cite[Sec. 3]{HicJim}, the group structure of digital nets guarantees the property below affecting any Walsh basis function $\varphi_{\vk}(\vx)=\e^{2 \pi \sqrt{-1} \ip{\vk}{\vx}}$,
 \begin{equation}\label{basis_integ_prop}
 \frac{1}{b^m}\sum_{\vx\in\mathcal{P}_m}\varphi_{\vk}(\vx)=
 \begin{cases}
@@ -350,10 +368,9 @@ As shown in \cite[Sec. 3]{HicJim}, the group structure of digital nets guarantee
 0,\quad \vk\notin\mathcal{P}_m^\perp.
 \end{cases}
 \end{equation}
-
-Therefore, considering the Walsh decomposition of any $f\in \mathbb{L}^2([0,1]^d)$: \[
+Therefore, using the Walsh decomposition of $f\in \mathbb{L}^2([0,1]^d)$: \[
 f(\vx)=\sum_{\vk\in\naturals_0^d}\hf_{\vk}\varphi_{\vk}(\vx), \]
-and,
+and defining the value of the integral,
 \[ I = \int_{\cube} f(\vx)\,d\vx,\]
 property \eqref{basis_integ_prop} leads to
 \begin{align}
@@ -364,15 +381,19 @@ property \eqref{basis_integ_prop} leads to
 &= \absolute{\sum_{\vk\in\mathcal{P}_m^\perp\setminus\{\vzero\}}\hf_{\vk}} \\
 & \leq \sum_{\vk\in\mathcal{P}_m^\perp\setminus\{\vzero\}}\absolute{\hf_{\vk}}. \label{3.1.err_bound}
 \end{align}
-Based on the size of $\absolute{\hf_{\vk}}$ and the structure of dual nets \eqref{dual_net_structure}, in \cite[Sec. 4.1]{HicJim} we proposed an ordering of the \emph{wavenumbers} $\vk(\cdot):\naturals_0\rightarrow\naturals_0^d$. Defining $\hf_{\kappa}=\hf_{\vk(\kappa)}$, the error bound \eqref{3.1.err_bound} becomes,
-\begin{equation}
+Based on the size of $\absolute{\hf_{\vk}}$ and the structure of dual nets \eqref{dual_net_structure}, in \cite[Sec. 4.1]{HicJim} we proposed an ordering of the \emph{wavenumbers} $\tilde{\vk}(\cdot):\naturals_0\rightarrow\naturals_0^d$. \comment{This ordering $\tilde{\vk}$ is a one-to-one and onto mapping between $\naturals_0$ and $\naturals_0^d$. Thus, we can identify each $\vk\in\naturals_0^d$ with one $\kappa\in\naturals_0$ such that $\tilde{\vk}(\kappa)=\vk$. This ordering ensures that $\mathcal{P}_m^\perp\setminus\{\vzero\}=\{\tilde{\vk}(\lambda b^m)\}_{\lambda=1}^\infty$. If we identify $\hf_{\kappa}=\hf_{\tilde{\vk}(\kappa)}$, the error bound \eqref{3.1.err_bound} becomes,}
+\begin{equation}\label{mapped_error_bound}
 \absolute{I - \frac{1}{b^m}\sum_{\vx\in\mathcal{P}_m}f(\vx)} \le \sum_{\lambda=1}^{\infty} \left \lvert \hf_{\lambda b^m}\right \rvert.
 \end{equation}
-Nonetheless, because the knowledge of the Walsh coefficients $\hf_{\kappa}$ is not assumed, we will estimate them using the fast transform obtained with the precomputed function values, and refer to them as $\tf_{m,\kappa}$,
+\comment{To use the error bound \eqref{mapped_error_bound} to design and automatic algorithm would require the knowledge of the Walsh coefficients. To avoid this assumption, we will estimate them via the fast transform obtained using the precomputed function values. We will refer to the discrete coefficients as $\tf_{m,\kappa}$,}
 \[
-\tf_{m,\kappa}=\tf_{m,\vk(\kappa)}=\frac{1}{b^m}\sum_{\vx\in\mathcal{P}_m}f(\vx)\overline{\varphi_{\vk(\kappa)}(\vx)}.
+\tf_{m,\kappa}=\tf_{m,\tilde{\vk}(\kappa)}=\frac{1}{b^m}\sum_{\vx\in\mathcal{P}_m}f(\vx)\overline{\varphi_{\tilde{\vk}(\kappa)}(\vx)}.
 \]
-Note that for function values evaluated at $\mathcal{P}_m$, one only generates $b^m$ discrete Walsh coefficients $\tf_{m,\kappa}$.
+\comment{As shown in \cite[Sec. 3]{HicJim}, the error of estimating the true coefficients using the discrete coefficients can be measured,
+\begin{equation}\label{discrite_true_relationship}
+\tf_{m,\kappa} = \hf_\kappa + \sum_{\lambda=1}^{\infty} \hf_{\kappa + \lambda b^m}, \qquad \text{ for all } \kappa\in\naturals_0,
+\end{equation}
+However, since there are at most $b^m$ distinct values of $\tf_{m,\kappa}$, we require some assumptions on the decay rate of $\hf_{\kappa}$ to transform \eqref{mapped_error_bound} into a new error bound in terms of the discrete coefficients.}
 
 For $\ell,m \in \mathbb{N}_0$ and $\ell \le m$ we introduce the following notation,
 \begin{align*}
@@ -382,17 +403,17 @@ S_m(f) &=  \sum_{\kappa=\left \lfloor b^{m-1} \right \rfloor}^{b^{m}-1} \absolut
 \sum_{\kappa=b^{m}}^{\infty} \absolute{\hf_{\kappa}},\\ 
 \tS_{\ell,m}(f) &= \sum_{\kappa=\left \lfloor b^{\ell-1}\right \rfloor}^{b^{\ell}-1} \absolute{\tf_{m,\kappa}}.
 \end{align*}
+\comment{Among these sums, one should notice that $\hS_{0,m}(f)$ corresponds to the error bound appearing in \eqref{mapped_error_bound}. Thus, $\wcS_m(f)$ is an infinite sum of Walsh coefficients that contain the error bound coefficients. To have a control on the decay rate of the coefficients, we also define the finite sum of true coefficients $S_m(f)$. Note that from these sums, we can only observe $\tS_{\ell,m}(f)$.  }
+
 Finally, we define the set of functions $\cc$,
 \begin{multline} \label{conecond}
 \cc:=\{f \in \mathbb{L}^2(\cube) : \hS_{\ell,m}(f) \le \homega(m-\ell) \wcS_m(f),\ \ \ell \le m, \\
 \wcS_m(f) \le \wcomega(m-\ell) S_{\ell}(f),\ \  \ell_* \le \ell \le m\}.
 \end{multline}
-for $\ell_* \in \mathbb{N}$, $\homega$ and $\wcomega$ two non-negative valued functions with $\lim_{m \to \infty} \wcomega(m) = 0$, and such that $\homega(r)\wcomega(r)<1$ for some fixed $r\in\mathbb{N}$.
-
-In \cite[Sec. 4.2]{HicJim} it is shown that for any $f\in\cc$,
+for a fixed $\ell_* \in \mathbb{N}$, $\homega$ and $\wcomega$ two non-negative valued functions with $\lim_{m \to \infty} \wcomega(m) = 0$. \comment{The decay rate assumptions on the Walsh coefficients are encoded in $\cc$ and controlled by $\homega$ and $\wcomega$. First, we assume that $\wcS_m(f)$ bounds $\hS_{\ell,m}(f)$ in some sense, in particular it bounds $\hS_{0,m}(f)$. This means that we can use $\wcS_m(f)$ as a good indicator for the error bound. Then, we also need $S_{\ell}(f)$ to bound $\wcS_m(f)$ which helps transforming the infinite sum into a finite sum. In this step, we are assuming that if $S_{\ell}(f)$ is small enough, we expect the high frequency coefficients, i.e. $\wcS_m(f)$, to also be small. By defining $r=m-\ell$, and assuming that $\homega(r)\wcomega(r)<1$ with $r\in\mathbb{N}$, one may see $r$ as a distance between $S_{\ell}(f)$ and $\wcS_m(f)$: larger values of $r$ will imply a smaller error bound but more dependence on smaller Walsh coefficients. Finally, we can write the error bound in terms of $\tS_{\ell,m}(f)$ instead of $\wcS_m(f)$ by using \eqref{discrite_true_relationship}.} In \cite[Sec. 4.2]{HicJim} it is shown that for any $f\in\cc$,
 \begin{equation}
 \absolute{I - \frac{1}{b^m}\sum_{\vx\in\mathcal{P}_m}f(\vx)}
-\le \tS_{\ell,m}(f)\underbrace{\frac{\homega(m) \wcomega(m-\ell)}{1 - \homega(m-\ell) \wcomega(m-\ell)}}_{\mathfrak{C}(m)}=\epsilon_{\widehat{I}}, \label{errbd}
+\le \tS_{\ell,m}(f)\underbrace{\frac{\homega(m) \wcomega(r)}{1 - \homega(r) \wcomega(r)}}_{\mathfrak{C}(m)}=\epsilon_{\widehat{I}}, \label{errbd}
 \end{equation}
 where one may increase $m$ until the error bound $\epsilon_{\widehat{I}}$ is small enough.
 
@@ -412,7 +433,7 @@ f(\vx_u:{\vx'}_{-u})\right)f(\vx')d\vx d{\vx'}}{\int_{[0,1)^{d}} f(\vx)^2 d{\vx}
 \overline{S}_u(\vI) & = \frac{\frac{1}{2}\int_{[0,1)^{d+1}}(f(\vx')-f(\vx_u:{\vx'}_{-u}))^2d\vx_u d{\vx'}}{\int_{[0,1)^{d}} f(\vx)^2 d{\vx}-\left(\int_{[0,1)^{d}} f(\vx) d{\vx}\right)^2}, \\
 \overline{S}_u(\vI) & = \frac{I_2}{I_3-(I_4)^2},
 \end{align*}
-where $\vI=(I_1,I_2,I_3,I_4)$ is a vector of integral values. Indices $\underline{S}_u(\vI)$ and $\overline{S}_u(\vI)$ are defined as functions over the vector $\vI$. If we estimate $\vI$ by $\widehat{\vI}$ with vector of error bounds $\varepsilon_{\widehat{\vI}}=(\epsilon_{\widehat{I}_1},\epsilon_{\widehat{I}_2},\epsilon_{\widehat{I}_3}$,\\ $\epsilon_{\widehat{I}_4})$ according to (\ref{errbd}), we know that $\vI\in B_{\varepsilon_{\widehat{\vI}}}(\widehat{\vI})=[\widehat{\vI}-\varepsilon_{\widehat{\vI}},\widehat{\vI}+\varepsilon_{\widehat{\vI}} ]$. 
+where $\vI=(I_1,I_2,I_3,I_4)$ is a vector of integral values. Indices $\underline{S}_u(\vI)$ and $\overline{S}_u(\vI)$ are defined as functions over the vector $\vI$. If we estimate $\vI$ by $\widehat{\vI}$ with vector of error bounds $\varepsilon_{\widehat{\vI}}=(\epsilon_{\widehat{I}_1},\epsilon_{\widehat{I}_2},\epsilon_{\widehat{I}_3}$, $\epsilon_{\widehat{I}_4})$ according to (\ref{errbd}), we know that $\vI\in B_{\varepsilon_{\widehat{\vI}}}(\widehat{\vI})=[\widehat{\vI}-\varepsilon_{\widehat{\vI}},\widehat{\vI}+\varepsilon_{\widehat{\vI}} ]$. 
 
 Then, as an alternative to the common Sobol' indices estimators (\ref{common.sobol.est}), we can define the following two estimators with their respective error bounds:
 \begin{gather}

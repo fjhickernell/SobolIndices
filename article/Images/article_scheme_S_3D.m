@@ -43,17 +43,17 @@ else
 end
 if Ireal(1) < I(1) % Ireal is indeed I, and variable I corresponds to I hat
 %     ax.XTickLabel = {'$\hat{I_3}-\varepsilon_{I_3}$','$I_3$','$\hat{I_3}$','$\hat{I_3}+\varepsilon_{I_3}$'};
-    ax.XTickLabel = {'$\hat{I_3}-\varepsilon_{I_3}$','$I_3$','$\hat{I_3}+\varepsilon_{I_3}$'};
+    ax.XTickLabel = {'$\hat{I_3}-\varepsilon_{\hat{I_3}}$','$I_3$','$\hat{I_3}+\varepsilon_{\hat{I_3}}$'};
 else
 %     ax.XTickLabel = {'$\hat{I_3}-\varepsilon_{I_3}$','$\hat{I_3}$','$I_3$','$\hat{I_3}+\varepsilon_{I_3}$'};
-    ax.XTickLabel = {'$\hat{I_3}-\varepsilon_{I_3}$','$I_3$','$\hat{I_3}+\varepsilon_{I_3}$'};
+    ax.XTickLabel = {'$\hat{I_3}-\varepsilon_{\hat{I_3}}$','$I_3$','$\hat{I_3}+\varepsilon_{\hat{I_3}}$'};
 end
 if Ireal(2) < I(2)
 %     ax.YTickLabel = {'$\hat{I_4}-\varepsilon_{I_4}$','$I_4$','$\hat{I_4}$','$\hat{I_4}+\varepsilon_{I_4}$'};
-    ax.YTickLabel = {'$\hat{I_4}-\varepsilon_{I_4}$','$I_4$','$\hat{I_4}+\varepsilon_{I_4}$'};
+    ax.YTickLabel = {'$\hat{I_4}-\varepsilon_{\hat{I_4}}$','$I_4$','$\hat{I_4}+\varepsilon_{\hat{I_4}}$'};
 else
 %     ax.YTickLabel = {'$\hat{I_4}-\varepsilon_{I_4}$','$\hat{I_4}$','$I_4$','$\hat{I_4}+\varepsilon_{I_4}$'};
-    ax.YTickLabel = {'$\hat{I_4}-\varepsilon_{I_4}$','$I_4$','$\hat{I_4}+\varepsilon_{I_4}$'};
+    ax.YTickLabel = {'$\hat{I_4}-\varepsilon_{\hat{I_4}}$','$I_4$','$\hat{I_4}+\varepsilon_{\hat{I_4}}$'};
 end
 if S(Ireal(1),Ireal(2)) < Smax & S(Ireal(1),Ireal(2)) > Smin % Not the...
     % same value as Smax and Smin for the Zaxis
@@ -140,5 +140,5 @@ view(az,e1)
 colorbar
 colormap autumn
 print '-depsc2' -opengl  'estimator_3d_small_color.eps'
-% a = colormap(gray); colormap(a/2 + 1/3)
-% print '-depsc2' -opengl  'estimator_3d_small.eps'
+a = colormap(gray); colormap(a/2 + 1/3)
+print '-depsc2' -opengl  'estimator_3d_small.eps'
