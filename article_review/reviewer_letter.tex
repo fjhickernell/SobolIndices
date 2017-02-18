@@ -55,6 +55,8 @@ Laurent Gilquin and Llu\'{i}s Antoni Jim\'{e}nez Rugama}
 \item[2.] Complete assessment of the cost: Since only the different variants of this method are compared in the numerical results, it is fair to focus on the number of function evaluations to compare their respective costs. However, and as discussed in paper [4] from the list of references (in particular toward the end of Theorem 1 in [4]), the overall cost of this method should also include the Walsh function evaluations required to determine the quantity $\widetilde{S}_{l,m}$ used in the error calculation via (14). The authors should mention this and discuss this impact of this cost on comparisons that are made with other methods.
 
 \item[3.]The set C: In the section describing numerical results, choices are made for the parameters $\ell^*$ and $r$ which in turn define the set (cone) of functions C for which the error threshold formula (14) used to derive the algorithm holds. There should be some information in the paper on whether or not the functions considered in this section can be shown to be in this cone. This is especially important in light of the results obtained on page 10 (column 1, lines 36-38), where it looks like the error threshold was not met by the algorithm. Is it because the function is not in C?
+
+\answer{End of section 3 and beginning of section 5}
 \end{itemize}
 
 
@@ -65,8 +67,11 @@ Laurent Gilquin and Llu\'{i}s Antoni Jim\'{e}nez Rugama}
 {\color{blue} The typo has been corrected.}
 \item[b.] page 2, column 2, equation (7): why use a biased estimator for $\sigma^2$ ?
 
-{\color{blue} The biased estimator has been replaced by the unbiased one.}
+{\color{blue} The biased estimator has been replaced with the unbiased one.}
 \item[c.] page 4, column 2, equation (14): it is not clear how $\ell$ is chosen on the RHS, and whether or not the inequality holds for all $\ell \leq m$ or for some specific value of $\ell$ ? Please clarify.
+
+\answer{While the RHS holds for any $\ell_*\leq\ell\leq m$, it is definitely not clear how to proceed with the information given in the article. We added more detailed information explaining that one only needs to fix $r=m-\ell$. Once $r$ is chosen, the RHS only depends on $m$.}
+
 \item[d.] page 4, column 2, line 42: is it not instead "...the error bound $\epsilon_{\hat{I}}$" (hat on subscript I?)?
 
 {\color{blue} The typo has been corrected.}
@@ -77,9 +82,12 @@ Laurent Gilquin and Llu\'{i}s Antoni Jim\'{e}nez Rugama}
 As for the properties of the Sobol' sequences, the ones used in this paper are generated with the directional numbers found by S. Joe and F. Y. Kuo (2008). These directional numbers insure better two-dimensional projections of the resulting Sobol' sequences.}
 
 \item[f.] page 6, column 2, line 32: is the "iid" property valid across the indices i, i.e., the n vectors have to be independent? If so, this would invalidate the use of a Sobol' sequence to create these vectors, so please clarify this point.
+
+\answer{As pointed out by the reviewer, some clarification was needed in this paragraph. We added the missing explanation indicating that we replace Owen's iid uniform points by a Sobol' sequence.}
+
 \item[g.] page 9, column 2 , "real case model". There are some imprecisions in this part: lines 15-16, it should be the "discounted payoff" and not just "payoff", rho is the risk-free interest rate (not just interest rate). More importantly, the authors directly give the discounted payoff in terms of the Brownian motion without stating what model is used for the stock price and without stating that for the purpose of pricing one should work under the risk-neutral measure. Please clarify this so that the financial motivation for this problem is properly done.
 
-{\color{blue} The ``real case model'' has been replaced with a new one as suggested by the second reviewer. Nonetheless, we thank the reviewer for these corrections.} 
+{\color{blue} The ``real case model'' has been replaced with a new one as suggested by the second reviewer. Nonetheless, we thank the reviewer for these corrections that we agreed with.} 
 \end{itemize}
 
 \textbf{\large{Reviewer $2$}}
@@ -106,16 +114,23 @@ Furthermore, a remark was added to specify that in this paper $\mathcal{P}$ and 
 
 \item[2.] Section $3.1$ needs more detail for readers not already familiar with the approach. For instance on page $4$ line $16$ a little should be said about what $k_{j\ell}$ is. It should also briefly say in words what $S_m$, $\hS_{\ell,m}$, $\wcS_m$ and $\tS_{\ell,m}$ all mean.
 
-\answer{More details have been provided in Section 3.1 to guide readers follow the ideas behind the approach. Among all additions, $k_{j\ell}$ has been defined and the sums $S_m$, $\hS_{\ell,m}$, $\wcS_m$, $\tS_{\ell,m}$ have been briefly described in conjunction with the cone conditions.}
+\answer{More details have been provided in Section 3.1 to help readers follow the ideas behind the approach. Among all additions, $k_{j\ell}$ has been defined and the sums $S_m$, $\hS_{\ell,m}$, $\wcS_m$, $\tS_{\ell,m}$ have been briefly described in conjunction with the cone conditions.}
 
 \item[3.] Page $5$ line $56$ presents some bounds that the Sobol' indices must satisfy. Sometimes they won't satisfy those bounds. When do they fail, how that
 be detectable, and what can we do in the face of bounds that might or might not hold? Presumably these issues have been discussed in simpler contexts. The paper should address this issue.
+
+\answer{
+As proposed in this point, we added more information that might be useful for this issue.
+
+If $I_1, I_2, I_3, I_4$ are all in $\mathcal{C}$, by construction we know that
+\[ \underline{S}_u\in \left[ \widehat{\underline{S}}_u - \varepsilon_{\widehat{\underline{S}}_u}, \widehat{\underline{S}}_u + \varepsilon_{\widehat{\underline{S}}_u} \right], \qquad \overline{S}_u\in \left[ \widehat{\overline{S}}_u - \varepsilon_{\widehat{\overline{S}}_u}, \widehat{\overline{S}}_u + \varepsilon_{\widehat{\overline{S}}_u} \right] .\]
+However, since we do not assume the knowledge of the Walsh coefficients of our integrands, it is hard to verify whether each of them lie inside $\mathcal{C}$. Instead, we suggest and refer to some data-based necessary conditions discussed in another article. If these necessary conditions are not satisfied, one should consider enlarging the cone.}
 
 \item[4.]If we replace $f$ by $f-c$ for some constant shift $c$, then the Sobol' indices do not change. But the bounds for $\underline{S}_u$ and $\overline{S}_u$ do change because $\vI_3$ is affected. What could/should we do about this?
 
 {\color {blue} We acknowledge that analytical formulas of Sobol' indices are invariant by adding a constant shift $c$ to the function $f$. As underlined by the reviewer, in our algorithm the addition of a constant shift $c$ modifies the error bound for $\vI_3$ but also the errors bounds for the others integrands ($\vI_1$, $\vI_2$ and $\vI_4$). More generally, our algorithm depends on the analytical expression of the Sobol' index estimator considered.
 
-However, that is not a concerns since error bounds for any estimator can be calculated. That is, our algorithm can be adapted to any Sobol' index estimator. In particular, this is done when ``Correlation 2'' is used in Variant A.b instead of (5).}
+However, that is not a concern since error bounds for any estimator can be calculated. That is, our algorithm can be adapted to any Sobol' index estimator. In particular, this is done when ``Correlation 2'' is used in Variant A.b instead of (5). Our goal was to design an automatic algorithm that does not ac...}
 
 
 \item[5.] Page $7$ lines $22:27$. The discussion here is saying that the higher dimensional integrand is likely to be the one that needs more evaluations. That is not in line with the last couple of decades of QMC theory. The nominal dimension might not be very telling. Maybe only a few of the inputs are important in the higher dimensional integrand, or maybe the higher order variable interactions are less important for that integrand.
@@ -123,7 +138,7 @@ However, that is not a concerns since error bounds for any estimator can be calc
 So, can you give a better reason for why that integrand might need larger $n$? Alternatively, in the numerical examples, which integrands required the most evaluations?
 (This point touches on the circular issue, perhaps best avoided, of finding which variables are important when you're estimating a Sobol' index.)
 
-{\color{blue} We agree with the reviewer that the effective dimension of the higher dimensions integrand might be lower than its lower dimensions counterpart. However, evaluating the effective dimension of each integrands already requires a large number of model evaluations itself (\textit{c.f.} Wang. X and Fang. K.-T., 2003).
+{\color{blue} We agree with the reviewer that the effective dimension of the higher dimensions integrand might be lower than its lower dimensions counterpart. However, evaluating the effective dimension of each integrands already requires a large number of model evaluations (\textit{c.f.} Wang. X and Fang. K.-T., 2003).
 
 Since evaluating the effective dimension is not in the scope of this paper, we propose the following. The original statement has been replaced with the assumption that the higher dimensions integrand possesses a higher effective dimension. Then, this assumption is tested on each example by plotting the repartition of the sum of the $c_j$ (equation (19)) over the $100$ repeats. The sign of the sum tells us if, in average, this assumption is validated across the Sobol' indices.}
 
@@ -132,7 +147,7 @@ Since evaluating the effective dimension is not in the scope of this paper, we p
 That makes it a particularly favorable problem for Sobol' points or any points in base $2$. The problem might just be too QMC-friendly. It would be better to use $g_j(x_j) = (|3x_j-2| + a_j)/(1 + a_j)$ which has issues when
 $x_j = 2/3$ which is not dyadic. The QMC friendly version might still work exactly the same as the unfriendly version, but changing $g$ just removes that issue from consideration.
 
-{\color{blue} The Sobol' g-function has been modified according to the reviewer remark. There were no drastic changes observed. As a matter of fact, the failure rates have improved for all three approaches (Variant A.a, A.b and B).} 
+{\color{blue} The Sobol' g-function has been modified according to the reviewer remark. There were no drastic changes observed, perhaps since the scrambling might remove most of the anchoring. Indeed, the new results show that failure rates have improved for all three approaches (Variant A.a, A.b and B).} 
 
 \item[7.] The Asian option is very over used in QMC problems. We already know that BB and PC make the first component most important. It might be interesting to compare these two, although the answer might depend on
 the strike price and volatility. 
@@ -144,9 +159,9 @@ For the same amount of work, the authors could use a real function where the ans
 \item[8.] Sobol' indices are often motivated by the need to identify important variables when $f$ is expensive to evaluate; perhaps half a day for $n = 1$. Estimates that require $n$ to be several hundred thousand do not fitthat motivating context. If the authors can describe a context where it would be worth having $n = 400000$ to get a Sobol' estimate, that would be great. Nobody else has properly addressed this issue, so this point is a
 suggestion, not a requirement.
 
-{\color{blue} We understand and agree with the issue raised by the reviewer. A possible solution is to choose a higher target precision $\epsilon$ when dealing with time-expensive function. In the proposed examples, $\epsilon$ was intentionally fixed small to put forward the performance of our algorithm. To cover both situations (small and high value of $\epsilon$), the bratley example has been reworked.
+{\color{blue} We understand and agree with the issue raised by the reviewer. A possible solution is to choose a less conservative precision $\epsilon$ when dealing with time-expensive functions. In the proposed examples, $\epsilon$ was intentionally fixed small to push forward the performance of our algorithm. That shows the difference in function evaluations cost ....
 
-On another hand, if one has to deal with a function where one day is required to obtain one evaluation, perhaps the use of Sobol' indices should be dropped for a screening method (less accurate but less greedy). Or if available, one could make use of a cluster to perform multiple model evaluations in parallel.}
+On another hand, if one has to deal with a function where one day is required to obtain one evaluation, perhaps the use of a screening method is more adequate (less accurate but less greedy). Or if available, one could make use of a cluster to perform multiple model evaluations in parallel.}
 \end{itemize}
 
 \textbf{Minor comments}:
@@ -165,5 +180,5 @@ new letter.
 \item[f.] page $8$ line $16$: twice as small  $\rightarrow$ half as large
 \end{itemize}
 
-{\color{blue} All minors points have been dealt with. For point c., equation (7) was replaced with the unbiased estimator of $\sigma^2$. For point e., the distinction has been noted in the paper given that notations cannot be changed (they need to match those of the sourced paper).
+{\color{blue} All minors points have been dealt with. For point c., equation (7) was replaced with the unbiased estimator of $\sigma^2$. For point e., the distinction has been noted in the paper. The authors preferred to keep the notations from previous cited articles.
 \end{document}
