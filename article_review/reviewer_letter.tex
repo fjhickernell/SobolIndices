@@ -54,9 +54,11 @@ Laurent Gilquin and Llu\'{i}s Antoni Jim\'{e}nez Rugama}
 
 \item[2.] Complete assessment of the cost: Since only the different variants of this method are compared in the numerical results, it is fair to focus on the number of function evaluations to compare their respective costs. However, and as discussed in paper [4] from the list of references (in particular toward the end of Theorem 1 in [4]), the overall cost of this method should also include the Walsh function evaluations required to determine the quantity $\widetilde{S}_{l,m}$ used in the error calculation via (14). The authors should mention this and discuss this impact of this cost on comparisons that are made with other methods.
 
+\answer{The function values used to estimate the Sobol' indices are the same to compute the discrite Walsh coefficients. Thus, there are no additional function evaluations needed to compute $\widetilde{S}_{l,m}$. }
+
 \item[3.]The set C: In the section describing numerical results, choices are made for the parameters $\ell^*$ and $r$ which in turn define the set (cone) of functions C for which the error threshold formula (14) used to derive the algorithm holds. There should be some information in the paper on whether or not the functions considered in this section can be shown to be in this cone. This is especially important in light of the results obtained on page 10 (column 1, lines 36-38), where it looks like the error threshold was not met by the algorithm. Is it because the function is not in C?
 
-\answer{End of section 3 and beginning of section 5}
+\answer{As the reviewer claims, this is a key point that we revised and explained with more detail. It is really hard to verify whether an integrand satisfies the cone condition. Indeed, because we choose our mapping $\tilde{\vk}$ heuristically, the cone conditions will also depend on the scrambling. At the end of section 3 we cited some data-based necessary conditions that can help identify when integrands are not in the cone. In addition, also at the beginning of section 5, we note that if the error bound is not satisfied it is certain that the integrand is not in the cone.}
 \end{itemize}
 
 

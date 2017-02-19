@@ -389,11 +389,11 @@ property \eqref{basis_integ_prop} leads to
 &= \absolute{\sum_{\vk\in\mathcal{P}_m^\perp\setminus\{\vzero\}}\hf_{\vk}} \\
 & \leq \sum_{\vk\in\mathcal{P}_m^\perp\setminus\{\vzero\}}\absolute{\hf_{\vk}}. \label{3.1.err_bound}
 \end{align}
-Based on the size of $\absolute{\hf_{\vk}}$ and the structure of dual nets \eqref{dual_net_structure}, in \cite[Sec. 4.1]{HicJim} we proposed an ordering of the \emph{wavenumbers} $\tilde{\vk}(\cdot):\naturals_0\rightarrow\naturals_0^d$. \comment{This ordering $\tilde{\vk}$ is a one-to-one and onto mapping between $\naturals_0$ and $\naturals_0^d$. Thus, we can identify each $\vk\in\naturals_0^d$ with one $\kappa\in\naturals_0$ such that $\tilde{\vk}(\kappa)=\vk$. This ordering ensures that $\mathcal{P}_m^\perp\setminus\{\vzero\}=\{\tilde{\vk}(\lambda b^m)\}_{\lambda=1}^\infty$. If we identify $\hf_{\kappa}=\hf_{\tilde{\vk}(\kappa)}$, the error bound \eqref{3.1.err_bound} becomes,}
+Based on the size of $\absolute{\hf_{\vk}}$ and the structure of dual nets \eqref{dual_net_structure}, in \cite[Sec. 4.1]{HicJim} we proposed an ordering of the \emph{wavenumbers} $\tilde{\vk}(\cdot):\naturals_0\rightarrow\naturals_0^d$. \comment{This ordering $\tilde{\vk}$ is a one-to-one and onto mapping between $\naturals_0$ and $\naturals_0^d$. Thus, we can identify each $\vk\in\naturals_0^d$ with one $\kappa\in\naturals_0$ such that $\tilde{\vk}(\kappa)=\vk$. The ordering is not unique and one should choose it such that large values of $\kappa$ are mapped to smaller values of $\absolute{\hf_{\tilde{\vk}(\kappa)}}$. It also ensures that $\mathcal{P}_m^\perp\setminus\{\vzero\}=\{\tilde{\vk}(\lambda b^m)\}_{\lambda=1}^\infty$. If we identify $\hf_{\kappa}=\hf_{\tilde{\vk}(\kappa)}$, the error bound \eqref{3.1.err_bound} becomes,}
 \begin{equation}\label{mapped_error_bound}
 \absolute{I - \frac{1}{b^m}\sum_{\vx\in\mathcal{P}_m}f(\vx)} \le \sum_{\lambda=1}^{\infty} \left \lvert \hf_{\lambda b^m}\right \rvert.
 \end{equation}
-\comment{To use the error bound \eqref{mapped_error_bound} to design and automatic algorithm would require the knowledge of the Walsh coefficients. To avoid this assumption, we will estimate them via the fast transform obtained using the precomputed function values. We will refer to the discrete coefficients as $\tf_{m,\kappa}$,}
+\comment{To use the error bound \eqref{mapped_error_bound} to design and automatic algorithm would require the knowledge of the Walsh coefficients. To avoid this assumption, we will estimate them via the fast transform obtained using the precomputed function values already used to estimate the mean. We will refer to the discrete coefficients as $\tf_{m,\kappa}$,}
 \[
 \tf_{m,\kappa}=\tf_{m,\tilde{\vk}(\kappa)}=\frac{1}{b^m}\sum_{\vx\in\mathcal{P}_m}f(\vx)\overline{\varphi_{\tilde{\vk}(\kappa)}(\vx)}.
 \]
@@ -477,6 +477,8 @@ Under the assumption that each integrand in $\underline{S}_u$ and $\overline{S}_
 The sequential estimation procedure we propose combines error bounds $\varepsilon_{\widehat{\underline{S}}_u}$ and $\varepsilon_{\widehat{\overline{S}}_u}$ presented in the previous section with either one of the two estimation strategies of Section \ref{sec:2.2}: Saltelli's strategy and the replication procedure. 
 
 We start by detailing our procedure under the form of an algorithm. Then, we discuss a possible improvement by considering a new estimator introduced in \cite{Owen} for the estimation of first-order indices.
+
+\comment{We assumed that evaluating our model is expensive. Thus, we will focus our cost study on the number of function evaluations needed to estimate the indices. The function evaluations used to estimate the indices are the same as the ones used to compute the discrete Walsh coefficients. The only computation cost that could be expensive is the fast transform algorithm. However, on a regular laptop computing the discrete coefficients of $2^{20}$ points takes around $0.5$ seconds while evaluating these points at an average evaluation time of $1$ microsecond, takes a total of around $1$ second.}
 
 \subsection{Sequential algorithm and cost}
 \label{sec:4.1}
@@ -608,9 +610,9 @@ For the two test functions, results of the three variants are compared based on 
 $$\delta_{\underline{S}_u} = \absolute{\underline{S}_u - \widehat{\underline{S}_u}}, \qquad \delta_{\overline{S}_u} = \absolute{\overline{S}_u - \widehat{\overline{S}_u}}.$$
 {\color{purple} (Lolo) True values of Sobol' indices are estimated with a precision of $10$ digits. For clarity concern, they are rounded in the tables presenting the results.}  
 
-We also compare the total number of evaluations of each variant. {\color{purple} (Lolo) Results are averaged over $100$ repetitions by applying different scrambling}. For each repetition, we fix the tolerance $\varepsilon=5.10^{-3}$, set $\ell_*=5$, and $r=4$ (the algorithm starts with $512$ Sobol' points). The algorithm error bound factor described in \eqref{errbd} is set to $\mathfrak{C}(m)=10\times 2^{-m}$.
+We also compare the total number of evaluations of each variant. {\color{purple} (Lolo) Results are averaged over $100$ repetitions by applying different scrambling}. For each repetition, we fix the tolerance $\varepsilon=5\cdot10^{-3}$, set $\ell_*=5$, and $r=4$ (the algorithm starts with $512$ Sobol' points). The algorithm error bound factor described in \eqref{errbd} is set to $\mathfrak{C}(m)=10\times 2^{-m}$.
 
-\comment{For the following examples we do not know the true Walsh coefficients of the integrands. Therefore, we cannot say whether they lie inside the cone defined. }The failure rates $r_{\delta_{\underline{S}_u}}$ and  $r_{\delta_{\overline{S}_u}}$ of each estimate are evaluated over the $100$ repetitions. These rates are the proportion of the repetitions in which the true estimation errors failed to satisfy $\delta_{\underline{S}_u} \leq \varepsilon$ and $\delta_{\underline{S}_u} \leq \varepsilon$. When $\delta_{\underline{S}_u} > \varepsilon$ and $\delta_{\underline{S}_u} > \varepsilon$, we can infer that our algorithm parameters that define the cone are not conservative enough and the integrands fall outside the cone \eqref{conecond}.
+\comment{For the examples in this section we do not know the true Walsh coefficients of the integrands. Indeed, since the mapping $\tilde{\vk}$ is chosen heuristically, the cone conditions will also depend on each scrambling. Therefore, we cannot say whether the integrands lie inside the cone. For this reason, we define the failure rates $r_{\delta_{\underline{S}_u}}$ and $r_{\delta_{\overline{S}_u}}$ over the $100$ repetitions. These rates are the proportion of the repetitions in which the true estimation errors failed to satisfy $\delta_{\underline{S}_u} \leq \varepsilon$ and $\delta_{\underline{S}_u} \leq \varepsilon$. When $\delta_{\underline{S}_u} > \varepsilon$ and $\delta_{\underline{S}_u} > \varepsilon$, we can infer that our algorithm parameters that define the cone are not conservative enough and at least one integrand ($I_1$, $I_2$, $I_3$, or $I_4$) falls outside the cone \eqref{conecond}.}
 
 {\color{purple} (Lolo) To verify the validity of assumption \eqref{assumption}, the sum of the $c_j$ is evaluated for each repetition and barplots of its values are drawn.}
 
@@ -670,9 +672,9 @@ Table \ref{res.gfunc.Aa} shows the averaged estimation errors obtained with Vari
 
 The main observation is that both approaches give similar results both in terms of estimation errors, failure rates and total number of evaluations. The use of ``Correlation 2'' in Variant $A.b$ to estimate the four small first-order Sobol' indices $\underline{S}_3, \underline{S}_4, \underline{S}_5, \underline{S}_6$ {\color{purple} (Lolo) does seem to bring an improvement. In particular, the failure rate for input $x_3$ is reduced to $0$.} We propose to draw boxplots of the estimation errors to further investigate the results. 
 
-Figure \ref{boxplots.gfunc} shows boxplots of the $100$ estimation errors $\delta_{\underline{S}_u}$ obtained with both Variant $A.a$ and Variant $A.b$ for the four inputs $x_3,x_4,x_5,x_6$. The dashed horizontal line marks the tolerance $\varepsilon=5.10^{-3}$.
+Figure \ref{boxplots.gfunc} shows boxplots of the $100$ estimation errors $\delta_{\underline{S}_u}$ obtained with both Variant $A.a$ and Variant $A.b$ for the four inputs $x_3,x_4,x_5,x_6$. The dashed horizontal line marks the tolerance $\varepsilon=5\cdot 10^{-3}$.
 \begin{figure}[t]
-\caption{Boxplots of estimation errors $\delta_{\underline{S}_u}$ for the four inputs $x_3,x_4,x_5,x_6$ obtained with both Variant $A.a$ and Variant $A.b$. The dashed horizontal line marks the tolerance $\varepsilon=5.10^{-3}$.}
+\caption{Boxplots of estimation errors $\delta_{\underline{S}_u}$ for the four inputs $x_3,x_4,x_5,x_6$ obtained with both Variant $A.a$ and Variant $A.b$. The dashed horizontal line marks the tolerance $\varepsilon=5\cdot 10^{-3}$.}
 \vspace*{0.2cm}
 \centering
 \includegraphics[width=0.45\textwidth]{sobolg_box.eps}
@@ -752,7 +754,7 @@ As for the g-function, Tables \ref{res.bratley.Aa} and \ref{res.bratley.Ab} show
 
 Variant $A.b$ gives lower estimation errors and fewer failure rates than Variant $A.a$ on the four small first-indices $\underline{S}_3$, $\underline{S}_4,\underline{S}_5$, $\underline{S}_6$ which highlights the performance of ``Correlation 2''. The discrepancy is particularly notable for input $x_3$ where Variant $A.a$ reaches a failure rate of $71\%$ against only $2\%$ for Variant $A.b$. Furthermore, Variant $A.b$ requires less evaluations than Variant $A.a$. The boxplots represented in Figure \ref{boxplots.bratley} emphasize the latter observations.
 \begin{figure}[t]
-\caption{Boxplots of estimation errors $\delta_{\underline{S}_u}$ for the four inputs $x_3,x_4,x_5,x_6$ obtained with both Variant $A.a$ and Variant $A.b$. The dashed horizontal line marks the tolerance $\varepsilon=5.10^{-3}$.}
+\caption{Boxplots of estimation errors $\delta_{\underline{S}_u}$ for the four inputs $x_3,x_4,x_5,x_6$ obtained with both Variant $A.a$ and Variant $A.b$. The dashed horizontal line marks the tolerance $\varepsilon=5\cdot 10^{-3}$.}
 \vspace*{0.2cm}
 \centering
 \includegraphics[width=0.45\textwidth]{bratley_box.eps}
