@@ -246,13 +246,15 @@ Both $\underline{\tau}_u^2$ and $\ov{$\tau$}_u^2$ satisfy the following relation
 
 %The problem of interest is the evaluation of first-order and total effect Sobol' indices.
 In our framework, we are only interested in single input indices, namely $|u|=1$. The computation of the normalized indices is performed based on the following integral formulas for their numerators:
+{\color{purple}(Lolo)
 \begin{align}
 \label{first.order}
-\underline{\tau}_u^2  &= \int_{[0,1]^{2d}} \left(f(\vx)-
-f(\vx_u:{\vx'}_{-u})\right)f(\vx')d\vx d{\vx'}, \\
+\underline{\tau}_u^2  &= \int_{[0,1]^{2d}} \left(
+f(\vx_u:{\vx'}_{-u})-f(\vx')\right)f(\vx)d\vx d{\vx'}, \\
 \label{total.effect}
 \ov{$\tau$}_u^2 &= \frac{1}{2}\int_{[0,1]^{d+1}}(f(\vx')-f(\vx_u:{\vx'}_{-u}))^2 d\vx_u d{\vx'}, \ u \in \mathcal{D},
 \end{align}
+}
 while variance and mean of $f$ are evaluated as:
 \begin{gather}
 \begin{aligned}
@@ -266,18 +268,21 @@ Usually the complexity of $f$ causes the solution of integrals \eqref{first.orde
 \subsection{Estimation of Sobol' indices}
 \label{sec:2.2}
 In this section we review two Monte Carlo procedures for the estimation of Sobol' indices. A design is a point set $\mathcal{P}=\{\vx_i\}_{i=0}^{n-1}$ where each point is obtained by sampling each variable $x_j$ $n$ times. Each row of the design is a point $\vx_i$ in $[0,1]^d$ and each column of the design refers to samples of a variable $x_j$. Consider $\mathcal{P}=\{\vx_i\}_{i=0}^{n-1}$ and $\mathcal{P'}=\{{\vx'}_i\}_{i=0}^{n-1}$ two designs where $(\vx_i,{\vx'}_i) \iid \mathcal{U}([0,1]^{2d})$. One way to estimate the two quantities (\ref{first.order}) and (\ref{total.effect}) is via:
+{\color{purple}(Lolo)
 \begin{align}
 \label{first.order.est}
-\widehat{\underline{\tau}_u^2} &= \frac{1}{n} \sum \limits_{i=0}^{n-1} \left(f(\vx_i)-f(\vx_{i,u}:{\vx'}_{i,-u})\right)f(\vx'_i),\\
+\widehat{\underline{\tau}_u^2} &= \frac{1}{n} \sum \limits_{i=0}^{n-1} \left(f(\vx_{i,u}:{\vx'}_{i,-u})-f(\vx'_i)\right)f(\vx_i),\\
 \label{total.effect.est}
 \widehat{\ov{$\tau$}_u^2} &= \frac{1}{2n} \sum \limits_{i=0}^{n-1} (f({\vx'}_i) - f(\vx_{i,u}:{\vx'}_{i,-u}))^2, \qquad u \in \mathcal{D},
 \end{align}
+}
 using for $\sigma^2$:
 {\color{purple} (Lolo)
 \begin{equation}
  \widehat{\sigma}^2 = \frac{1}{n-1} \sum \limits_{i=0}^{n-1} \left( f(\vx_i) - \widehat{\mu}\right)^2, \text{ with } \ \widehat{\mu} =  \frac{1}{n} \sum \limits_{i=0}^{n-1} f(\vx_i).
 \label{mu.est}
-\end{equation}}
+\end{equation}
+}
 Then, the Sobol' indices estimators are:
 \begin{equation}
 \widehat{\underline{S}}_u = \widehat{\underline{\tau}_u^2} / \widehat{\sigma}^2, \qquad
@@ -436,13 +441,14 @@ For our problem, only Sobol' sequences \cite{Sobol'seq} have been considered. Th
 The idea here is to extend the definition of the error bound (\ref{errbd}) to Sobol' indices. To achieve this goal, we consider the two integral formulas of the first-order and total effect Sobol' indices with $|u|=1$:
 %\subsection{Definition of $\widehat{S}$ (fix it with max and min)}
 %In some applications, it is more useful to estimate the normalized Sobol' indices, $S_u = \underline{\tau}_u^2/\sigma^2$ and $\overline{S}_u = \overline{\tau}_u^2/\sigma^2$. In both cases, regular and normalized indices can be approximated by estimating some integrals,
+{\color{purple}(Lolo)
 \begin{align*}
-\underline{S}_u(\vI) & = \frac{\int_{[0,1)^{2d}} \left(f(\vx)-
-f(\vx_u:{\vx'}_{-u})\right)f(\vx')d\vx d{\vx'}}{\int_{[0,1)^{d}} f(\vx)^2 d{\vx}-\left(\int_{[0,1)^{d}} f(\vx) d{\vx}\right)^2}, \\ 
+\underline{S}_u(\vI) & = \frac{\int_{[0,1)^{2d}} \left(f(\vx_u:{\vx'}_{-u})-f(\vx')\right)f(\vx)d\vx d{\vx'}}{\int_{[0,1)^{d}} f(\vx)^2 d{\vx}-\left(\int_{[0,1)^{d}} f(\vx) d{\vx}\right)^2}, \\ 
 \underline{S}_u(\vI) & = \frac{I_1}{I_3-(I_4)^2}, \\
 \overline{S}_u(\vI) & = \frac{\frac{1}{2}\int_{[0,1)^{d+1}}(f(\vx')-f(\vx_u:{\vx'}_{-u}))^2d\vx_u d{\vx'}}{\int_{[0,1)^{d}} f(\vx)^2 d{\vx}-\left(\int_{[0,1)^{d}} f(\vx) d{\vx}\right)^2}, \\
 \overline{S}_u(\vI) & = \frac{I_2}{I_3-(I_4)^2},
 \end{align*}
+}
 where $\vI=(I_1,I_2,I_3,I_4)$ is a vector of integral values. Indices $\underline{S}_u(\vI)$ and $\overline{S}_u(\vI)$ are defined as functions over the vector $\vI$. If we estimate $\vI$ by $\widehat{\vI}$ with vector of error bounds $\varepsilon_{\widehat{\vI}}=(\epsilon_{\widehat{I}_1},\epsilon_{\widehat{I}_2},\epsilon_{\widehat{I}_3}$, $\epsilon_{\widehat{I}_4})$ according to (\ref{errbd}), we know that $\vI\in B_{\varepsilon_{\widehat{\vI}}}(\widehat{\vI})=[\widehat{\vI}-\varepsilon_{\widehat{\vI}},\widehat{\vI}+\varepsilon_{\widehat{\vI}} ]$. 
 
 Then, as an alternative to the common Sobol' indices estimators (\ref{common.sobol.est}), we can define the following two estimators with their respective error bounds:
