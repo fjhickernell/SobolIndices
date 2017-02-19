@@ -48,7 +48,7 @@ Laurent Gilquin and Llu\'{i}s Antoni Jim\'{e}nez Rugama}
 {\color{blue} The ``real case model'' has been replaced with another academic application as suggested by the second reviewer. Nonetheless, we thank the associate editor for pointing out these corrections.}
 \item[5.] The given examples are only in small dimensions. What about higher-dimensional "real-life" examples?-- Pierre L'Ecuyer
 
-{\color{blue} The new academic application is in dimension $10$. For higher-dimensional "real-life" examples, our procedure should still work well given that the effective dimension of a model is often way smaller than its nominal dimension. Furthermore, the estimator ``Correlation 2'' is really efficient at revealing inputs with small main effects.}
+{\color{blue} The new academic application is in dimension $10$. For higher-dimensional "real-life" examples, our procedure should still work well given that the effective dimension of a model is often way smaller than its nominal dimension. Furthermore, the estimator ``Correlation 2'' is really efficient at identifying inputs with small main effects.}
 \end{itemize}
 
 
@@ -64,11 +64,11 @@ Laurent Gilquin and Llu\'{i}s Antoni Jim\'{e}nez Rugama}
 
 {\color{blue} We address here the remark saying that ``simpler methods based on random sampling and straightforward confidence intervals become more attractive, as they have no extra cost and potentially a better assessment of how likely it is that the error is met''. 
 
-First, the cost of constructing the error threshold is a computational cost and not a numerical cost. That is, it does not require extra model evaluations. This specificity is further discussed in the answer to point 2.
+First, the cost of constructing the error threshold is a computational cost and not a numerical cost. That is, it does not require extra model evaluations. This specificity is further discussed in the answer to comment 2. below.
 
-Secondly, we claim that the precision of our procedure should be better than those based on confidence intervals (asymptotic or bootstrap based) obtained with random sampling methods. In our approach, the construction of the error bounds makes use of the analytical expression of the Sobol' indices. At the opposite, errors bounds in confidence intervals are estimated entirely from the sampling points and are less accurate.
+Secondly, we claim that the precision of our procedure should be better than those of random sampling methods using confidence intervals (asymptotic or bootstrap based). In our approach, the construction of the error bounds makes use of the analytical expression of the Sobol' indices. At the opposite, errors bounds in confidence intervals are estimated entirely from the sampling points and are less accurate.
 
-To back up this claim, the precision of our procedure is compared to bootstrap confidence intervals obtained from random sampling. The comparison is carried out for the wing weight example. Results show that for an equivalent number of evaluations, the precision of bootstrap confidence intervals is far less accurate than the precision of our procedure.}
+To back up this claim, the precision of our procedure is compared to bootstrap confidence intervals obtained from random sampling. The comparison is carried out for the bratley test function in Section 5.3. Results show that for an equivalent number of evaluations, random methods using confidence intervals are less accurate than our procedure.}
 
 
 
