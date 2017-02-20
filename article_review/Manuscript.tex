@@ -351,7 +351,7 @@ x_{j} = \sum_{\ell=1}^{\infty} x_{j\ell}b^{-\ell},\qquad t_{j} = \sum_{\ell=1}^{
 \]
 For $b=2$, the digitwise addition is equivalent to the XOR operation.
 
-In addition, we consider the \emph{wavenumber} space of non-negative integers $\mathbb{N}_0^d$. These non-negative integers will index the frequencies in which we decompose our integrand as a Fourier series. The space $\mathbb{N}_0^d$ is also a group under the digitwise addition:
+In addition, we consider the \emph{wavenumber} space of non-negative integers $\mathbb{N}_0^d$. These non-negative integers will index the frequencies in which we decompose our integrand as a Walsh series. The space $\mathbb{N}_0^d$ is also a group under the digitwise addition:
 \[
 \vk \oplus \vl = \left(\sum_{\ell=0}^{\infty} [(k_{j\ell} + l_{j\ell}) \bmod b] b^{\ell} \right)_{j=1}^d,
 \]
@@ -395,7 +395,7 @@ Based on the size of $\absolute{\hf_{\vk}}$ and the structure of dual nets \eqre
 \begin{equation}\label{mapped_error_bound}
 \absolute{I - \frac{1}{b^m}\sum_{\vx\in\mathcal{P}_m}f(\vx)} \le \sum_{\lambda=1}^{\infty} \left \lvert \hf_{\lambda b^m}\right \rvert.
 \end{equation}
-\comment{To use the error bound \eqref{mapped_error_bound} to design and automatic algorithm would require the knowledge of the Walsh coefficients. To avoid this assumption, we will estimate them via the fast transform obtained using the precomputed function values already used to estimate the mean. We will refer to the discrete coefficients as $\tf_{m,\kappa}$,}
+\comment{The use of the error bound \eqref{mapped_error_bound} to design and automatic algorithm requires the knowledge of the Walsh coefficients. To avoid this assumption, we will estimate them via the fast transform obtained using the precomputed function values already used to estimate the mean. We will refer to the discrete coefficients as $\tf_{m,\kappa}$,}
 \[
 \tf_{m,\kappa}=\tf_{m,\tilde{\vk}(\kappa)}=\frac{1}{b^m}\sum_{\vx\in\mathcal{P}_m}f(\vx)\overline{\varphi_{\tilde{\vk}(\kappa)}(\vx)}.
 \]
@@ -413,7 +413,7 @@ S_m(f) &=  \sum_{\kappa=\left \lfloor b^{m-1} \right \rfloor}^{b^{m}-1} \absolut
 \sum_{\kappa=b^{m}}^{\infty} \absolute{\hf_{\kappa}},\\ 
 \tS_{\ell,m}(f) &= \sum_{\kappa=\left \lfloor b^{\ell-1}\right \rfloor}^{b^{\ell}-1} \absolute{\tf_{m,\kappa}}.
 \end{align*}
-\comment{The sums $S_m(f)$, $\hS_{\ell,m}(f)$, $\wcS_m(f)$, and $\tS_{\ell,m}(f)$ are different from the normalized Sobol' indices $\underline{S}_u$ and $\ov{$S$}_u$. Unfortunately, the notation in articles \cite{HicJim,HicJimLi,JimHic} uses these symbols for the sums which should not be confused with the normalized Sobol' indices.
+\comment{The sums $S_m(f)$, $\hS_{\ell,m}(f)$, $\wcS_m(f)$, and $\tS_{\ell,m}(f)$ are different from the normalized Sobol' indices $\underline{S}_u$ and $\ov{$S$}_u$. Unfortunately, the notation in articles \cite{HicJim,HicJimLi,JimHic} coincides and should not be confused with the normalized Sobol' indices notation.
 
 Among these sums, one should notice that $\hS_{0,m}(f)$ corresponds to the error bound appearing in \eqref{mapped_error_bound}. Thus, $\wcS_m(f)$ is an infinite sum of Walsh coefficients that contain the error bound coefficients. To have a control on the decay rate of the coefficients, we also define the finite sum of true coefficients $S_m(f)$. Note that from these sums, we can only observe $\tS_{\ell,m}(f)$.  }
 
@@ -422,7 +422,7 @@ Finally, we define the set of functions $\cc$,
 \cc:=\{f \in \mathbb{L}^2(\cube) : \hS_{\ell,m}(f) \le \homega(m-\ell) \wcS_m(f),\ \ \ell \le m, \\
 \wcS_m(f) \le \wcomega(m-\ell) S_{\ell}(f),\ \  \ell_* \le \ell \le m\}.
 \end{multline}
-for a fixed $\ell_* \in \mathbb{N}$, $\homega$ and $\wcomega$ two non-negative valued functions with $\lim_{m \to \infty} \wcomega(m) = 0$. \comment{The decay rate assumptions on the Walsh coefficients are encoded in $\cc$ and controlled by $\homega$ and $\wcomega$. First, we assume that $\wcS_m(f)$ bounds $\hS_{\ell,m}(f)$ in some sense, in particular it bounds $\hS_{0,m}(f)$. This means that we can use $\wcS_m(f)$ as an indicator of the error bound. Then, we also need $S_{\ell}(f)$ to bound $\wcS_m(f)$ which helps transforming the infinite sum into a finite sum. In this step, we are assuming that if $S_{\ell}(f)$ is small enough, we expect the high frequency coefficients, i.e. $\wcS_m(f)$, to also be small. By defining $r=m-\ell$ with $\homega(r)\wcomega(r)<1$ and $r\in\mathbb{N}$, one may intuitively see $r$ as the distance between $S_{\ell}(f)$ and $\wcS_m(f)$. One only needs to choose the appropriate $r$: larger values of $r$ will imply a smaller error bound but more dependence on smaller Walsh coefficients. Finally, we can write the error bound in terms of $\tS_{\ell,m}(f)$ instead of $\wcS_m(f)$ by using \eqref{discrite_true_relationship}.} With this reasoning, in \cite[Sec. 4.2]{HicJim} we showed that for any $f\in\cc$,
+for a fixed $\ell_* \in \mathbb{N}$, and $\homega$ and $\wcomega$ two non-negative valued functions with $\lim_{m \to \infty} \wcomega(m) = 0$. \comment{The decay rate assumptions on the Walsh coefficients are encoded in $\cc$ and controlled by $\homega$ and $\wcomega$. First, we assume that $\wcS_m(f)$ bounds $\hS_{\ell,m}(f)$ through $\homega$, in particular it bounds $\hS_{0,m}(f)$. This means that we can use $\wcS_m(f)$ as an indicator of the error bound. Then, we also need $S_{\ell}(f)$ to bound $\wcS_m(f)$ which helps transforming the infinite sum into a finite sum. In this step, we are assuming that if $S_{\ell}(f)$ is small enough, we expect the high frequency coefficients, i.e. $\wcS_m(f)$, to also be small. By defining $r=m-\ell$ with $\homega(r)\wcomega(r)<1$ and $r\in\mathbb{N}$, one may intuitively see $r$ as the distance between $S_{\ell}(f)$ and $\wcS_m(f)$. One only needs to choose the appropriate $r$: larger values of $r$ will imply a smaller error bound but more dependence on smaller Walsh coefficients. Finally, we can write the error bound in terms of $\tS_{\ell,m}(f)$ instead of $\wcS_m(f)$ by using \eqref{discrite_true_relationship}.} With this reasoning, in \cite[Sec. 4.2]{HicJim} we showed that for any $f\in\cc$,
 \begin{equation}
 \absolute{I - \frac{1}{b^m}\sum_{\vx\in\mathcal{P}_m}f(\vx)}
 \le \tS_{m-r,m}(f)\underbrace{\frac{\homega(m) \wcomega(r)}{1 - \homega(r) \wcomega(r)}}_{\mathfrak{C}(m)}=\epsilon_{\widehat{I}}, \label{errbd}
@@ -435,7 +435,7 @@ For our problem, only Sobol' sequences \cite{Sobol'seq} have been considered. Th
 
 \subsection{Extension to Sobol' indices}
 \label{sec:3.2}
-The idea here is to extend the definition of the error bound (\ref{errbd}) to Sobol' indices. To achieve this goal, we consider the two integral formulas of the first-order and total effect Sobol' indices with $|u|=1$:
+In this section we will extend the definition of the error bound (\ref{errbd}) to Sobol' indices. To achieve this goal, we consider the two integral formulas of the first-order and total effect Sobol' indices with $|u|=1$:
 %\subsection{Definition of $\widehat{S}$ (fix it with max and min)}
 %In some applications, it is more useful to estimate the normalized Sobol' indices, $S_u = \underline{\tau}_u^2/\sigma^2$ and $\overline{S}_u = \overline{\tau}_u^2/\sigma^2$. In both cases, regular and normalized indices can be approximated by estimating some integrals,
 {\color{purple}(Lolo)
@@ -446,7 +446,7 @@ The idea here is to extend the definition of the error bound (\ref{errbd}) to So
 \overline{S}_u(\vI) & = \frac{I_2}{I_3-(I_4)^2},
 \end{align*}
 }
-where $\vI=(I_1,I_2,I_3,I_4)$ is a vector of integral values. Indices $\underline{S}_u(\vI)$ and $\overline{S}_u(\vI)$ are defined as functions over the vector $\vI$. If we estimate $\vI$ by $\widehat{\vI}$ with vector of error bounds $\varepsilon_{\widehat{\vI}}=(\epsilon_{\widehat{I}_1},\epsilon_{\widehat{I}_2},\epsilon_{\widehat{I}_3}$, $\epsilon_{\widehat{I}_4})$ according to (\ref{errbd}), we know that $\vI\in B_{\varepsilon_{\widehat{\vI}}}(\widehat{\vI})=[\widehat{\vI}-\varepsilon_{\widehat{\vI}},\widehat{\vI}+\varepsilon_{\widehat{\vI}} ]$. 
+where $\vI=(I_1,I_2,I_3,I_4)$ is a vector of integral values. Indices $\underline{S}_u(\vI)$ and $\overline{S}_u(\vI)$ are defined as functions over the vector $\vI$. If we estimate $\vI$ by $\widehat{\vI}$ with known error bounds $\varepsilon_{\widehat{\vI}}=(\epsilon_{\widehat{I}_1},\epsilon_{\widehat{I}_2},\epsilon_{\widehat{I}_3}$, $\epsilon_{\widehat{I}_4})$ according to (\ref{errbd}), we know that $\vI\in B_{\varepsilon_{\widehat{\vI}}}(\widehat{\vI})=[\widehat{\vI}-\varepsilon_{\widehat{\vI}},\widehat{\vI}+\varepsilon_{\widehat{\vI}} ]$. 
 
 Then, as an alternative to the common Sobol' indices estimators (\ref{common.sobol.est}), we can define the following two estimators with their respective error bounds:
 \begin{gather}
@@ -466,13 +466,13 @@ and,
 \end{gather}
 Because numerator and denominator are both known to be positive, maximizing $\underline{S}_u(\vI)$ (resp. $\overline{S}_u(\vI)$) is done through maximizing the numerator $I_1$ (resp. $I_2$) and minimizing the denominator $I_3-I_4^2$. Analogously, to minimize $\underline{S}_u(\vI)$ (resp. $\overline{S}_u(\vI)$) one minimizes the numerator $I_1$ (resp. $I_2$) and maximizes the denominator $I_3-I_4^2$. As an example, Figure \ref{fig:1} illustrates the region of possible values of $\underline{S}_2(\vI)$ given the true value of $I_1$ for the test function of Bratley \textit{et al.} \cite{Bratley}. This function is further described in Section \ref{sec:5}. 
 \begin{figure}[!ht]
-\caption{The delimited region on the figure represents the values $\underline{S}_2$ in $\vI\in B_{(0,0,0.05,0.1)}(\widehat{\vI})$ for the Bratley \textit{et al.} function. There, $\underline{S}_2^{\min}=\max\Big{(}\min_{\vI\in B_{\varepsilon_{\vI}}(\widehat{\vI})} \underline{S}_2(\vI),0\Big{)}$ and $\underline{S}_2^{\max}=\min\Big{(}\max_{\vI\in B_{\varepsilon_{\vI}}(\widehat{\vI})} \underline{S}_2(\vI),1\Big{)}$, and $\widehat{\underline{S}}_2=(\underline{S}_2^{\min}+\underline{S}_2^{\max})/2$.}
+\caption{The delimited region in the figure represents the possible values of $\underline{S}_2$ for $\vI\in B_{(0,0,0.05,0.1)}(\widehat{\vI})$ (Bratley \textit{et al.} function). There, $\underline{S}_2^{\min}=\max\Big{(}\min_{\vI\in B_{\varepsilon_{\vI}}(\widehat{\vI})} \underline{S}_2(\vI),0\Big{)}$, $\underline{S}_2^{\max}=\min\Big{(}\max_{\vI\in B_{\varepsilon_{\vI}}(\widehat{\vI})} \underline{S}_2(\vI),1\Big{)}$, and $\widehat{\underline{S}}_2=(\underline{S}_2^{\min}+\underline{S}_2^{\max})/2$.}
 \centering
 \includegraphics[width=.5\textwidth]{estimator_3d_small.eps}
 \label{fig:1}       % Give a unique label
 \end{figure}
 
-Under the assumption that each integrand in $\underline{S}_u$ and $\overline{S}_u$ lies inside $\cc$, these new estimators satisfy: \[ \underline{S}_u\in \left[ \widehat{\underline{S}}_u - \varepsilon_{\widehat{\underline{S}}_u}, \widehat{\underline{S}}_u + \varepsilon_{\widehat{\underline{S}}_u} \right], \qquad \overline{S}_u\in \left[ \widehat{\overline{S}}_u - \varepsilon_{\widehat{\overline{S}}_u}, \widehat{\overline{S}}_u + \varepsilon_{\widehat{\overline{S}}_u} \right] .\]
+By construction, under the assumption that each integrand in $\underline{S}_u$ and $\overline{S}_u$ lies inside $\cc$, these new estimators satisfy: \[ \underline{S}_u\in \left[ \widehat{\underline{S}}_u - \varepsilon_{\widehat{\underline{S}}_u}, \widehat{\underline{S}}_u + \varepsilon_{\widehat{\underline{S}}_u} \right], \qquad \overline{S}_u\in \left[ \widehat{\overline{S}}_u - \varepsilon_{\widehat{\overline{S}}_u}, \widehat{\overline{S}}_u + \varepsilon_{\widehat{\overline{S}}_u} \right] .\]
 \comment{Because we do not assume the knowledge of the Walsh coefficients, it is hard to verify whether all the integrands lie in $\cc$. Nevertheless, some data-based necessary conditions are provided in \cite{HicJimLi}. These conditions can be used to automatically enlarge the cone according to each integrand.} For the rest of the article, we will consider $\widehat{\underline{S}}_u$ and $\widehat{\overline{S}}_u$ as defined in formulas (\ref{formula_undersu}) and (\ref{formula_oversu}).
 
 \section{Sequential estimation procedure}
@@ -481,11 +481,12 @@ The sequential estimation procedure we propose combines error bounds $\varepsilo
 
 We start by detailing our procedure under the form of an algorithm. Then, we discuss a possible improvement by considering a new estimator introduced in \cite{Owen} for the estimation of first-order indices.
 
-\comment{For this article, we assumed that evaluating the model is expensive. Hence, to study the cost we will focus on the number of function evaluations needed to estimate the indices. The function values used to estimate the indices are also used to compute the discrete Walsh coefficients. Thus, there are no additional evaluations needed to compute the error bound. The only computation cost that could be expensive is the fast Walsh transform. However, on a regular laptop, if we consider an extreme case of obtaining $2^{20}$ model values ($\approx$ one million points):
+\comment{For this article, we assumed that evaluating the model is expensive. Hence, to study the cost we will focus on the number of function evaluations needed to estimate the indices. The function values used to estimate the indices are also used to compute the discrete Walsh coefficients. Thus, there are no additional evaluations required to compute the error bound. The only computation cost that could be expensive is the fast Walsh transform. However, on a regular laptop, if we consider an extreme case of obtaining $2^{20}$ model values ($\approx$ one million points):
 \begin{itemize}
 \item At an average evaluation time of $1$ microsecond per point, the total evaluation time is about $1$ second.
-\item The fast transform on these values takes around $0.5$ seconds.
+\item The fast transform applied to these values takes around $0.5$ seconds.
 \end{itemize}
+In practice, we focus on models that will take much more than $1$ microsecond to evaluate and hence, the fast transform cost becomes inexpensive.
 }
 
 \subsection{Sequential algorithm and cost}
