@@ -208,7 +208,7 @@ We propose a sequential estimation procedure of Sobol' indices using the error b
 
 Let $f$ represent a deterministic numerical model in $[0,1]^d$, $d \geq 1$. Sensitivity measures, also known as Sobol' indices, are used to assess which inputs of $f$ are influential for the output. The normalized indices are scalars between $0$ and $1$ whose values are interpreted as follows: the closer to $1$ the more influential the index. Alternatively, they can be interpreted as the percentage of the variance explained by the inputs. Among all Sobol' indices one can distinguish first-order and total effect indices. The first measure the effect of a single input, while the second measure the effect of a single input plus all its interactions with other inputs.
 
-When dealing with complex numerical models, analytical expressions of Sobol' indices are often inaccessible. In such cases, one must rely on an estimation of these indices. The original estimation procedure is due to Sobol' \cite{Sobol'}. However, this procedure requires several model evaluations which are usually expensive. Later on, Saltelli \cite{Saltelli} proposed strategies to estimate sets of Sobol' indices at once through the use of a combinatorial formalisms. While elegant, these strategies still require a large number of model evaluations.  A cost efficient alternative to estimate first-order indices was introduced in \cite{Mara}. This alternative, called the replication procedure, has recently been further studied  in \cite{Tissot} and generalized to the estimation of closed second-order indices.
+When dealing with complex numerical models, analytical expressions of Sobol' indices are often inaccessible. In such cases, one must rely on an estimation of these indices. The original estimation procedure is due to Sobol' \cite{Sobol'}. However, this procedure requires several model evaluations which are usually expensive. Later on, Saltelli \cite{Saltelli} proposed strat\-egies to estimate sets of Sobol' indices at once through the use of a combinatorial formalisms. While elegant, these strat\-egies still require a large number of model evaluations.  A cost efficient alternative to estimate first-order indices was introduced in \cite{Mara}. This alternative, called the replication procedure, has recently been further studied  in \cite{Tissot} and generalized to the estimation of closed second-order indices.
 
 A practical problem concerning the use of these methods is how to quantify the number of model evaluations required to ensure that Sobol' estimates are accurate enough. This article addresses this challenge by proposing a reliable error bound for Sobol' indices based on digital sequences. The error bound is defined in terms of the discrete Walsh coefficients of the integrands involved in the Sobol' indices definition. We propose a sequential estimation procedure of Sobol' indices using the error bound as our stopping criterion. The procedure operates under the assumption that all integrands lie inside a particular cone of functions (see \cite{HicJim}).
 
@@ -234,7 +234,8 @@ f_{\varnothing} &= \mathbb{E}[f(\vx)]= \mu, \\
 f_u(\vx) &= \int_{[0,1]^{|u|}} f(\vx) d{\vx}_{-u} - \sum \limits_{v \subsetneq u} f_v(\vx).
 \end{align*}
 Due to orthogonality, the variance of equation \eqref{anova} leads to the variance decomposition of $f$:
-\[ \sigma^2 = \mathrm{Var}[f(\vx)] = \sum \limits_{u \subseteq \mathcal{D}, u \neq \varnothing} \sigma_u^2, \ \text{ with } \ \sigma_u^2=\int_{[0,1]^{|u|}} f_u(\vx)^2 d{\vx_u}.\]
+\[ \sigma^2 = \mathrm{Var}[f(\vx)] = \sum \limits_{u \subseteq \mathcal{D}, u \neq \varnothing} \sigma_u^2,\]
+\[ \sigma_u^2=\int_{[0,1]^{|u|}} f_u(\vx)^2 d{\vx_u}.\]
 From this decomposition, one can define the following two quantities:
 \[\underline{\tau}_u^2 = \sum \limits_{v \subseteq u} \sigma_v^2, \qquad
 \ov{$\tau$}_u^2 = \sum \limits_{v \cap u \neq \varnothing} \sigma_v^2, \qquad u \subseteq \mathcal{D}.\]
@@ -974,7 +975,7 @@ The main observation is that our procedure performs the best. The random sapling
 \end{table}
 
 \begin{figure}[!ht]
-\caption{Boxplots of estimation errors $\delta_{\underline{S}_u}$ obtained with both Variant $A.b$ and the random sampling method (MC). The dashed horizontal line marks the tolerance $\varepsilon=5\cdot 10^{-3}$.}
+\caption{Boxplots of estimation errors $\delta_{\underline{S}_u}$ obtained with both Variant $A.b$ and the random sampling method. The dashed horizontal line marks the tolerance $\varepsilon=5\cdot 10^{-3}$.}
 \centering
 \vspace*{0.2cm}
 \includegraphics[width=0.4\textwidth]{comp_MC_first.eps}
@@ -982,7 +983,7 @@ The main observation is that our procedure performs the best. The random sapling
 \end{figure}
 
 \begin{figure}[!ht]
-\caption{Boxplots of estimation errors $\delta_{\overline{S}_u}$ obtained with both Variant $A.b$ and the random sampling method (MC). The dashed horizontal line marks the tolerance $\varepsilon=5\cdot 10^{-3}$.}
+\caption{Boxplots of estimation errors $\delta_{\overline{S}_u}$ obtained with both Variant $A.b$ and the random sampling method. The dashed horizontal line marks the tolerance $\varepsilon=5\cdot 10^{-3}$.}
 \centering
 \vspace*{0.2cm}
 \includegraphics[width=0.4\textwidth]{comp_MC_tot.eps}
