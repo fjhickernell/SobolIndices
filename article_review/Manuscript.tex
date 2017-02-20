@@ -208,7 +208,7 @@ We propose a sequential estimation procedure of Sobol' indices using the error b
 
 Let $f$ represent a deterministic numerical model in $[0,1]^d$, $d \geq 1$. Sensitivity measures, also known as Sobol' indices, are used to assess which inputs of $f$ are influential for the output. The normalized indices are scalars between $0$ and $1$ whose values are interpreted as follows: the closer to $1$ the more influential the index. Alternatively, they can be interpreted as the percentage of the variance explained by the inputs. Among all Sobol' indices one can distinguish first-order and total effect indices. The first measure the effect of a single input, while the second measure the effect of a single input plus all its interactions with other inputs.
 
-When dealing with complex numerical models, analytical expressions of Sobol' indices are often inaccessible. In such cases, one must rely on an estimation of these indices. The original estimation procedure is due to Sobol' \cite{Sobol'}. However, this procedure requires several model evaluations which are usually expensive. Later on, Saltelli \cite{Saltelli} proposed strategies to estimate sets of Sobol' indices at once through the use of a combinatorial formalisms. While elegant, these strategies still require a large number of model evaluations.  A cost efficient alternative to estimate first-order indices was introduced in \cite{Mara}. This alternative, called the replication procedure, has recently been further studied  in \cite{Tissot} and generalized to the estimation of closed second-order indices.
+When dealing with complex numerical models, analytical expressions of Sobol' indices are often inaccessible. In such cases, one must rely on an estimation of these indices. The original estimation procedure is due to Sobol' \cite{Sobol'}. However, this procedure requires several model evaluations which are usually expensive. Later on, Saltelli \cite{Saltelli} proposed strat\-egies to estimate sets of Sobol' indices at once through the use of a combinatorial formalisms. While elegant, these strat\-egies still require a large number of model evaluations.  A cost efficient alternative to estimate first-order indices was introduced in \cite{Mara}. This alternative, called the replication procedure, has recently been further studied  in \cite{Tissot} and generalized to the estimation of closed second-order indices.
 
 A practical problem concerning the use of these methods is how to quantify the number of model evaluations required to ensure that Sobol' estimates are accurate enough. This article addresses this challenge by proposing a reliable error bound for Sobol' indices based on digital sequences. The error bound is defined in terms of the discrete Walsh coefficients of the integrands involved in the Sobol' indices definition. We propose a sequential estimation procedure of Sobol' indices using the error bound as our stopping criterion. The procedure operates under the assumption that all integrands lie inside a particular cone of functions (see \cite{HicJim}).
 
@@ -234,7 +234,8 @@ f_{\varnothing} &= \mathbb{E}[f(\vx)]= \mu, \\
 f_u(\vx) &= \int_{[0,1]^{|u|}} f(\vx) d{\vx}_{-u} - \sum \limits_{v \subsetneq u} f_v(\vx).
 \end{align*}
 Due to orthogonality, the variance of equation \eqref{anova} leads to the variance decomposition of $f$:
-\[ \sigma^2 = \mathrm{Var}[f(\vx)] = \sum \limits_{u \subseteq \mathcal{D}, u \neq \varnothing} \sigma_u^2, \ \text{ with } \ \sigma_u^2=\int_{[0,1]^{|u|}} f_u(\vx)^2 d{\vx_u}.\]
+\[ \sigma^2 = \mathrm{Var}[f(\vx)] = \sum \limits_{u \subseteq \mathcal{D}, u \neq \varnothing} \sigma_u^2,\]
+\[ \sigma_u^2=\int_{[0,1]^{|u|}} f_u(\vx)^2 d{\vx_u}.\]
 From this decomposition, one can define the following two quantities:
 \[\underline{\tau}_u^2 = \sum \limits_{v \subseteq u} \sigma_v^2, \qquad
 \ov{$\tau$}_u^2 = \sum \limits_{v \cap u \neq \varnothing} \sigma_v^2, \qquad u \subseteq \mathcal{D}.\]
@@ -465,7 +466,7 @@ and,
 \label{formula_oversu}
 \end{gather}
 Because numerator and denominator are both known to be positive, maximizing $\underline{S}_u(\vI)$ (resp. $\overline{S}_u(\vI)$) is done through maximizing the numerator $I_1$ (resp. $I_2$) and minimizing the denominator $I_3-I_4^2$. Analogously, to minimize $\underline{S}_u(\vI)$ (resp. $\overline{S}_u(\vI)$) one minimizes the numerator $I_1$ (resp. $I_2$) and maximizes the denominator $I_3-I_4^2$. As an example, Figure \ref{fig:1} illustrates the region of possible values of $\underline{S}_2(\vI)$ given the true value of $I_1$ for the test function of Bratley \textit{et al.} \cite{Bratley}. This function is further described in Section \ref{sec:5}. 
-\begin{figure}[!ht]
+\begin{figure}[t]
 \caption{The delimited region in the figure represents the possible values of $\underline{S}_2$ for $\vI\in B_{(0,0,0.05,0.1)}(\widehat{\vI})$ (Bratley \textit{et al.} function). There, $\underline{S}_2^{\min}=\max\Big{(}\min_{\vI\in B_{\varepsilon_{\vI}}(\widehat{\vI})} \underline{S}_2(\vI),0\Big{)}$, $\underline{S}_2^{\max}=\min\Big{(}\max_{\vI\in B_{\varepsilon_{\vI}}(\widehat{\vI})} \underline{S}_2(\vI),1\Big{)}$, and $\widehat{\underline{S}}_2=(\underline{S}_2^{\min}+\underline{S}_2^{\max})/2$.}
 \centering
 \includegraphics[width=.5\textwidth]{estimator_3d_small.eps}
@@ -506,7 +507,7 @@ Alternatively, $\mathcal{P}_{m}$ and $\mathcal{P}'_{m}$ can be used with the rep
 In both cases we always check if the respective error bounds $\varepsilon_{\widehat{\underline{S}}_u}$ and $\varepsilon_{\widehat{\overline{S}}_u}$ are lower than the tolerance $\epsilon$. For Variant $A$ the stopping criterion is $\varepsilon_{\widehat{\underline{S}}_u} \leq \epsilon \text{ and } \varepsilon_{\widehat{\overline{S}}_u} \leq \epsilon$ for all $ u \in \mathcal{D}$. For Variant $B$ it is $\varepsilon_{\widehat{\underline{S}}_u} \leq \epsilon$ for all $ u \in \mathcal{D}$. 
 
 If the stopping criterion is satisfied, the algorithm stops and Sobol' estimates are returned. Otherwise, $m$ is incremented by one to perform a new estimation. 
-\begin{algorithm}[!ht]
+\begin{algorithm}[t]
 \caption{Sequential estimation of Sobol' indices}
 \begin{algorithmic}[1]
 \vspace*{0.2cm}
@@ -593,14 +594,10 @@ The difference (\ref{cost.improvement}) $-$ (\ref{cost.non.improvement}) equals:
 \item[1)] for $j \in \Gamma$, if the total effect index $\ov{$S$}_{u_j}$ requires as much or more evaluations than the first-order index $\underline{S}_{u_j}$. Since the total effect estimator is the same, as a consequence we have $m'_{u_j}=m_{u_j}$ and $c_j >0$.
 \item[2)] for $j \in \Gamma$, if the total effect index $\ov{$S$}_{u_j}$ requires less evaluations than the first-order index $\underline{S}_{u_j}$. In this case, if both $m''_{u_j} < m_{u_j}$ and $m'_{u_j} < m_{u_j}$ then $c_j \leq 0$.  
 \end{itemize}
-{\color{purple}(Lolo) We assume that the effective dimension of the numerator of $\underline{S}_u$ is higher than the one of the numerator of $\ov{$S$}_u$. If this assumption holds, we expect to observe case $2)$ more often than case $1)$ and \eqref{cost.comparison} verifies the following inequality:
-\begin{equation}
-\sum \limits_{j \in \Gamma} c_j \leq 0 \ .
-\label{assumption}
-\end{equation}
-The validity of this assumption is tested on the numerical examples presented in Section \ref{sec:5}.
-%Overall we expect to observe case $2)$ more often than case $1)$. Indeed, the numerator of $\underline{S}_u$ requires to estimate $2d$ dimensional integrals against only $d+1$ dimensional integrals for the numerator of $\ov{$S$}_u$. Hence, it seems reasonable to expect that it will take less points to estimate $\ov{$S$}_u$ than $\underline{S}_u$. 
-Furthermore, in case $2)$, we expect the two conditions $m''_{u_j} < m_{u_j}$ and $m'_{u_j} < m_{u_j}$ to usually hold as ``Correlation 2" is shown to perform better for small first-order indices (\textit c.f. \cite{Owen}).}
+{\color{purple}(Lolo) We assume that the effective dimension of the numerator of $\underline{S}_u$ is higher than the one of the numerator of $\ov{$S$}_u$. This assumption is tested on the numerical examples presented in Section \ref{sec:5.1} by comparing the number of evaluations required by the two numerators. 
+
+If this assumption holds, we expect to observe case $2)$ more often than case $1)$. Furthermore, in case $2)$, we expect the two conditions $m''_{u_j} < m_{u_j}$ and $m'_{u_j} < m_{u_j}$ to usually hold as ``Correlation 2" is shown to perform better for small first-order indices (\textit c.f. \cite{Owen}).}
+\bigskip
 
 In practice, one does not know which are the small Sobol' indices ($u_1,\dots,u_\gamma)$. To overcome this issue, we propose the following alternative for Variant $A$. {\color{purple}(Lolo) If at the end of the first iteration $\widehat{\underline{S}}_u$ is smaller than a threshold (in our case $0.1$, as suggested by Owen), the estimator (\ref{first.order.est}) is switched to ``Correlation 2" for this particular $u$. Then, a third Sobol' sequence $\mathcal{P''}_{m}=\{\vz_i\}_{i=0}^{2^m-1}$ is constructed to obtain the corresponding evaluations $f({\vz}_{i,u}:{\vx}_{i,-u})$. $\mathcal{P''}$ is obtained by assigning and scrambling the next $d$ coordinates of the starting $2d$-dimensional Sobol' sequence.}
 
@@ -623,7 +620,9 @@ We also compare the total number of evaluations of each variant. {\color{purple}
 
 \comment{For the examples in this section we do not know the true Walsh coefficients of the integrands. Indeed, since the mapping $\tilde{\vk}$ is chosen heuristically, the cone conditions will also depend on each scrambling. Therefore, we cannot say whether the integrands lie inside the cone. For this reason, we define the failure rates $r_{\delta_{\underline{S}_u}}$ and $r_{\delta_{\overline{S}_u}}$ over the $100$ repetitions. These rates are the proportion of the repetitions in which the true estimation errors failed to satisfy $\delta_{\underline{S}_u} \leq \varepsilon$ and $\delta_{\underline{S}_u} \leq \varepsilon$. When $\delta_{\underline{S}_u} > \varepsilon$ and $\delta_{\underline{S}_u} > \varepsilon$, we can infer that our algorithm parameters that define the cone are not conservative enough and at least one integrand ($I_1$, $I_2$, $I_3$, or $I_4$) falls outside the cone \eqref{conecond}.}
 
-{\color{purple} (Lolo) To verify the validity of assumption \eqref{assumption}, the sum of the $c_j$ is evaluated for each repetition and barplots of its values are drawn.}
+%{\color{purple} (Lolo) To test if the effective dimension of the numerator of $\underline{S}_u$ is higher than the one of the numerator of $\ov{$S$}_u$, 
+
+%To verify the validity of assumption \eqref{assumption}, the sum of the $c_j$ is evaluated for each repetition and barplots of its values are drawn.}
 
 %$\varepsilon=0.005$, initial $512$ points, $fudge = @(m,d) 10*2.^{-m}$, run $100$ samples and show the average values for the whole set of samples:
 %
@@ -692,17 +691,25 @@ Figure \ref{boxplots.gfunc} shows boxplots of the $100$ estimation errors $\delt
 
 As expected, we observe that the use of ``Correlation 2'' in Variant $A.b$ results in lower estimation errors for these four inputs. The discrepancy observed does not stand out in Table \ref{res.gfunc.Ab} due to its low magnitude ($10^{-4} \sim 10^{-5}$).
 
-{\color{purple} (Lolo)
-\begin{figure}[t]
-\caption{Barplots of the $100$ values taken by the sum of the $c_j$. The distribution is bimodal with $60\%$ values equal to $0$.}
-\vspace*{0.2cm}
+{\color{purple}(Lolo) Table \ref{comparison.gfunc} shows the average number of evaluations performed in Variant $A.a$ to estimate $I_1$, the numerator of $\underline{S}_u$, and $I_2$, the numerator of $\ov{$S$}_u$. The column $I_2 > I_1$ indicates the number of times where $I_2$ required more evaluations than $I_1$. We observe that $I_2$ never requires more evaluations than $I_1$. This seems to indicate that the effective dimension of $I_1$ is higher than $I_2$ for this example.
+\begin{table}[t]
+\caption{Number of evaluations evaluations performed to estimate $I_1$ and $I_2$ in Variant $A.a$. $N$ is the number of times among the $100$ repeats where $I_2$ required more evaluations than $I_1$}
 \centering
-\includegraphics[width=0.25\textwidth]{sobolg_cj.eps}
-\label{cj.gfunc}
-\end{figure}
-Figure \ref{cj.gfunc} shows barplots of the $100$ values of the sum of the $c_j$. The distribution is bimodal with around $60\%$ of the values equal to $0$ and $40\%$ equal to $512$. As a result, assumption \eqref{assumption} is validated $60\%$ of the times and Variant A.b does not cost more (or slightly more) than Variant A.a.}
+\begin{tabular}{cccc}
+\hline
+ input & $I_1$ & $I_2$ & $I_2 > I_1$ \\ \hline
+ $x_1$ & $32768$ & $32768$ & $0$ \\   \hline
+ $x_2$ & $16384$ & $16384$ & $0$ \\  \hline
+ $x_3$ & $4096$ & $2048$ & $0$ \\  \hline
+ $x_4$ & $830$ & $512$ & $0$ \\  \hline
+ $x_5$ & $512$ & $512$ & $0$ \\  \hline
+ $x_6$ & $512$ & $512$ & $0$ \\  \hline
+\end{tabular}
+\label{comparison.gfunc}
+\end{table}}
 \bigskip
 
+Table \ref{res.gfunc.B} shows averaged estimation errors $\delta_{\underline{S}_u}$ and total number of evaluations for Variant $B$. The results show that the use of Variant $B$ leads to slightly higher estimation errors than those obtained with Variant $A.a$ or Variant $A.b$. However, the total number of evaluations is {\color{purple}half as large}. As such, this approach remains interesting when one wants to estimate only first-order indices.
 \begin{table}[t]
 \caption{Averaged estimation errors $\delta_{\underline{S}_u}$ and total number of evaluations for Variant $B$.}
 \centering
@@ -719,7 +726,6 @@ Figure \ref{cj.gfunc} shows barplots of the $100$ values of the sum of the $c_j$
 \end{tabular}
 \label{res.gfunc.B}
 \end{table}
-Table \ref{res.gfunc.B} shows averaged estimation errors $\delta_{\underline{S}_u}$ and total number of evaluations for Variant $B$. The results show that the use of Variant $B$ leads to slightly higher estimation errors than those obtained with Variant $A.a$ or Variant $A.b$. However, the total number of evaluations is {\color{purple}half as large}. As such, this approach remains interesting when one wants to estimate only first-order indices.
 
 \subsubsection{Bratley et al. function}
 
@@ -770,20 +776,24 @@ Variant $A.b$ gives lower estimation errors and fewer failure rates than Variant
 \label{boxplots.bratley}
 \end{figure}
 
-{\color{purple} (Lolo)
-\begin{figure}[t]
-\caption{Barplots of the $100$ values taken by the sum of the $c_j$. $88\%$ of the values are lower or equal to zero. The maximal value equal $3072$.}
-\vspace*{0.2cm}
+{\color{purple}(Lolo) Table \ref{comparison.bratley} shows the average number of evaluations performed in Variant $A.a$ to estimate $I_1$, the numerator of $\underline{S}_u$, and $I_2$, the numerator of $\ov{$S$}_u$. The column $I_2 > I_1$ indicates the number of times among the $100$ repeats where $I_2$ required more evaluations than $I_1$. 
+\begin{table}[t]
+\caption{Number of evaluations evaluations performed to estimate $I_1$ and $I_2$ in Variant $A.a$. $N$ is the number of times where $I_2$ required more evaluations than $I_1$}
 \centering
-\includegraphics[width=0.45\textwidth]{bratley_cj.eps}
-\label{cj.bratley}
-\end{figure}
-
-Figure \ref{cj.bratley} shows barplots of the $100$ values of the sum of the $c_j$. $88\%$ of the values are lower of equal to zero, that is assumption \eqref{assumption} is validated most of the times.}
-\bigskip
-
-Table \ref{res.bratley.B} shows averaged estimation errors $\delta_{\underline{S}_u}$ and total number of evaluations for Variant $B$. The estimation errors are lower than those of Variant $A.a$ but higher than those of Variant $A.b$. Failure rates are similar to those of Variant $A.b$. Since the total number of evaluations is close to the one of Variant $A.b$ at the exception of input $x_4$. As a conclusion, Variant $B$ does not bring much improvement for this example.
-\begin{table}[!ht]
+\begin{tabular}{cccc}
+\hline
+ input & $I_1$ & $I_2$ & $I_2 > I_1$ \\ \hline
+ $x_1$ & $16876$ & $16384$ & $0$ \\  \hline
+ $x_2$ & $8520$ & $8192$ & $0$ \\  \hline
+ $x_3$ & $4096$ & $2786$ & $0$ \\  \hline
+ $x_4$ & $3794$ & $1096$ & $4$ \\  \hline
+ $x_5$ & $635$ & $512$ & $0$ \\  \hline
+ $x_6$ & $712$ & $512$ & $0$ \\ 
+\hline 
+\end{tabular}
+\label{comparison.bratley}
+\end{table}
+\begin{table}[t]
 \caption{Averaged estimation errors $\delta_{\underline{S}_u}$ and total number of evaluations for Variant $B$.}
 \centering
 \begin{tabular}{cccc}
@@ -799,6 +809,9 @@ Table \ref{res.bratley.B} shows averaged estimation errors $\delta_{\underline{S
 \end{tabular}
 \label{res.bratley.B}
 \end{table}
+We observe that $I_2$ almost never requires more evaluations than $I_1$. This seems to indicate that the effective dimension of $I_1$ is also higher than $I_2$ for this example.}
+
+Table \ref{res.bratley.B} shows averaged estimation errors $\delta_{\underline{S}_u}$ and total number of evaluations for Variant $B$. The estimation errors are lower than those of Variant $A.a$ but higher than those of Variant $A.b$. Failure rates are similar to those of Variant $A.b$. Since the total number of evaluations is close to the one of Variant $A.b$ at the exception of input $x_4$. As a conclusion, Variant $B$ does not bring much improvement for this example.
 \bigskip
 
 From the results on these two test functions, the main conclusion is that Variant $A.b$ performs the best. This highlights the efficiency of ``Correlation 2'' to estimate small first-order indices with quasi-Monte Carlo methods. Even if ``Correlation 2'' originally requires more model evaluations, this drawback is overridden when this estimator is included into a sequential procedure such as ours. 
@@ -814,9 +827,9 @@ For the case where we are only interested in estimating first-order indices, Var
 f(\vx)=0.036 x_1^{0.758} & x_2^{0.0035} \left(\frac{x_3}{\cos(x_4)^2}\right)^{0.6} x_5^{0.006} x_6^{0.04}\times \\
  & \times\left(\frac{100 x_7}{\cos(x_4)}\right)^{-0.3} (x_8 x_9)^{0.49} + x_1 x_{10}
 \end{align*}
-Table \ref{wing_inputs_table} gives the range of variation of each input and their physical representation.  All inputs are independent and uniformly distributed in their respective ranges.
+Table \ref{wing_inputs_table} gives the range of variation of each input and their physical representation.  All inputs are uniformly distributed in their respective ranges. To illustrate the performance of our procedure, five additional inert inputs $x_{11}$, $\dots$, $x_{15}$ are added which serve only to add ``noise'' to the sensitivity analysis. The inert inputs are all uniformly distributed in $[0,1]$.
 \begin{table}[!ht]
-\caption{Inputs and their ranges of variation. All inputs are independent and uniformly distributed in their respective ranges.}
+\caption{Inputs and their ranges of variation. All inputs are uniformly distributed in their respective ranges.}
 \centering
 \begin{tabular}{ccc}
 \hline
@@ -831,30 +844,39 @@ $x_7$ & $[0.08, 0.18]$ & aerofoil thickness to chord ratio \\
 $x_8$ & $[2.5, 6]$ & ultimate load factor \\
 $x_9$ & $[1700, 2500]$ & flight design gross weight (lb) \\
 $x_{10}$ & $[0.025, 0.08]$ & paint weight (lb/ft$^2$) \\
+$x_{11},\dots,x_{15}$ & $[0,1]$ & ``noise'' \\
 \hline
 \end{tabular}
 \label{wing_inputs_table}
 \end{table}
 
-(TABLES OF RESULTS)
+The motivation of this application is to test if our procedure capture the same set of influent inputs $(x_1,x_3,x_7,x_8,x_9)$ selected by the analysis of Forrester \textit{et al.}. 
+
+A second motivation is to compare the performance of each variant ($A.a$, $A.b$ and $B$) on a function where true values of Sobol' indices cannot be computed. The comparison is based on averaged Sobol' estimates and averaged total number of evaluations over $100$ repetitions.
+\bigskip
+
+
+Tables \ref{res.wing.Aa}, \ref{res.wing.Ab} show the results obtained with Variant $A.a$ and  Variant $A.b$. Both variants capture well the presence of inert inputs. Variant A.b is more expansive but validates the property that first-order indices are lower or equal to total-effect indices. At the opposite, Variant A.a fails to guarantee this property for inputs with small main effects: $x_2$, $x_4$, $x_5$, $x_6$. This highlights once again the efficiency of ``Correlation 2''. The boxplots represented in Figure \ref{boxplots.wing} emphasize the latter observation, Variant $A.b$ provides less variance in the estimates. 
+
 \begin{table}[!ht]
 \caption{Averaged values of $\widehat{\underline{S}}_u$, ${\widehat{\overline{S}}_u}$, and total number of evaluations of Variant $A.a$.}
 \centering
 \begin{tabular}{ccc}
 \hline
  input & $\widehat{\underline{S}}_u$ & $\widehat{\overline{S}}_u$ \\ \hline
- $x_1$ & $0.1245$ & $0.1280$  \\ \hline
+ $x_1$ & $0.1245$ & $0.1279$  \\ \hline
  $x_2$ & $0.0001$ & $< 10^{-4}$  \\ \hline
  $x_3$ & $0.2203$ & $0.2261$  \\ \hline
- $x_4$ & $0.0025$ & $0.0006$  \\ \hline
- $x_5$ & $0.0007$ & $0.0001$  \\ \hline
- $x_6$ & $0.0034$ & $0.0024$  \\ \hline 
- $x_7$ & $0.1410$ & $0.1451$  \\ \hline
- $x_8$ & $0.4116$ & $0.4197$  \\ \hline
- $x_9$ & $0.0851$ & $0.0876$  \\ \hline
- $x_{10}$ & $0.0031$ & $0.0042$  \\ \hline
+ $x_4$ & $0.0022$ & $0.0006$  \\ \hline
+ $x_5$ & $0.0011$ & $0.0001$  \\ \hline
+ $x_6$ & $0.0037$ & $0.0024$  \\ \hline 
+ $x_7$ & $0.1410$ & $0.1452$  \\ \hline
+ $x_8$ & $0.4116$ & $0.4196$  \\ \hline
+ $x_9$ & $0.0851$ & $0.0877$  \\ \hline
+ $x_{10}$ & $0.0038$ & $0.0043$  \\ \hline
+ $x_{11},\dots,x_{15}$ & $0$ & $0$  \\ \hline
 \hline
-\multicolumn{3}{l}{Total number of evaluations: $84 \ 792$} \\ \hline 
+\multicolumn{3}{l}{Total number of evaluations: $87 \ 844$} \\ \hline 
 \end{tabular}
 \label{res.wing.Aa}
 \end{table}
@@ -864,43 +886,23 @@ $x_{10}$ & $[0.025, 0.08]$ & paint weight (lb/ft$^2$) \\
 \begin{tabular}{ccc}
 \hline
   input & $\widehat{\underline{S}}_u$ & $\widehat{\overline{S}}_u$ \\ \hline
- $x_1$ & $0.1245$ & $0.1280$  \\ \hline
+ $x_1$ & $0.1245$ & $0.1279$  \\ \hline
  $x_2$ & $< 10^{-4}$ & $< 10^{-4}$  \\ \hline
  $x_3$ & $0.2203$ & $0.2261$  \\ \hline
  $x_4$ & $0.0006$ & $0.0006$  \\ \hline
  $x_5$ & $0.0001$ & $0.0001$  \\ \hline
  $x_6$ & $0.0023$ & $0.0024$  \\ \hline 
- $x_7$ & $0.1410$ & $0.1451$  \\ \hline
- $x_8$ & $0.4116$ & $0.4197$  \\ \hline
- $x_9$ & $0.0850$ & $0.0876$  \\ \hline
- $x_{10}$ & $0.0042$ & $0.0042$  \\ \hline
+ $x_7$ & $0.1410$ & $0.1452$  \\ \hline
+ $x_8$ & $0.4116$ & $0.4196$  \\ \hline
+ $x_9$ & $0.0851$ & $0.0877$  \\ \hline
+ $x_{10}$ & $0.0043$ & $0.0043$  \\ \hline
+ $x_{11},\dots,x_{15}$ & $0$ & $0$  \\ \hline
 \hline
-\multicolumn{3}{l}{Total number of evaluations: $88 \ 269$} \\ \hline 
+\multicolumn{3}{l}{Total number of evaluations: $93 \ 881$} \\ \hline 
 \end{tabular}
 \label{res.wing.Ab}
 \end{table}
-\begin{table}[!ht]
-\caption{Averaged values of $\widehat{\underline{S}}_u$ and total number of evaluations of Variant $B$.}
- \centering
-\begin{tabular}{cc}
-\hline
- input & $\widehat{\underline{S}}_u$ \\ \hline
- $x_1$ & $0.1245$ \\ \hline
- $x_2$ & $0.0042$ \\ \hline
- $x_3$ & $0.2201$ \\ \hline
- $x_4$ & $0.0039$ \\ \hline
- $x_5$ & $0.0035$ \\ \hline
- $x_6$ & $0.0045$ \\ \hline 
- $x_7$ & $0.1410$ \\ \hline
- $x_8$ & $0.4116$ \\ \hline
- $x_9$ & $0.0850$ \\ \hline
- $x_{10}$ & $0.0042$ \\ \hline
- \hline
-\multicolumn{2}{l}{Total number of evaluations: $65 \ 536$} \\ \hline 
-\end{tabular}
-\label{res.wing.B}
-\end{table}
-(FIGURES)
+
 \begin{figure}[!ht]
 \caption{Boxplots of first-order indices $\underline{S}_u$ for inputs $x_2,x_4,x_5,x_6,x_{10}$ obtained with both Variant $A.a$ and Variant $A.b$.}
 \vspace*{0.2cm}
@@ -908,209 +910,95 @@ $x_{10}$ & $[0.025, 0.08]$ & paint weight (lb/ft$^2$) \\
 \includegraphics[width=0.45\textwidth]{wingweight_box.eps}
 \label{boxplots.wing}
 \end{figure}
-\begin{figure}[t]
-\caption{Barplots of the $100$ values taken by the sum of the $c_j$. All values are higher than zero.}
-\vspace*{0.2cm}
+
+Tables \ref{res.wing.B} show the results obtained with Variant $B$. Variant $B$ does not capture the presence of the inert inputs $x_{11}$, $\dots$, $x_{15}$. Their estimated main effects are confused with those of inputs $x_4$, $x_5$, $x_6$,$x_9$ and $x_{10}$.  However, the drawback of overestimating small first-order indices is balanced by the improvement in terms of number of evaluations. 
+
+Overall, each variant captures well the same set of influent inputs identified by Forrester \textit{et al.}
+\begin{table}[t]
+\caption{Averaged values of $\widehat{\underline{S}}_u$ and total number of evaluations of Variant $B$.}
+ \centering
+\begin{tabular}{cc}
+\hline
+ input & $\widehat{\underline{S}}_u$ \\ \hline
+ $x_1$ & $0.1243$ \\ \hline
+ $x_2$ & $0.0035$ \\ \hline
+ $x_3$ & $0.2202$ \\ \hline
+ $x_4$ & $0.0033$ \\ \hline
+ $x_5$ & $0.0021$ \\ \hline
+ $x_6$ & $0.0037$ \\ \hline 
+ $x_7$ & $0.1410$ \\ \hline
+ $x_8$ & $0.4117$ \\ \hline
+ $x_9$ & $0.0673$ \\ \hline
+ $x_{10}$ & $0.0043$ \\ \hline
+ $x_{11},\dots,x_{15}$ & $\in [6.10^{-4},7.10^{-3}]$ \\ \hline
+ \hline
+\multicolumn{2}{l}{Total number of evaluations: $65 \ 536$} \\ \hline 
+\end{tabular}
+\label{res.wing.B}
+\end{table}
+
+\subsection{Comparison with Monte Carlo method}
+
+In this section, our procedure is compared to a simpler method based on random sampling and straightforward confidence intervals. The bratley \textit{et al.} function is used to compare both approaches. The random sampling method corresponds to Saltelli's procedure described in Section \ref{sec:2.2}. For a fair comparison, ``Correlation 2'' is used instead of \eqref{first.order.est} to estimate the small main effects of inputs $x_3$, $x_4$, $x_5$ and $x_6$. The random sampling method proceeds as follows: each Sobol' index is evaluated with the same number of evaluations used in Variant $A.b$. Then, bootstrap confidence intervals are computed. 
+
+The results are averaged over $100$ repetitions and compared in Table \ref{compa_MC} to those obtained with Variant $A.b$. The comparison is made based on estimation errors and failures rates. The column precision corresponds to the average width of the bootstrap confidence interval for the random sampling method.
+
+The main observation is that our procedure performs the best. The random sapling method has high failure rates for inputs $x_1$, $x_2$ and slightly worse failure rates than Variant $A.b$ for inputs $x_3$, $x_4$. The average precision only falls below the tolerance $\varepsilon=5\cdot10^{-3}$ for inputs $x_5$ and $x_6$. Figures \ref{compa_MC_first} and \ref{compa_MC_tot} emphasize the latter observations.
+
+
+\begin{table}[!ht]
+\caption{Averaged estimation errors $\delta_{\underline{S}_u}$, $\delta_{\overline{S}_u}$ and failure rates for the random sampling method (MC) and Variant $A.b$ (QMC).}
 \centering
-\includegraphics[width=0.45\textwidth]{wingweight_cj.eps}
-\label{cj.wing}
+\begin{tabular}{ccccccc}
+\hline
+ input & procedure & $\delta_{\underline{S}_u}$ & $r_{\delta_{\underline{S}_u}}$ & $\delta_{\overline{S}_u}$ &$r_{\delta_{\overline{S}_u}}$ & precision \\
+\hline
+\multirow{2}{*}{$x_1$} & QMC & $0.0005$ & $0$ & $0.0002$ & $0$ & \multirow{2}{*}{$0.0344$} \\
+& MC & $0.0116$ & $0.75$ & $0.0086$ & $0.67$ & \\
+\hline
+\multirow{2}{*}{$x_2$} & QMC & $0.0006$ & $0$ & $0.0005$ & $0$ & \multirow{2}{*}{$0.0362$} \\
+& MC & $0.0122$ & $0.74$ & $0.0049$ & $0.37$ & \\
+\hline
+\multirow{2}{*}{$x_3$} & QMC & $0.0017$ & $0.02$ & $0.0015$ & $0.01$ & \multirow{2}{*}{$0.007$} \\
+& MC & $0.0020$ & $0.02$ & $0.0030$ & $0.18$ & \\
+\hline
+\multirow{2}{*}{$x_4$} & QMC & $0.0017$ & $0$ & $0.0018$ & $0.02$ & \multirow{2}{*}{$0.0052$} \\
+& MC & $0.0014$ & $0.01$ & $0.0027$ & $0.11$ & \\
+\hline
+\multirow{2}{*}{$x_5$} & QMC & $0.0003$ & $0$ & $0.0016$ & $0.05$ & \multirow{2}{*}{$0.0012$} \\
+& MC & $0.0003$ & $0$ & $0.0011$ & $0.01$ & \\
+\hline
+\multirow{2}{*}{$x_6$} & QMC & $0.0004$ & $0$ & $0.0011$ & $0$ & \multirow{2}{*}{$0.0012$} \\
+& MC & $0.0003$ & $0$ & $0.0010$ & $0$ & \\
+\hline
+\end{tabular}
+\label{compa_MC}
+\end{table}
+
+\begin{figure}[!ht]
+\caption{Boxplots of estimation errors $\delta_{\underline{S}_u}$ obtained with both Variant $A.b$ and the random sampling method. The dashed horizontal line marks the tolerance $\varepsilon=5\cdot 10^{-3}$.}
+\centering
+\vspace*{0.2cm}
+\includegraphics[width=0.4\textwidth]{comp_mc_first.eps}
+\label{compa_MC_first}
 \end{figure}
 
-Comments: Variant A.b is more expansive but guarantee that first-order indices are lower or equal to total-effect indices. At the opposite, Variant A.a fails to guarantee this property. 
+\begin{figure}[!ht]
+\caption{Boxplots of estimation errors $\delta_{\overline{S}_u}$ obtained with both Variant $A.b$ and the random sampling method. The dashed horizontal line marks the tolerance $\varepsilon=5\cdot 10^{-3}$.}
+\centering
+\vspace*{0.2cm}
+\includegraphics[width=0.4\textwidth]{comp_mc_tot.eps}
+\label{compa_MC_tot}
+\end{figure}}
 
-Variant B requires less evaluations but estimates of small first-order indices are less accurate.
-(TO COMPLETE) 
-
-(ALSO TRY LEVEL E MODEL ?)
-}
-
-%\comment{As an academic case example, we will study the wing weight function:
-%\begin{align*}
-%f(\vx)=0.036 x_1^{0.758} & x_2^{0.0035} \left(\frac{x_3}{\cos(x_4)^2}\right)^{0.6} x_5^{0.006} x_6^{0.04}\times \\
-% & \times\left(\frac{100 x_7}{\cos(x_4)}\right)^{-0.3} (x_8 x_9)^{0.49} + x_1 x_10
-%\end{align*}
-%\begin{tabular}{|l|l|}
-%\hline
-%$x_1\in[150, 200]$ & wing area (ft$^2$) \\
-%$x_2\in[220, 300]$ & weight of fuel in the wing (lb) \\
-%$x_3\in[6, 10]$ & aspect ratio \\
-%$x_4\in[-10, 10]$ & quarter-chord sweep (degrees) \\
-%$x_5\in[16, 45]$ & dynamic pressure at cruise (lb/ft$^2$) \\
-%$x_6\in[0.5, 1]$ & taper ratio \\
-%$x_7\in[0.08, 0.18]$ & aerofoil thickness to chord ratio \\
-%$x_8\in[2.5, 6]$ & ultimate load factor \\
-%$x_9\in[1700, 2500]$ & flight design gross weight (lb) \\
-%$x_{10}\in[0.025, 0.08]$ & paint weight (lb/ft$^2$) \\
-%\hline
-%\end{tabular}
-
-
-%\subsection{Wing weight model}
-%As an academic case example, we will study the payoff function of an arithmetic mean Asian call option. For a discretized Brownian motion $\vect{B}=(B_{t_1}, B_{t_2},\dots, B_{t_d})$ at times $t_i=T\times i/d$, the payoff of the option is:
-%
-%\[
-%f_{\rm payoff}(\vect{B}) = \e^{-\rho T}\max\left(\frac{1}{d}\sum_{i=1}^d S_0\e^{(\rho-\sigma^2/2)t_i+\sigma B_{t_i}}-K, 0\right)
-%\]
-%where $T$ is the maturity of the option, $S_0$ is the initial stock price, $\sigma$ the volatility of the stock, $\rho$ the interest rate, and $K$ the strike price.
-%
-%The discretized Brownian motion $\vect{B}$ follows a multivariate normal distribution with mean $\vzero$ and covariance matrix $\mathsf{\Sigma}$, with $\mathsf{\Sigma}_{ij}=\min(t_i,t_j)$. If $\vect{Y}\sim N(\vzero,I_d)$, then for any matrix $M$, $M\vect{Y}\sim N(\vzero,\mathsf{\Sigma})$ where $\mathsf{\Sigma}=MM^t$. Hence, we can generate the discretized Brownian motion using the inverse normal cumulative distribution function $\phi^{-1}$: $\vect{B}\sim M\phi^{-1}(\vect{X})$ with $\phi^{-1}(\vect{X})=(\phi^{-1}(X_1),\dots,\phi^{-1}(X_d))^t$ and $\vect{X}\sim \mathcal{U}([0,1]^d)$. Thus, we can estimate the Sobol' indices over $f_{\rm payoff}(M\phi^{-1}(\vect{X}))$. In this particular application, the choice of $M$ is pivotal to reduce the effective dimensionality of the model. In this regard, Sobol' indices can help us assess whether we reduce the effective dimensionality. We will compare the case with either the Cholesky decomposition or the PCA construction.
-%
-%We propose to analyze the results with averaged Sobol' estimates and averaged total number of evaluations over $100$ repetitions. The tolerance $\varepsilon$ and parameters $\ell^*$, $r$ and $\mathfrak{C}(m)$ are set as previously.
-%
-%Tables \ref{res.AsianChol.Aa}, \ref{res.AsianChol.Ab}, and \ref{res.AsianChol.B} show the results when $M$ corresponds to the Cholesky decomposition of $\mathsf{\Sigma}$. 
-%\begin{table}[!ht]
-%\caption{Averaged values of $\widehat{\underline{S}}_u$, ${\widehat{\overline{S}}_u}$, and total number of evaluations of Variant $A.a$ with Cholesky decomposition.}
-%%\centering
-%%\begin{tabular}{ccccc}
-%%\hline
-%% input & $\widehat{\underline{S}}_u$ & $n$ & $\widehat{\overline{S}}_u$ & $n$ \\ \hline
-%% $x_1$ & $0.2120$ & $131072$ & $0.5650$ & $133693$ \\ \hline
-%% $x_2$ & $0.1370$ & $65536$ & $0.4420$ & $131072$ \\ \hline
-%% $x_3$ & $0.0820$ & $37356$ & $0.3150$ & $65536$ \\ \hline
-%% $x_4$ & $0.0408$ & $16742$ & $0.1950$ & $33096$ \\ \hline
-%% $x_5$ & $0.0142$ & $5980$ & $0.0944$ & $16384$ \\ \hline
-%% $x_6$ & $0.0048$ & $1106$ & $0.0257$ & $1654$ \\ \hline \hline
-%\centering
-%\begin{tabular}{ccc}
-%\hline
-% input & $\widehat{\underline{S}}_u$ & $\widehat{\overline{S}}_u$ \\ \hline
-% $x_1$ & $0.2120$ & $0.5650$  \\ \hline
-% $x_2$ & $0.1370$ & $0.4420$  \\ \hline
-% $x_3$ & $0.0820$ & $0.3150$  \\ \hline
-% $x_4$ & $0.0408$ & $0.1950$  \\ \hline
-% $x_5$ & $0.0142$ & $0.0944$  \\ \hline
-% $x_6$ & $0.0048$ & $0.0257$  \\ \hline \hline
-%\multicolumn{3}{l}{Total number of evaluations: $648 \ 821$} \\ \hline 
-%\end{tabular}
-%\label{res.AsianChol.Aa}
-%\end{table}
-%\begin{table}[!ht]
-%\caption{Averaged values of $\widehat{\underline{S}}_u$, ${\widehat{\overline{S}}_u}$ and total number of evaluations of Variant $A.b$ with Cholesky decomposition.}
-%%\centering
-%%\begin{tabular}{ccccc}
-%%\hline
-%% input & $\widehat{\underline{S}}_u$ & $n$ & $\widehat{\overline{S}}_u$ & $n$ \\ \hline
-%% $x_1$ & $0.2120$ & $131072$ & $0.5650$ & $133693$ \\ \hline
-%% $x_2$ & $0.1370$ & $65536$ & $0.4420$ & $131072$ \\ \hline
-%% $x_3$ & $0.0822$ & $34406$ & $0.3150$ & $65536$ \\ \hline
-%% $x_4$ & $0.0434$ & $13107$ & $0.1950$ & $33423$ \\ \hline
-%% $x_5$ & $0.0169$ & $2371$ & $0.0944$ & $16384$ \\ \hline
-%% $x_6$ & $0.0049$ & $532$ & $0.0259$ & $1577$ \\ \hline \hline
-% \centering
-%\begin{tabular}{ccc}
-%\hline
-% input & $\widehat{\underline{S}}_u$ & $\widehat{\overline{S}}_u$  \\ \hline
-% $x_1$ & $0.2120$ & $0.5650$  \\ \hline
-% $x_2$ & $0.1370$ & $0.4420$ \\ \hline
-% $x_3$ & $0.0822$ & $0.3150$  \\ \hline
-% $x_4$ & $0.0434$ & $0.1950$  \\ \hline
-% $x_5$ & $0.0169$ & $0.0944$  \\ \hline
-% $x_6$ & $0.0049$ & $0.0259$  \\ \hline \hline
-%\multicolumn{3}{l}{Total number of evaluations: $699 \ 487$}\\ \hline 
-%\end{tabular}
-%\label{res.AsianChol.Ab}
-%\end{table}
-%\begin{table}[!ht]
-%\caption{Averaged values of $\widehat{\underline{S}}_u$ and total number of evaluations of Variant $B$ with Cholesky decomposition.}
-%%\centering
-%%\begin{tabular}{ccc}
-%%\hline
-%% input & $\widehat{\underline{S}}_u$ & $n$ \\ \hline
-%% $x_1$ & $0.2120$ & $131072$ \\ \hline
-%% $x_2$ & $0.1350$ & $129766$ \\ \hline
-%% $x_3$ & $0.0774$ & $62290$ \\ \hline
-%% $x_4$ & $0.0338$ & $49961$ \\ \hline
-%% $x_5$ & $0.0149$ & $48845$ \\ \hline
-%% $x_6$ & $0.0028$ & $17905$ \\ \hline \hline
-% \centering
-%\begin{tabular}{cc}
-%\hline
-% input & $\widehat{\underline{S}}_u$ \\ \hline
-% $x_1$ & $0.2120$ \\ \hline
-% $x_2$ & $0.1350$ \\ \hline
-% $x_3$ & $0.0774$ \\ \hline
-% $x_4$ & $0.0338$ \\ \hline
-% $x_5$ & $0.0149$ \\ \hline
-% $x_6$ & $0.0028$ \\ \hline \hline
-%\multicolumn{2}{l}{Total number of evaluations: $262 \ 144$} \\ \hline 
-%\end{tabular}
-%\label{res.AsianChol.B}
-%\end{table}
-%
-%It turns out that Variant $A.b$ does not perform better than Variant $A.a$. Averaged Sobol' estimates are similar but the average total number of model evaluations is slightly worse. The explanation is that total effect Sobol' indices require more evaluations than their corresponding first-order indices. As such, ``Correlation 2'' falls into case 1) explained in Section \ref{sec:4.2}. Variant $B$ shows a drastic improvement on the total number of evaluations with the drawback of a false estimation for input $x_4$. Its discrepancy is higher than $\epsilon$ when comparing to the other two variants.
-%
-%
-%Tables \ref{res.AsianPCA.Aa}, \ref{res.AsianPCA.Ab}, and \ref{res.AsianPCA.B} show the results when $M$ corresponds to the PCA decomposition of $\mathsf{\Sigma}$. 
-%
-%\begin{table}[!ht]
-%\caption{Averaged values of $\widehat{\underline{S}}_u$, ${\widehat{\overline{S}}_u}$ and total number of evaluations of Variant $A.a$ with PCA decomposition.}
-%\centering
-%\begin{tabular}{ccccc}
-%\hline
-% input & $\widehat{\underline{S}}_u$ & $\widehat{\overline{S}}_u$ \\ \hline
-% $x_1$ & $0.9800$ & $0.9960$  \\ \hline
-% $x_2$ & $0.0037$ & $0.0172$  \\ \hline
-% $x_3$ & $0.0016$ & $0.0023$  \\ \hline
-% $x_4$ & $0.0014$ & $0.0005$  \\ \hline
-% $x_5$ & $0.0005$ & $0.0001$  \\ \hline
-% $x_6$ & $0.0002$ & $0.0000$ \\ \hline
-% \multicolumn{3}{l}{Total number of evaluations: $396 \ 221$}
-% \\ \hline
-%\end{tabular}
-%\label{res.AsianPCA.Aa}
-%\end{table}
-%
-%\begin{table}[!ht]
-%\caption{Averaged values of $\widehat{\underline{S}}_u$, ${\widehat{\overline{S}}_u}$ and total number of evaluations of Variant $A.b$ with PCA decomposition.}
-%%\centering
-%%\begin{tabular}{ccccc}
-%%\hline
-%% input & $\widehat{\underline{S}}_u$ & $n$ & $\widehat{\overline{S}}_u$ & $n$ \\ \hline
-%% $x_1$ & $0.9800$ & $131072$ & $0.9960$ & $117309$ \\ \hline
-%% $x_2$ & $0.0034$ & $512$ & $0.0172$ & $824$ \\ \hline
-%% $x_3$ & $0.0004$ & $512$ & $0.0023$ & $512$ \\ \hline
-%% $x_4$ & $0.0001$ & $512$ & $0.0005$ & $512$ \\ \hline
-%% $x_5$ & $0.0000$ & $512$ & $0.0001$ & $512$ \\ \hline
-%% $x_6$ & $0.0000$ & $512$ & $0.0000$ & $512$ \\ \hline \hline
-% \centering
-%\begin{tabular}{ccc}
-%\hline
-% input & $\widehat{\underline{S}}_u$ & $\widehat{\overline{S}}_u$ \\ \hline
-% $x_1$ & $0.9800$ &  $0.9960$  \\ \hline
-% $x_2$ & $0.0034$ &  $0.0172$  \\ \hline
-% $x_3$ & $0.0004$ &  $0.0023$  \\ \hline
-% $x_4$ & $0.0001$ &  $0.0005$  \\ \hline
-% $x_5$ & $0.0000$ &  $0.0001$  \\ \hline
-% $x_6$ & $0.0000$ &  $0.0000$  \\ \hline \hline
-%\multicolumn{3}{l}{Total number of evaluations: $398 \ 648$} \\ \hline 
-%\end{tabular}
-%\label{res.AsianPCA.Ab}
-%\end{table}
-%
-%\begin{table}[!ht]
-%\caption{Averaged values of $\widehat{\underline{S}}_u$ and total number of evaluations of Variant $B$ with PCA decomposition.}
-%\centering
-%\begin{tabular}{ccc}
-%\hline
-% input & $\widehat{\underline{S}}_u$  \\ \hline
-% $x_1$ & $0.9800$ \\ \hline
-% $x_2$ & $0.0037$ \\ \hline
-% $x_3$ & $0.0028$ \\ \hline
-% $x_4$ & $0.0029$ \\ \hline
-% $x_5$ & $0.0017$ \\ \hline
-% $x_6$ & $0.0029$ \\ \hline \hline
-%\multicolumn{2}{l}{Total number of evaluations: $262 \ 144$} \\ \hline 
-%\end{tabular}
-%\label{res.AsianPCA.B}
-%\end{table}
-%Variant $A.a$ performs as well as Variant $A.b$ in terms of average total number of evaluations. However, Variant $A.a$ is most probably giving worse estimates for the small first-order indices. Table \ref{res.AsianPCA.Aa} shows that averaged $\widehat{\underline{S}}_4$ is greater than $\widehat{\overline{S}}_4$, $\widehat{\underline{S}}_5$ greater than $\widehat{\overline{S}}_5$, and $\widehat{\underline{S}}_6$ greater than $\widehat{\overline{S}}_6$, which is inconsistent with the property ${\underline{S}}_u\leq{\overline{S}}_u$. Once again, variant $B$ shows an improvement on the total number of evaluations with the drawback of slightly overestimating the small first-order indices.
-%
-%Overall, each variant captures well how the PCA Brownian motion construction reduces the high effective dimensionality of the payoff function, in contrast to the initial Cholesky decomposition.
 
 \section{Conclusion}
 When estimating Sobol' indices, the question of how many evaluations must be performed to reach a desired precision is often raised by practitioners. This question is difficult to address mostly because the number of evaluations needed depends on the complexity of the model studied. As such, it is hard to bring out a general rule of thumb. 
 
-The sequential estimation procedure proposed in this article offers a practical solution with the construction of an estimator and error bound for Sobol' indices. The number of points is progressively augmented until the error bound becomes lower than a user specified tolerance. The procedure presented combines Sobol' sequences with either Saltelli's strategy to estimate both first-order and total effect indices, or the replication procedure to estimate only first-order indices. Furthermore, we investigated the use of a recent estimator well-suited to the estimation of small first-order indices using quasi-Monte Carlo methods. The efficiency of this estimator, called ``Correlation 2'', was assessed and highlighted on two test functions. Overall, the variant combining Saltelli's strategy and ``Correlation 2'' gave the best results, with low failure rates across all indices.
+The sequential estimation procedure proposed in this article offers a practical solution with the construction of an estimator and error bound for Sobol' indices. The number of points is progressively augmented until the error bound becomes lower than a user specified tolerance. The procedure presented combines Sobol' sequences with either Saltelli's strategy to estimate both first-order and total effect indices, or the replication procedure to estimate only first-order indices. Furthermore, we investigated the use of a recent estimator well-suited to the estimation of small first-order indices using quasi-Monte Carlo methods. The efficiency of this estimator, called ``Correlation 2'', was assessed and highlighted on two test functions and an application. Overall, the variant combining Saltelli's strategy and ``Correlation 2'' gave the best results, with low failure rates across all indices.
+
+{\color{purple}(Lolo) The precision of our procedure was also compared to a simpler method based on random sampling and straightforward confidence intervals. For an identical number of evaluations, our procedure was far more accurate than a random sampling method. The origin of the discrepancy observed lies in the use of a more robust error bound.}
+
 \comment{Add that we can consider relative errors and reference ...}
 
 As a future project, the same estimators and algorithms can be designed for rank-1 lattices using the results in \cite{JimHic}, and noticing that rank-1 lattices of the same size are also replicated designs of order 1. 

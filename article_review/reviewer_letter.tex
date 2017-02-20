@@ -23,7 +23,7 @@ mathtools,bm,extraipa,mathabx,graphicx,algorithm}
 \begin{document}
 
 \textcolor{blue}{Dear associated editor and reviewers,\\
-we would like to thank you for the positive and constructive feedback. Below we have compiled a detailed list of answers (blue text) to the issues raised in the review reports. In particular, in light of reviewer's two remark, the Asian option problem was replaced with a new ``real function''.\\
+we would like to thank you for the positive and constructive feedback. Below we have compiled a detailed list of answers (blue text) to the issues raised in the review reports. The corresponding modifications in the manuscript are colored in purple. In particular, in light of reviewer's two remark, the Asian option problem was replaced with a new application.\\
 Best regards,\\
 Laurent Gilquin and Llu\'{i}s Antoni Jim\'{e}nez Rugama}
 
@@ -47,12 +47,10 @@ Laurent Gilquin and Llu\'{i}s Antoni Jim\'{e}nez Rugama}
 {\color{blue} The ``real case model'' has been replaced with another academic application as suggested by the second reviewer. Nonetheless, we thank the associate editor for pointing out these corrections.}
 \item[5.] The given examples are only in small dimensions. What about higher-dimensional "real-life" examples?-- Pierre L'Ecuyer
 
-{\color{blue} The new academic application is in dimension $10$. For higher-dimensional examples, we expect the effective dimension to be much smaller than its nominal dimension. Otherwise, a high dimensional problem with high effective dimension will be hard to deal with in most applications. In low effective dimensional problems, most Sobol' indices will have a small value. As shown in the examples, all the small value indices are very easily estimated. Furthermore, the estimator ``Correlation 2'' can (in some cases) reduce further the function values needed for inputs with small main effects.}
+{\color{blue} The new academic application is in dimension $15$. For higher-dimensional examples, we expect the effective dimension to be much smaller than its nominal dimension. Otherwise, a high dimensional problem with high effective dimension will be hard to deal with in most applications. In low effective dimensional problems, most Sobol' indices will have a small value. As shown in the examples, all the small value indices are very easily estimated. Furthermore, the estimator ``Correlation 2'' can (in some cases) reduce further the function values needed for inputs with small main effects.}
 \end{itemize}
 
-
-
-
+\newpage
 \textbf{\large{Reviewer $1$}}
 \vspace*{0.5cm}
 
@@ -69,7 +67,7 @@ The cost of constructing the error bound is a computational cost and not a numer
 
 For the estimation of the integrands, random sampling methods have convergence rates of $\mathcal{O}(n^{-1/2})$ instead of the quasi-Monte Carlo methods $\mathcal{O}(n^{-1+\delta})$. Hence, we expect the precision of our procedure to be better than those of random sampling methods that use confidence intervals (asymptotic or bootstrap based). In our approach, the construction of the error bounds is analytical even if the Sobol' sequence is randomly sampled. However, in other random sampling methods the confidence intervals are estimated entirely from the sampling points and are less accurate.
 
-To confirm this claim, the precision of our procedure is compared to bootstrap confidence intervals obtained from random sampling. The comparison is carried out for the Bratley test function in Section 5.3. Results show that for an equivalent number of evaluations, random methods using confidence intervals are less accurate than our procedure.}
+To confirm this claim, the precision of our procedure is compared to bootstrap confidence intervals obtained from random sampling. The comparison is carried out for the bratley \textit{et al.} test function in Section 5.3. Results show that for an equivalent number of evaluations, the random sampling method is less accurate than our procedure.}
 
 
 
@@ -81,7 +79,7 @@ To confirm this claim, the precision of our procedure is compared to bootstrap c
 
 \answer{As the reviewer claims, this is a key point that we revised and explained with more detail. It is really hard to verify whether an integrand satisfies the cone condition. Indeed, because we choose our mapping $\tilde{\vk}$ heuristically, the cone conditions will also depend on the scrambling. At the end of section 3 we cited some data-based necessary conditions that can help identify when integrands are not in the cone. In addition, also at the beginning of section 5, we noted that if the error bound is not satisfied it is certain that the integrand is not in the cone.}
 \end{itemize}
-
+\vspace*{0.5cm}
 
 \textbf{Minor comments}:
 \begin{itemize}
@@ -110,9 +108,10 @@ As for the properties, in this paper we generate the sequences with the directio
 
 \item[g.] page 9, column 2 , "real case model". There are some imprecisions in this part: lines 15-16, it should be the "discounted payoff" and not just "payoff", rho is the risk-free interest rate (not just interest rate). More importantly, the authors directly give the discounted payoff in terms of the Brownian motion without stating what model is used for the stock price and without stating that for the purpose of pricing one should work under the risk-neutral measure. Please clarify this so that the financial motivation for this problem is properly done.
 
-{\color{blue} The ``real case model'' has been replaced with a new one suggested by the second reviewer. Nonetheless, we thank the reviewer for these corrections that we agreed with.} 
+{\color{blue} The ``real case model'' has been replaced with a new application as suggested by the second reviewer. Nonetheless, we thank the reviewer for these corrections that we agreed with.} 
 \end{itemize}
 
+\newpage
 \textbf{\large{Reviewer $2$}}
 \vspace*{0.5cm}
 
@@ -131,9 +130,9 @@ that rearranges the rows ... ''.
 
 Nonetheless, we modified the definition to only consider point sets whose points are coordinate-wise different. More precisely, consider $\mathcal{P}=\{\vx_i\}_{i=0}^{n-1}$ and $\vx_{i_1}$, $\vx_{i_2}$, two different points from this set. Then $\vx_{i_1}$ and $\vx_{i_2}$ are coordinate-wise different if: 
 $$ x_{i_1,j} \neq x_{i_2,j}, \qquad \forall j=1,\dots,d .$$
-Definition 1 has been reworked to include this property. This solves the issue of having more than one permutation that would rearrange the rows $\vx'_i$ into $\vx_i$. Now, the permutation is unique.
+Definition 1 has been reworked to include this property. This solves the issue of having more than one permutation that would rearrange the rows $\vx'_i$ into $\vx_i$. Now, the permutation is unique.}
 
-Furthermore, a remark was added to specify that in this paper $\mathcal{P}$ and $\mathcal{P}'$ are constructed to avoid the degenerate case: $\forall i, \ \vx'_i=\vx_i$.}
+%Furthermore, a remark was added to specify that in this paper $\mathcal{P}$ and $\mathcal{P}'$ are constructed to avoid the degenerate case: $\forall i, \ \vx'_i=\vx_i$.}
 
 
 
@@ -170,7 +169,8 @@ So, can you give a better reason for why that integrand might need larger $n$? A
 
 {\color{blue} We agree with the reviewer that the effective dimension of the $2d-1$ integrand might be lower than the $d+1$ integrand. However, estimating the effective dimension of each integrand already requires a large number of model evaluations (\textit{c.f.} Wang. X and Fang. K.-T., 2003).
 
-Since evaluating the effective dimension is not in the scope of this paper, we propose the following. The original statement has been replaced with the assumption that the higher dimensions integrand possesses a higher effective dimension. Then, this assumption is tested on each example by plotting the repartition of the sum of the $c_j$ (equation (19)) over the $100$ repeats. The sign of the sum tells us if, in average, this assumption is validated across the Sobol' indices.}
+Since evaluating the effective dimension is not in the scope of this paper, we propose the following. The original statement has been replaced with the assumption that the higher dimensions integrand possesses a higher effective dimension. Then, this assumption is tested on each example by comparing the number of evaluations required by each integrand.}
+%plotting the repartition of the sum of the $c_j$ (equation (19)) over the $100$ repeats. The sign of the sum tells us if, in average, this assumption is validated across the Sobol' indices.}
 
 
 \item[6.] In Section $5.1.1$, the Sobol' g-function looks like a potentially misleading choice. It is completely smooth except when one of the inputs is $1/2$.
@@ -184,7 +184,7 @@ the strike price and volatility.
 
 For the same amount of work, the authors could use a real function where the answer would be interesting. Derek Bingham maintains a site of test functions for computer experiments. Some of those would be more suitable.
 
-{\color{blue} The Asian option problem has been replaced by the wing weight test function taken from the suggested database. Section $5.2$ has been reworked to introduce this new test function. Our results are compared to older results obtained by screening approaches (Moon, H. (2010)).} 
+{\color{blue} The Asian option problem has been replaced by the wing weight test function taken from the suggested database. Section $5.2$ has been reworked to introduce this new test function.} %Our results are compared to older results obtained by screening approaches (Moon, H. (2010)).} 
 
 \item[8.] Sobol' indices are often motivated by the need to identify important variables when $f$ is expensive to evaluate; perhaps half a day for $n = 1$. Estimates that require $n$ to be several hundred thousand do not fit that motivating context. If the authors can describe a context where it would be worth having $n = 400000$ to get a Sobol' estimate, that would be great. Nobody else has properly addressed this issue, so this point is a
 suggestion, not a requirement.
@@ -194,6 +194,7 @@ suggestion, not a requirement.
 If one has to deal with a function where one day is required to obtain one evaluation, perhaps the use of a screening method is more adequate (less accurate but less greedy). Or if available, one could make use of a cluster to perform multiple model evaluations in parallel.}
 \end{itemize}
 
+\newpage
 \textbf{Minor comments}:
 \begin{itemize}
 \item[a.] page $2$ line $48$: it should be clear that $v \subset $u excludes $v = u$.
