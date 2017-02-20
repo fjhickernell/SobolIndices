@@ -108,7 +108,7 @@ mathtools,bm,extraipa,mathabx,graphicx,algorithm}
 \let\oldemptyset\emptyset
 \let\emptyset\varnothing
 
-\newcommand{\comment}[1]{{\color{cyan} (Toni) #1 }}
+\newcommand{\comment}[1]{{\color{cyan} #1 }}
 % Insert the name of "your journal" with
 % \journalname{myjournal}
 %
@@ -303,13 +303,10 @@ A more efficient alternative to evaluate all first-order indices was proposed in
 {\color{purple} (Lolo) 
 \begin{definition}
 \label{rep.designs}
-Let $\mathcal{P}=\{\vx_i\}_{i=0}^{n-1}$ and $\mathcal{P}'=\{{\vx'}_i\}_{i=0}^{n-1}$ be two point sets in $[0,1]^{d}$. Assume that the points $\vx_i$ (resp. $\vx'_i$) are all coordinate-wise different; that is $\forall (i_1,i_2) \in \{0,,n-1\}^2$, such that $i_1 \neq i_2$: $$x_{i_1,j} \neq x_{i_2,j}, \qquad \forall j=1,\dots,d .$$
-Let $\mathcal{P}^u=\{\vx_{i,u}\}_{i=0}^{n-1}$ (resp. ${\mathcal{P}'}^u$), $u \subsetneq \mathcal{D}$, denote the subset of dimensions of $\mathcal{P}$ (resp. $\mathcal{P}'$) indexed by $u$. We say that $\mathcal{P}$ and $\mathcal{P}'$ are two replicated designs of order $a \in \{1,\dots,d-1\}$ if for any $u \subsetneq \mathcal{D}$ such that $|u|=a$, $\mathcal{P}^u$ and ${\mathcal{P}'}^u$ are the same point set in $[0,1]^a$. We define by $\pi_u$ the permutation that rearranges the rows of ${\mathcal{P}'}^u$ into $\mathcal{P}^u$.
+Let $\mathcal{P}=\{\vx_i\}_{i=0}^{n-1}$ and $\mathcal{P}'=\{{\vx'}_i\}_{i=0}^{n-1}$ be two point sets in $[0,1]^{d}$. In these sets, all points $\vx_i$ (resp. $\vx'_i$) are coordinate-wise different, i.e. for all $(i_1,i_2) \in \{0,\dots,n-1\}^2$ such that $i_1 \neq i_2$: $$x_{i_1,j} \neq x_{i_2,j}, \qquad \text{for any  } j=1,\dots,d .$$
+Let $\mathcal{P}^u=\{\vx_{i,u}\}_{i=0}^{n-1}$ (resp. ${\mathcal{P}'}^u$), $u \subsetneq \mathcal{D}$, denote the subset of dimensions of $\mathcal{P}$ (resp. $\mathcal{P}'$) indexed by $u$. We say that $\mathcal{P}$ and $\mathcal{P}'$ are two replicated designs of order $a \in \{1,\dots,d-1\}$ if for any $u \subsetneq \mathcal{D}$ such that $|u|=a$, $\mathcal{P}^u$ and ${\mathcal{P}'}^u$ are the same point set in $[0,1]^a$. We define by $\pi_u$ the permutation that rearranges the rows of ${\mathcal{P}'}^u$ into $\mathcal{P}^u$ and exclude the trivial case $\vx_i = \vx'_i$ for all $i\in\{0,\dots,n-1\}$.
 \end{definition}
-
-\begin{remark}
-In the following, the two replicated designs $\mathcal{P}$, $\mathcal{P}'$ are constructed to avoid the degenerate case $\forall i \ \vx_i = \vx'_i$. 
-\end{remark}}
+}
 
 The method introduced in \cite{Mara} allows to estimate all first-order Sobol' indices with only two replicated designs of order $1$. The key point of this method is to use the permutations resulting from the structure of the two replicated designs to mimic the hybrid points in equation (\ref{first.order.est}). 
 
@@ -484,14 +481,19 @@ The sequential estimation procedure we propose combines error bounds $\varepsilo
 
 We start by detailing our procedure under the form of an algorithm. Then, we discuss a possible improvement by considering a new estimator introduced in \cite{Owen} for the estimation of first-order indices.
 
-\comment{We assumed that evaluating our model is expensive. Thus, we will focus our cost study on the number of function evaluations needed to estimate the indices. The function evaluations used to estimate the indices are the same as the ones used to compute the discrete Walsh coefficients. The only computation cost that could be expensive is the fast transform algorithm. However, on a regular laptop computing the discrete coefficients of $2^{20}$ points takes around $0.5$ seconds while evaluating these points at an average evaluation time of $1$ microsecond, takes a total of around $1$ second.}
+\comment{For this article, we assumed that evaluating the model is expensive. Hence, to study the cost we will focus on the number of function evaluations needed to estimate the indices. The function values used to estimate the indices are also used to compute the discrete Walsh coefficients. Thus, there are no additional evaluations needed to compute the error bound. The only computation cost that could be expensive is the fast Walsh transform. However, on a regular laptop, if we consider an extreme case of obtaining $2^{20}$ model values ($\approx$ one million points):
+\begin{itemize}
+\item At an average evaluation time of $1$ microsecond per point, the total evaluation time is about $1$ second.
+\item The fast transform on these values takes around $0.5$ seconds.
+\end{itemize}
+}
 
 \subsection{Sequential algorithm and cost}
 \label{sec:4.1}
 
 Algorithm \ref{recursive.algorithm} summarizes the main steps of our sequential procedure. First, one must fix the tolerance $\epsilon >0$ at which Sobol' indices must be estimated, and set $m=\ell_*+r$, where $\ell_*$ and $r$ are the two hyper-parameters defined in \eqref{conecond}.  {\color{purple} (Lolo) The choice of $\ell_*$ must be large enough to ensure that each integrand of $\underline{S}_u$ and $\overline{S}_u$ (Section \ref{sec:3.2}) is in $\cc$ (see  (\ref{conecond})).}
 
-Then, one must construct the two designs $\mathcal{P}_{m}=\{\vx_i\}_{i=0}^{2^{m}-1}$ and $\mathcal{P}'_{m}=\{\vx'_i\}_{i=0}^{2^{m}-1}$ at Step $5$ according to the multiplicative approach detailed in \cite{GJAHMP}. {\color{purple} (Lolo) This approach iteratively constructs a $2d$-dimensional Sobol' sequence then assigns its first $d$ coordinates to $\mathcal{P}_{m}$ and its last $d$ coordinates to $\mathcal{P}'_{m}$. The $2d$-dimension Sobol' sequence is generated based on the directional numbers found in \cite{Kuo}. These directional numbers insure better two-dimensional projections of the resulting Sobol' sequence. In addition, $\mathcal{P}_{m}$ and $\mathcal{P}'_{m}$ are also independently scrambled using Owen's scrambling scheme \cite{HonHic00a,Owe95}.......}
+Then, one must construct the two designs $\mathcal{P}_{m}=\{\vx_i\}_{i=0}^{2^{m}-1}$ and $\mathcal{P}'_{m}=\{\vx'_i\}_{i=0}^{2^{m}-1}$ at Step $5$ according to the multiplicative approach detailed in \cite{GJAHMP}. {\color{purple} (Lolo) This approach iteratively constructs a $2d$-dimensional Sobol' sequence then assigns its first $d$ coordinates to $\mathcal{P}_{m}$ and its last $d$ coordinates to $\mathcal{P}'_{m}$. The $2d$-dimensional Sobol' sequence is generated based on the direction numbers found in \cite{Kuo}. These direction numbers optimize the two-dimensional projections of the Sobol' sequence. Although this is the authors choice, one may choose any other Sobol' construction of $\mathcal{P}_{m}$ and $\mathcal{P}'_{m}$ as long as the $2d$ dimensions are each generated with different primitive polynomials. In addition, $\mathcal{P}_{m}$ and $\mathcal{P}'_{m}$ are also independently scrambled using Owen's scrambling scheme \cite{HonHic00a,Owe95}.}
 
 %Under this construction, $\mathcal{P}_{m}$ and $\mathcal{P}'_{m}$ correspond to the first $2^{m}$ points of two independent Sobol' sequences. Furthermore, they possess the structure of two replicated designs of order $1$, as shown in \cite{GJAHMP}. In addition, $\mathcal{P}_{m}$ and $\mathcal{P}'_{m}$ can also be scrambled as long as both point sets share the same scrambling dimensionwise.
 \bigskip
@@ -604,7 +606,7 @@ In practice, one does not know which are the small Sobol' indices ($u_1,\dots,u_
 \section{Applications}
 \label{sec:5}
 
-We illustrate our sequential estimation procedure with two classical test functions and one real example. In each case, Sobol' indices are estimated with the following three variants:
+We illustrate our sequential estimation procedure with two classical test functions and one academic example. In each case, Sobol' indices are estimated with the following three variants:
 \begin{itemize}
 \item[$\bullet$] Variant $A.a$ as Variant $A$ without using ``Correlation 2''. 
 \item[$\bullet$] Variant $A.b$ as Variant $A$ using ``Correlation 2''.
@@ -921,7 +923,7 @@ Variant B requires less evaluations but estimates of small first-order indices a
 (ALSO TRY LEVEL E MODEL ?)
 }
 
-%\comment{As a real case example, we will study the wing weight function:
+%\comment{As an academic case example, we will study the wing weight function:
 %\begin{align*}
 %f(\vx)=0.036 x_1^{0.758} & x_2^{0.0035} \left(\frac{x_3}{\cos(x_4)^2}\right)^{0.6} x_5^{0.006} x_6^{0.04}\times \\
 % & \times\left(\frac{100 x_7}{\cos(x_4)}\right)^{-0.3} (x_8 x_9)^{0.49} + x_1 x_10
@@ -942,8 +944,8 @@ Variant B requires less evaluations but estimates of small first-order indices a
 %\end{tabular}
 
 
-%\subsection{Real case model}
-%As a real case example, we will study the payoff function of an arithmetic mean Asian call option. For a discretized Brownian motion $\vect{B}=(B_{t_1}, B_{t_2},\dots, B_{t_d})$ at times $t_i=T\times i/d$, the payoff of the option is:
+%\subsection{Wing weight model}
+%As an academic case example, we will study the payoff function of an arithmetic mean Asian call option. For a discretized Brownian motion $\vect{B}=(B_{t_1}, B_{t_2},\dots, B_{t_d})$ at times $t_i=T\times i/d$, the payoff of the option is:
 %
 %\[
 %f_{\rm payoff}(\vect{B}) = \e^{-\rho T}\max\left(\frac{1}{d}\sum_{i=1}^d S_0\e^{(\rho-\sigma^2/2)t_i+\sigma B_{t_i}}-K, 0\right)
