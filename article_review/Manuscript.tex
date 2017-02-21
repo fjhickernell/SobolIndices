@@ -108,7 +108,7 @@ mathtools,bm,extraipa,mathabx,graphicx,algorithm}
 \let\oldemptyset\emptyset
 \let\emptyset\varnothing
 
-\newcommand{\comment}[1]{{\color{cyan} #1 }}
+\newcommand{\comment}[1]{{\color{purple} #1 }}
 % Insert the name of "your journal" with
 % \journalname{myjournal}
 %
@@ -208,7 +208,7 @@ We propose a sequential estimation procedure of Sobol' indices using the error b
 
 Let $f$ represent a deterministic numerical model in $[0,1]^d$, $d \geq 1$. Sensitivity measures, also known as Sobol' indices, are used to assess which inputs of $f$ are influential for the output. The normalized indices are scalars between $0$ and $1$ whose values are interpreted as follows: the closer to $1$ the more influential the index. Alternatively, they can be interpreted as the percentage of the variance explained by the inputs. Among all Sobol' indices one can distinguish first-order and total effect indices. The first measure the effect of a single input, while the second measure the effect of a single input plus all its interactions with other inputs.
 
-When dealing with complex numerical models, analytical expressions of Sobol' indices are often inaccessible. In such cases, one must rely on an estimation of these indices. The original estimation procedure is due to Sobol' \cite{Sobol'}. However, this procedure requires several model evaluations which are usually expensive. Later on, Saltelli \cite{Saltelli} proposed strat\-egies to estimate sets of Sobol' indices at once through the use of a combinatorial formalisms. While elegant, these strat\-egies still require a large number of model evaluations.  A cost efficient alternative to estimate first-order indices was introduced in \cite{Mara}. This alternative, called the replication procedure, has recently been further studied  in \cite{Tissot} and generalized to the estimation of closed second-order indices.
+When dealing with complex numerical models, analytical expressions of Sobol' indices are often inaccessible. In such cases, one must rely on an estimation of these indices. The original estimation procedure is due to Sobol' \cite{Sobol'}. \break However, this procedure requires several model evaluations which are usually expensive. Later on, Saltelli \cite{Saltelli} proposed strat\-egies to estimate sets of Sobol' indices at once through the use of a combinatorial formalisms. While elegant, these strat\-egies still require a large number of model evaluations.  A cost efficient alternative to estimate first-order indices was introduced in \cite{Mara}. This alternative, called the replication procedure, has recently been further studied  in \cite{Tissot} and generalized to the estimation of closed second-order indices.
 
 A practical problem concerning the use of these methods is how to quantify the number of model evaluations required to ensure that Sobol' estimates are accurate enough. This article addresses this challenge by proposing a reliable error bound for Sobol' indices based on digital sequences. \comment{One reason to use digital sequences is that the numerical integration convergence rates are of $\mathcal{O}(n^{-1+\delta})$ ($n$ being the number of function values) instead of the usual $\mathcal{O}(n^{-1/2})$ for iid Monte Carlo methods. In addition,} the error bound in this article is defined in terms of the discrete Walsh coefficients of the integrands involved in the Sobol' indices definition. We propose a sequential estimation procedure of Sobol' indices using the error bound as our stopping criterion. The procedure operates under the assumption that all integrands lie inside a particular cone of functions (see \cite{HicJim}).
 
@@ -247,7 +247,6 @@ Both $\underline{\tau}_u^2$ and $\ov{$\tau$}_u^2$ satisfy the following relation
 
 %The problem of interest is the evaluation of first-order and total effect Sobol' indices.
 In our framework, we are only interested in single input indices, namely $|u|=1$. The computation of the normalized indices is performed based on the following integral formulas for their numerators:
-{\color{purple}
 \begin{align}
 \label{first.order}
 \underline{\tau}_u^2  &= \int_{[0,1]^{2d}} \left(
@@ -255,7 +254,6 @@ f(\vx_u:{\vx'}_{-u})-f(\vx')\right)f(\vx)d\vx d{\vx'}, \\
 \label{total.effect}
 \ov{$\tau$}_u^2 &= \frac{1}{2}\int_{[0,1]^{d+1}}(f(\vx')-f(\vx_u:{\vx'}_{-u}))^2 d\vx_u d{\vx'}, \ u \in \mathcal{D},
 \end{align}
-}
 while variance and mean of $f$ are evaluated as:
 \begin{gather}
 \begin{aligned}
@@ -269,14 +267,12 @@ Usually the complexity of $f$ causes the solution of integrals \eqref{first.orde
 \subsection{Estimation of Sobol' indices}
 \label{sec:2.2}
 In this section we review two Monte Carlo procedures for the estimation of Sobol' indices. A design is a point set $\mathcal{P}=\{\vx_i\}_{i=0}^{n-1}$ where each point is obtained by sampling each variable $x_j$ $n$ times. Each row of the design is a point $\vx_i$ in $[0,1]^d$ and each column of the design refers to samples of a variable $x_j$. Consider $\mathcal{P}=\{\vx_i\}_{i=0}^{n-1}$ and $\mathcal{P'}=\{{\vx'}_i\}_{i=0}^{n-1}$ two designs where $(\vx_i,{\vx'}_i) \iid \mathcal{U}([0,1]^{2d})$. One way to estimate the two quantities (\ref{first.order}) and (\ref{total.effect}) is via:
-{\color{purple}
 \begin{align}
 \label{first.order.est}
 \widehat{\underline{\tau}_u^2} &= \frac{1}{n} \sum \limits_{i=0}^{n-1} \left(f(\vx_{i,u}:{\vx'}_{i,-u})-f(\vx'_i)\right)f(\vx_i),\\
 \label{total.effect.est}
 \widehat{\ov{$\tau$}_u^2} &= \frac{1}{2n} \sum \limits_{i=0}^{n-1} (f({\vx'}_i) - f(\vx_{i,u}:{\vx'}_{i,-u}))^2, \qquad u \in \mathcal{D},
 \end{align}
-}
 using for $\sigma^2$:
 {\color{purple} 
 \begin{equation}
@@ -297,7 +293,7 @@ The $d+2$ designs $\{\vx_{i,u}:{\vx'}_{i,-u}\}_{i=0}^{n-1}$ constructed for $u \
 \end{theorem}
 The main idea of the theorem is that there is no need to reevaluate $f({\vx}_i)$ and $f({\vx'}_i)$ for each $u$. Hence, we can simply evaluate $f({\vx}_i)$ $n$ times, $f({\vx'}_i)$ $n$ times, and $f(\vx_{i,u}:{\vx'}_{i,-u})$ $nd$ times, which accounts for the $n(d+2)$ evaluations.
 
-The $d+2$ designs of Theorem \ref{saltelli.theorem} are obtained by substituting columns of $\mathcal{P}$ for columns of $\mathcal{P}'$ {\color{purple}according} to $u$. While elegant, this approach requires a number of model evaluations that grows linearly with respect to the input space dimension.
+The $d+2$ designs of Theorem \ref{saltelli.theorem} are obtained by substituting columns of $\mathcal{P}$ for columns of $\mathcal{P}'$ {\color{purple}according} to $u$. While elegant, this approach requires a number of model evaluations that grows linearly with respect to the input \break space dimension.
 
 A more efficient alternative to evaluate all first-order indices was proposed in \cite{Mara} and only requires $2n$ model evaluations. This alternative relies on the construction of two replicated designs. The notion of replicated designs was first introduced by McKay through his replicated Latin Hypercubes in \cite{McKay}. In order to apply this definition to other types of points, in \cite{GJAHMP} we generalized this notion to the following.
 
@@ -439,14 +435,12 @@ For our problem, only Sobol' sequences \cite{Sobol'seq} have been considered. Th
 In this section we will extend the definition of the error bound (\ref{errbd}) to Sobol' indices. To achieve this goal, we consider the two integral formulas of the first-order and total effect Sobol' indices with $|u|=1$:
 %\subsection{Definition of $\widehat{S}$ (fix it with max and min)}
 %In some applications, it is more useful to estimate the normalized Sobol' indices, $S_u = \underline{\tau}_u^2/\sigma^2$ and $\overline{S}_u = \overline{\tau}_u^2/\sigma^2$. In both cases, regular and normalized indices can be approximated by estimating some integrals,
-{\color{purple}
 \begin{align*}
 \underline{S}_u(\vI) & = \frac{\int_{[0,1]^{2d}} \left(f(\vx_u:{\vx'}_{-u})-f(\vx')\right)f(\vx)d\vx d{\vx'}}{\int_{[0,1]^{d}} f(\vx)^2 d{\vx}-\left(\int_{[0,1]^{d}} f(\vx) d{\vx}\right)^2}, \\ 
 \underline{S}_u(\vI) & = \frac{I_1}{I_3-(I_4)^2}, \\
 \overline{S}_u(\vI) & = \frac{\frac{1}{2}\int_{[0,1]^{d+1}}(f(\vx')-f(\vx_u:{\vx'}_{-u}))^2d\vx_u d{\vx'}}{\int_{[0,1]^{d}} f(\vx)^2 d{\vx}-\left(\int_{[0,1]^{d}} f(\vx) d{\vx}\right)^2}, \\
 \overline{S}_u(\vI) & = \frac{I_2}{I_3-(I_4)^2},
 \end{align*}
-}
 where $\vI=(I_1,I_2,I_3,I_4)$ is a vector of integral values. Indices $\underline{S}_u(\vI)$ and $\overline{S}_u(\vI)$ are defined as functions over the vector $\vI$. If we estimate $\vI$ by $\widehat{\vI}$ with known error bounds $\varepsilon_{\widehat{\vI}}=(\epsilon_{\widehat{I}_1},\epsilon_{\widehat{I}_2},\epsilon_{\widehat{I}_3}$, $\epsilon_{\widehat{I}_4})$ according to (\ref{errbd}), we know that $\vI\in B_{\varepsilon_{\widehat{\vI}}}(\widehat{\vI})=[\widehat{\vI}-\varepsilon_{\widehat{\vI}},\widehat{\vI}+\varepsilon_{\widehat{\vI}} ]$. 
 
 Then, as an alternative to the common Sobol' indices estimators (\ref{common.sobol.est}), we can define the following two estimators with their respective error bounds:
@@ -465,11 +459,11 @@ and,
 \end{aligned}
 \label{formula_oversu}
 \end{gather}
-Because numerator and denominator are both known to be positive, maximizing $\underline{S}_u(\vI)$ (resp. $\overline{S}_u(\vI)$) is done through maximizing the numerator $I_1$ (resp. $I_2$) and minimizing the denominator $I_3-I_4^2$. Analogously, to minimize $\underline{S}_u(\vI)$ (resp. $\overline{S}_u(\vI)$) one minimizes the numerator $I_1$ (resp. $I_2$) and maximizes the denominator $I_3-I_4^2$. As an example, Figure \ref{fig:1} illustrates the region of possible values of $\underline{S}_2(\vI)$ given the true value of $I_1$ for the test function of Bratley \textit{et al.} \cite{Bratley}. This function is further described in Section \ref{sec:5}. 
+Because numerator and denominator are both known to be positive, maximizing $\underline{S}_u(\vI)$ (resp. $\overline{S}_u(\vI)$) is done through \break maximizing the numerator $I_1$ (resp. $I_2$) and minimizing the denominator $I_3-I_4^2$. Analogously, to minimize $\underline{S}_u(\vI)$ (resp. $\overline{S}_u(\vI)$) one minimizes the numerator $I_1$ (resp. $I_2$) and maximizes the denominator $I_3-I_4^2$. As an example, Figure \ref{fig:1} illustrates the region of possible values of $\underline{S}_2(\vI)$ given the true value of $I_1$ for the test function of Bratley \textit{et al.} \cite{Bratley}. This function is further described in Section \ref{sec:5}. 
 \begin{figure}[t]
 \caption{The delimited region in the figure represents the possible values of $\underline{S}_2$ for $\vI\in B_{(0,0,0.05,0.1)}(\widehat{\vI})$ (Bratley \textit{et al.} function). There, $\underline{S}_2^{\min}=\max\Big{(}\min_{\vI\in B_{\varepsilon_{\vI}}(\widehat{\vI})} \underline{S}_2(\vI),0\Big{)}$, $\underline{S}_2^{\max}=\min\Big{(}\max_{\vI\in B_{\varepsilon_{\vI}}(\widehat{\vI})} \underline{S}_2(\vI),1\Big{)}$, and $\widehat{\underline{S}}_2=(\underline{S}_2^{\min}+\underline{S}_2^{\max})/2$.}
 \centering
-\includegraphics[width=.5\textwidth]{estimator_3d_small.eps}
+\includegraphics[width=.45\textwidth]{estimator_3d_small.eps}
 \label{fig:1}       % Give a unique label
 \end{figure}
 
@@ -482,13 +476,14 @@ The sequential estimation procedure we propose combines error bounds $\varepsilo
 
 We start by detailing our procedure under the form of an algorithm. Then, we discuss a possible improvement by considering a new estimator introduced in \cite{Owen} for the estimation of first-order indices.
 
-\comment{For this article, we assumed that evaluating the model is expensive. Hence, to study the cost we will focus on the number of function evaluations needed to estimate the indices. The function values used to estimate the indices are also used to compute the discrete Walsh coefficients. Thus, there are no additional evaluations required to compute the error bound. The only computation cost that could be expensive is the fast Walsh transform. However, on a regular laptop, if we consider an extreme case of obtaining $2^{20}$ model values ($\approx$ one million points):
-\begin{itemize}
-\item At an average evaluation time of $1$ microsecond per point, the total evaluation time is about $1$ second.
-\item The fast transform applied to these values takes around $0.5$ seconds.
-\end{itemize}
-In practice, we focus on models that will take much more than $1$ microsecond to evaluate and hence, the fast transform cost becomes inexpensive.
-}
+\comment{It is important to note that the function evaluations performed to estimate the Sobol' indices are also used to compute the discrete Walsh coefficients. As a result, no additional function evaluations is required to compute the error bound. The only computation cost that could be expensive is the fast Walsh transform. However, the fast transform cost becomes inexpensive when dealing with models that will take much more than $1$ microsecond to evaluate.}
+%For this article, we assumed that evaluating the model is expensive. Hence, to study the cost we will focus on the number of function evaluations needed to estimate the indices. The function values used to estimate the indices are also used to compute the discrete Walsh coefficients. Thus, there are no additional evaluations required to compute the error bound. The only computation cost that could be expensive is the fast Walsh transform. However, on a regular laptop, if we consider an extreme case of obtaining $2^{20}$ model values ($\approx$ one million points):
+%\begin{itemize}
+%\item At an average evaluation time of $1$ microsecond per point, the total evaluation time is about $1$ second.
+%\item The fast transform applied to these values takes around $0.5$ seconds.
+%\end{itemize}
+%In practice, we focus on models that will take much more than $1$ microsecond to evaluate and hence, the fast transform cost becomes inexpensive.
+%}
 
 \subsection{Sequential algorithm and cost}
 \label{sec:4.1}
@@ -551,7 +546,6 @@ where:
 \item[$\bullet$] $2 \times 2^{m^{\star}}$ is the number of evaluations $f\left(\vx_{i}\right)$ and $f\left({\vx'}_{i}\right)$ used in the estimation of each first-order and total effect indices.
 \end{itemize}
 If all $m_u$ are equal, the cost of Variant $A$ becomes $2^{m^\star}(d+2)$ and we recover the cost specified in Theorem \ref{saltelli.theorem} with $n=2^{m^\star}$.
-
 If Variant $B$ is selected, the cost of our algorithm equals $2 \times 2^{m^{\star}}$. This cost corresponds to the one of the replication procedure introduced in Section \ref{sec:2.2}, where $2n=2\times 2^{m^{\star}}$ independent of $d$.
 
 \subsection{Improvement}
@@ -561,7 +555,7 @@ When $\underline{S}_u$ is small, it usually becomes harder to estimate. For this
 \begin{equation*}
 \widehat{\underline{\tau}_u^2} = \frac{1}{n} \sum \limits_{i=0}^{n-1} (f(\vx_i)-f({\vz}_{i,u}:{\vx}_{i,-u}))(f(\vx_{i,u}:{\vx'}_{i,-u})-f({\vx'}_i)).
 \end{equation*}
-\comment{As proposed by Owen in \cite{Owen}, the sample points are $(\vx_i,{\vx'}_i, \vz_i) \iid \mathcal{U}([0,1])^{3d}$. For our algorithm, we extend Owen's estimator by replacing the uniform points with a scrambled Sobol' sequence in dimension $3d$. In either case, this estimator requires an additional set of $n$ model evaluations to estimate $\underline{\tau}_u^2$.}
+\comment{As proposed by Owen in \cite{Owen}, the sample points are \break $(\vx_i,{\vx'}_i, \vz_i) \iid \mathcal{U}([0,1])^{3d}$. For our algorithm, we extend \break Owen's estimator by replacing the uniform points with a scrambled Sobol' sequence in dimension $3d$. In either case, this estimator requires an additional set of $n$ model evaluations to estimate $\underline{\tau}_u^2$.}
 \bigskip
 
 We discuss below the potential improvement brought by using ``Correlation 2" in Variant $A$. The idea is to replace the current estimator (\ref{first.order.est}) by  ``Correlation 2" for each small first-order index. 
@@ -631,7 +625,7 @@ We also compare the total number of evaluations of each variant to verify the as
 \subsection{Classical test functions}
 \label{sec:5.1}
 
-The two classical test functions considered in this article are {\color{purple} a non qMC (quasi-Monte Carlo) friendly version of the} g-function introduced by Sobol' \cite{Sobol'}, and the function introduced by Bratley \textit{et al.} \cite{Bratley}. The idea is to test our method over two categories of functions: additive (Bratley \textit{et al.} function) and multiplicative (g-function).
+The two classical test functions considered in this article are {\color{purple} a non qMC (quasi-Monte Carlo) friendly version of the} g-function introduced by Sobol' \cite{Sobol'}, and the function introduced by Bratley \textit{et al.} \cite{Bratley}. The idea is to test our method over two categories of functions: additive (Bratley \textit{et al.}) and multiplicative (g-function).
 
 \subsubsection{Sobol' g-function}
 
@@ -643,8 +637,14 @@ f(\vx)= \prod \limits_{j=1}^{d}g_j(x_j), \qquad g_j(x_j)=\frac{\left |3x_j-2 \ri
 Each value $a_j$ determines the relative importance of the $x_j$. When the value of $a_j$ gets closer to zero the variable $x_j$ becomes more influent. For this example, we chose $d=6$ and $a_1=0,a_2=0.5, a_3=3, a_4=9, a_5=99$, and $a_6=99$.
 
 Table \ref{res.gfunc.Aa} shows the averaged estimation errors obtained with Variant $A.a$ as well as the averaged total number of evaluations performed. Table \ref{res.gfunc.Ab} shows the same results obtained with Variant $A.b$.
+
+The main observation is that both approaches give similar results both in terms of estimation errors, failure rates and averaged total number of evaluations. The use of ``Correlation 2'' in Variant $A.b$ to estimate the four small first-order Sobol' indices $\underline{S}_3, \underline{S}_4, \underline{S}_5, \underline{S}_6$ {\color{purple}  does seem to bring an improvement. In particular, the failure rate for input $x_3$ is reduced to $0$.} We propose to draw boxplots of the estimation errors to further investigate the results. 
+\bigskip
+
+Figure \ref{boxplots.gfunc} shows boxplots of the $100$ estimation errors $\delta_{\underline{S}_u}$ obtained with both Variant $A.a$ and Variant $A.b$ for the four inputs $x_3,x_4,x_5,x_6$. The dashed horizontal line marks the tolerance $\varepsilon=5\cdot 10^{-3}$.As expected, we observe that the use of ``Correlation 2'' in Variant $A.b$ results in lower estimation errors for these four inputs. The discrepancy observed does not stand out in Table \ref{res.gfunc.Ab} due to its low magnitude ($10^{-4}$ to $10^{-6}$).
+
+\setlength{\tabcolsep}{5.5pt}
 \renewcommand{\arraystretch}{1.25}
-{\color{purple} (nouvelles tables et figures)
 \begin{table}[t]
 \caption{Averaged estimation errors $\delta_{\underline{S}_u}$ and $\delta_{\overline{S}_u}$, failure rates $r_{\delta_{\underline{S}_u}}$ and $r_{\delta_{\overline{S}_u}}$, and averaged total number of evaluations for Variant $A.a$.}
 \centering
@@ -676,11 +676,7 @@ Table \ref{res.gfunc.Aa} shows the averaged estimation errors obtained with Vari
 \multicolumn{4}{l}{Total number of evaluations: $120 \ 832$} & & &\\ \hline 
 \end{tabular}
 \label{res.gfunc.Ab}
-\end{table}}
-
-The main observation is that both approaches give similar results both in terms of estimation errors, failure rates and averaged total number of evaluations. The use of ``Correlation 2'' in Variant $A.b$ to estimate the four small first-order Sobol' indices $\underline{S}_3, \underline{S}_4, \underline{S}_5, \underline{S}_6$ {\color{purple}  does seem to bring an improvement. In particular, the failure rate for input $x_3$ is reduced to $0$.} We propose to draw boxplots of the estimation errors to further investigate the results. 
-
-Figure \ref{boxplots.gfunc} shows boxplots of the $100$ estimation errors $\delta_{\underline{S}_u}$ obtained with both Variant $A.a$ and Variant $A.b$ for the four inputs $x_3,x_4,x_5,x_6$. The dashed horizontal line marks the tolerance $\varepsilon=5\cdot 10^{-3}$.
+\end{table}
 \begin{figure}[t]
 \caption{Boxplots of estimation errors $\delta_{\underline{S}_u}$ for the four inputs $x_3,x_4,x_5,x_6$ obtained with both Variant $A.a$ and Variant $A.b$. The dashed horizontal line marks the tolerance $\varepsilon=5\cdot 10^{-3}$.}
 \vspace*{0.2cm}
@@ -689,11 +685,9 @@ Figure \ref{boxplots.gfunc} shows boxplots of the $100$ estimation errors $\delt
 \label{boxplots.gfunc}
 \end{figure}
 
-As expected, we observe that the use of ``Correlation 2'' in Variant $A.b$ results in lower estimation errors for these four inputs. The discrepancy observed does not stand out in Table \ref{res.gfunc.Ab} due to its low magnitude ($10^{-4}$ to $10^{-6}$).
-
-{\color{purple} Table \ref{comparison.gfunc} shows the average number of evaluations performed in Variant $A.a$ to estimate $\underline{S}_u$ and $\ov{$S$}_u$. The column $N$ indicates the number of times where $\ov{$S$}_u$ required more evaluations than $\underline{S}_u$. We observe that $\ov{$S$}_u$ never requires more evaluations than $\underline{S}_u$.
+{\color{purple} Table \ref{comparison.gfunc} shows the average number of evaluations performed in Variant $A.a$ to estimate $\underline{S}_u$ and $\overline{S}_u$. The column $N$ indicates the number of times where $\overline{S}_u$ required more evaluations than $\underline{S}_u$. We observe that $\overline{S}_u$ never requires more evaluations than $\underline{S}_u$.
 \begin{table}[t]
-\caption{Average number of evaluations performed to estimate $\underline{S}_u$ and $\ov{$S$}_u$ in Variant $A.a$. Column $N$ shows the number of times among the $100$ repeats where $\ov{$S$}_u$ required more evaluations than $\underline{S}_u$.}
+\caption{Average number of evaluations performed to estimate $\underline{S}_u$ and $\overline{S}_u$ in Variant $A.a$. Column $N$ shows the number of times among the $100$ repeats where $\overline{S}_u$ required more evaluations than $\underline{S}_u$.}
 \centering
 \begin{tabular}{cccc}
 \hline
@@ -776,13 +770,13 @@ Variant $A.b$ gives lower estimation errors and fewer failure rates than Variant
 \label{boxplots.bratley}
 \end{figure}
 
-{\color{purple} Table \ref{comparison.bratley} shows the average number of evaluations performed in Variant $A.a$ to estimate $\underline{S}_u$ and $\ov{$S$}_u$. The column $N$ indicates the number of times where $\ov{$S$}_u$ required more evaluations than $\underline{S}_u$. In this case, we observe that $\ov{$S$}_u$ requires more evaluations than $\underline{S}_u$ in only $4$ of the $600$ estimations.
+{\color{purple} Table \ref{comparison.bratley} shows the average number of evaluations performed in Variant $A.a$ to estimate $\underline{S}_u$ and $\ov{$S$}_u$. The column $N$ indicates the number of times where $\ov{$S$}_u$ required more evaluations than $\underline{S}_u$. In this case, we observe that $\ov{$S$}_u$ requires more evaluations than $\underline{S}_u$ in only $4$ of the $100$ estimations.
 \begin{table}[t]
-\caption{Average number of evaluations performed to estimate $\underline{S}_u$ and $\ov{$S$}_u$ in Variant $A.a$. Column $N$ shows the number of times among the $100$ repeats where $\ov{$S$}_u$ required more evaluations than $\underline{S}_u$.}
+\caption{Average number of evaluations performed to estimate $\underline{S}_u$ and $\overline{S}_u$ in Variant $A.a$. Column $N$ shows the number of times among the $100$ repeats where $\overline{S}_u$ required more evaluations than $\underline{S}_u$.}
 \centering
 \begin{tabular}{cccc}
 \hline
- input & $\underline{S}_u$ & $\ov{$S$}_u$ & $N$ \\ \hline
+ input & $\underline{S}_u$ & $\overline{S}_u$ & $N$ \\ \hline
  $x_1$ & $16876$ & $16384$ & $0$ \\  \hline
  $x_2$ & $8520$ & $8192$ & $0$ \\  \hline
  $x_3$ & $4096$ & $2786$ & $0$ \\  \hline
@@ -855,7 +849,7 @@ A second motivation is to compare the performance of each variant ($A.a$, $A.b$ 
 \bigskip
 
 
-Tables \ref{res.wing.Aa} and \ref{res.wing.Ab} show the results obtained with Variant $A.a$ and  Variant $A.b$. Both variants capture well the presence of inert inputs. Variant $A.b$ is more expansive but validates the property that first-order indices are lower or equal to total-effect indices. Nonetheless, Variant A.a fails to guarantee this property for inputs with small main effects: $x_2$, $x_4$, $x_5$, $x_6$. Once again, this highlights the efficiency of ``Correlation 2''. The boxplots presented in Figure \ref{boxplots.wing} emphasize the latter observation where Variant $A.b$ shows less variance in the estimates. 
+Tables \ref{res.wing.Aa} and \ref{res.wing.Ab} show the results obtained with Variant $A.a$ and  Variant $A.b$. Both variants capture well the presence of inert inputs. Variant $A.b$ is more expansive but validates the property that first-order indices are lower or equal to total-effect indices. On the other hand, Variant A.a fails to guarantee this property for inputs with small main effects: $x_2$, $x_4$, $x_5$, $x_6$. Once again, this highlights the efficiency of ``Correlation 2''. The boxplots presented in Figure \ref{boxplots.wing} emphasize the latter observation where Variant $A.b$ shows less variance in the estimates. 
 
 \begin{table}[t]
 \caption{Averaged values of $\widehat{\underline{S}}_u$, ${\widehat{\overline{S}}_u}$, and averaged total number of evaluations of Variant $A.a$.}
@@ -938,11 +932,11 @@ Overall, each variant captures well the same set of influent inputs identified b
 
 \subsection{Comparison with the iid Monte Carlo method}
 
-In this section, our procedure is compared to a simpler method based on iid sampling and straightforward confidence intervals. This method corresponds to Saltelli's procedure described in Section \ref{sec:2.2} using iid uniform points instead of Sobol' sequences. The Bratley \textit{et al.} function is used to compare the iid sampling approach with Variant $A.b$. The iid sampling method proceeds as follows: each Sobol' index is evaluated with the same number of evaluations used in Variant $A.b$. Then, we compute bootstrap confidence intervals to compare the error bounds.
+In this section, our procedure is compared to a simpler \break method based on iid sampling and straightforward confidence intervals. This method corresponds to Saltelli's procedure described in Section \ref{sec:2.2} using iid uniform points instead of Sobol' sequences. The Bratley \textit{et al.} function is used to compare the iid sampling approach with Variant $A.b$. The iid sampling method proceeds as follows: each Sobol' index is evaluated with the same number of evaluations used in Variant $A.b$. Then, we compute bootstrap confidence intervals to compare the error bounds. The confidence levels of the bootstrap intervals are set to $95\%$. The bounds are respectively the $2.5\%$ and $97.5\%$ quantile of the bootstrap sample.  
 
 The results are averaged over $100$ repetitions and compared in Table \ref{compa_MC}. The comparison is made based on the estimation errors and failures rates. The column \textit{precision} corresponds to the average width of the bootstrap confidence interval for the iid sampling method.
 
-The main observation is that our procedure performs the best. The random sapling method has high failure rates for inputs $x_1$, $x_2$ and slightly worse failure rates than Variant $A.b$ for inputs $x_3$, $x_4$. The average \textit{precision} values only fall below the tolerance $\varepsilon=5\cdot10^{-3}$ for inputs $x_5$ and $x_6$. Figures \ref{compa_MC_first} and \ref{compa_MC_tot} emphasize the latter observations.
+The main observation is that our procedure performs the best. The random sampling method has high failure rates for inputs $x_1$, $x_2$ and slightly worse failure rates than Variant $A.b$ for inputs $x_3$, $x_4$. The average \textit{precision} values only fall below the tolerance $\varepsilon=5\cdot10^{-3}$ for inputs $x_5$ and $x_6$. Figures \ref{compa_MC_first} and \ref{compa_MC_tot} emphasize the latter observations.
 
 
 \begin{table}[t]
@@ -1001,7 +995,7 @@ The sequential estimation procedure proposed in this article offers a practical 
 As a future project, the same estimators and algorithms can be designed for rank-1 lattices using the results in \cite{JimHic}, and noticing that rank-1 lattices of the same size are also replicated designs of order 1. In addition, in view of the results from \cite{HicJimLi}, one can also include the hybrid error tolerance criterion in these algorithms.
 
 \begin{acknowledgements}
-The authors thank Fred J. Hickernell and Cl\'ementine Prieur for initiating this collaborative work, and Elise Arnaud for her proofreading. The authors are grateful to Stephen Joe, Frances Y. Kuo and Art B. Owen for their helpful answers and suggestions.   
+The authors thank Fred J. Hickernell and \break Cl\'ementine Prieur for initiating this collaborative work, and Elise \break Arnaud for her proofreading. The authors are grateful to Stephen Joe, Frances Y. Kuo and Art B. Owen for their helpful answers and suggestions.   
 \end{acknowledgements}
 
 % BibTeX users please use one of
