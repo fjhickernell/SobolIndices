@@ -476,7 +476,7 @@ The sequential estimation procedure we propose combines error bounds $\varepsilo
 
 We start by detailing our procedure under the form of an algorithm. Then, we discuss a possible improvement by considering a new estimator introduced in \cite{Owen} for the estimation of first-order indices.
 
-\comment{It is important to note that the function evaluations performed to estimate the Sobol' indices are also used to compute the discrete Walsh coefficients. As a result, no additional function evaluations is required to compute the error bound. The only computation cost that could be expensive is the fast Walsh transform. However, the fast transform cost becomes inexpensive when dealing with models that will take much more than $1$ microsecond to evaluate.}
+\comment{It is important to note that the function evaluations performed to estimate the Sobol' indices are also used to compute the discrete Walsh coefficients. As a result, no additional function evaluations are required to compute the error bound. The only computation cost that could be expensive is the fast Walsh transform. However, the fast transform cost becomes inexpensive when dealing with time consuming models.}
 %For this article, we assumed that evaluating the model is expensive. Hence, to study the cost we will focus on the number of function evaluations needed to estimate the indices. The function values used to estimate the indices are also used to compute the discrete Walsh coefficients. Thus, there are no additional evaluations required to compute the error bound. The only computation cost that could be expensive is the fast Walsh transform. However, on a regular laptop, if we consider an extreme case of obtaining $2^{20}$ model values ($\approx$ one million points):
 %\begin{itemize}
 %\item At an average evaluation time of $1$ microsecond per point, the total evaluation time is about $1$ second.
@@ -843,13 +843,13 @@ $x_{11},\dots,x_{15}$ & $[0,1]$ & ``noise'' \\
 \label{wing_inputs_table}
 \end{table}
 
-The motivation of this application is to test if our procedure captures the same set of influent inputs $(x_1,x_3,x_7,x_8,x_9)$ selected by the analysis of Forrester \textit{et al.} which are those of value greater than $0.01$.
+The motivation of this application is to test if our procedure captures the same set of influent inputs $(x_1,x_3,x_7,x_8,x_9)$ selected by the analysis of Forrester \textit{et al.} which are those of value greater than $0.05$.
 
 A second motivation is to compare the performance of each variant ($A.a$, $A.b$ and $B$) on a function where the true values of Sobol' indices are unknown. The comparison is based on averaged Sobol' indices estimates and averaged total number of evaluations over $100$ repetitions.
 \bigskip
 
 
-Tables \ref{res.wing.Aa} and \ref{res.wing.Ab} show the results obtained with Variant $A.a$ and  Variant $A.b$. Both variants capture well the presence of inert inputs. Variant $A.b$ is more expansive but validates the property that first-order indices are lower or equal to total-effect indices. On the other hand, Variant A.a fails to guarantee this property for inputs with small main effects: $x_2$, $x_4$, $x_5$, $x_6$. Once again, this highlights the efficiency of ``Correlation 2''. The boxplots presented in Figure \ref{boxplots.wing} emphasize the latter observation where Variant $A.b$ shows less variance in the estimates. 
+Tables \ref{res.wing.Aa} and \ref{res.wing.Ab} show the results obtained with Variant $A.a$ and  Variant $A.b$. Both variants capture well the presence of inert inputs. Variant $A.b$ is more expansive but validates the property that first-order indices are lower or equal to total-effect indices. Conversely, Variant A.a fails to guarantee this property for inputs with small main effects: $x_2$, $x_4$, $x_5$, $x_6$. Once again, this highlights the efficiency of ``Correlation 2''. The boxplots presented in Figure \ref{boxplots.wing} emphasize the latter observation where Variant $A.b$ shows less variance in the estimates. 
 
 \begin{table}[t]
 \caption{Averaged values of $\widehat{\underline{S}}_u$, ${\widehat{\overline{S}}_u}$, and averaged total number of evaluations of Variant $A.a$.}
@@ -940,7 +940,7 @@ The main observation is that our procedure performs the best. The random samplin
 
 
 \begin{table}[t]
-\caption{Averaged estimation errors $\delta_{\underline{S}_u}$ and $\delta_{\overline{S}_u}$, and failure rates $r_{\delta_{\underline{S}_u}}$ and $r_{\delta_{\overline{S}_u}}$ for the random sampling method (Monte Carlo as MC) and Variant $A.b$ (qMC).}
+\caption{Averaged estimation errors $\delta_{\underline{S}_u}$ and $\delta_{\overline{S}_u}$, and failure rates $r_{\delta_{\underline{S}_u}}$ and $r_{\delta_{\overline{S}_u}}$ for the iid sampling method (Monte Carlo as MC) and Variant $A.b$ (qMC).}
 \centering
 \begin{tabular}{ccccccc}
 \hline
@@ -969,7 +969,7 @@ The main observation is that our procedure performs the best. The random samplin
 \end{table}
 
 \begin{figure}[t]
-\caption{Boxplots of estimation errors $\delta_{\underline{S}_u}$ obtained with both Variant $A.b$ and the random sampling method. The dashed horizontal line marks the tolerance $\varepsilon=5\cdot 10^{-3}$.}
+\caption{Boxplots of estimation errors $\delta_{\underline{S}_u}$ obtained with both Variant $A.b$ and the iid sampling method. The dashed horizontal line marks the tolerance $\varepsilon=5\cdot 10^{-3}$.}
 \centering
 \vspace*{0.2cm}
 \includegraphics[width=0.4\textwidth]{comp_mc_first.eps}
@@ -977,7 +977,7 @@ The main observation is that our procedure performs the best. The random samplin
 \end{figure}
 
 \begin{figure}[t]
-\caption{Boxplots of estimation errors $\delta_{\overline{S}_u}$ obtained with both Variant $A.b$ and the random sampling method. The dashed horizontal line marks the tolerance $\varepsilon=5\cdot 10^{-3}$.}
+\caption{Boxplots of estimation errors $\delta_{\overline{S}_u}$ obtained with both Variant $A.b$ and the iid sampling method. The dashed horizontal line marks the tolerance $\varepsilon=5\cdot 10^{-3}$.}
 \centering
 \vspace*{0.2cm}
 \includegraphics[width=0.4\textwidth]{comp_mc_tot.eps}
