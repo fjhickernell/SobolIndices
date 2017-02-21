@@ -67,7 +67,7 @@ The cost of constructing the error bound is a computational cost and not a numer
 
 For the estimation of the integrands, random sampling methods have convergence rates of $\mathcal{O}(n^{-1/2})$ instead of the quasi-Monte Carlo methods $\mathcal{O}(n^{-1+\delta})$. Hence, we expect the precision of our procedure to be better than those of random sampling methods that use confidence intervals (asymptotic or bootstrap based). In our approach, the construction of the error bounds is analytical even if the Sobol' sequence is randomly sampled. However, in other random sampling methods the confidence intervals are estimated entirely from the sampling points and are less accurate.
 
-To confirm this claim, the precision of our procedure is compared to bootstrap confidence intervals obtained from random sampling. The comparison is carried out for the bratley \textit{et al.} test function in Section 5.3. Results show that for an equivalent number of evaluations, the random sampling method is less accurate than our procedure.}
+To confirm this claim, the precision of our procedure is compared to bootstrap confidence intervals obtained from random sampling. The comparison is carried out for the Bratley \textit{et al.} test function in Section 5.3. Results show that for an equivalent number of evaluations, the random sampling method is less accurate than our procedure.}
 
 
 
@@ -104,7 +104,7 @@ As for the properties, in this paper we generate the sequences with the directio
 
 \item[f.] page 6, column 2, line 32: is the "iid" property valid across the indices i, i.e., the n vectors have to be independent? If so, this would invalidate the use of a Sobol' sequence to create these vectors, so please clarify this point.
 
-\answer{As pointed out by the reviewer, some clarification was needed in this paragraph. We indicated that we extend the use of  Owen's estimator by using Sobol' sequences instead of iid random points.}
+\answer{As pointed out by the reviewer, some clarification was needed in this paragraph. We indicated that we extend  Owen's estimator by using Sobol' sequences instead of iid random points.}
 
 \item[g.] page 9, column 2 , "real case model". There are some imprecisions in this part: lines 15-16, it should be the "discounted payoff" and not just "payoff", rho is the risk-free interest rate (not just interest rate). More importantly, the authors directly give the discounted payoff in terms of the Brownian motion without stating what model is used for the stock price and without stating that for the purpose of pricing one should work under the risk-neutral measure. Please clarify this so that the financial motivation for this problem is properly done.
 
@@ -167,9 +167,9 @@ Without additional information and for the class of functions defined, the algor
 So, can you give a better reason for why that integrand might need larger $n$? Alternatively, in the numerical examples, which integrands required the most evaluations?
 (This point touches on the circular issue, perhaps best avoided, of finding which variables are important when you're estimating a Sobol' index.)
 
-{\color{blue} We agree with the reviewer that the effective dimension of the $2d-1$ integrand might be lower than the $d+1$ integrand. However, estimating the effective dimension of each integrand already requires a large number of model evaluations (\textit{c.f.} Wang. X and Fang. K.-T., 2003).
+{\color{blue} We agree with the reviewer that the effective dimension of the $2d$ integrand in $I_1$ might be lower than the $d+1$ integrand in $I_2$. However, estimating the effective dimension of each integrand already requires a large number of model evaluations (\textit{c.f.} Wang. X and Fang. K.-T., 2003).
 
-Since evaluating the effective dimension is not in the scope of this paper, we propose the following. The original statement has been replaced with the assumption that the higher dimensions integrand possesses a higher effective dimension. Then, this assumption is tested on each example by comparing the number of evaluations required by each integrand.}
+Since evaluating the effective dimension is not in the scope of this paper, we propose the following. The original statement has been replaced with the assumption that the integrand in $I_1$ is harder to estimate than the integrand in $I_2$. Then, this assumption is tested on each example by comparing the number of evaluations required to estimate $I_1$ vs $I_2$. This is a reasonable assumption since $I_1$ contains a factor $f(\vx)f(\vx')$ (not appearing in $I_2$) which could increase the effective dimension of its homologous $f(\vx)$. While it is true that in QMC the nominal dimension might not be very telling, this happens in particular cases such as RKHS with dimension weights satisfying some specific properties. Since for Sobol' indices we consider integrands resulting from products of the same function with different independent inputs, considering the original RKHS might not be enough and the resulting effective dimension might increase.}
 %plotting the repartition of the sum of the $c_j$ (equation (19)) over the $100$ repeats. The sign of the sum tells us if, in average, this assumption is validated across the Sobol' indices.}
 
 
