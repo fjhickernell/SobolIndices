@@ -1,0 +1,104 @@
+\documentclass[10pt,a4paper]{article}
+\usepackage[utf8]{inputenc}
+\usepackage[english]{babel}
+\usepackage{amssymb,
+mathtools,bm,extraipa,mathabx,graphicx,algorithm}
+\usepackage{color}
+
+\newcommand{\vect}[1]{\boldsymbol{\mathbf{#1}}}
+\newcommand{\vk}{\vect{k}}
+\newcommand{\vx}{\vect{x}}
+\newcommand{\vI}{\vect{I}}
+\newcommand{\hS}{\widehat{S}}
+\newcommand{\tS}{\widetilde{S}}
+\newcommand{\wcS}{\widecheck{S}}
+\def\dashfill{\cleaders\hbox to 2em{-}\hfill}
+\newcommand{\answer}[1]{{\color{blue} #1 }}
+
+\makeatletter
+\newcommand{\ov}[1]{
+  \m@th\overline{\mbox{#1}\raisebox{2mm}{}}
+}
+
+\begin{document}
+
+\textcolor{blue}{Dear associated editor and reviewers,\\
+we would like to thank you for the positive and constructive feedback. Below we have compiled a detailed list of answers (blue text) to the issues raised in the review reports. The corresponding modifications in the manuscript are colored in purple. \\
+Further aknowledgments have been preemptively added to thank both the associate editor and the two reviewers work.\\
+Best regards,\\
+Laurent Gilquin and Llu\'{i}s Antoni Jim\'{e}nez Rugama}
+
+\section*{Report on ``Reliable error estimation for Sobol' indices''}
+
+
+\textbf{\large{Reviewer $1$}}
+\vspace*{0.5cm}
+
+\textbf{Minor comments}:
+
+\begin{itemize}
+
+\item[1.] page 2, column 1, line 1: replace "convergence rates are of" by "convergence rates can be", as these convergence rates only hold under some conditions, and the "are of" without any mention of conditions makes it sound as if these rates always held
+
+\item[2.] page 4, column 1, line 9, italicize d in "dimension d"
+
+\item[3.] page 4, column 2, lines 42-43: replace "and" by "an" before "automatic"
+
+\item[4.] page 6, column 2, lines 22-23: replace "incur" by "result"
+
+\item[5.] page 7, line 9 of column 2: regarding item f of the minor comments in my previous review, although it is now more clear how the points are constructed, the "iid" mention is still slightly confusing. I think you mean that the 3d coordinates are independent but not that the points themselves are independent (since even after scrambling the points of the scrambled sequence are dependent). I would remove the iid mention, assuming it is meant to describe the property of the 3d coordinates, as it is implicit when saying that each point follow a $\mathcal{U}([0,1)^{3d})$.
+
+\item[6.] page 8, column 1, lines 32-33: "academic example": what does this mean? Why not just say "application" as indicated in the title of your Section 5.2 on page 10?
+
+\item[7.] page 11, column 1, lines 51-52: should read "expensive"
+\end{itemize}
+
+\textcolor{blue}{
+\begin{itemize}
+\item[*]Points $1$, $2$, $3$, $4$ and $7$ have all been addressed accordingly.
+\item[*]Concerning point $5$, we indeed intended to say that ``the 3d coordinates are independent but not that the points themselves''. As such, we have followed the suggested correction and removed the $iid$ mention.
+\item[*]Concerning point $6$, we simply missed this correction during the first review. We thank the reviewer for catching it.
+\end{itemize}}
+
+\newpage
+\textbf{\large{Reviewer $2$}}
+\vspace*{0.5cm}
+
+\textbf{Minor comments}:
+\begin{itemize}
+\item[1.] p2 line 33 Left: there is an extra $\in$
+
+\item[2.] p3 eq (7): you can get a better estimate of $\sigma^2$ using all 2n observations, not just the first n.
+
+\item[3.] p3 line 37 Left: `we generalized' is not quite precise, since ref [4] had 4 other authors
+
+\item[4.] Rereading my original comment about definition 1, I see it was a bit ambiguous. Sorry about that. Something extra needed to be said to rule out bad point sets.  That could either be in the definition itself, or put in a comment right at the place where points satisfying the definition get used.  The revision puts it into the definition.  This is ok, but it leaves you with a longer definition than you might have wanted.
+
+\item[5.] p3 line 14 Right: ref 21 has only two authors, so why not just say Tissot and Prieur instead of Tissot et al?
+
+\item[6.] p3 line 26 Right: asymptotical $\rightarrow$ asymptotic
+
+\item[7.] p5 eq (15) replace period by comma
+
+\item[8.] sec 5.1.1  for readers who don't know a lot about QMC, it would help to explain why the new g function is not as qmc friendly as the previous one.
+
+\item[9.] p5 line 51 Right: propose to draw boxplots $\rightarrow$ draw boxplots
+
+\item[10.] p9 and elsewhere: influent $\rightarrow$ influential.  Influential means important. Influent refers to water flowing in: \\
+http://www.dictionary.com/browse/influent?s=t
+
+\item[11.] p10 55 Left shwon $\rightarrow$ shown
+
+\item[12.] p11 52 Left expansive $\rightarrow$ expensive
+\end{itemize}
+
+\textcolor{blue}{
+\begin{itemize}
+\item[*]Points $1$, $5$, $6$, $7$, $9$, $10$, $11$ and $12$ have all been addressed accordingly.
+\item[*]Concerning point $2$, $\sigma^2$ (along with $\mu$) has been rewritten to use all $2n$ observations.
+\item[*]Concerning point $3$, `we generalized' has been replaced by `we use the generalization from' to answer the issue.
+\item[*]Concerning point $4$, we decided to keep the modification in the definition to stress that bad point sets are ruled out.
+\item[*]Concerning point $8$, further explainations were added on the new g-function (inspired from the reviewer's comments on the first review).
+\end{itemize}}
+
+\end{document}
