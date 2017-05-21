@@ -277,15 +277,15 @@ using for $\sigma^2$:
 \begin{equation}\label{mu.est}
 \widehat{\sigma}^2 = \frac{1}{n-1} \sum \limits_{i=0}^{n-1} \left(f(\vx_i) - \widehat{\mu}\right)^2, \text{ with } \ \widehat{\mu} =  \frac{1}{n} \sum \limits_{i=0}^{n-1}f(\vx_i).
 \end{equation}
-\comment{Equation \eqref{mu.est} can be improved if we use the $2n$ evaluations $f(\vx_i)$ and $f(\vx'_i)$. While this would be an important improvement to estimate the indices' denominator, the error construction described in Section \ref{sec:3} would require additional computations. Because of the new computations in the algorithm, the additional benefit of using $2n$ evaluations could become more costly than beneficial.}
+\comment{Equation \eqref{mu.est} can be improved if we use the $2n$ evaluations $f(\vx_i)$ and $f(\vx'_i)$. While this would be an important improvement to estimate the indices' denominator, the error construction described in Section \ref{sec:3} would require additional computations. Because of these new computations in the algorithm, the additional benefit of using $2n$ evaluations could become more costly than beneficial.}
 
-Then, the Sobol' indices estimators are:
+The Sobol' indices estimators are:
 \begin{equation}
 \widehat{\underline{S}}_u = \widehat{\underline{\tau}_u^2} / \widehat{\sigma}^2, \qquad
 \widehat{\overline{S}}_u = \widehat{\overline{\tau}_u^2} / \widehat{\sigma}^2.
 \label{common.sobol.est}
 \end{equation}
-Using this method, the estimation of a single pair ($\widehat{\underline{S}}_u$, $\widehat{\overline{S}}_u$) requires $3n$ evaluations of the model $f$. Thus, for all first order and total effect indices, one would need $3nd$ model evaluations. Using a combinatorial formalism, in \cite{Saltelli} Saltelli proposes the following estimation strategy:
+Based on equation \eqref{common.sobol.est}, the estimation of a single pair ($\widehat{\underline{S}}_u$, $\widehat{\overline{S}}_u$) requires $3n$ evaluations of the model $f$. Thus, for all first order and total effect indices, one would need $3nd$ model evaluations. Using a combinatorial formalism, in \cite{Saltelli} Saltelli proposes the following estimation strategy:
 \begin{theorem}
 \label{saltelli.theorem}
 The $d+2$ designs $\{\vx_{i,u}:{\vx'}_{i,-u}\}_{i=0}^{n-1}$ constructed for $u \in \{\varnothing,\{1\},\dots,$ $\{d\},\mathcal{D}\}$ allow to estimate all first-order and total effect Sobol' indices at a cost of $n(d+2)$ evaluations of the model.
@@ -965,7 +965,7 @@ The main observation is that our procedure performs the best. The random samplin
 \caption{Boxplots of estimation errors $\delta_{\underline{S}_u}$ obtained with both Variant $A.b$ and the iid sampling method. The dashed horizontal line marks the tolerance $\varepsilon=5\cdot 10^{-3}$.}
 \centering
 \vspace*{0.2cm}
-\includegraphics[width=0.4\textwidth]{Fig5.eps}
+\includegraphics[width=0.45\textwidth]{Fig5.eps}
 \label{compa_MC_first}
 \end{figure}
 
@@ -973,7 +973,7 @@ The main observation is that our procedure performs the best. The random samplin
 \caption{Boxplots of estimation errors $\delta_{\overline{S}_u}$ obtained with both Variant $A.b$ and the iid sampling method. The dashed horizontal line marks the tolerance $\varepsilon=5\cdot 10^{-3}$.}
 \centering
 \vspace*{0.2cm}
-\includegraphics[width=0.4\textwidth]{Fig6.eps}
+\includegraphics[width=0.45\textwidth]{Fig6.eps}
 \label{compa_MC_tot}
 \end{figure}
 
