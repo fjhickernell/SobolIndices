@@ -56,7 +56,7 @@ Laurent Gilquin and Llu\'{i}s Antoni Jim\'{e}nez Rugama}
 \textcolor{blue}{
 \begin{itemize}
 \item[*]Points $1$, $2$, $3$, $4$ and $7$ have all been addressed accordingly.
-\item[*]Concerning point $5$, we indeed intended to say that ``the 3d coordinates are independent but not that the points themselves''. As such, we have followed the suggested correction and removed the $iid$ mention.
+\item[*]Concerning point $5$, we intended to mention Owen's estimator in its original form, designed with uniform iid points. Since it uses iid uniform points, the integral (or expected value to be estimated) is defined over the uniform measure. Hence, because the integral is defined over the uniform measure, we can apply quasi-Monte Carlo points instead of uniform iid points. This does not imply that the quasi-Monte Carlo points need to be independent. As the reviewer mentions, since this is confusing, we have followed the suggested correction and removed the $iid$ mention.
 \item[*]Concerning point $6$, we simply missed this correction during the first review. We thank the reviewer for catching it.
 \end{itemize}}
 
@@ -95,7 +95,7 @@ http://www.dictionary.com/browse/influent?s=t
 \textcolor{blue}{
 \begin{itemize}
 \item[*]Points $1$, $5$, $6$, $7$, $9$, $10$, $11$ and $12$ have all been addressed accordingly.
-\item[*]Concerning point $2$, $\sigma^2$ (along with $\mu$) has been rewritten to use all $2n$ observations.
+\item[*]Concerning point $2$, although this is a great idea, this is not as convenient if we use the error estimation from Section 3. We could proceed by estimating $\mu$ (the same method for $\sigma^2$) with $f(\vx_i)$ and computing the error bound, estimating $\mu$ with $f(\vx'_i)$ and computing the error bound. Then, if $\mu\in[a,b]$ and $\mu'\in[a',b']$, the new estimator would be the mid point in $[a,b]\cap[a',b']$. This would require including the computation of the fast Fourier transform for the $f(\vx'_i)$ evaluations which could be too costly for the benefits it provides (given that the hard integral is in the numerator). As the reviewer suggests, it is important to consider that we have the $f(\vx'_i)$ evaluations and this could always be used. We added a comment after equation (7) explaining this point.
 \item[*]Concerning point $3$, `we generalized' has been replaced by `we use the generalization from' to answer the issue.
 \item[*]Concerning point $4$, we decided to keep the modification in the definition to stress that bad point sets are ruled out.
 \item[*]Concerning point $8$, further explainations were added on the new g-function (inspired from the reviewer's comments on the first review).

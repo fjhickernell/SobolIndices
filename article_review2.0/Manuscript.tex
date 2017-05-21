@@ -274,14 +274,10 @@ In this section we review two Monte Carlo procedures for the estimation of Sobol
 \widehat{\ov{$\tau$}_u^2} &= \frac{1}{2n} \sum \limits_{i=0}^{n-1} (f({\vx'}_i) - f(\vx_{i,u}:{\vx'}_{i,-u}))^2, \qquad u \in \mathcal{D},
 \end{align}
 using for $\sigma^2$:
-\comment{\begin{equation}
- \widehat{\sigma}^2 = \frac{1}{2(n-1)} \sum \limits_{i=0}^{n-1} \left[\left( f(\vx_i) - \widehat{\mu}\right)^2 + \left( f(\vx'_i) - \widehat{\mu}\right)^2\right],
- \end{equation}
-with
-\begin{equation}
-\widehat{\mu} =  \frac{1}{2n} \sum \limits_{i=0}^{n-1} \left[ f(\vx_i)+f(\vx'_i)\right].
-\label{mu.est}
-\end{equation}}
+\begin{equation}\label{mu.est}
+\widehat{\sigma}^2 = \frac{1}{n-1} \sum \limits_{i=0}^{n-1} \left(f(\vx_i) - \widehat{\mu}\right)^2, \text{ with } \ \widehat{\mu} =  \frac{1}{n} \sum \limits_{i=0}^{n-1}f(\vx_i).
+\end{equation}
+\comment{Equation \eqref{mu.est} can be improved if we use the $2n$ evaluations $f(\vx_i)$ and $f(\vx'_i)$. While this would be an important improvement to estimate the indices' denominator, the error construction described in Section \ref{sec:3} would require additional computations. Because of the new computations in the algorithm, the additional benefit of using $2n$ evaluations could become more costly than beneficial.}
 
 Then, the Sobol' indices estimators are:
 \begin{equation}
