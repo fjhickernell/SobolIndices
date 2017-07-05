@@ -418,6 +418,10 @@ for u = 1:out_param.d
 
     down = [INDICES(u).est_int(1, :) - INDICES(u).err_bound_int(1, :), est_int_fx2_fx(1, :) - err_bound_int_fx2_fx(1, :)];
     up = [INDICES(u).est_int(1, :) + INDICES(u).err_bound_int(1, :), est_int_fx2_fx(1, :) + err_bound_int_fx2_fx(1, :)];
+    
+    center = [INDICES(u).est_int(1, :), est_int_fx2_fx(1,1), est_int_fx2_fx(1,2)];
+    out_param.center(u) = INDICES(u).Smax(center,center);
+        
     q(u) = 1/2*(INDICES(u).Smax(down,up) + INDICES(u).Smin(down,up));
     out_param.bound_err(u) = 1/2*(INDICES(u).Smax(down,up) - INDICES(u).Smin(down,up));
     INDICES(u).errest(1) = out_param.bound_err(u);
@@ -628,6 +632,9 @@ for m = out_param.mmin+1:out_param.mmax
 
                 down = [INDICES(u).est_int(meff, :) - INDICES(u).err_bound_int(meff, :), est_int_fx2_fx(meff, :) - err_bound_int_fx2_fx(meff, :)];
                 up = [INDICES(u).est_int(meff, :) + INDICES(u).err_bound_int(meff, :), est_int_fx2_fx(meff, :) + err_bound_int_fx2_fx(meff, :)];
+                
+                center = [INDICES(u).est_int(1, :), est_int_fx2_fx(1,1), est_int_fx2_fx(1,2)];
+                out_param.center(u) = INDICES(u).Smax(center,center);
                 
                 q(u) = 1/2*(INDICES(u).Smax(down,up) + INDICES(u).Smin(down,up));
                 out_param.bound_err(u) = 1/2*(INDICES(u).Smax(down,up) - INDICES(u).Smin(down,up));
